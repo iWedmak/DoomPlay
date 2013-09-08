@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView">
+
+    <RelativeLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/linearAllSongs"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:gravity="center_vertical">
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="7dp" android:src="@drawable/icon_music"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/all_songs"
+                    android:paddingLeft="8dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/almost_white"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/linearAlbums"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:gravity="center_vertical"
+                android:layout_below="@+id/linearAllSongs">
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="7dp" android:src="@drawable/icon_album"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp"
+                    android:textSize="20sp"
+                    android:text="@string/albums"
+                    android:textColor="@color/almost_white"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:id="@+id/linearArtists"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp" android:gravity="center_vertical"
+                android:layout_below="@+id/linearAlbums">
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="7dp" android:src="@drawable/icon_artist"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/artists"
+                    android:id="@+id/textView"
+                    android:paddingLeft="8dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/almost_white"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/linearPlaylists"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp" android:gravity="center_vertical"
+                android:layout_below="@+id/linearArtists">
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView"
+                    android:paddingLeft="7dp" android:src="@drawable/icon_playlist"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/Playlists"
+                    android:paddingLeft="8dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/almost_white"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/linearSearch"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:gravity="center_vertical" android:layout_below="@+id/linearPlaylists">
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="6dp"
+                    android:src="@drawable/icon_search"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/search"
+                    android:paddingLeft="8dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/almost_white"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/linearFolders"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:gravity="center_vertical"
+                android:layout_below="@+id/linearSearch">
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="6dp"
+                    android:src="@drawable/icon_folder"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/folders"
+                    android:paddingLeft="8dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/almost_white"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:id="@+id/linearLoading"
+                android:visibility="invisible" android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/loading_music"
+                    android:id="@+id/textView1"
+                    android:layout_gravity="center_horizontal|bottom"/>
+            <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/progressBar"
+                    android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</ScrollView>
+

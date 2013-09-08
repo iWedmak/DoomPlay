@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DoomPlay</string>
+    <string name="search">Search</string>
+    <string name="folders">Folders</string>
+    <string name="all_songs">All Songs</string>
+    <string name="artists">Artists</string>
+    <string name="Playlists">Playlists</string>
+    <string name="albums">Albums</string>
+    <string name="generate">Generate new playlist</string>
+    <string name="main_screen">mainScreen</string>
+    <string name="add_to_playlist">add to playlist</string>
+    <string name="delete">delete</string>
+    <string name="sleep_timer">sleep timer</string>
+    <string name="equalizer">equalizer</string>
+    <string name="loading_music">loading music</string>
+    <string name="search_hint">search the music</string>
+    <string name="Rescan">rescan</string>
+    <string name="about">about</string>
+    <string name="full_screen">fullScreen</string>
+    <string name="return_small">listScreen</string>
+    <string name="edit_list">edit playlist</string>
+    <string name="add_music">add tracks</string>
+    <string name="hide_controls">Show/Hide controls</string>
+    <string name="new_playlist">new playlist</string>
+    <string name="set_track_as_ringtone">set track as ringtone</string>
+    <string name="advertisement_setting">advertisement\'s settings</string>
+    <string name="delete_playlist">delete playlist</string>
+    <string name="play_all">play all</string>
+    <string name="track_up">track up</string>
+    <string name="track_down">track down</string>
+    <string name="delete_track">delete track</string>
+    <string name="enter_playlist_name">enter the playlist\'s name</string>
+    <string name="save">save</string>
+    <string name="cancel">cancel</string>
+    <string name="invalid_name">invalid name</string>
+    <string name="to_playlist">to playlist</string>
+    <string name="zeros">0.00</string>
+    <string name="destiny">Destiny</string>
+    <string name="enter_search_query">enter search query</string>
+    <string name="sleep_after_playing">Sleep after playing x tracks</string>
+    <string name="sleep_after_minit">Sleep after x min</string>
+    <string name="disable">disable</string>
+    <string name="enable">enable</string>
+    <string name="title">Title</string>
+    <string name="artist">Artist</string>
+    <string name="didnt_match">didn\'t match any tracks</string>
+    <string name="voice_search">voice search</string>
+    <string name="shuffle_tracks">shuffle tracks</string>
+    <string name="to_track">to track</string>
+    <string name="tracks_dont_match">tracks don\'t match</string>
+    <string name="settings">settings</string>
+    <string name="exit">exit</string>
+    <string name="send_report">feedback</string>
+    <string name="lyrics">lyrics</string>
+    <string name="like">like</string>
+    <string name="sign_in">sign in</string>
+    <string name="refresh">refresh</string>
+
+
+</resources>

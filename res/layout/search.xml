@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:id="@+id/linearListener">
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:paddingBottom="10dp"
+            android:gravity="center_vertical">
+        <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:id="@+id/editQuery" android:hint="@string/enter_search_query" android:textSize="19sp"
+                android:layout_weight="1" android:layout_gravity="center_vertical" android:layout_marginTop="3dp"
+                android:layout_marginLeft="3dp" android:layout_marginRight="3dp"/>
+    </LinearLayout>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textNoResult" android:paddingLeft="15dp" android:textSize="16sp"
+            android:visibility="gone" android:text="@string/didnt_match"/>
+    <ListView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/listSearch" android:divider="@null" android:layout_weight="1" android:focusable="false"
+            android:fastScrollAlwaysVisible="false"/>
+
+    <RelativeLayout
+                        android:orientation="vertical"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content" android:background="#000000"
+                        android:id = "@+id/linearControls"
+                        android:visibility="gone">
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+            <SeekBar
+                    android:id="@+id/seek_bar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:layout_weight="1"
+                    android:thumb="@drawable/hollow_thumb"
+                    android:progressDrawable="@drawable/scrubber_progress_playing"
+                    />
+            <LinearLayout
+                    android:id="@+id/linearTopControls"
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:layout_gravity="top"
+                    android:orientation="horizontal"
+                    android:gravity="top" android:longClickable="false">
+                <TextView
+                        android:id="@+id/textElapsed"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="center"
+                        android:textIsSelectable="false"
+                        android:textSize="11sp"
+                        android:text="@string/zeros"
+                        android:paddingRight="3dp" android:layout_weight="1" android:paddingLeft="13dp"/>
+                <TextView
+                        android:id="@+id/textDuration"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/zeros"
+                        android:textSize="11sp" android:paddingLeft="3dp" android:paddingRight="13dp"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:gravity="center_horizontal"
+                android:layout_alignParentBottom="false" android:layout_alignParentTop="false"
+                android:layout_alignParentEnd="true" android:layout_marginTop="18dp">
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageRepeat" android:clickable="true"
+                    android:src="@drawable/repeat_disable" android:onClick="onClickControlsList"
+                    android:layout_gravity="center_vertical|right" android:paddingRight="10dp"/>
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imagePrevious" android:clickable="true"
+                    android:src="@drawable/previous" android:onClick="onClickControlsList"
+                    android:layout_gravity="center_vertical" android:paddingRight="8dp"/>
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imagePlay" android:clickable="true" android:src="@drawable/play"
+                    android:onClick="onClickControlsList"/>
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageNext" android:clickable="true" android:src="@drawable/next"
+                    android:onClick="onClickControlsList" android:layout_gravity="center_vertical"
+                    android:paddingLeft="8dp"/>
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageShuffle" android:clickable="true"
+                    android:src="@drawable/shuffle_disable" android:onClick="onClickControlsList"
+                    android:layout_gravity="center" android:paddingLeft="10dp"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</LinearLayout>

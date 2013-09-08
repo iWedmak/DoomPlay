@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name = "blue_active">#0D6BB8</color>
+    <color name = "almost_white">#C8E6E8</color>
+    <color name = "filesystem_white">#B7C6C7</color>
+    <color name = "deleted_item">#77654B</color>
+    <color name = "selected_item">#A1FCFF</color>
+    <color name = "black">#000000</color>
+    <color name = "background">#121212</color>
+    <color name = "transparent">#00000000</color>
+    <color name="pressed">#CC006AC1</color>
+    <color name = "blue_text">#217FCC</color>
+</resources>

@@ -1,0 +1,107 @@
+package com.perm.Widgets;
+
+
+/*
+ *    Copyright 2013 Vladislav Krot
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ *
+ *    You can contact me <DoomPlaye@gmail.com>
+ */
+
+import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.widget.RemoteViews;
+import com.perm.DoomPlay.PlayingService;
+import com.example.DoomPlay.R;
+import com.perm.DoomPlay.Song;
+
+
+public class SimpleSWidget extends AppWidgetProvider
+{
+    public final static String actionUpdateWidget ="doom.update.widget";
+
+    @Override
+    public void onReceive(Context context, Intent intent)
+    {
+        super.onReceive(context,intent);
+
+        if(intent.getAction().equals(actionUpdateWidget))
+            updateWidget(context);
+
+    }
+    static void updateWidget(Context context)
+    {
+
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_small);
+        if(!PlayingService.isOnline)
+        {
+            Song song = new Song(PlayingService.tracks[PlayingService.indexCurrentTrack]);
+            views.setTextViewText(R.id.widgetTitle, song.getTitle());
+            views.setTextViewText(R.id.widgetArtist, song.getArtist() );
+
+            Bitmap cover = song.getBitmap(context);
+            if (cover == null)
+            {
+                views.setImageViewResource(R.id.widgetAlbum, R.drawable.fallback_cover);
+            }
+            else
+            {
+                views.setImageViewBitmap(R.id.widgetAlbum, cover);
+            }
+        }
+        else
+        {
+            views.setTextViewText(R.id.widgetTitle, PlayingService.audios.get(PlayingService.indexCurrentTrack).title);
+            views.setTextViewText(R.id.widgetArtist,PlayingService.audios.get(PlayingService.indexCurrentTrack).artist);
+            views.setImageViewResource(R.id.widgetAlbum, R.drawable.fallback_cover);
+        }
+
+
+        int playButton = PlayingService.isPlaying ? R.drawable.widget_pause : R.drawable.widget_play;
+
+        views.setImageViewResource(R.id.widgetPlay, playButton);
+
+        ComponentName componentService = new ComponentName(context,PlayingService.class);
+
+        Intent intentPlay = new Intent(PlayingService.actionPlay);
+        intentPlay.setComponent(componentService);
+        views.setOnClickPendingIntent(R.id.widgetPlay, PendingIntent.getService(context, 0, intentPlay,0));
+
+
+
+        Intent intentNext = new Intent(PlayingService.actionNext);
+        intentNext.setComponent(componentService);
+        views.setOnClickPendingIntent(R.id.widgetNext, PendingIntent.getService(context, 0, intentNext, 0));
+
+        Intent intentPrevious = new Intent(PlayingService.actionPrevious);
+        intentPrevious.setComponent(componentService);
+        views.setOnClickPendingIntent(R.id.widgetPrevious, PendingIntent.getService(context, 0, intentPrevious, 0));
+
+
+        AppWidgetManager manager = AppWidgetManager.getInstance(context);
+
+        ComponentName componentWidget = new ComponentName(context,SimpleSWidget.class);
+
+        int ids[] = manager.getAppWidgetIds(componentWidget);
+
+        for (int widgetID : ids)
+            manager.updateAppWidget(widgetID, views);
+
+    }
+}

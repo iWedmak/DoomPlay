@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+        xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:id="@+id/itemGetLiricks"
+            android:icon="@drawable/lyrics"
+            android:showAsAction="always"
+            android:title="@string/lyrics">
+    </item>
+    <item
+            android:id="@+id/itemLike"
+            android:icon="@drawable/like"
+            android:showAsAction="always"
+            android:title="@string/like">
+    </item>
+</menu>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.example.DoomPlay"
+          android:versionCode="1"
+          android:versionName="1.11">
+    <uses-sdk android:minSdkVersion="4"
+              android:targetSdkVersion="16"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application android:label="@string/app_name"
+                 android:icon="@drawable/ic_launcher"
+                 android:name="com.perm.DoomPlay.MyApplication">
+
+        <activity android:name="com.perm.DoomPlay.MainScreenActivity"
+                  android:label="@string/app_name"
+                  android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+        </activity>
+
+        <activity android:name="com.perm.DoomPlay.FullPlaybackActivity"
+                  android:label="@string/app_name"
+                  android:launchMode="singleTask"
+                  android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MUSIC_PLAYER"/>
+                <action android:name="android.intent.action.VIEW"/>
+                <data android:mimeType="audio/*"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MUSIC_PLAYER"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.perm.DoomPlay.SearchActivity"
+                  android:launchMode="singleTask"/>
+
+        <activity android:name="com.perm.DoomPlay.FileSystemActivity"
+                  android:launchMode="singleTop"/>
+
+        <activity android:name="com.perm.DoomPlay.PlaylistActivity"
+                  android:launchMode="singleTop"/>
+
+        <activity android:name="com.perm.DoomPlay.ListTracksActivity"
+                  android:launchMode="singleTask"/>
+
+        <activity android:name="com.perm.DoomPlay.AlbumArtistActivity"
+                  android:launchMode="singleTop"/>
+
+        <activity android:name="com.perm.DoomPlay.ListTrackToListActivity"
+                  android:launchMode="singleTop"/>
+
+        <activity android:name="com.perm.DoomPlay.SearchVkActivity"
+                  android:launchMode="singleTask"/>
+
+        <activity android:name="com.perm.DoomPlay.ListVkActivity"
+                  android:launchMode="singleTask"/>
+
+        <activity android:name="com.perm.DoomPlay.LoginActivity"/>
+
+
+        <activity android:name="com.perm.DoomPlay.SettingActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.PREFERENCE" />
+            </intent-filter>
+        </activity>
+
+
+
+        <service
+                android:name="com.perm.DoomPlay.PlayingService"
+                android:launchMode ="singleTask"
+                android:configChanges="orientation">
+        </service>
+
+
+        <receiver
+                android:name="com.perm.Widgets.SimpleSWidget"
+                android:icon="@drawable/ic_launcher"
+                android:label="DoomPlay">
+            <intent-filter>
+                <action android:name ="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name ="doom.update.widget"/>
+            </intent-filter>
+            <meta-data
+                    android:name="android.appwidget.provider"
+                    android:resource="@xml/small_widget_metadata">
+            </meta-data>
+        </receiver>
+
+        <receiver
+                android:name="com.perm.Widgets.BigWidget"
+                android:icon="@drawable/ic_launcher"
+                android:label="DoomPlay">
+            <intent-filter>
+                <action android:name ="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name ="doom.update.widget"/>
+            </intent-filter>
+            <meta-data
+                    android:name="android.appwidget.provider"
+                    android:resource="@xml/big_widget_metadata">
+            </meta-data>
+        </receiver>
+
+    </application>
+</manifest>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+             <PreferenceScreen
+                     android:title="Audio"
+                     android:summary="audio settings">
+                 <PreferenceCategory
+                         android:title="Call">
+                     <CheckBoxPreference
+                             android:key="oncall"
+                             android:summary="set pause while calling"
+                             android:title="On call"
+                             android:defaultValue="true">
+                     </CheckBoxPreference>
+                     <CheckBoxPreference
+                             android:dependency="oncall"
+                             android:key="aftercall"
+                             android:summary="playing after call (if was playing before)"
+                             android:title="After call"
+                             android:defaultValue="true">
+                     </CheckBoxPreference>
+                 </PreferenceCategory>
+
+                 <PreferenceCategory
+                         android:title="AudioFocus">
+                     <CheckBoxPreference
+                             android:key="shortfocus"
+                             android:summary="set pause on short change of audiofocus (sms/navigation/etc.)"
+                             android:title="Short audiofocus"
+                             android:defaultValue="false">
+                     </CheckBoxPreference>
+
+                     <CheckBoxPreference
+                             android:key="longfocus"
+                             android:summary="set pause on long change of audiofocus (another player/game/etc.)"
+                             android:title="Long audiofocus"
+                             android:defaultValue="false">
+                     </CheckBoxPreference>
+
+                     <CheckBoxPreference
+                             android:key="gainfocus"
+                             android:summary="playing after gain focus (if was playing before)"
+                             android:title="Gain focus"
+                             android:defaultValue="false">
+                     </CheckBoxPreference>
+                 </PreferenceCategory>
+             </PreferenceScreen>
+
+
+
+         <PreferenceScreen
+                 android:title="Album art"
+                 android:summary="album art settings">
+             <CheckBoxPreference
+                     android:key="downloadart"
+                     android:summary="download album art from internet"
+                     android:title="Download album art"
+                     android:defaultValue="true">
+             </CheckBoxPreference>
+             <CheckBoxPreference
+                     android:dependency="downloadart"
+                     android:key="saveart"
+                     android:summary="save downloaded album art from internet"
+                     android:defaultValue="true"
+                     android:title="Save downloaded album art">
+             </CheckBoxPreference>
+         </PreferenceScreen>
+
+
+
+
+
+        <PreferenceScreen
+                android:title="Other"
+                android:summary="Other settings" >
+            <CheckBoxPreference
+                    android:key="scroll"
+                    android:summary="scroll to track after it changed (available only in SDK > 7)"
+                    android:title="Smooth scroll"
+                    android:defaultValue="true">
+            </CheckBoxPreference>
+
+            <CheckBoxPreference
+                    android:key="notifreturn"
+                    android:summary="return on full screen if true ,else on small screen"
+                    android:title="On click notification"
+                    android:defaultValue="true">
+            </CheckBoxPreference>
+            <CheckBoxPreference
+                    android:key="hideoncreate"
+                    android:summary="show controls on first open"
+                    android:title="Show controls"
+                    android:defaultValue="true">
+            </CheckBoxPreference>
+        </PreferenceScreen>
+
+
+
+
+        <PreferenceScreen
+                android:title="About"
+                android:summary="about application">
+            <PreferenceScreen
+                    android:title="Copyright"
+                    android:summary="© 2013 Vladislav Krot (DoomPlay)">
+            </PreferenceScreen>
+            <PreferenceScreen
+                    android:title="Contact to author"
+                    android:summary="DoomPlaye@gmail.com">
+            </PreferenceScreen>
+        </PreferenceScreen>
+
+
+
+</PreferenceScreen>

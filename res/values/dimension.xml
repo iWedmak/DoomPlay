@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name ="dialogSleepWidth">700dp</dimen>
+    <dimen name ="dialogSleepHeight">270dp</dimen>
+    <dimen name = "dialogAddNewWidth">400dp</dimen>
+    <dimen name = "dialogAddNewHeight">160dp</dimen>
+</resources>

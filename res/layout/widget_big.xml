@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="match_parent"
+              android:layout_gravity="center_vertical"
+              android:orientation="vertical" android:background="#35000000">
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:background="#80000000" android:gravity="center_vertical">
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_weight="1" android:paddingLeft="10dp"
+                android:paddingTop="4dp" android:paddingBottom="4dp">
+            <TextView
+                    android:id="@+id/textWidgetlTitle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:ellipsize="marquee" android:textSize="17sp" android:textColor="@color/blue_text"
+                    android:textStyle="normal" android:text=""/>
+            <TextView
+                    android:id="@+id/textWidgetArtist"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:ellipsize="marquee" android:textSize="14sp" android:text=""
+                    android:textColor="@color/almost_white"/>
+        </LinearLayout>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textWidgetCount" android:textSize="14sp" android:paddingRight="5dp"
+                android:singleLine="false"/>
+    </LinearLayout>
+    <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageWidgetCover" android:layout_weight="1" android:src="@drawable/fallback_cover"
+            android:layout_marginBottom="8dp" android:layout_marginTop="8dp"/>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:gravity="center_horizontal"
+            android:layout_alignParentBottom="false" android:layout_alignParentTop="false"
+            android:layout_alignParentEnd="true" android:background="#80000000"
+            android:paddingTop="5dp" android:paddingBottom="5dp">
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageRepeat" android:clickable="true"
+                android:src="@drawable/repeat_disable"
+                android:layout_gravity="center_vertical|right" android:paddingRight="6dp"/>
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imagePrevious" android:clickable="true"
+                android:src="@drawable/previous"
+                android:layout_gravity="center_vertical" android:paddingRight="6dp"/>
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imagePlay" android:clickable="true" android:src="@drawable/play"
+                />
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageNext" android:clickable="true" android:src="@drawable/next"
+               android:layout_gravity="center_vertical"
+                android:paddingLeft="6dp"/>
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageShuffle" android:clickable="true"
+                android:src="@drawable/shuffle_disable"
+                android:layout_gravity="center" android:paddingLeft="4dp"/>
+    </LinearLayout>
+</LinearLayout>

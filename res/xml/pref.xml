@@ -49,7 +49,41 @@
                  </PreferenceCategory>
              </PreferenceScreen>
 
-
+    <PreferenceScreen
+            android:title="Vk"
+            android:summary="vkontakte settings">
+        <ListPreference
+                android:key="downloadart"
+                android:summary="download album art from internet"
+                android:title="Download album art"
+                android:defaultValue="true">
+        </ListPreference>
+        <ListPreference
+                android:key="downloadart"
+                android:summary="download album art from internet"
+                android:title="Download album art"
+                android:defaultValue="true">
+        </ListPreference>
+        <ListPreference
+                android:key="downloadart"
+                android:summary="download album art from internet"
+                android:title="Download album art"
+                android:defaultValue="true">
+        </ListPreference>
+        <ListPreference
+                android:key="downloadart"
+                android:summary="download album art from internet"
+                android:title="Download album art"
+                android:defaultValue="true">
+        </ListPreference>
+        <CheckBoxPreference
+                android:dependency="downloadart"
+                android:key="saveart"
+                android:summary="save downloaded album art from internet"
+                android:defaultValue="true"
+                android:title="Save downloaded album art">
+        </CheckBoxPreference>
+    </PreferenceScreen>
 
          <PreferenceScreen
                  android:title="Album art"

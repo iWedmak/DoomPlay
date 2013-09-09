@@ -58,6 +58,13 @@ public class Audio implements Serializable ,Parcelable
         dest.writeLong(aid);
         dest.writeLong(lyrics_id);
     }
+
+
+    public boolean equal(Audio o)
+    {
+        return o.title.equals(title) && o.artist.equals(artist) && o.url.equals(url) && o.aid == aid && o.lyrics_id == lyrics_id;
+    }
+
     public static final Parcelable.Creator<Audio> CREATOR = new Parcelable.Creator<Audio>()
     {
         @Override

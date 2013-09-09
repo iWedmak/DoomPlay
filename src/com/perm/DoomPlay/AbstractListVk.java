@@ -3,9 +3,11 @@ package com.perm.DoomPlay;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -24,17 +26,19 @@ abstract class AbstractListVk extends AbstractControls
     ListVkAdapter adapter;
     static protected ArrayList<Audio> audios;
     Api api;
+
     @Override
-    protected void initializeAbstract()
+    protected void onCreate(Bundle savedInstanceState)
     {
-        super.initializeAbstract();
-        api=new Api(MainScreenActivity.account.access_token, LoginActivity.API_ID);
+        super.onCreate(savedInstanceState);
+        api = new Api(MainScreenActivity.account.access_token, LoginActivity.API_ID);
     }
 
     protected void markItem(int position , boolean withScroll)
     {
-        if(PlayingService.serviceAlive && PlayingService.audios.equals(audios))
+        if(PlayingService.serviceAlive && PlayingService.audios != null && equalsCollections(PlayingService.audios, audios))
         {
+
             adapter.setMarkedItem(position);
             if(withScroll && SettingActivity.getPreferences(this,SettingActivity.keyScroll) && Build.VERSION.SDK_INT >= 8)
                 listView.smoothScrollToPosition(position);
@@ -42,6 +46,18 @@ abstract class AbstractListVk extends AbstractControls
         else
             adapter.notifyDataSetChanged();
     }
+     public static boolean equalsCollections(ArrayList<Audio> first, ArrayList<Audio> second)
+     {
+         if(first.size() != second.size())
+             return false;
+
+         for (int i = 0 ; i < first.size(); i++)
+             if (!first.get(i).equal(second.get(i)))
+                return false;
+
+         return true;
+     }
+
     @Override
     protected void trackChanged()
     {
@@ -138,30 +154,44 @@ abstract class AbstractListVk extends AbstractControls
     };
     void getLyriks(int position)
     {
+        long lid = audios.get(position).lyrics_id;
+        if(lid != 0 && Utils.isOnline(getBaseContext()))
+        {
+            Bundle bundle = new Bundle();
+            bundle.putLong(LyricsDialog.keyLyrics, lid);
+            LyricsDialog dialog = new LyricsDialog();
+            dialog.setArguments(bundle);
+            dialog.show(getSupportFragmentManager(),"tag");
 
+        }
+        else
+            Toast.makeText(this,"can't find lyrics",Toast.LENGTH_SHORT);
     }
     void likeTrack(int position)
     {
-        AsyncTask<Long,Void,Void> asyncTask = new AsyncTask<Long, Void, Void>()
+        if(Utils.isOnline(getBaseContext()))
         {
-            @Override
-            protected Void doInBackground(Long... params)
+            AsyncTask<Long,Void,Void> asyncTask = new AsyncTask<Long, Void, Void>()
             {
-                try
+                @Override
+                protected Void doInBackground(Long... params)
                 {
-                    api.addAudio(params[0],MainScreenActivity.account.user_id);
+                    try
+                    {
+                        api.addAudio(params[0],MainScreenActivity.account.user_id);
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (KException e) {
-                    e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (KException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
                 }
-                return null;
-            }
-        };
-        asyncTask.execute(audios.get(position).aid);
+            };
+            asyncTask.execute(audios.get(position).aid);
+        }
     }
     AdapterView.OnItemLongClickListener onItemLongVkListener = new AdapterView.OnItemLongClickListener()
     {
@@ -174,6 +204,12 @@ abstract class AbstractListVk extends AbstractControls
     };
     protected void onClickTrack(int position)
     {
+        if(MainScreenActivity.isLoading)
+        {
+            Toast.makeText(getBaseContext(),"please wait",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if(!PlayingService.isOnline)
         {
             stopService(new Intent(getBaseContext(),PlayingService.class));
@@ -184,11 +220,8 @@ abstract class AbstractListVk extends AbstractControls
         {
             intentService.putExtra(FullPlaybackActivity.keyIndex,position);
             intentService.putExtra(FullPlaybackActivity.keyService,audios);
-            if(PlayingService.isClosed)
-            {
-                bindService(intentService,serviceConnection,0);
-                PlayingService.isClosed = false;
-            }
+
+            bindService(intentService,serviceConnection,BIND_IMPORTANT);
             startService(intentService);
         }
         else
@@ -198,5 +231,14 @@ abstract class AbstractListVk extends AbstractControls
 
             playingService.playTrackFromList(position);
         }
+    }
+
+    @Override
+    void onClickControl(int id)
+    {
+        if(!MainScreenActivity.isLoading)
+            super.onClickControl(id);
+        else
+            Toast.makeText(this,"please wait",Toast.LENGTH_SHORT);
     }
 }

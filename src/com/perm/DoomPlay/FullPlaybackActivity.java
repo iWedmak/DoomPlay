@@ -67,8 +67,6 @@ public class FullPlaybackActivity  extends AbstractControls
     protected void onResume()
     {
         super.onResume();
-
-        tracks = PlayingService.tracks;
         isShown = true;
         viewPager.setCurrentItem(PlayingService.indexCurrentTrack,false);
 
@@ -131,13 +129,19 @@ public class FullPlaybackActivity  extends AbstractControls
 
     void getTracks()
     {
-        if(!intentWas.getAction().equals(Intent.ACTION_VIEW))
-            tracks =  intentWas.getStringArrayExtra((FileSystemActivity.keyMusic));
-        else
+        if(intentWas.getAction().equals(Intent.ACTION_VIEW))
         {
             if(!TracksHolder.isScanned)
                 startScan();
             tracks = new String[]{getRealPathFromIntent(intentWas)};
+        }
+        else if(intentWas.getAction().equals(actionPlayFull))
+        {
+            tracks =  intentWas.getStringArrayExtra((FileSystemActivity.keyMusic));
+        }
+        else if(intentWas.getAction().equals(actionReturnFull))
+        {
+            tracks = PlayingService.tracks;
         }
     }
 

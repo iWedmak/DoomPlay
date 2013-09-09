@@ -203,35 +203,39 @@ abstract class AbstractControls extends AbstractReceiver
                 clickWithoutAction();
             else
             {
-                switch (v.getId())
-                {
-                    case (R.id.imageShuffle):
-                        playingService.setShuffle();
-                        if(PlayingService.shuffle)
-                            imgShuffle.setImageResource(R.drawable.shuffle_enable);
-                        else
-                            imgShuffle.setImageResource(R.drawable.shuffle_disable);
-                        break;
-                    case (R.id.imagePrevious):
-                        playingService.previousSong();
-                        break;
-                    case (R.id.imagePlay):
-                        playingService.playPause();
-                        break;
-                    case (R.id.imageNext):
-                        playingService.nextSong();
-                        break;
-                    case (R.id.imageRepeat):
-                        playingService.setLoop();
-                        if(PlayingService.looping)
-                            imgRepeat.setImageResource(R.drawable.repeat_enable);
-                        else
-                            imgRepeat.setImageResource(R.drawable.repeat_disable);
-                        break;
-                }
+                onClickControl(v.getId());
             }
         }
     };
+    void onClickControl(int id)
+    {
+        switch (id)
+        {
+            case (R.id.imageShuffle):
+                playingService.setShuffle();
+                if(PlayingService.shuffle)
+                    imgShuffle.setImageResource(R.drawable.shuffle_enable);
+                else
+                    imgShuffle.setImageResource(R.drawable.shuffle_disable);
+                break;
+            case (R.id.imagePrevious):
+                playingService.previousSong();
+                break;
+            case (R.id.imagePlay):
+                playingService.playPause();
+                break;
+            case (R.id.imageNext):
+                playingService.nextSong();
+                break;
+            case (R.id.imageRepeat):
+                playingService.setLoop();
+                if(PlayingService.looping)
+                    imgRepeat.setImageResource(R.drawable.repeat_enable);
+                else
+                    imgRepeat.setImageResource(R.drawable.repeat_disable);
+                break;
+        }
+    }
 
     SeekBar.OnSeekBarChangeListener seekBarHandler = new SeekBar.OnSeekBarChangeListener()
     {

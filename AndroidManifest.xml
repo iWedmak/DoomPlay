@@ -64,6 +64,13 @@
         <activity android:name="com.perm.DoomPlay.ListVkActivity"
                   android:launchMode="singleTask"/>
 
+        <activity android:name="com.perm.DoomPlay.VkPopularActivity"
+                  android:launchMode="singleTop"/>
+        <activity android:name="com.perm.DoomPlay.VkAlbumsActivity"
+                  android:launchMode="singleTop"/>
+        <activity android:name="com.perm.DoomPlay.VkFriendsActivity"
+                  android:launchMode="singleTop"/>
+
         <activity android:name="com.perm.DoomPlay.LoginActivity"/>
 
 

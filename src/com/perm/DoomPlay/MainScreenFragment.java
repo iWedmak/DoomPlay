@@ -20,7 +20,7 @@ public class MainScreenFragment extends SherlockFragment
 
     void scan()
     {
-        AsyncTask<Void,Void,Void> task = new AsyncTask<Void, Void, Void>()
+        new AsyncTask<Void, Void, Void>()
         {
             @Override
             protected void onPreExecute()
@@ -44,14 +44,21 @@ public class MainScreenFragment extends SherlockFragment
                 linearLoading.setVisibility(View.GONE);
                 MainScreenActivity.isLoading = false;
             }
-        };
-        task.execute();
+        }.execute();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         activity =(MainScreenActivity)getActivity();
+        activity.setScanCallback(new MainScreenActivity.IScanCallback()
+        {
+            @Override
+            public void scanI()
+            {
+                scan();
+            }
+        });
         View view = inflater.inflate(R.layout.mainscreen_fragment,container,false);
         linearLoading = (LinearLayout)view.findViewById(R.id.linearLoading);
         view.findViewById(R.id.linearAlbums).setOnClickListener(onClickMainLinear);
@@ -60,6 +67,7 @@ public class MainScreenFragment extends SherlockFragment
         view.findViewById(R.id.linearPlaylists).setOnClickListener(onClickMainLinear);
         view.findViewById(R.id.linearFolders).setOnClickListener(onClickMainLinear);
         view.findViewById(R.id.linearSearch).setOnClickListener(onClickMainLinear);
+
 
         if(!TracksHolder.isScanned)
             scan();

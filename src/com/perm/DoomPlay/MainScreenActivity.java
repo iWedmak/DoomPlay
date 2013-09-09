@@ -39,12 +39,21 @@ public class MainScreenActivity extends AbstractReceiver
     public static final boolean isJellyBean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
     public static final boolean isOldSDK =  Build.VERSION.SDK_INT <= 8;
     private static final int REQUEST_LOGIN = 1093;
-    static boolean isLoading;
+    public static boolean isLoading;
     public static Account account = new Account();
     public static boolean isRegister = false;
     ViewPager viewPager;
-    MainScreenFragment fragmentMain;
-    MainVkFragment fragmentVk;
+
+    interface IScanCallback
+    {
+        void scanI();
+    }
+    private IScanCallback scanCallback;
+
+    void setScanCallback(IScanCallback scanCallback)
+    {
+         this.scanCallback = scanCallback;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,8 +61,6 @@ public class MainScreenActivity extends AbstractReceiver
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mail_screen);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        fragmentMain = new MainScreenFragment();
-        fragmentVk = new MainVkFragment();
 
         viewPager = (ViewPager)findViewById(R.id.viewPagerMain);
         viewPager.setAdapter(new MainPageAdapter(getSupportFragmentManager()));
@@ -70,7 +77,6 @@ public class MainScreenActivity extends AbstractReceiver
             public void onPageScrollStateChanged(int i){}
         });
         isLoading = false;
-
         account.restore(this);
 
         isRegister = account.access_token != null;
@@ -93,7 +99,7 @@ public class MainScreenActivity extends AbstractReceiver
         {
             case R.id.itemRescan:
                 if(!isLoading)
-                    fragmentMain.scan();
+                    scanCallback.scanI();
                 else
                     Toast.makeText(this,"wait, tracks doesn't loaded",Toast.LENGTH_SHORT);
                 return true;
@@ -132,6 +138,8 @@ public class MainScreenActivity extends AbstractReceiver
                 account.user_id=data.getLongExtra("user_id", 0);
                 account.save(this);
             }
+            else
+                Toast.makeText(getBaseContext(),"registration's error", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -147,9 +155,9 @@ public class MainScreenActivity extends AbstractReceiver
         {
             currentFragment = position;
             if(position == 0)
-                return fragmentMain;
+                return new MainScreenFragment();
             else
-                return fragmentVk;
+                return new MainVkFragment();
         }
 
         @Override

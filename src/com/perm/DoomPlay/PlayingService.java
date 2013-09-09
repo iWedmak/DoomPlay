@@ -32,6 +32,7 @@ import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.audiofx.AudioEffect;
+import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -179,7 +180,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         Notification notification = new Notification();
         notification.contentView = views;
         notification.flags |= Notification.FLAG_FOREGROUND_SERVICE;
-        notification.contentIntent = PendingIntent.getActivity(this,0,intentActivity,0);
+        notification.contentIntent = PendingIntent.getActivity(this,0,intentActivity,PendingIntent.FLAG_UPDATE_CURRENT);
         notification.icon =  isPlaying ?  R.drawable.status_icon_pause : R.drawable.status_icon_play;
 
         return notification;
@@ -236,7 +237,12 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
         Intent intentActivity;
 
-        if(SettingActivity.getPreferences(this,SettingActivity.keyOnClickNotif))
+        if(isOnline)
+        {
+            intentActivity = new Intent(this,ListVkActivity.class);
+            intentActivity.putExtra(MainScreenActivity.keyOpenInListTrack,audios);
+        }
+        else if(SettingActivity.getPreferences(this,SettingActivity.keyOnClickNotif))
         {
             intentActivity = new Intent(FullPlaybackActivity.actionReturnFull);
             intentActivity.setClass(this,FullPlaybackActivity.class);
@@ -253,7 +259,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         notification.priority = Notification.PRIORITY_MAX;
         notification.contentView = views;
         notification.bigContentView = views;
-        notification.contentIntent = PendingIntent.getActivity(this,0,intentActivity,0);
+        notification.contentIntent = PendingIntent.getActivity(this,0,intentActivity,PendingIntent.FLAG_UPDATE_CURRENT);
         notification.icon =  isPlaying ?  R.drawable.status_icon_pause : R.drawable.status_icon_play;
 
         return notification;
@@ -302,70 +308,114 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
     void handleNotifControll(String action)
     {
-        if(mediaPlayer == null)
+        if(!MainScreenActivity.isLoading)
         {
-            if(tracks == null)
-                return;
+            if(mediaPlayer == null)
+            {
+                if(tracks == null)
+                    return;
 
 
-            Intent intent = new Intent(this,PlayingService.class);
+                Intent intent = new Intent(this,PlayingService.class);
 
-            intent.setAction(actionOffline);
-            intent.putExtra(FullPlaybackActivity.keyService,tracks);
-            intent.putExtra(FullPlaybackActivity.keyIndex,indexCurrentTrack);
-            startService(intent);
-        }
-        else if (action.equals(actionPlay))
-        {
-            playPause();
+                intent.setAction(actionOffline);
+                intent.putExtra(FullPlaybackActivity.keyService,tracks);
+                intent.putExtra(FullPlaybackActivity.keyIndex,indexCurrentTrack);
+                startService(intent);
+            }
+            else if (action.equals(actionPlay))
+            {
+                playPause();
 
-        }
-        else if (action.equals(actionClose))
-        {
-            stopSelf();
-            isClosed = true;
-        }
-        else if (action.equals(actionPrevious))
-        {
-            previousSong();
-        }
-        else if (action.equals(actionNext))
-        {
-            nextSong();
-        }
-        else if(action.equals(actionShuffle))
-        {
-            setShuffle();
-        }
-        else if(action.equals(actionLoop))
-        {
-            setLoop();
+            }
+            else if (action.equals(actionClose))
+            {
+                stopSelf();
+                isClosed = true;
+            }
+            else if (action.equals(actionPrevious))
+            {
+                previousSong();
+            }
+            else if (action.equals(actionNext))
+            {
+                nextSong();
+            }
+            else if(action.equals(actionShuffle))
+            {
+                setShuffle();
+            }
+            else if(action.equals(actionLoop))
+            {
+                setLoop();
+            }
         }
     }
 
     AFListener afListener = new AFListener();
-    private void loadMusic()
+
+    private synchronized void loadMusic()
     {
         sendBroadcast(new Intent(actionTrackChanged));
         dispose();
-
+        startNotif();
         try
         {
             mediaPlayer = new MediaPlayer();
             if(!isOnline)
+            {
                 mediaPlayer.setDataSource(tracks[indexCurrentTrack]);
+                mediaPlayer.prepare();
+            }
             else
-                mediaPlayer.setDataSource(audios.get(indexCurrentTrack).url);
-            mediaPlayer.prepare();
+            {
+
+                new AsyncTask<Void,Void,Void>()
+                {
+                    @Override
+                    protected void onPreExecute()
+                    {
+                        super.onPreExecute();
+                        MainScreenActivity.isLoading = true;
+                    }
+
+                    @Override
+                    protected Void doInBackground(Void... params)
+                    {
+
+                        try {
+                            mediaPlayer.setDataSource(audios.get(indexCurrentTrack).url);
+                            mediaPlayer.prepare();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            startNotif();
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void aVoid)
+                    {
+                        super.onPostExecute(aVoid);
+                        MainScreenActivity.isLoading = false;
+                        partOfLoadMusic();
+                    }
+                }.execute();
+                return;
+            }
+
 
         }
         catch (IOException e)
         {
             Toast.makeText(this,"can't find file",Toast.LENGTH_SHORT).show();
-            startNotif();
             return;
         }
 
+        partOfLoadMusic();
+    }
+    void partOfLoadMusic()
+    {
         audioManager.requestAudioFocus(afListener,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN );
         isPrepared = true;
         mediaPlayer.setOnCompletionListener(this);
@@ -379,7 +429,6 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
         if(!MainScreenActivity.isOldSDK)
             notifyEqualizer();
-        startNotif();
 
 
         if(trackCountTotal != valueTrackNotChanged)
@@ -388,9 +437,8 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
             if(trackCountCurrent == trackCountTotal)
                 sendBroadcast(new Intent(AbstractReceiver.actionKill));
         }
-
-
     }
+
     void notifyEqualizer()
     {
         Intent intentEqualizer = new Intent(AudioEffect.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION);

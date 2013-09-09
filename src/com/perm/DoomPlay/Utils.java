@@ -118,7 +118,13 @@ public class Utils
     {
         final NetworkInfo netInfo = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
 
-        return (netInfo != null && netInfo.isConnected());
+        if(netInfo != null && netInfo.isConnected())
+            return true;
+        else
+        {
+            Toast.makeText(context,"check your internet connection",Toast.LENGTH_SHORT).show();
+            return false;
+        }
     }
 
     public static String[] getShuffledTracks(String[] tracks)

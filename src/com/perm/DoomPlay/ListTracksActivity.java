@@ -58,12 +58,10 @@ public class ListTracksActivity extends AbstractLists
         setContentView(R.layout.list_tracks);
 
         getTracksFromIntent();
+
         initialize();
         initializeAbstract();
         checkIsShown(savedInstanceState);
-
-
-
 
     }
 

@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -41,6 +42,11 @@ public class SearchVkActivity extends AbstractListVk
     {
         getSupportMenuInflater().inflate(R.menu.bar_search,menu);
         return true;
+    }
+    private void hideKeyboard()
+    {
+        InputMethodManager inputManager = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
 
@@ -103,8 +109,8 @@ public class SearchVkActivity extends AbstractListVk
         @Override
         public void onClick(View v)
         {
-             TaskLoader taskLoader = new TaskLoader();
-            taskLoader.execute(editQuery.getText().toString());
+            new TaskLoader().execute(editQuery.getText().toString());
+            hideKeyboard();
         }
     };
 
@@ -115,7 +121,7 @@ public class SearchVkActivity extends AbstractListVk
         {
             try
             {
-                audios = api.searchAudio(params[0],10);
+                audios = api.searchAudio(params[0],20);
 
             } catch (IOException e) {
                 e.printStackTrace();

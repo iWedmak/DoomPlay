@@ -8,14 +8,12 @@ import java.util.ArrayList;
 
 public class AudioAlbum {
     public long album_id;
-    public long owner_id;
     public String title;
 
     public static AudioAlbum parse(JSONObject o) throws JSONException {
         AudioAlbum a = new AudioAlbum();
         a.title = Api.unescape(o.optString("title"));
         a.album_id = o.getLong("album_id");
-        a.owner_id = o.optLong("owner_id");
         return a;
     }
     

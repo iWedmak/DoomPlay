@@ -47,7 +47,6 @@ public class SearchActivity extends AbstractLists
 
         initialize();
         initializeAbstract();
-
         checkIsShown(savedInstanceState);
 
     }
@@ -63,7 +62,6 @@ public class SearchActivity extends AbstractLists
     };
     private void initialize()
     {
-        isShown = false;
         editQuery = (EditText) findViewById(R.id.editQuery);
         listView = (ListView) findViewById(R.id.listSearch);
         editQuery.addTextChangedListener(onTextChangeHandler);

@@ -43,7 +43,7 @@
                 android:id="@+id/linearVkTop"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:gravity="center_vertical" android:layout_below="@+id/linearVkAlbum">
+                android:gravity="center_vertical" android:layout_below="@+id/linearVkFriends">
             <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -54,6 +54,28 @@
                     android:paddingLeft="8dp"
                     android:textSize="20sp"
                     android:text="Top rated"
+                    android:textColor="@color/almost_white"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/linearVkFriends"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:gravity="center_vertical" android:layout_below="@+id/linearVkAlbum">
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="7dp" android:src="@drawable/icon_vk_friends"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp"
+                    android:textSize="20sp"
+                    android:text="Friends"
                     android:textColor="@color/almost_white"/>
         </LinearLayout>
         <LinearLayout
@@ -128,12 +150,13 @@
                 android:layout_height="fill_parent"
                 android:gravity="bottom"
                 android:id="@+id/linearLoading"
-                android:visibility="invisible" android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true">
+                android:visibility="invisible"
+                android:layout_alignParentBottom="false"
+                android:layout_centerInParent="true">
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/loading_music"
+                    android:text="@string/please_wait"
                     android:id="@+id/textView1"
                     android:layout_gravity="center_horizontal|bottom"/>
             <ProgressBar

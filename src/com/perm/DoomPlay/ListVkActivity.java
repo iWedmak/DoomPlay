@@ -5,9 +5,16 @@ import android.os.Bundle;
 import android.widget.*;
 import com.actionbarsherlock.view.Menu;
 import com.example.DoomPlay.R;
+import com.perm.vkontakte.api.Audio;
+
+import java.util.ArrayList;
 
 public class ListVkActivity extends AbstractListVk
 {
+    static String currentAction ;
+    public static final String actionMyMusic ="actionMyMusic";
+    public static final String actionMyAlbums = "actionMyAlbums";
+    public static final String actionJust = "actionJust";
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -15,6 +22,7 @@ public class ListVkActivity extends AbstractListVk
         setContentView(R.layout.list_tracks);
 
         audios  = getIntent().getParcelableArrayListExtra(MainScreenActivity.keyOpenInListTrack);
+        currentAction = getIntent().getAction();
 
         initializeUi();
         initializeAbstract();
@@ -39,6 +47,19 @@ public class ListVkActivity extends AbstractListVk
         seekBar = (SeekBar)findViewById(R.id.seek_bar);
         textCurrentTime = (TextView)findViewById(R.id.textElapsed);
         textTotalTime = (TextView)findViewById(R.id.textDuration);
+    }
+    @Override
+    protected void onNewIntent(Intent intent)
+    {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        ArrayList<Audio> tempTracks = intent.getParcelableArrayListExtra(MainScreenActivity.keyOpenInListTrack);
+
+        if(tempTracks != null)
+            audios = tempTracks;
+
+
+        currentAction  = intent.getAction();
     }
 
     @Override

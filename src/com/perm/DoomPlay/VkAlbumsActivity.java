@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.example.DoomPlay.R;
-import com.perm.vkontakte.api.Api;
+import com.perm.vkontakte.api.Account;
 import com.perm.vkontakte.api.Audio;
 import com.perm.vkontakte.api.AudioAlbum;
 import com.perm.vkontakte.api.KException;
@@ -22,7 +22,6 @@ import java.util.ArrayList;
 public class VkAlbumsActivity extends AbstractReceiver
 {
     ListView listView;
-    Api api;
     LinearLayout linearLoading;
     static ArrayList<AudioAlbum> albums;
 
@@ -36,7 +35,6 @@ public class VkAlbumsActivity extends AbstractReceiver
         linearLoading = (LinearLayout)findViewById(R.id.linearLoading);
         listView.setOnItemClickListener(onClickListener);
 
-        api = new Api(MainScreenActivity.account.access_token, LoginActivity.API_ID);
 
         if(albums == null && Utils.isOnline(getBaseContext()))
         {
@@ -47,7 +45,9 @@ public class VkAlbumsActivity extends AbstractReceiver
                  {
                      handler.sendEmptyMessage(1);
                      try {
-                         albums = api.getAudioAlbums(MainScreenActivity.account.user_id,40);
+                         albums = MainScreenActivity.api.getAudioAlbums(Account.account.user_id,null,
+                                 SettingActivity.getPreference(getBaseContext(),"countvkall"));
+
                      } catch (IOException e) {
                          e.printStackTrace();
                      } catch (JSONException e) {
@@ -106,9 +106,8 @@ public class VkAlbumsActivity extends AbstractReceiver
                         handler.sendEmptyMessage(1);
                         try
                         {
-                            return api.getAudio(null,albums.get(params[0]).album_id);
-
-
+                            return MainScreenActivity.api.getAudio(null,albums.get(params[0]).album_id,null
+                                    ,SettingActivity.getPreference(getBaseContext(),"countvkall"));
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -126,6 +125,7 @@ public class VkAlbumsActivity extends AbstractReceiver
                         super.onPostExecute(audios);
                         handler.sendEmptyMessage(2);
                         Intent intent = new Intent(getBaseContext(),ListVkActivity.class);
+                        intent.setAction(ListVkActivity.actionMyAlbums);
                         intent.putExtra(MainScreenActivity.keyOpenInListTrack,audios);
                         startActivity(intent);
                     }

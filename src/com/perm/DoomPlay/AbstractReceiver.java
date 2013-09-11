@@ -58,7 +58,7 @@ abstract class AbstractReceiver extends SherlockFragmentActivity
         if(PlayingService.tracks != null)
         {
             Intent intent = new Intent(getBaseContext(),ListTracksActivity.class);
-            intent.setAction(ListTracksActivity.actionPlayList);
+            intent.setAction(ListTracksActivity.actionJust);
             intent.putExtra(MainScreenActivity.keyOpenInListTrack,PlayingService.tracks);
             startActivity(intent);
         }

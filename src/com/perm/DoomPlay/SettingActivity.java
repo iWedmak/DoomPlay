@@ -43,6 +43,11 @@ public class SettingActivity extends SherlockPreferenceActivity
     {
          return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(key,false);
     }
+    public static int getPreference(Context context, String key)
+    {
+        return PreferenceManager.getDefaultSharedPreferences(context).getInt(key,10);
+    }
+
 
     @SuppressWarnings("deprecation")
     @Override

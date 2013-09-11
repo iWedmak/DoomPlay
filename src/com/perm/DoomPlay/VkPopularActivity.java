@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.example.DoomPlay.R;
-import com.perm.vkontakte.api.Api;
 import com.perm.vkontakte.api.Audio;
 import com.perm.vkontakte.api.KException;
 import org.json.JSONException;
@@ -24,7 +23,6 @@ public class VkPopularActivity extends AbstractReceiver
     public final static int[] acordingIds = {1,2,3,4,5,6,7,21,8,9,10,11,12,13,14,15,16,17,19,22,18};
 
     ListView listView;
-    Api api;
     LinearLayout linearLoading;
 
 
@@ -34,7 +32,6 @@ public class VkPopularActivity extends AbstractReceiver
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_vk);
 
-        api = new Api(MainScreenActivity.account.access_token, LoginActivity.API_ID);
         listView = (ListView)findViewById(R.id.listVk);
         listView.setAdapter(new VkPopularAdapter());
         linearLoading = (LinearLayout)findViewById(R.id.linearLoading);
@@ -63,7 +60,8 @@ public class VkPopularActivity extends AbstractReceiver
                       protected ArrayList<Audio> doInBackground(Integer... params)
                       {
                           try {
-                              return api.getAudioPopular(acordingIds[params[0]],30);
+                              return MainScreenActivity.api.getAudioPopular(acordingIds[params[0]],
+                                      SettingActivity.getPreference(getBaseContext(),"countvkpopular"));
                           } catch (IOException e) {
                               e.printStackTrace();
                           } catch (JSONException e) {
@@ -83,6 +81,7 @@ public class VkPopularActivity extends AbstractReceiver
 
 
                           Intent intent = new Intent(getBaseContext(),ListVkActivity.class);
+                          intent.setAction(ListVkActivity.actionJust);
                           intent.putExtra(MainScreenActivity.keyOpenInListTrack,audios);
                           startActivity(intent);
                       }

@@ -14,15 +14,8 @@ public class Attachment implements Serializable {
     public Photo photo; 
     //public Photo posted_photo;
     public Audio audio; 
-    public Link link; 
-    public Note note; 
-    public Graffiti graffiti;
-    public VkApp app; 
+    public Link link;
     public VkPoll poll;
-    public Geo geo;
-    public Document document;
-    public Message message;
-    public WallMessage wallMessage;
     public Page page;
 
     public static ArrayList<Attachment> parseAttachments(JSONArray attachments, long from_id, long copy_owner_id, JSONObject geo_json) throws JSONException {
@@ -42,13 +35,10 @@ public class Attachment implements Serializable {
                         attachment.photo=Photo.parse(x);
                 }
                 if(attachment.type.equals("graffiti"))
-                    attachment.graffiti=Graffiti.parse(json_attachment.getJSONObject("graffiti"));
                 if(attachment.type.equals("link"))
                     attachment.link=Link.parse(json_attachment.getJSONObject("link"));
                 if(attachment.type.equals("audio"))
                     attachment.audio=Audio.parse(json_attachment.getJSONObject("audio"));
-                if(attachment.type.equals("note"))
-                    attachment.note=Note.parse(json_attachment.getJSONObject("note"), false);
                 if(attachment.type.equals("poll")){
                     attachment.poll=VkPoll.parse(json_attachment.getJSONObject("poll"));
                     if(attachment.poll.owner_id==0){
@@ -58,23 +48,13 @@ public class Attachment implements Serializable {
                             attachment.poll.owner_id=from_id;
                     }
                 }
-                if(attachment.type.equals("doc"))
-                    attachment.document=Document.parse(json_attachment.getJSONObject("doc"));
-                if(attachment.type.equals("wall"))
-                    attachment.wallMessage=WallMessage.parse(json_attachment.getJSONObject("wall"));
+
                 if(attachment.type.equals("page"))
                     attachment.page=Page.parseFromAttachment(json_attachment.getJSONObject("page"));
                 attachments_arr.add(attachment);
             }
         }
-        
-        //Geo тоже добавляем в attacmnets если он есть
-        if(geo_json!=null){
-            Attachment a=new Attachment();
-            a.type="geo";
-            a.geo=Geo.parse(geo_json);
-            attachments_arr.add(a);
-        }
+
         return attachments_arr;
     }
 }

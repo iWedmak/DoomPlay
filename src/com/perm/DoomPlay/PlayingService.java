@@ -64,7 +64,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     final static int nextTrack = 1;
     final static int previousTrack = -1;
     public final static int valueTrackNotChanged = 519815;
-    MyBinder binder = new MyBinder();
+    final MyBinder binder = new MyBinder();
     public final static int idForeground = 931;
     public final static String actionPlay = "DoomePlay";
     public final static String actionClose = "DoomClose";
@@ -78,9 +78,10 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     public final static String actionOffline = "FromlPlayback";
     public static boolean isOnline;
     public static final String actionOnline = "vkOnline";
-    public static boolean isClosed = false;
-    AudioManager audioManager;
+    final AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+    final TelephonyManager telephonyManager = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
     public static ArrayList<Audio> audios ;
+    public static boolean isLoadingTrack;
 
 
     @Override
@@ -88,7 +89,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     {
         super.onCreate();
         initialize();
-        ((TelephonyManager)getSystemService(TELEPHONY_SERVICE)).listen(new CallListener(),CallListener.LISTEN_CALL_STATE);
+        telephonyManager.listen(new CallListener(),CallListener.LISTEN_CALL_STATE);
 
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
 
@@ -142,9 +143,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
             views.setImageViewResource(R.id.notifAlbum, R.drawable.fallback_cover);
         }
 
-
-        int playButton = isPlaying ? R.drawable.widget_pause : R.drawable.widget_play;
-        views.setImageViewResource(R.id.notifPlay, playButton);
+        views.setImageViewResource(R.id.notifPlay, isPlaying ? R.drawable.widget_pause : R.drawable.widget_play);
 
         ComponentName componentName = new ComponentName(this,PlayingService.class);
 
@@ -176,7 +175,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         {
             intentActivity = FullPlaybackActivity.returnSmall(this);
         }
-
+        intentActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         Notification notification = new Notification();
         notification.contentView = views;
         notification.flags |= Notification.FLAG_FOREGROUND_SERVICE;
@@ -214,8 +213,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         }
 
 
-        int playButton = isPlaying ? R.drawable.widget_pause : R.drawable.widget_play;
-        views.setImageViewResource(R.id.notifJellyPlay, playButton);
+        views.setImageViewResource(R.id.notifJellyPlay,isPlaying ? R.drawable.widget_pause : R.drawable.widget_play);
 
         ComponentName componentName = new ComponentName(this,PlayingService.class);
 
@@ -237,12 +235,8 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
         Intent intentActivity;
 
-        if(isOnline)
-        {
-            intentActivity = new Intent(this,ListVkActivity.class);
-            intentActivity.putExtra(MainScreenActivity.keyOpenInListTrack,audios);
-        }
-        else if(SettingActivity.getPreferences(this,SettingActivity.keyOnClickNotif))
+
+        if(SettingActivity.getPreferences(this,SettingActivity.keyOnClickNotif))
         {
             intentActivity = new Intent(FullPlaybackActivity.actionReturnFull);
             intentActivity.setClass(this,FullPlaybackActivity.class);
@@ -251,8 +245,8 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         else
         {
             intentActivity = FullPlaybackActivity.returnSmall(this);
-            intentActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         }
+        intentActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         Notification notification = new Notification();
         notification.flags |= Notification.FLAG_FOREGROUND_SERVICE;
@@ -267,11 +261,11 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
     private void initialize()
     {
+        isLoadingTrack = false;
         random = new Random();
         shuffle = false;
         isPlaying = true;
         looping = false;
-        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
@@ -308,20 +302,28 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
     void handleNotifControll(String action)
     {
-        if(!MainScreenActivity.isLoading)
+        if(!PlayingService.isLoadingTrack)
         {
             if(mediaPlayer == null)
             {
-                if(tracks == null)
-                    return;
-
-
                 Intent intent = new Intent(this,PlayingService.class);
-
-                intent.setAction(actionOffline);
-                intent.putExtra(FullPlaybackActivity.keyService,tracks);
                 intent.putExtra(FullPlaybackActivity.keyIndex,indexCurrentTrack);
-                startService(intent);
+
+                if(!isOnline && tracks != null)
+                {
+                    intent.setAction(actionOffline);
+                    intent.putExtra(FullPlaybackActivity.keyService,tracks);
+
+                    startService(intent);
+                }
+                else if(isOnline && audios != null)
+                {
+                    intent.setAction(actionOnline);
+                    intent.putExtra(FullPlaybackActivity.keyService,audios);
+
+                    startService(intent);
+                }
+
             }
             else if (action.equals(actionPlay))
             {
@@ -331,7 +333,6 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
             else if (action.equals(actionClose))
             {
                 stopSelf();
-                isClosed = true;
             }
             else if (action.equals(actionPrevious))
             {
@@ -359,6 +360,8 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         sendBroadcast(new Intent(actionTrackChanged));
         dispose();
         startNotif();
+        sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
+
         try
         {
             mediaPlayer = new MediaPlayer();
@@ -376,7 +379,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
                     protected void onPreExecute()
                     {
                         super.onPreExecute();
-                        MainScreenActivity.isLoading = true;
+                        isLoadingTrack = true;
                     }
 
                     @Override
@@ -397,7 +400,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
                     protected void onPostExecute(Void aVoid)
                     {
                         super.onPostExecute(aVoid);
-                        MainScreenActivity.isLoading = false;
+                        isLoadingTrack = false;
                         partOfLoadMusic();
                     }
                 }.execute();
@@ -425,7 +428,6 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
             mediaPlayer.start();
             sendBroadcast(new Intent(actionIconPause));
         }
-        sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
 
         if(!MainScreenActivity.isOldSDK)
             notifyEqualizer();

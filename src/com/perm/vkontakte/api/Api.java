@@ -232,19 +232,13 @@ public class Api {
 
     /*** methods for friends ***/
     //http://vk.com/dev/friends.get
-    public ArrayList<User> getFriends(Long user_id, String fields, Integer lid, String captcha_key, String captcha_sid) throws MalformedURLException, IOException, JSONException, KException{
+    public ArrayList<User> getFriends(Long user_id) throws MalformedURLException, IOException, JSONException, KException{
         Params params = new Params("friends.get");
-        if(fields==null)
-            fields="first_name,last_name,photo_medium,online";
-        params.put("fields",fields);
+        params.put("fields","first_name,last_name,photo_medium");
         params.put("uid",user_id);
-        params.put("lid", lid);
+        params.put("order","hints");
         
-        //сортировка по популярности не даёт запросить друзей из списка
-        if(lid==null)
-            params.put("order","hints");
-        
-        addCaptchaParams(captcha_key, captcha_sid, params);
+        //addCaptchaParams(captcha_key, captcha_sid, params);
         JSONObject root = sendRequest(params);
         ArrayList<User> users=new ArrayList<User>();
         JSONArray array=root.optJSONArray("response");
@@ -364,14 +358,19 @@ public class Api {
 
     /*** for audio ***/
     //http://vk.com/dev/audio.get
-    public ArrayList<Audio> getAudio() throws MalformedURLException, IOException, JSONException, KException{
+    public ArrayList<Audio> getAudio(Long uid, Long gid, Long album_id,int count) throws MalformedURLException, IOException, JSONException, KException{
         Params params = new Params("audio.get");
+        params.put("uid", uid);
+        params.put("gid", gid);
+        params.put("album_id", album_id);
+        params.put("count", count);
         //addCaptchaParams(captcha_key, captcha_sid, params);
         JSONObject root = sendRequest(params);
         JSONArray array = root.optJSONArray("response");
         return parseAudioList(array, 0);
     }
-    
+
+
     //http://vk.com/dev/audio.getById
     public ArrayList<Audio> getAudioById(String audios, String captcha_key, String captcha_sid) throws MalformedURLException, IOException, JSONException, KException{
         Params params = new Params("audio.getById");
@@ -573,20 +572,7 @@ public class Api {
 
     
     //http://vk.com/dev/friends.getLists
-    public ArrayList<FriendsList> friendsLists() throws JSONException, MalformedURLException, IOException, KException {
-        Params params = new Params("friends.getLists");
-        JSONObject root = sendRequest(params);
-        ArrayList<FriendsList> result = new ArrayList<FriendsList>();
-        JSONArray list = root.optJSONArray("response");
-        if (list != null) {
-            for (int i=0; i<list.length(); ++i) {
-                JSONObject o = list.getJSONObject(i);
-                FriendsList fl = FriendsList.parse(o);
-                result.add(fl);
-            }
-        }
-        return result;
-    }
+
 
     
     private ArrayList<PhotoTag> parsePhotoTags(JSONArray array, Long pid, Long owner_id) throws JSONException {
@@ -608,19 +594,16 @@ public class Api {
     }
 
     //http://vk.com/dev/groups.getById
-    public ArrayList<Group> getGroups(Collection<Long> uids, String domain, String fields) throws MalformedURLException, IOException, JSONException, KException{
-        if (uids == null && domain == null)
-            return null;
-        if (uids.size() == 0 && domain == null)
-            return null;
-        Params params = new Params("groups.getById");
-        String str_uids;
-        if (uids != null && uids.size() > 0)
-            str_uids=arrayToString(uids);
-        else
-            str_uids = domain;
-        params.put("gids", str_uids);
-        params.put("fields", fields); //Possible values: place,wiki_page,city,country,description,start_date,finish_date,site,fixed_post
+    public ArrayList<Group> getGroups(Long uid, Integer count) throws MalformedURLException, IOException, JSONException, KException{
+
+        if(count == null)
+            count =  Integer.valueOf(600);
+
+        Params params = new Params("groups.get");
+        params.put("uid", uid);
+        params.put("count", count);
+
+        //params.put("fields", fields); //Possible values: place,wiki_page,city,country,description,start_date,finish_date,site,fixed_post
         JSONObject root = sendRequest(params);
         JSONArray array=root.optJSONArray("response");
         return Group.parseGroups(array);
@@ -756,12 +739,11 @@ public class Api {
     }
     
     //http://vk.com/dev/audio.getAlbums
-    public ArrayList<AudioAlbum> getAudioAlbums(Long uid, Long gid, Integer offset, Integer count) throws MalformedURLException, IOException, JSONException, KException{
+    public ArrayList<AudioAlbum> getAudioAlbums(Long uid, Long gid, Integer count) throws MalformedURLException, IOException, JSONException, KException{
         Params params = new Params("audio.getAlbums");
         params.put("uid", uid);
         params.put("gid", gid);
         params.put("count", count);
-        params.put("offset", offset);
         JSONObject root = sendRequest(params);
         JSONArray array = root.optJSONArray("response");
         ArrayList<AudioAlbum> albums = AudioAlbum.parseAlbums(array);
@@ -779,12 +761,10 @@ public class Api {
     }
     
     //http://vk.com/dev/audio.getPopular
-    public ArrayList<Audio> getAudioPopular() throws MalformedURLException, IOException, JSONException, KException{
+    public ArrayList<Audio> getAudioPopular(int genre_id,int count) throws MalformedURLException, IOException, JSONException, KException{
         Params params = new Params("audio.getPopular");
-        //params.put("only_eng", only_eng);
-        //params.put("genre_id", genre_id);
-        //params.put("count", count);
-        //params.put("offset", offset);
+        params.put("genre_id", genre_id);
+        params.put("count", count);
         JSONObject root = sendRequest(params);
         JSONArray array = root.optJSONArray("response");
         return parseAudioList(array, 0);

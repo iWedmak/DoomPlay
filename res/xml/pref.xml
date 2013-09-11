@@ -53,35 +53,49 @@
             android:title="Vk"
             android:summary="vkontakte settings">
         <ListPreference
-                android:key="downloadart"
-                android:summary="download album art from internet"
-                android:title="Download album art"
-                android:defaultValue="true">
+                android:entryValues="@array/count_values"
+                android:entries="@array/count_values"
+                android:key="countvkall"
+                android:summary="maximum size of my music"
+                android:title="Max size of my music"
+                android:defaultValue="50">
         </ListPreference>
         <ListPreference
-                android:key="downloadart"
-                android:summary="download album art from internet"
-                android:title="Download album art"
-                android:defaultValue="true">
+                android:entryValues="@array/count_values"
+                android:entries="@array/count_values"
+                android:key="countfrgr"
+                android:summary="maximum size of friends and gropu music"
+                android:title="Max size of friends and group"
+                android:defaultValue="50">
         </ListPreference>
         <ListPreference
-                android:key="downloadart"
-                android:summary="download album art from internet"
-                android:title="Download album art"
-                android:defaultValue="true">
+                android:entryValues="@array/count_values"
+                android:entries="@array/count_values"
+                android:key="countvksearch"
+                android:summary="maximus size of music got from search"
+                android:title="Max size of search"
+                android:defaultValue="50">
         </ListPreference>
         <ListPreference
-                android:key="downloadart"
-                android:summary="download album art from internet"
-                android:title="Download album art"
-                android:defaultValue="true">
+                android:entryValues="@array/count_values"
+                android:entries="@array/count_values"
+                android:key="countvkpopular"
+                android:summary="maximus size of music got from popular"
+                android:title="Max size of popular"
+                android:defaultValue="50">
         </ListPreference>
+
         <CheckBoxPreference
-                android:dependency="downloadart"
-                android:key="saveart"
-                android:summary="save downloaded album art from internet"
-                android:defaultValue="true"
-                android:title="Save downloaded album art">
+                android:key="friendsphotos"
+                android:summary="download friends photos"
+                android:title="Friends photos"
+                android:defaultValue="false">
+        </CheckBoxPreference>
+        <CheckBoxPreference
+                android:key="groupphotos"
+                android:summary="downloaded group photos"
+                android:title="Group photos"
+                android:defaultValue="false">
         </CheckBoxPreference>
     </PreferenceScreen>
 

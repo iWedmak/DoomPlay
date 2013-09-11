@@ -53,7 +53,7 @@ public class ListTrackToListActivity extends AbstractReceiver
         adapter = new ListTracksAdapter(tracks,this);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(onItemClickHandler);
-        playlistDB = new PlaylistDB(this);
+        playlistDB = PlaylistDB.getInstance(this);;
         LinearLayout linearAddToList = (LinearLayout)findViewById(R.id.linearToPlaylist);
         linearAddToList.setOnClickListener(onClickAddToList);
 

@@ -60,20 +60,30 @@ public class PageFragment extends SherlockFragment
 
 
         View page = isPortrait ? inflater.inflate(R.layout.page,container,false) : inflater.inflate(R.layout.page_landscape,container,false);
-        Bitmap background;
-
-        Song song = new Song(FullPlaybackActivity.tracks[pageNumber]);
-        background = song.getBitmap(getActivity().getBaseContext());
 
 
-        ImageView imgAlbum = (ImageView)page.findViewById(R.id.imageAlbum);
-        TextView textNumberSong = (TextView)page.findViewById(R.id.textNumberSong);
+        if(!PlayingService.isOnline)
+        {
+            Song song = new Song(FullPlaybackActivity.tracks[pageNumber]);
+            Bitmap background = song.getBitmap(getActivity());
 
 
-        if(background != null)
-            imgAlbum.setImageBitmap(background);
+            ImageView imgAlbum = (ImageView)page.findViewById(R.id.imageAlbum);
+            TextView textNumberSong = (TextView)page.findViewById(R.id.textNumberSong);
 
-        textNumberSong.setText(pageNumber+1 + "/" + FullPlaybackActivity.tracks.length);
+
+            if(background != null)
+                imgAlbum.setImageBitmap(background);
+
+            textNumberSong.setText(pageNumber+1 + "/" + FullPlaybackActivity.tracks.length);
+        }
+        else
+        {
+            page.findViewById(R.id.imageAlbum).setBackgroundResource(R.drawable.fallback_cover);
+            ((TextView)page.findViewById(R.id.textNumberSong)).setText(pageNumber+1 + "/" + FullPlaybackActivity.audios.size());
+        }
+
+
 
         return page;
     }

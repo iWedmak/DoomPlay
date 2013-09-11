@@ -36,14 +36,17 @@ import android.widget.TextView;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.example.DoomPlay.R;
+import com.perm.vkontakte.api.Audio;
 
 import java.io.File;
 import java.net.URI;
+import java.util.ArrayList;
 
 
 public class FullPlaybackActivity  extends AbstractControls
 {
-    public static String[] tracks;
+    static String[] tracks;
+    static ArrayList<Audio> audios;
     LinearLayout linearBackground;
     ViewPager viewPager;
     public final static String keyService = "zajiy";
@@ -135,14 +138,24 @@ public class FullPlaybackActivity  extends AbstractControls
                 startScan();
             tracks = new String[]{getRealPathFromIntent(intentWas)};
         }
-        else if(intentWas.getAction().equals(actionPlayFull))
+        else if(PlayingService.isOnline)
         {
-            tracks =  intentWas.getStringArrayExtra((FileSystemActivity.keyMusic));
+           audios = PlayingService.audios;
         }
-        else if(intentWas.getAction().equals(actionReturnFull))
+        else
         {
-            tracks = PlayingService.tracks;
+            if(intentWas.getAction().equals(actionPlayFull))
+            {
+                tracks =  intentWas.getStringArrayExtra((FileSystemActivity.keyMusic));
+            }
+            else if(intentWas.getAction().equals(actionReturnFull))
+            {
+                tracks = PlayingService.tracks;
+            }
+            intentService.setAction(PlayingService.actionOffline);
+
         }
+
     }
 
     @Override
@@ -169,24 +182,42 @@ public class FullPlaybackActivity  extends AbstractControls
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        if(!MainScreenActivity.isOldSDK)
-            getSupportMenuInflater().inflate(R.menu.bar_playing,menu);
+        if(PlayingService.isOnline)
+        {
+            getSupportMenuInflater().inflate(R.menu.bar_online_playing,menu);
+        }
         else
-            getSupportMenuInflater().inflate(R.menu.bar_playing_old,menu);
+        {
+            if(!MainScreenActivity.isOldSDK)
+                getSupportMenuInflater().inflate(R.menu.bar_playing,menu);
+            else
+                getSupportMenuInflater().inflate(R.menu.bar_playing_old,menu);
+        }
         return true;
     }
     public static Intent returnSmall(Context context)
     {
-        Intent intent = new Intent(context,ListTracksActivity.class);
+        if(PlayingService.isOnline)
+        {
+            Intent intent = new Intent(context,ListVkActivity.class);
+            intent.setAction(ListVkActivity.currentAction);
+            intent.putExtra(MainScreenActivity.keyOpenInListTrack,PlayingService.audios);
 
-        if(ListTracksActivity.currentAction != null &&
-                ListTracksActivity.currentAction.equals(ListTracksActivity.actionFromPlaylist))
-            intent.setAction(ListTracksActivity.actionFromPlaylist);
+            return intent;
+        }
         else
-            intent.setAction(ListTracksActivity.actionPlayList);
+        {
+            Intent intent = new Intent(context,ListTracksActivity.class);
 
-        intent.putExtra(MainScreenActivity.keyOpenInListTrack,PlayingService.tracks);
-        return intent;
+            if(ListTracksActivity.currentAction != null )
+                intent.setAction(ListTracksActivity.currentAction);
+            else
+                intent.setAction(ListTracksActivity.actionJust);
+
+            intent.putExtra(MainScreenActivity.keyOpenInListTrack,PlayingService.tracks);
+            return intent;
+        }
+
     }
 
 
@@ -225,7 +256,12 @@ public class FullPlaybackActivity  extends AbstractControls
 
     private void initializeService()
     {
-        intentService.putExtra(keyService,tracks);
+        if(!PlayingService.isOnline)
+            intentService.putExtra(keyService, tracks);
+        else
+            intentService.putExtra(keyService, audios);
+
+        bindService(intentService,serviceConnection,BIND_IMPORTANT);
         startService(intentService);
         PlayingService.serviceAlive = true;
     }
@@ -233,11 +269,6 @@ public class FullPlaybackActivity  extends AbstractControls
     @Override
     protected void clickWithoutAction()
     {
-        if(PlayingService.isClosed)
-        {
-            bindService(intentService,serviceConnection,0);
-            PlayingService.isClosed = false;
-        }
         initializeService();
     }
 
@@ -253,7 +284,6 @@ public class FullPlaybackActivity  extends AbstractControls
         linearBackground = (LinearLayout)findViewById(R.id.linearPlaying);
         imgPlay = (ImageView)findViewById(R.id.imagePlay);
         intentService = new Intent(this,PlayingService.class);
-        intentService.setAction(PlayingService.actionOffline);
         viewPager = (ViewPager)findViewById(R.id.viewPager);
         viewPager.setOnPageChangeListener(pageChangeHandler);
         adapterPager = new PagePlaybackAdapter(getSupportFragmentManager());
@@ -303,7 +333,11 @@ public class FullPlaybackActivity  extends AbstractControls
         @Override
         public int getCount()
         {
-            return tracks.length;
+
+            if(PlayingService.isOnline)
+                return audios.size();
+            else
+                return tracks.length;
         }
     }
 

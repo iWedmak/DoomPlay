@@ -7,9 +7,11 @@ import android.preference.PreferenceManager;
 
 public class Account
 {
+    public static final Account account = new Account();
     public String access_token;
     public long user_id;
 
+    private Account(){}
     public void save(Context context)
     {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

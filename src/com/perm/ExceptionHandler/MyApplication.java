@@ -1,7 +1,6 @@
-package com.perm.DoomPlay;
+package com.perm.ExceptionHandler;
 
 import android.app.Application;
-import com.perm.ExceptionHandler.ExceptionHandler;
 
 public class MyApplication extends Application
 {

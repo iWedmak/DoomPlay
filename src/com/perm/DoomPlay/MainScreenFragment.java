@@ -138,7 +138,7 @@ public class MainScreenFragment extends SherlockFragment
     void goAllSongs()
     {
         Intent intent = new Intent(activity,ListTracksActivity.class);
-        intent.setAction(ListTracksActivity.actionPlayList);
+        intent.setAction(ListTracksActivity.actionJust);
         intent.putExtra(MainScreenActivity.keyOpenInListTrack,TracksHolder.songAllPath);
         startActivity(intent);
     }

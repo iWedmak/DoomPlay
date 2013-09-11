@@ -106,6 +106,7 @@ public class SearchActivity extends AbstractLists
     {
         super.onClickTrack(position);
         hideKeyboard();
+        ListTracksActivity.currentAction = ListVkActivity.actionJust;
     }
 
     TextWatcher onTextChangeHandler = new TextWatcher()

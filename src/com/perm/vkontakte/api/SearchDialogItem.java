@@ -8,6 +8,5 @@ public class SearchDialogItem {
     public SDIType type;
     public String email;
     public User user;
-    public Message chat;
     
 }

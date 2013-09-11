@@ -12,7 +12,7 @@ import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.example.DoomPlay.R;
-import com.perm.vkontakte.api.Api;
+import com.perm.vkontakte.api.Account;
 import com.perm.vkontakte.api.Audio;
 import com.perm.vkontakte.api.KException;
 import org.json.JSONException;
@@ -25,18 +25,16 @@ abstract class AbstractListVk extends AbstractControls
     ListView listView;
     ListVkAdapter adapter;
     static protected ArrayList<Audio> audios;
-    Api api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        api = new Api(MainScreenActivity.account.access_token, LoginActivity.API_ID);
     }
 
     protected void markItem(int position , boolean withScroll)
     {
-        if(PlayingService.serviceAlive && PlayingService.audios != null && equalsCollections(PlayingService.audios, audios))
+        if(PlayingService.serviceAlive && PlayingService.isOnline && equalsCollections(PlayingService.audios, audios))
         {
 
             adapter.setMarkedItem(position);
@@ -48,7 +46,7 @@ abstract class AbstractListVk extends AbstractControls
     }
      public static boolean equalsCollections(ArrayList<Audio> first, ArrayList<Audio> second)
      {
-         if(first.size() != second.size())
+         if(first == null || first.size() != second.size())
              return false;
 
          for (int i = 0 ; i < first.size(); i++)
@@ -96,7 +94,7 @@ abstract class AbstractListVk extends AbstractControls
                 sleepDialog.show(getSupportFragmentManager(),FullPlaybackActivity.tagSleepDialog);
                 return true;
             case R.id.itemFullScreen:
-                //goFullScreen();
+                goFullScreen();
                 return true;
             case R.id.itemSettings:
                 startActivity(new Intent(this,SettingActivity.class));
@@ -115,7 +113,7 @@ abstract class AbstractListVk extends AbstractControls
             onClickTrack(position);
         }
     };
-    ActionMode.Callback callback = new ActionMode.Callback()
+    final ActionMode.Callback callback = new ActionMode.Callback()
     {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu)
@@ -135,15 +133,7 @@ abstract class AbstractListVk extends AbstractControls
                 return false;
             else
             {
-                final int position =(Integer) mode.getTag();
-                if(item.getItemId() == R.id.itemGetLiricks)
-                {
-                    getLyriks(position);
-                }
-                else if(item.getItemId() == R.id.itemLike)
-                {
-                    likeTrack(position);
-                }
+                handleActionMode(item.getItemId(), (Integer) mode.getTag());
                 mode.finish();
                 return true;
             }
@@ -152,6 +142,48 @@ abstract class AbstractListVk extends AbstractControls
         @Override
         public void onDestroyActionMode(ActionMode mode) {}
     };
+    void handleActionMode(int itemId,int position)
+    {
+        switch (itemId)
+        {
+            case  R.id.itemGetLiricks:
+                getLyriks(position);
+                break;
+            case R.id.itemLike:
+                likeTrack(position);
+                break;
+            case R.id.itemDislike:
+                dislikeTrack(position);
+                break;
+        }
+    }
+
+    void dislikeTrack(int position)
+    {
+        if(Utils.isOnline(getBaseContext()))
+        {
+            new AsyncTask<Long, Void, Void>()
+            {
+                @Override
+                protected Void doInBackground(Long... params)
+                {
+                    try
+                    {
+                        MainScreenActivity.api.deleteAudio(params[0],Account.account.user_id);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (KException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+            }.execute(audios.get(position).aid);
+        }
+    }
+
     void getLyriks(int position)
     {
         long lid = audios.get(position).lyrics_id;
@@ -171,14 +203,14 @@ abstract class AbstractListVk extends AbstractControls
     {
         if(Utils.isOnline(getBaseContext()))
         {
-            AsyncTask<Long,Void,Void> asyncTask = new AsyncTask<Long, Void, Void>()
+            new AsyncTask<Long, Void, Void>()
             {
                 @Override
                 protected Void doInBackground(Long... params)
                 {
                     try
                     {
-                        api.addAudio(params[0],MainScreenActivity.account.user_id);
+                        MainScreenActivity.api.addAudio(params[0], Account.account.user_id);
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -189,8 +221,7 @@ abstract class AbstractListVk extends AbstractControls
                     }
                     return null;
                 }
-            };
-            asyncTask.execute(audios.get(position).aid);
+            }.execute(audios.get(position).aid);
         }
     }
     AdapterView.OnItemLongClickListener onItemLongVkListener = new AdapterView.OnItemLongClickListener()
@@ -204,7 +235,7 @@ abstract class AbstractListVk extends AbstractControls
     };
     protected void onClickTrack(int position)
     {
-        if(MainScreenActivity.isLoading)
+        if(!PlayingService.isLoadingTrack)
         {
             Toast.makeText(getBaseContext(),"please wait",Toast.LENGTH_SHORT).show();
             return;
@@ -236,7 +267,7 @@ abstract class AbstractListVk extends AbstractControls
     @Override
     void onClickControl(int id)
     {
-        if(!MainScreenActivity.isLoading)
+        if(!PlayingService.isLoadingTrack)
             super.onClickControl(id);
         else
             Toast.makeText(this,"please wait",Toast.LENGTH_SHORT);

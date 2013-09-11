@@ -35,8 +35,8 @@ import java.util.Arrays;
 
 public class ListTracksActivity extends AbstractLists
 {
-    public final static String actionPlayList = "actionPlayFull";
-    public final static String actionFromPlaylist = "actionFromPlaylist";
+    public final static String actionJust = "actionPlayFull";
+    public final static String actionPlaylist = "actionPlaylist";
     ActionMode actionMode;
     static String currentAction;
 
@@ -95,7 +95,7 @@ public class ListTracksActivity extends AbstractLists
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu)
         {
-            if(currentAction.equals(actionFromPlaylist))
+            if(currentAction.equals(actionPlaylist))
                 getSupportMenuInflater().inflate(R.menu.action_edit,menu);
 
             else
@@ -117,7 +117,7 @@ public class ListTracksActivity extends AbstractLists
                 position = (Integer)mode.getTag();
                 isFirstCall = false;
             }
-            if(currentAction.equals(actionFromPlaylist))
+            if(currentAction.equals(actionPlaylist))
             {
                 switch (item.getItemId())
                 {
@@ -258,7 +258,7 @@ public class ListTracksActivity extends AbstractLists
     {
         super.onResume();
 
-        if(currentAction.equals(actionFromPlaylist))
+        if(currentAction.equals(actionPlaylist))
         {
             checkDeletedTracks();
             updateList();
@@ -288,7 +288,7 @@ public class ListTracksActivity extends AbstractLists
     private void initialize()
     {
         listView = (ListView)findViewById(R.id.listAllSongs);
-        playlistDB = new PlaylistDB(this);
+        playlistDB = PlaylistDB.getInstance(this);
         intentService = new Intent(this,PlayingService.class);
         intentService.setAction(PlayingService.actionOffline);
         intentService.putExtra(FullPlaybackActivity.keyService, tracks);
@@ -315,7 +315,7 @@ public class ListTracksActivity extends AbstractLists
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        if(!currentAction.equals(actionFromPlaylist))
+        if(!currentAction.equals(actionPlaylist))
         {
             if(!MainScreenActivity.isOldSDK)
                 getSupportMenuInflater().inflate(R.menu.bar_list,menu);

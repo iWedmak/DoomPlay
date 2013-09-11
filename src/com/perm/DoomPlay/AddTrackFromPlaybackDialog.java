@@ -47,7 +47,7 @@ public class AddTrackFromPlaybackDialog extends SherlockDialogFragment
     {
 
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
-        playlistDB = new PlaylistDB(getActivity().getBaseContext());
+        playlistDB = PlaylistDB.getInstance(getActivity());
         listPlaylist =  playlistDB.getListPlaylist();
         View view = inflater.inflate(R.layout.dialog_from_playback,container,false);
         listView = (ListView)view.findViewById(R.id.listDialogFromPlay);

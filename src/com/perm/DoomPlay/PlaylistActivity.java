@@ -43,7 +43,7 @@ public class PlaylistActivity extends AbstractReceiver
         super.onCreate(savedInstanceState);
         setContentView(R.layout.playlists);
         listPlaylist = (ListView) findViewById(R.id.listPlaylist);
-        playlistDB = new PlaylistDB(this);
+        playlistDB = PlaylistDB.getInstance(this);
         playlists = playlistDB.getListPlaylist();
 
         if(playlists == null)
@@ -66,7 +66,7 @@ public class PlaylistActivity extends AbstractReceiver
             String[] tracks = playlistDB.getTracks(selectedPlaylist);
 
             Intent intent = new Intent(getBaseContext(),ListTracksActivity.class);
-            intent.setAction(ListTracksActivity.actionFromPlaylist);
+            intent.setAction(ListTracksActivity.actionPlaylist);
             intent.putExtra(MainScreenActivity.keyOpenInListTrack,tracks);
             startActivity(intent);
         }

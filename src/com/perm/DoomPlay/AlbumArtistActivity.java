@@ -61,7 +61,7 @@ public class AlbumArtistActivity extends AbstractReceiver
         listView = (ListView)findViewById(R.id.listAlbumArtist);
 
 
-        playlistDB = new PlaylistDB(this);
+        playlistDB = PlaylistDB.getInstance(this);
 
         if(currentAction.equals(actionPlayArtist))
             albumArtist = TracksHolder.allArtist;
@@ -123,7 +123,7 @@ public class AlbumArtistActivity extends AbstractReceiver
         if(currentAction.equals(actionPlayAlbum))
         {
             intent = new Intent(getBaseContext(),ListTracksActivity.class);
-            intent.setAction(ListTracksActivity.actionPlayList);
+            intent.setAction(ListTracksActivity.actionJust);
             intent.putExtra(MainScreenActivity.keyOpenInListTrack, getTracksFromAlbumArtist(position, true));
         }
         else if(currentAction.equals(actionAddAlbum))
@@ -167,7 +167,7 @@ public class AlbumArtistActivity extends AbstractReceiver
     void onClickOpenArtist(int position)
     {
         Intent intent = new Intent(this,ListTracksActivity.class);
-        intent.setAction(ListTracksActivity.actionPlayList);
+        intent.setAction(ListTracksActivity.actionJust);
         intent.putExtra(MainScreenActivity.keyOpenInListTrack, getTracksFromAlbumArtist(position, false));
         startActivity(intent);
     }

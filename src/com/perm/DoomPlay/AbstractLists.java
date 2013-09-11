@@ -19,7 +19,7 @@ abstract class AbstractLists extends AbstractControls
 
     protected void markItem(int position , boolean withScroll)
     {
-        if(PlayingService.serviceAlive && Arrays.equals(PlayingService.tracks, tracks))
+        if(PlayingService.serviceAlive && !PlayingService.isOnline && Arrays.equals(PlayingService.tracks, tracks))
         {
             adapter.setMarkedItem(position);
             if(withScroll && SettingActivity.getPreferences(this,SettingActivity.keyScroll) && Build.VERSION.SDK_INT >= 8)
@@ -102,11 +102,7 @@ abstract class AbstractLists extends AbstractControls
         {
             intentService.putExtra(FullPlaybackActivity.keyIndex,position);
             intentService.putExtra(FullPlaybackActivity.keyService,tracks);
-            if(PlayingService.isClosed)
-            {
-                bindService(intentService,serviceConnection,0);
-                PlayingService.isClosed = false;
-            }
+            bindService(intentService,serviceConnection,BIND_IMPORTANT);
             startService(intentService);
         }
         else

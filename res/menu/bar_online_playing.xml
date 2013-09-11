@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+            android:id="@+id/itemReturnSmall"
+            android:icon="@drawable/smallscreen"
+            android:showAsAction="always"
+            android:title="@string/return_small">
+    </item>
+    <item
+            android:id="@+id/itemLike"
+            android:icon="@drawable/like"
+            android:showAsAction="always"
+            android:title="@string/like">
+    </item>
+    <item
+            android:id="@+id/itemSleep"
+            android:showAsAction="never"
+            android:title="@string/sleep_timer">
+    </item>
+    <item
+            android:id="@+id/itemEqualizer"
+            android:showAsAction="never"
+            android:title="@string/equalizer">
+    </item>
+    <item
+            android:id="@+id/itemSettings"
+            android:showAsAction="never"
+            android:title ="@string/settings">
+    </item>
+    <item
+            android:id="@+id/itemExit"
+            android:showAsAction="never"
+            android:title ="@string/exit">
+    </item>
+</menu>

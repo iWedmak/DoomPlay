@@ -36,9 +36,29 @@ public class PlaylistDB extends SQLiteOpenHelper
     private static final String KEY_POSITION_TRACK = "postiontak";
     private static final String TABLE_DEFAULT = "defaultTable";
 
-    public PlaylistDB(Context context)
+
+
+
+    private PlaylistDB(Context context)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    private static volatile PlaylistDB instance;
+
+    public static PlaylistDB getInstance(Context context)
+    {
+        PlaylistDB temp = instance;
+        if(temp == null)
+        {
+            synchronized (PlaylistDB.class)
+            {
+                temp = instance;
+                if(temp == null)
+                    instance = temp = new PlaylistDB(context);
+            }
+        }
+        return temp;
     }
 
     @Override

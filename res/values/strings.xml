@@ -57,6 +57,15 @@
     <string name="sign_in">sign in</string>
     <string name="refresh">refresh</string>
     <string name="please_wait">please wait</string>
+    <string name="dislike">dislike</string>
+    <string-array name ="count_values">
+        <item>10</item>
+        <item>30</item>
+        <item>50</item>
+        <item>100</item>
+        <item>200</item>
+        <item>600</item>
+    </string-array>
 
 
 </resources>

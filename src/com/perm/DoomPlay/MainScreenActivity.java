@@ -31,6 +31,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.example.DoomPlay.R;
 import com.perm.vkontakte.api.Account;
+import com.perm.vkontakte.api.Api;
 
 public class MainScreenActivity extends AbstractReceiver
 {
@@ -40,9 +41,9 @@ public class MainScreenActivity extends AbstractReceiver
     public static final boolean isOldSDK =  Build.VERSION.SDK_INT <= 8;
     private static final int REQUEST_LOGIN = 1093;
     public static boolean isLoading;
-    public static Account account = new Account();
     public static boolean isRegister = false;
     ViewPager viewPager;
+    public static Api api;
 
     interface IScanCallback
     {
@@ -77,9 +78,13 @@ public class MainScreenActivity extends AbstractReceiver
             public void onPageScrollStateChanged(int i){}
         });
         isLoading = false;
-        account.restore(this);
+        Account.account.restore(this);
 
-        isRegister = account.access_token != null;
+        if(Account.account.access_token != null)
+        {
+            isRegister = true;
+            api = new Api(Account.account.access_token, LoginActivity.API_ID);
+        }
 
 
     }
@@ -134,9 +139,10 @@ public class MainScreenActivity extends AbstractReceiver
         {
             if (resultCode == RESULT_OK)
             {
-                account.access_token=data.getStringExtra("token");
-                account.user_id=data.getLongExtra("user_id", 0);
-                account.save(this);
+                Account.account.access_token=data.getStringExtra("token");
+                Account.account.user_id=data.getLongExtra("user_id", 0);
+                Account.account.save(this);
+                api = new Api(Account.account.access_token, LoginActivity.API_ID);
             }
             else
                 Toast.makeText(getBaseContext(),"registration's error", Toast.LENGTH_SHORT).show();

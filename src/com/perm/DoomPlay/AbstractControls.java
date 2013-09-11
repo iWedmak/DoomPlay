@@ -242,7 +242,7 @@ abstract class AbstractControls extends AbstractReceiver
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
         {
-            if(fromUser && playingService != null)
+            if(fromUser && playingService != null && !PlayingService.isLoadingTrack)
                 playingService.setCurrentPosition(playingService.getDuration()*progress / 100);
         }
         @Override

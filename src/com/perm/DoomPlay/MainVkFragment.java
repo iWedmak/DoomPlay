@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.example.DoomPlay.R;
-import com.perm.vkontakte.api.Api;
+import com.perm.vkontakte.api.Account;
 import com.perm.vkontakte.api.KException;
 import org.json.JSONException;
 
@@ -21,17 +21,15 @@ public class MainVkFragment extends SherlockFragment
 {
     MainScreenActivity activity;
     LinearLayout linearLoading;
-    Api api ;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         activity =(MainScreenActivity)getActivity();
-        api=new Api(MainScreenActivity.account.access_token, LoginActivity.API_ID);
         View view = inflater.inflate(R.layout.main_vk_fragment,container,false);
         linearLoading = (LinearLayout)view.findViewById(R.id.linearLoading);
         view.findViewById(R.id.linearVkAll).setOnClickListener(onClickVkListener);
         view.findViewById(R.id.linearVkTop).setOnClickListener(onClickVkListener);
-        view.findViewById(R.id.linearVkRecomended).setOnClickListener(onClickVkListener);
+        view.findViewById(R.id.linearVkGroup).setOnClickListener(onClickVkListener);
         view.findViewById(R.id.linearVkSearch).setOnClickListener(onClickVkListener);
         view.findViewById(R.id.linearVkAlbum).setOnClickListener(onClickVkListener);
         view.findViewById(R.id.linearVkFriends).setOnClickListener(onClickVkListener);
@@ -48,7 +46,8 @@ public class MainVkFragment extends SherlockFragment
                     handler.sendEmptyMessage(1);
                     try
                     {
-                        TracksHolder.tempAudiosMine = api.getAudio(MainScreenActivity.account.user_id,null);
+                        TracksHolder.tempAudiosMine = MainScreenActivity.api.getAudio(Account.account.user_id,
+                                null,null,SettingActivity.getPreference(activity,"countvkall"));
                     } catch (IOException e) {
                         e.printStackTrace();Toast.makeText(activity,"failed",Toast.LENGTH_SHORT).show();
                     } catch (JSONException e) {
@@ -87,30 +86,10 @@ public class MainVkFragment extends SherlockFragment
                         case R.id.linearVkAlbum:
                             startActivity(new Intent(activity,VkAlbumsActivity.class));
                             break;
-                        case R.id.linearVkRecomended:
-                            if(TracksHolder.tempAudiosRecomended == null)
-                                new Thread(new Runnable()
-                                {
-                                    @Override
-                                    public void run()
-                                    {
-                                        handler.sendEmptyMessage(1);
-                                        try
-                                        {
-                                            TracksHolder.tempAudiosRecomended = api.getAudioRecommendations(30,MainScreenActivity.account.user_id);
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        } catch (KException e) {
-                                            e.printStackTrace();
-                                        }
-                                        handler.sendEmptyMessage(2);
-                                        handler.sendEmptyMessage(4);
-                                    }
-                                }).start();
-                            else
-                                intentToAllTracks();
+                        case R.id.linearVkGroup:
+                            Intent intentGroup = new Intent(activity,VkFrGrActivity.class);
+                            intentGroup.setAction(VkFrGrActivity.actionGroup);
+                            startActivity(intentGroup);
                             break;
                         case R.id.linearVkSearch:
                             startActivity(new Intent(activity,SearchVkActivity.class));
@@ -119,7 +98,9 @@ public class MainVkFragment extends SherlockFragment
                             startActivity(new Intent(activity,VkPopularActivity.class));
                             break;
                         case R.id.linearVkFriends:
-                            startActivity(new Intent(activity,VkFriendsActivity.class));
+                            Intent intentFriends = new Intent(activity,VkFrGrActivity.class);
+                            intentFriends.setAction(VkFrGrActivity.actionFriends);
+                            startActivity(intentFriends);
                             break;
                     }
                 }
@@ -131,10 +112,11 @@ public class MainVkFragment extends SherlockFragment
     void intentToAllTracks()
     {
         Intent intent = new Intent(activity,ListVkActivity.class);
+        intent.setAction(ListVkActivity.actionMyMusic);
         intent.putExtra(MainScreenActivity.keyOpenInListTrack,TracksHolder.tempAudiosMine);
         startActivity(intent);
     }
-    void startRecomended()
+    void startGroups()
     {
         Intent intent = new Intent(activity,ListVkActivity.class);
         intent.putExtra(MainScreenActivity.keyOpenInListTrack,TracksHolder.tempAudiosRecomended);
@@ -161,7 +143,7 @@ public class MainVkFragment extends SherlockFragment
             }
             else if(msg.what == 4)
             {
-                startRecomended();
+                startGroups();
             }
 
         }

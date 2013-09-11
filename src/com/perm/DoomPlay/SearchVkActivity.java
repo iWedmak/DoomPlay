@@ -11,12 +11,10 @@ import android.widget.*;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.example.DoomPlay.R;
-import com.perm.vkontakte.api.Audio;
 import com.perm.vkontakte.api.KException;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class SearchVkActivity extends AbstractListVk
 {
@@ -49,6 +47,13 @@ public class SearchVkActivity extends AbstractListVk
         inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
+    @Override
+    protected void onClickTrack(int position)
+    {
+        super.onClickTrack(position);
+        hideKeyboard();
+        ListVkActivity.currentAction = ListVkActivity.actionJust;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
@@ -81,7 +86,6 @@ public class SearchVkActivity extends AbstractListVk
 
     void initializeUi()
     {
-        adapter = new ListVkAdapter(new ArrayList<Audio>(0),this);
         editQuery = (EditText) findViewById(R.id.editQuery);
         listView = (ListView) findViewById(R.id.listSearch);
         textNoResults = (TextView)findViewById(R.id.textNoResult);
@@ -121,7 +125,8 @@ public class SearchVkActivity extends AbstractListVk
         {
             try
             {
-                audios = api.searchAudio(params[0],20);
+                audios = MainScreenActivity.api.searchAudio(params[0],
+                        SettingActivity.getPreference(getBaseContext(),"countvksearch"));
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -146,6 +151,7 @@ public class SearchVkActivity extends AbstractListVk
         {
             super.onPostExecute(aVoid);
             adapter.changeData(audios);
+            adapter.setMarkedItem(PlayingService.indexCurrentTrack);
             progressVk.setVisibility(View.GONE);
         }
     }

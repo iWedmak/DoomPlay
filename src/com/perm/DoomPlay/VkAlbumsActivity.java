@@ -1,14 +1,16 @@
 package com.perm.DoomPlay;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 import com.example.DoomPlay.R;
 import com.perm.vkontakte.api.Account;
 import com.perm.vkontakte.api.Audio;
@@ -19,12 +21,9 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class VkAlbumsActivity extends AbstractReceiver
+public class VkAlbumsActivity extends AbstractVkItems
 {
-    ListView listView;
-    LinearLayout linearLoading;
     static ArrayList<AudioAlbum> albums;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -38,32 +37,36 @@ public class VkAlbumsActivity extends AbstractReceiver
 
         if(albums == null && Utils.isOnline(getBaseContext()))
         {
-             new Thread(new Runnable()
-             {
-                 @Override
-                 public void run()
-                 {
-                     handler.sendEmptyMessage(1);
-                     try {
-                         albums = MainScreenActivity.api.getAudioAlbums(Account.account.user_id,null,
-                                 SettingActivity.getPreference(getBaseContext(),"countvkall"));
-
-                     } catch (IOException e) {
-                         e.printStackTrace();
-                     } catch (JSONException e) {
-                         e.printStackTrace();
-                     } catch (KException e) {
-                         e.printStackTrace();
-                     }
-                     handler.sendEmptyMessage(2);
-                     handler.sendEmptyMessage(3);
-                 }
-             }).start();
+             getAlbums();
         }
         else
         {
             listView.setAdapter(new VkAlbumsAdapter());
         }
+    }
+    void getAlbums()
+    {
+        new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                handler.sendEmptyMessage(1);
+                try {
+                    albums = MainScreenActivity.api.getAudioAlbums(Account.account.user_id,null,
+                            SettingActivity.getPreference(getBaseContext(),"countvkall"));
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (KException e) {
+                    e.printStackTrace();
+                }
+                handler.sendEmptyMessage(2);
+                handler.sendEmptyMessage(3);
+            }
+        }).start();
     }
 
 
@@ -74,13 +77,13 @@ public class VkAlbumsActivity extends AbstractReceiver
         {
             if(msg.what == 1)
             {
-                MainScreenActivity.isLoading = true;
                 linearLoading.setVisibility(View.VISIBLE);
+                isLoading = true;
             }
             else if(msg.what == 2)
             {
                 linearLoading.setVisibility(View.GONE);
-                MainScreenActivity.isLoading = false;
+                isLoading = false;
             }
             else if(msg.what == 3)
             {
@@ -90,55 +93,39 @@ public class VkAlbumsActivity extends AbstractReceiver
         }
     };
 
-    AdapterView.OnItemClickListener onClickListener = new AdapterView.OnItemClickListener()
+    @Override
+    protected void startListVkActivity(ArrayList<Audio> audios)
     {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+        Intent intent = new Intent(this,ListVkActivity.class);
+        intent.setAction(ListVkActivity.actionMyAlbums);
+        intent.putExtra(MainScreenActivity.keyOpenInListTrack,audios);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onClickRefresh()
+    {
+        getAlbums();
+    }
+
+    @Override
+    protected ArrayList<Audio> getAudios(int position)
+    {
+        try
         {
 
-            if(!MainScreenActivity.isLoading && Utils.isOnline(getBaseContext()))
-            {
-                new AsyncTask<Integer,Void,ArrayList<Audio>>()
-                {
-                    @Override
-                    protected ArrayList<Audio> doInBackground(Integer... params)
-                    {
-                        handler.sendEmptyMessage(1);
-                        try
-                        {
-                            return MainScreenActivity.api.getAudio(null,albums.get(params[0]).album_id,null
-                                    ,SettingActivity.getPreference(getBaseContext(),"countvkall"));
+            return MainScreenActivity.api.getAudio(null,null,albums.get(position).album_id
+                    ,SettingActivity.getPreference(getBaseContext(),"countvkall"));
 
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (KException e) {
-                            e.printStackTrace();
-                        }
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(ArrayList<Audio> audios)
-                    {
-                        super.onPostExecute(audios);
-                        handler.sendEmptyMessage(2);
-                        Intent intent = new Intent(getBaseContext(),ListVkActivity.class);
-                        intent.setAction(ListVkActivity.actionMyAlbums);
-                        intent.putExtra(MainScreenActivity.keyOpenInListTrack,audios);
-                        startActivity(intent);
-                    }
-
-
-                }.execute(position);
-            }
-            else
-                Toast.makeText(getBaseContext(), "please wait", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (KException e) {
+            e.printStackTrace();
         }
-
-
-    };
+        return null;
+    }
 
 
     class VkAlbumsAdapter extends BaseAdapter

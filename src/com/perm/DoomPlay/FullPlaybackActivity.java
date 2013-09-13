@@ -48,7 +48,7 @@ public class FullPlaybackActivity  extends AbstractControls
     static String[] tracks;
     static ArrayList<Audio> audios;
     LinearLayout linearBackground;
-    ViewPager viewPager;
+    CustomViewPager viewPager;
     public final static String keyService = "zajiy";
     public final static String keyIndex = "indKey";
     public final static String tagSleepDialog = "diasTa";
@@ -97,6 +97,7 @@ public class FullPlaybackActivity  extends AbstractControls
 
 
         intentWas = getIntent();
+        intentService = new Intent(this,PlayingService.class);
         getTracks();
         initialize();
 
@@ -177,6 +178,26 @@ public class FullPlaybackActivity  extends AbstractControls
             cursor.moveToFirst();
             return cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
         }
+    }
+
+    @Override
+    protected void onServiceAbstractConnected()
+    {
+        playingService.setOnLoadingTrackListener(new PlayingService.OnLoadingTrackListener()
+        {
+            @Override
+            public void onLoadingTrackStarted()
+            {
+                viewPager.setEnabled(false);
+            }
+
+            @Override
+            public void onLoadingTrackEnded()
+            {
+
+                viewPager.setEnabled(true);
+            }
+        });
     }
 
     @Override
@@ -283,8 +304,7 @@ public class FullPlaybackActivity  extends AbstractControls
         textTotalTime = (TextView)findViewById(R.id.textDuration);
         linearBackground = (LinearLayout)findViewById(R.id.linearPlaying);
         imgPlay = (ImageView)findViewById(R.id.imagePlay);
-        intentService = new Intent(this,PlayingService.class);
-        viewPager = (ViewPager)findViewById(R.id.viewPager);
+        viewPager = (CustomViewPager)findViewById(R.id.viewPager);
         viewPager.setOnPageChangeListener(pageChangeHandler);
         adapterPager = new PagePlaybackAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapterPager);
@@ -316,7 +336,6 @@ public class FullPlaybackActivity  extends AbstractControls
         @Override
         public void onPageScrollStateChanged(int state){}
         };
-
 
     class PagePlaybackAdapter extends FragmentStatePagerAdapter
     {

@@ -28,10 +28,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.SeekBar;
-import android.widget.TextView;
+import android.widget.*;
 import com.example.DoomPlay.R;
 
 
@@ -160,6 +157,8 @@ abstract class AbstractControls extends AbstractReceiver
         super.onSaveInstanceState(outState);
         outState.putBoolean(keySaveShown,isShown);
     }
+    protected void onServiceAbstractConnected()
+    {}
 
     protected void initializeAbstract()
     {
@@ -179,6 +178,7 @@ abstract class AbstractControls extends AbstractReceiver
             public void onServiceConnected(ComponentName name, IBinder binder)
             {
                 playingService = ((PlayingService.MyBinder) binder).getService();
+                onServiceAbstractConnected();
                 loadUpdateThread();
             }
             @Override
@@ -209,32 +209,38 @@ abstract class AbstractControls extends AbstractReceiver
     };
     void onClickControl(int id)
     {
-        switch (id)
+        if(!PlayingService.isLoadingTrack)
         {
-            case (R.id.imageShuffle):
-                playingService.setShuffle();
-                if(PlayingService.shuffle)
-                    imgShuffle.setImageResource(R.drawable.shuffle_enable);
-                else
-                    imgShuffle.setImageResource(R.drawable.shuffle_disable);
-                break;
-            case (R.id.imagePrevious):
-                playingService.previousSong();
-                break;
-            case (R.id.imagePlay):
-                playingService.playPause();
-                break;
-            case (R.id.imageNext):
-                playingService.nextSong();
-                break;
-            case (R.id.imageRepeat):
-                playingService.setLoop();
-                if(PlayingService.looping)
-                    imgRepeat.setImageResource(R.drawable.repeat_enable);
-                else
-                    imgRepeat.setImageResource(R.drawable.repeat_disable);
-                break;
+            switch (id)
+            {
+                case (R.id.imageShuffle):
+                    playingService.setShuffle();
+                    if(PlayingService.shuffle)
+                        imgShuffle.setImageResource(R.drawable.shuffle_enable);
+                    else
+                        imgShuffle.setImageResource(R.drawable.shuffle_disable);
+                    break;
+                case (R.id.imagePrevious):
+                    playingService.previousSong();
+                    break;
+                case (R.id.imagePlay):
+                    playingService.playPause();
+                    break;
+                case (R.id.imageNext):
+                    playingService.nextSong();
+                    break;
+                case (R.id.imageRepeat):
+                    playingService.setLoop();
+                    if(PlayingService.looping)
+                        imgRepeat.setImageResource(R.drawable.repeat_enable);
+                    else
+                        imgRepeat.setImageResource(R.drawable.repeat_disable);
+                    break;
+            }
         }
+        else
+            Toast.makeText(this, "please wait", Toast.LENGTH_SHORT);
+
     }
 
     SeekBar.OnSeekBarChangeListener seekBarHandler = new SeekBar.OnSeekBarChangeListener()

@@ -78,10 +78,21 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     public final static String actionOffline = "FromlPlayback";
     public static boolean isOnline;
     public static final String actionOnline = "vkOnline";
-    final AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-    final TelephonyManager telephonyManager = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
+    AudioManager audioManager ;
     public static ArrayList<Audio> audios ;
     public static boolean isLoadingTrack;
+
+    private OnLoadingTrackListener loadingListener;
+
+    interface OnLoadingTrackListener
+    {
+        void onLoadingTrackStarted();
+        void onLoadingTrackEnded();
+    }
+    void setOnLoadingTrackListener(OnLoadingTrackListener loadingListener)
+    {
+        this.loadingListener = loadingListener;
+    }
 
 
     @Override
@@ -89,8 +100,8 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     {
         super.onCreate();
         initialize();
-        telephonyManager.listen(new CallListener(),CallListener.LISTEN_CALL_STATE);
-
+        ((TelephonyManager)getSystemService(TELEPHONY_SERVICE)).listen(new CallListener(),CallListener.LISTEN_CALL_STATE);
+        audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
 
         serviceAlive = true;
@@ -380,6 +391,9 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
                     {
                         super.onPreExecute();
                         isLoadingTrack = true;
+
+                        if(loadingListener != null)
+                            loadingListener.onLoadingTrackStarted();
                     }
 
                     @Override
@@ -401,6 +415,8 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
                     {
                         super.onPostExecute(aVoid);
                         isLoadingTrack = false;
+                        if(loadingListener != null)
+                            loadingListener.onLoadingTrackEnded();
                         partOfLoadMusic();
                     }
                 }.execute();
@@ -432,13 +448,6 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         if(!MainScreenActivity.isOldSDK)
             notifyEqualizer();
 
-
-        if(trackCountTotal != valueTrackNotChanged)
-        {
-            trackCountCurrent++;
-            if(trackCountCurrent == trackCountTotal)
-                sendBroadcast(new Intent(AbstractReceiver.actionKill));
-        }
     }
 
     void notifyEqualizer()
@@ -580,6 +589,14 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     @Override
     public void onCompletion(MediaPlayer mp)
     {
+        if(trackCountTotal != valueTrackNotChanged)
+        {
+            trackCountCurrent++;
+            if(trackCountCurrent == trackCountTotal)
+                sendBroadcast(new Intent(AbstractReceiver.actionKill));
+            trackCountTotal = PlayingService.valueTrackNotChanged;
+        }
+
         nextSong();
     }
     void dispose()

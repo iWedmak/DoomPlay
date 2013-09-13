@@ -71,14 +71,11 @@ public class Api {
         String body="";
         if(is_post)
             body=params.getParamsString();
-        Log.i(TAG, "url="+url);
-        if(body.length()!=0)
-            Log.i(TAG, "body="+body);
+
         String response="";
         for(int i=1;i<=MAX_TRIES;++i){
             try{
-                if(i!=1)
-                    Log.i(TAG, "try "+i);
+
                 response = sendRequestInternal(url, body, is_post);
                 break;
             }catch(javax.net.ssl.SSLException ex){
@@ -601,6 +598,7 @@ public class Api {
 
         Params params = new Params("groups.get");
         params.put("uid", uid);
+        params.put("extended",1);
         params.put("count", count);
 
         //params.put("fields", fields); //Possible values: place,wiki_page,city,country,description,start_date,finish_date,site,fixed_post

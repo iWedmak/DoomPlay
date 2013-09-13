@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.actionbarsherlock.view.ActionMode;
@@ -25,11 +26,32 @@ abstract class AbstractListVk extends AbstractControls
     ListView listView;
     ListVkAdapter adapter;
     static protected ArrayList<Audio> audios;
+    static boolean isLoading = false;
+    LinearLayout linearLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onServiceAbstractConnected()
+    {
+        playingService.setOnLoadingTrackListener(new PlayingService.OnLoadingTrackListener()
+        {
+            @Override
+            public void onLoadingTrackStarted()
+            {
+                linearLoading.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onLoadingTrackEnded()
+            {
+                linearLoading.setVisibility(View.GONE);
+            }
+        });
     }
 
     protected void markItem(int position , boolean withScroll)
@@ -94,6 +116,7 @@ abstract class AbstractListVk extends AbstractControls
                 sleepDialog.show(getSupportFragmentManager(),FullPlaybackActivity.tagSleepDialog);
                 return true;
             case R.id.itemFullScreen:
+                finish();
                 goFullScreen();
                 return true;
             case R.id.itemSettings:
@@ -113,7 +136,7 @@ abstract class AbstractListVk extends AbstractControls
             onClickTrack(position);
         }
     };
-    final ActionMode.Callback callback = new ActionMode.Callback()
+    protected ActionMode.Callback callback = new ActionMode.Callback()
     {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu)
@@ -142,6 +165,7 @@ abstract class AbstractListVk extends AbstractControls
         @Override
         public void onDestroyActionMode(ActionMode mode) {}
     };
+
     void handleActionMode(int itemId,int position)
     {
         switch (itemId)
@@ -235,7 +259,7 @@ abstract class AbstractListVk extends AbstractControls
     };
     protected void onClickTrack(int position)
     {
-        if(!PlayingService.isLoadingTrack)
+        if(PlayingService.isLoadingTrack)
         {
             Toast.makeText(getBaseContext(),"please wait",Toast.LENGTH_SHORT).show();
             return;
@@ -262,14 +286,5 @@ abstract class AbstractListVk extends AbstractControls
 
             playingService.playTrackFromList(position);
         }
-    }
-
-    @Override
-    void onClickControl(int id)
-    {
-        if(!PlayingService.isLoadingTrack)
-            super.onClickControl(id);
-        else
-            Toast.makeText(this,"please wait",Toast.LENGTH_SHORT);
     }
 }

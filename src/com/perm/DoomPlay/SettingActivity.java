@@ -45,7 +45,7 @@ public class SettingActivity extends SherlockPreferenceActivity
     }
     public static int getPreference(Context context, String key)
     {
-        return PreferenceManager.getDefaultSharedPreferences(context).getInt(key,10);
+        return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(key,"10"));
     }
 
 

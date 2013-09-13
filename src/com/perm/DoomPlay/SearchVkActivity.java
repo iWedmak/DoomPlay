@@ -11,10 +11,12 @@ import android.widget.*;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.example.DoomPlay.R;
+import com.perm.vkontakte.api.Audio;
 import com.perm.vkontakte.api.KException;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class SearchVkActivity extends AbstractListVk
 {
@@ -22,7 +24,7 @@ public class SearchVkActivity extends AbstractListVk
     EditText editQuery;
     TextView textNoResults;
     ImageView buttonSearch;
-    ProgressBar progressVk;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -83,7 +85,7 @@ public class SearchVkActivity extends AbstractListVk
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
+    TaskLoader taskLoader;
     void initializeUi()
     {
         editQuery = (EditText) findViewById(R.id.editQuery);
@@ -92,10 +94,9 @@ public class SearchVkActivity extends AbstractListVk
         buttonSearch = (ImageView)findViewById(R.id.imageSearchVk);
         buttonSearch.setOnClickListener(onClickSearch);
         listView.setOnItemClickListener(onItemTrackClick);
+        adapter = new ListVkAdapter(new ArrayList<Audio>(),this);
         listView.setAdapter(adapter);
         listView.setOnItemLongClickListener(onItemLongVkListener);
-        progressVk = (ProgressBar)findViewById(R.id.progressVk);
-
         linearControls = (RelativeLayout)findViewById(R.id.linearControls);
         intentService = new Intent(this,PlayingService.class);
         intentService.setAction(PlayingService.actionOnline);
@@ -107,16 +108,32 @@ public class SearchVkActivity extends AbstractListVk
         seekBar = (SeekBar)findViewById(R.id.seek_bar);
         textCurrentTime = (TextView)findViewById(R.id.textElapsed);
         textTotalTime = (TextView)findViewById(R.id.textDuration);
+        linearLoading = (LinearLayout)findViewById(R.id.linearLoading);
     }
     View.OnClickListener onClickSearch = new View.OnClickListener()
     {
         @Override
         public void onClick(View v)
         {
-            new TaskLoader().execute(editQuery.getText().toString());
-            hideKeyboard();
+            if(!isLoading)
+            {
+                taskLoader = new TaskLoader();
+                taskLoader.execute(editQuery.getText().toString());
+                hideKeyboard();
+            }
+            else
+                Toast.makeText(getBaseContext(),"please wait",Toast.LENGTH_SHORT);
+
         }
     };
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        taskLoader.cancel(true);
+        isLoading = false;
+    }
 
     class TaskLoader extends AsyncTask<String,Void,Void>
     {
@@ -143,16 +160,18 @@ public class SearchVkActivity extends AbstractListVk
         protected void onPreExecute()
         {
             super.onPreExecute();
-            progressVk.setVisibility(View.VISIBLE);
+            linearLoading.setVisibility(View.VISIBLE);
+            isLoading = true;
         }
 
         @Override
         protected void onPostExecute(Void aVoid)
         {
             super.onPostExecute(aVoid);
+            isLoading = false;
+            linearLoading.setVisibility(View.GONE);
             adapter.changeData(audios);
             adapter.setMarkedItem(PlayingService.indexCurrentTrack);
-            progressVk.setVisibility(View.GONE);
         }
     }
 }

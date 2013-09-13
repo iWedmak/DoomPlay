@@ -16,7 +16,6 @@ public class Attachment implements Serializable {
     public Audio audio; 
     public Link link;
     public VkPoll poll;
-    public Page page;
 
     public static ArrayList<Attachment> parseAttachments(JSONArray attachments, long from_id, long copy_owner_id, JSONObject geo_json) throws JSONException {
         ArrayList<Attachment> attachments_arr=new ArrayList<Attachment>();
@@ -48,9 +47,6 @@ public class Attachment implements Serializable {
                             attachment.poll.owner_id=from_id;
                     }
                 }
-
-                if(attachment.type.equals("page"))
-                    attachment.page=Page.parseFromAttachment(json_attachment.getJSONObject("page"));
                 attachments_arr.add(attachment);
             }
         }

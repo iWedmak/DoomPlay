@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+            android:id="@+id/itemRefresh"
+            android:icon="@drawable/refresh"
+            android:showAsAction="always"
+            android:title="@string/refresh">
+    </item>
+    <item
+            android:id="@+id/itemInterrupt"
+            android:icon="@drawable/cancel_list"
+            android:showAsAction="always"
+            android:title="@string/interrupt">
+    </item>
+    <item
+            android:id="@+id/itemSettings"
+            android:showAsAction="never"
+            android:title ="@string/settings">
+    </item>
+    <item
+            android:id="@+id/itemExit"
+            android:showAsAction="never"
+            android:title ="@string/exit">
+    </item>
+</menu>

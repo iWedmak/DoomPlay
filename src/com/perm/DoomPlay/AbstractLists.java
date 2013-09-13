@@ -66,6 +66,7 @@ abstract class AbstractLists extends AbstractControls
                 sleepDialog.show(getSupportFragmentManager(),FullPlaybackActivity.tagSleepDialog);
                 return true;
             case R.id.itemFullScreen:
+                finish();
                 goFullScreen();
                 return true;
             case R.id.itemAddMusic:

@@ -15,7 +15,7 @@ public class ListVkAdapter  extends BaseAdapter
 {
     LayoutInflater inflater;
     Context context;
-    private int markedItem ;
+    int markedItem ;
     ArrayList<Audio> audios;
 
 

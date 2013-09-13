@@ -79,7 +79,6 @@ public class PageFragment extends SherlockFragment
         }
         else
         {
-            page.findViewById(R.id.imageAlbum).setBackgroundResource(R.drawable.fallback_cover);
             ((TextView)page.findViewById(R.id.textNumberSong)).setText(pageNumber+1 + "/" + FullPlaybackActivity.audios.size());
         }
 

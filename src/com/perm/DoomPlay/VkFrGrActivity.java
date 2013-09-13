@@ -1,15 +1,15 @@
 package com.perm.DoomPlay;
 
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 import com.example.DoomPlay.R;
 import com.perm.vkontakte.api.*;
 import org.json.JSONException;
@@ -17,10 +17,8 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class VkFrGrActivity extends AbstractReceiver
+public class VkFrGrActivity extends AbstractVkItems
 {
-    ListView listView;
-    LinearLayout linearLoading;
     static ArrayList<User> users;
     static ArrayList<Group> groups;
     static boolean isFriend;
@@ -43,25 +41,7 @@ public class VkFrGrActivity extends AbstractReceiver
         {
             if(users == null)
             {
-                new Thread(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        handler.sendEmptyMessage(1);
-                        try {
-                            users = MainScreenActivity.api.getFriends(Account.account.user_id);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (KException e) {
-                            e.printStackTrace();
-                        }
-                        handler.sendEmptyMessage(2);
-                        handler.sendEmptyMessage(3);
-                    }
-                }).start();
+                 getFriends();
             }
             else
             {
@@ -72,34 +52,72 @@ public class VkFrGrActivity extends AbstractReceiver
         {
             if(groups == null)
             {
-                new Thread(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        handler.sendEmptyMessage(1);
-                        try {
-                            groups = MainScreenActivity.api.getGroups(Account.account.user_id,null);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (KException e) {
-                            e.printStackTrace();
-                        }
-                        handler.sendEmptyMessage(2);
-                        handler.sendEmptyMessage(3);
-                    }
-                }).start();
+                  getGroups();
             }
             else
             {
                 listView.setAdapter(new VkAlbumsAdapter());
             }
         }
+    }
+    void getFriends()
+    {
+        new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                handler.sendEmptyMessage(1);
+                isLoading= true;
+                try {
+                    users = MainScreenActivity.api.getFriends(Account.account.user_id);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (KException e) {
+                    e.printStackTrace();
+                }
+                handler.sendEmptyMessage(2);
+                isLoading = false;
+                handler.sendEmptyMessage(3);
 
+            }
+        }).start();
+    }
+    void getGroups()
+    {
+        new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                isLoading = true;
+                handler.sendEmptyMessage(1);
+                try {
+                    groups = MainScreenActivity.api.getGroups(Account.account.user_id,100);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (KException e) {
+                    e.printStackTrace();
+                }
+                handler.sendEmptyMessage(2);
+                isLoading = false;
+                handler.sendEmptyMessage(3);
 
+            }
+        }).start();
+    }
 
+    @Override
+    protected void onClickRefresh()
+    {
+        if(isFriend)
+             getFriends();
+        else
+             getGroups();
     }
 
 
@@ -110,75 +128,44 @@ public class VkFrGrActivity extends AbstractReceiver
         {
             if(msg.what == 1)
             {
-                MainScreenActivity.isLoading = true;
                 linearLoading.setVisibility(View.VISIBLE);
             }
             else if(msg.what == 2)
             {
                 linearLoading.setVisibility(View.GONE);
-                MainScreenActivity.isLoading = false;
             }
             else if(msg.what == 3)
             {
                 listView.setAdapter(new VkAlbumsAdapter());
             }
-
         }
     };
 
-    AdapterView.OnItemClickListener onClickListener = new AdapterView.OnItemClickListener()
+
+
+    @Override
+    protected ArrayList<Audio> getAudios(int position)
     {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+
+        try
         {
+            if(isFriend)
+                return MainScreenActivity.api.getAudio(users.get(position).uid,null,null,
+                            SettingActivity.getPreference(getBaseContext(),"countfrgr"));
 
-            if(!MainScreenActivity.isLoading && Utils.isOnline(getBaseContext()))
-            {
-                new AsyncTask<Integer,Void,ArrayList<Audio>>()
-                {
-                    @Override
-                    protected ArrayList<Audio> doInBackground(Integer... params)
-                    {
-                        handler.sendEmptyMessage(1);
-                        try
-                        {
-                            if(isFriend)
-                                return MainScreenActivity.api.getAudio(users.get(params[0]).uid,null,null,
-                                        SettingActivity.getPreference(getBaseContext(),"countfrgr"));
-                            else
-                                return MainScreenActivity.api.getAudio(null,groups.get(params[0]).gid,null,
-                                        SettingActivity.getPreference(getBaseContext(),"countfrgr"));
-
-                        } catch (IOException e) {
-                            e.printStackTrace(); cancel(false);
-                        } catch (JSONException e) {
-                            Log.e("JSONException","JSONexception",e); cancel(false);
-                        } catch (KException e) {
-                            e.printStackTrace();cancel(false);Toast.makeText(getBaseContext(),"acces to users or groups audio is denied",Toast.LENGTH_SHORT).show();
-                        }
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(ArrayList <Audio> audios)
-                    {
-                        super.onPostExecute(audios);
-                        handler.sendEmptyMessage(2);
-                        Intent intent = new Intent(getBaseContext(),ListVkActivity.class);
-                        intent.setAction(ListVkActivity.actionJust);
-                        intent.putExtra(MainScreenActivity.keyOpenInListTrack,audios);
-                        startActivity(intent);
-                    }
-
-
-                }.execute(position);
-
-            }
             else
-                Toast.makeText(getBaseContext(), "please wait", Toast.LENGTH_SHORT).show();
+                return MainScreenActivity.api.getAudio(null,groups.get(position).gid,null,
+                        SettingActivity.getPreference(getBaseContext(),"countfrgr"));
         }
-
-    };
+        catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (KException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     class VkAlbumsAdapter extends BaseAdapter
     {
@@ -190,13 +177,19 @@ public class VkFrGrActivity extends AbstractReceiver
         @Override
         public int getCount()
         {
-            return users.size();
+            if(isFriend)
+                return users.size();
+            else
+                return groups.size();
         }
 
         @Override
         public Object getItem(int position)
         {
-            return users.get(position);
+            if(isFriend)
+                return users.get(position);
+            else
+                return groups.get(position);
         }
 
         @Override

@@ -35,7 +35,6 @@ public final class TracksHolder
     public static String[] allAlbums;
     public static String[] allAcordingArtists;
     public static ArrayList<Audio> tempAudiosMine ;
-    public static ArrayList<Audio> tempAudiosRecomended;
 
     private TracksHolder(){}
     public static void scanCard(Context context)

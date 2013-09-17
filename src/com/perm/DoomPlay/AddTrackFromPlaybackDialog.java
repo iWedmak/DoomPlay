@@ -30,7 +30,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.*;
 import com.actionbarsherlock.app.SherlockDialogFragment;
-import com.example.DoomPlay.R;
 
 public class AddTrackFromPlaybackDialog extends SherlockDialogFragment
 {

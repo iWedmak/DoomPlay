@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.example.DoomPlay.R;
 
 import java.util.Random;
 

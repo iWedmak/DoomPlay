@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockDialogFragment;
-import com.example.DoomPlay.R;
 import com.perm.ExceptionHandler.GMailSender;
 
 class ReportDialog extends SherlockDialogFragment

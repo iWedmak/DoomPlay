@@ -13,4 +13,10 @@
             android:showAsAction="always"
             android:title="@string/like">
     </item>
+    <item
+            android:id="@+id/itemDownload"
+            android:icon="@drawable/action_download"
+            android:showAsAction="always"
+            android:title="@string/download">
+    </item>
 </menu>

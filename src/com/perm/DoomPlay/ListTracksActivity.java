@@ -28,7 +28,6 @@ import android.widget.*;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.example.DoomPlay.R;
 
 import java.io.File;
 import java.util.Arrays;

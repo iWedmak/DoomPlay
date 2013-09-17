@@ -28,7 +28,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.widget.RemoteViews;
 import com.perm.DoomPlay.PlayingService;
-import com.example.DoomPlay.R;
+import com.perm.DoomPlay.R;
 import com.perm.DoomPlay.Song;
 
 

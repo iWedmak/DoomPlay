@@ -29,7 +29,6 @@ import android.widget.*;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.example.DoomPlay.R;
 
 import java.util.ArrayList;
 
@@ -142,7 +141,7 @@ public class SearchActivity extends AbstractLists
                 textNoResults.setVisibility(View.GONE);
 
             adapter.changeData(tracks);
-            adapter.setMarkedItem(PlayingService.valueTrackNotChanged);
+            adapter.setMarkedItem(PlayingService.valueIncredible);
         }
     };
     ActionMode.Callback callback = new ActionMode.Callback()

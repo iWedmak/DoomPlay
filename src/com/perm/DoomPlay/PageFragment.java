@@ -29,7 +29,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.example.DoomPlay.R;
 
 public class PageFragment extends SherlockFragment
 {

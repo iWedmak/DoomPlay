@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -12,7 +13,6 @@ import android.widget.Toast;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.example.DoomPlay.R;
 import com.perm.vkontakte.api.Account;
 import com.perm.vkontakte.api.Audio;
 import com.perm.vkontakte.api.KException;
@@ -64,7 +64,7 @@ abstract class AbstractListVk extends AbstractControls
                 listView.smoothScrollToPosition(position);
         }
         else
-            adapter.notifyDataSetChanged();
+            adapter.setMarkedItem(PlayingService.valueIncredible);
     }
      public static boolean equalsCollections(ArrayList<Audio> first, ArrayList<Audio> second)
      {
@@ -179,6 +179,11 @@ abstract class AbstractListVk extends AbstractControls
             case R.id.itemDislike:
                 dislikeTrack(position);
                 break;
+            case R.id.itemDownload:
+                Intent downloadIntent = new Intent(this,DownloadingService.class);
+                downloadIntent.putExtra(DownloadingService.keyDownload,(Parcelable)audios.get(position));
+                startService(downloadIntent);
+                break;
         }
     }
 
@@ -186,14 +191,22 @@ abstract class AbstractListVk extends AbstractControls
     {
         if(Utils.isOnline(getBaseContext()))
         {
-            new AsyncTask<Long, Void, Void>()
+            audios.remove(position);
+            adapter.changeData(audios);
+
+            if(PlayingService.isOnline && position == PlayingService.indexCurrentTrack && equalsCollections(PlayingService.audios,audios))
+                playingService.playTrackFromList(PlayingService.indexCurrentTrack);
+
+
+
+            new AsyncTask<Integer, Void, Void>()
             {
                 @Override
-                protected Void doInBackground(Long... params)
+                protected Void doInBackground(Integer... params)
                 {
                     try
                     {
-                        MainScreenActivity.api.deleteAudio(params[0],Account.account.user_id);
+                        MainScreenActivity.api.deleteAudio(audios.get(params[0]).aid,Account.account.user_id);
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -204,7 +217,8 @@ abstract class AbstractListVk extends AbstractControls
                     }
                     return null;
                 }
-            }.execute(audios.get(position).aid);
+
+            }.execute(position);
         }
     }
 
@@ -227,14 +241,14 @@ abstract class AbstractListVk extends AbstractControls
     {
         if(Utils.isOnline(getBaseContext()))
         {
-            new AsyncTask<Long, Void, Void>()
+            new AsyncTask<Integer, Void, Void>()
             {
                 @Override
-                protected Void doInBackground(Long... params)
+                protected Void doInBackground(Integer... params)
                 {
                     try
                     {
-                        MainScreenActivity.api.addAudio(params[0], Account.account.user_id);
+                        MainScreenActivity.api.addAudio(audios.get(params[0]).aid, Account.account.user_id);
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -245,7 +259,8 @@ abstract class AbstractListVk extends AbstractControls
                     }
                     return null;
                 }
-            }.execute(audios.get(position).aid);
+
+            }.execute(position);
         }
     }
     AdapterView.OnItemLongClickListener onItemLongVkListener = new AdapterView.OnItemLongClickListener()

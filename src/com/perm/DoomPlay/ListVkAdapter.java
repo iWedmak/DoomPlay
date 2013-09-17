@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import com.example.DoomPlay.R;
 import com.perm.vkontakte.api.Audio;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class ListVkAdapter  extends BaseAdapter
     public ListVkAdapter(ArrayList<Audio> audios,Context context)
     {
         inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        markedItem = PlayingService.valueTrackNotChanged;
+        markedItem = PlayingService.valueIncredible;
         this.audios = audios;
         this.context = context;
     }

@@ -29,7 +29,6 @@ import android.os.Message;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.*;
-import com.example.DoomPlay.R;
 
 
 abstract class AbstractControls extends AbstractReceiver
@@ -123,12 +122,12 @@ abstract class AbstractControls extends AbstractReceiver
         else
             imgPlay.setImageResource(R.drawable.play);
 
-        if(PlayingService.looping)
+        if(PlayingService.isLoop)
             imgRepeat.setImageResource(R.drawable.repeat_enable);
         else
             imgRepeat.setImageResource(R.drawable.repeat_disable);
 
-        if(PlayingService.shuffle)
+        if(PlayingService.isShuffle)
             imgShuffle.setImageResource(R.drawable.shuffle_enable);
         else
             imgShuffle.setImageResource(R.drawable.shuffle_disable);
@@ -136,11 +135,8 @@ abstract class AbstractControls extends AbstractReceiver
 
     private void connectServer()
     {
-        if(!isBound)
-        {
-            bindService(intentService,serviceConnection,0);
-            isBound = true;
-        }
+        bindService(intentService,serviceConnection,BIND_IMPORTANT);
+        isBound = true;
     }
     private void unConnecServer()
     {
@@ -215,7 +211,7 @@ abstract class AbstractControls extends AbstractReceiver
             {
                 case (R.id.imageShuffle):
                     playingService.setShuffle();
-                    if(PlayingService.shuffle)
+                    if(PlayingService.isShuffle)
                         imgShuffle.setImageResource(R.drawable.shuffle_enable);
                     else
                         imgShuffle.setImageResource(R.drawable.shuffle_disable);
@@ -231,7 +227,7 @@ abstract class AbstractControls extends AbstractReceiver
                     break;
                 case (R.id.imageRepeat):
                     playingService.setLoop();
-                    if(PlayingService.looping)
+                    if(PlayingService.isLoop)
                         imgRepeat.setImageResource(R.drawable.repeat_enable);
                     else
                         imgRepeat.setImageResource(R.drawable.repeat_disable);

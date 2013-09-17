@@ -58,7 +58,7 @@
                 android:key="countvkall"
                 android:summary="maximum size of my music"
                 android:title="Max size of my music"
-                android:defaultValue="50">
+                android:defaultValue="200">
         </ListPreference>
         <ListPreference
                 android:entryValues="@array/count_values"
@@ -66,7 +66,7 @@
                 android:key="countfrgr"
                 android:summary="maximum size of friends and gropu music"
                 android:title="Max size of friends and group"
-                android:defaultValue="50">
+                android:defaultValue="200">
         </ListPreference>
         <ListPreference
                 android:entryValues="@array/count_values"
@@ -82,8 +82,16 @@
                 android:key="countvkpopular"
                 android:summary="maximus size of music got from popular"
                 android:title="Max size of popular"
-                android:defaultValue="50">
+                android:defaultValue="200">
         </ListPreference>
+
+        <PreferenceScreen
+                android:key="download_folder"
+                android:summary="default value folder is download"
+                android:title="Download in folder"
+                android:defaultValue="null">
+
+        </PreferenceScreen>
 
         <CheckBoxPreference
                 android:key="friendsphotos"

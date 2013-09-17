@@ -31,7 +31,6 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
-import com.example.DoomPlay.R;
 
 abstract class AbstractReceiver extends SherlockFragmentActivity
 {
@@ -55,12 +54,10 @@ abstract class AbstractReceiver extends SherlockFragmentActivity
     }
     private void onClickActionBar()
     {
-        if(PlayingService.tracks != null)
+        if((!PlayingService.isOnline && PlayingService.tracks != null)
+                || (PlayingService.isOnline && PlayingService.audios != null))
         {
-            Intent intent = new Intent(getBaseContext(),ListTracksActivity.class);
-            intent.setAction(ListTracksActivity.actionJust);
-            intent.putExtra(MainScreenActivity.keyOpenInListTrack,PlayingService.tracks);
-            startActivity(intent);
+            startActivity(FullPlaybackActivity.returnSmall(this));
         }
     }
 
@@ -107,14 +104,14 @@ abstract class AbstractReceiver extends SherlockFragmentActivity
             view = getLayoutInflater().inflate(R.layout.action_bar_cust,null);
         else
             view = getLayoutInflater().inflate(R.layout.action_bar_landscape,null);
-        /*view.setOnClickListener(new View.OnClickListener()
+        view.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
                 onClickActionBar();
             }
-        }); */
+        });
 
         textArtist = (TextView)view.findViewById(R.id.textControlArtist);
         textTitle = (TextView)view.findViewById(R.id.textControlTitle);

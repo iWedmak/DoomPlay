@@ -10,7 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.example.DoomPlay.R;
+import com.actionbarsherlock.view.Menu;
 import com.perm.vkontakte.api.*;
 import org.json.JSONException;
 
@@ -25,6 +25,13 @@ public class VkFrGrActivity extends AbstractVkItems
     public static final String actionFriends = "actionFrend";
     public static final String actionGroup = "actionGroup";
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getSupportMenuInflater().inflate(R.menu.bar_vk_pgf,menu);
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -94,8 +101,10 @@ public class VkFrGrActivity extends AbstractVkItems
             {
                 isLoading = true;
                 handler.sendEmptyMessage(1);
-                try {
+                try
+                {
                     groups = MainScreenActivity.api.getGroups(Account.account.user_id,100);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {

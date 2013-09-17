@@ -7,11 +7,10 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
-import com.example.DoomPlay.R;
+import android.widget.*;
+import com.actionbarsherlock.view.ActionMode;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.perm.vkontakte.api.Account;
 import com.perm.vkontakte.api.Audio;
 import com.perm.vkontakte.api.AudioAlbum;
@@ -24,6 +23,7 @@ import java.util.ArrayList;
 public class VkAlbumsActivity extends AbstractVkItems
 {
     static ArrayList<AudioAlbum> albums;
+    static long currentAlbumId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -33,6 +33,15 @@ public class VkAlbumsActivity extends AbstractVkItems
         listView = (ListView)findViewById(R.id.listVk);
         linearLoading = (LinearLayout)findViewById(R.id.linearLoading);
         listView.setOnItemClickListener(onClickListener);
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+        {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                startActionMode(callback).setTag(position);
+                return true;
+            }
+        });
 
 
         if(albums == null && Utils.isOnline(getBaseContext()))
@@ -44,6 +53,40 @@ public class VkAlbumsActivity extends AbstractVkItems
             listView.setAdapter(new VkAlbumsAdapter());
         }
     }
+
+    ActionMode.Callback callback = new ActionMode.Callback()
+    {
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu)
+        {
+            getSupportMenuInflater().inflate(R.menu.action_vk_album,menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu){return false;}
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item)
+        {
+
+            return true;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {}
+    };
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getSupportMenuInflater().inflate(R.menu.bar_vk_album,menu);
+        return true;
+    }
+
+
+
     void getAlbums()
     {
         new Thread(new Runnable()
@@ -111,6 +154,7 @@ public class VkAlbumsActivity extends AbstractVkItems
     @Override
     protected ArrayList<Audio> getAudios(int position)
     {
+        currentAlbumId = albums.get(position).album_id;
         try
         {
 

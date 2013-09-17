@@ -35,7 +35,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.example.DoomPlay.R;
 import com.perm.vkontakte.api.Audio;
 
 import java.io.File;
@@ -98,28 +97,24 @@ public class FullPlaybackActivity  extends AbstractControls
 
         intentWas = getIntent();
         intentService = new Intent(this,PlayingService.class);
+
         getTracks();
         initialize();
-
+        initializeAbstract();
 
         if(intentWas.getAction().equals(actionReturnFull) || savedInstanceState != null)
         {
-            intentService.putExtra(keyIndex, PlayingService.valueTrackNotChanged);
+            intentService.putExtra(keyIndex, PlayingService.valueIncredible);
         }
         else if(PlayingService.serviceAlive)
         {
             stopService(intentService);
-            PlayingService.serviceAlive = false;
-        }
-        if(intentWas.getIntExtra(keyIndex,11116) != 11116)
-            intentService.putExtra(keyIndex,intentWas .getIntExtra(keyIndex,0));
-
-        if(!PlayingService.serviceAlive )
-        {
             initializeService();
         }
+        else if(!PlayingService.serviceAlive)
+            initializeService();
 
-        initializeAbstract();
+
 
 
     }
@@ -153,9 +148,11 @@ public class FullPlaybackActivity  extends AbstractControls
             {
                 tracks = PlayingService.tracks;
             }
-            intentService.setAction(PlayingService.actionOffline);
 
         }
+
+        if(intentWas.getIntExtra(keyIndex,11116) != 11116)
+            intentService.putExtra(keyIndex,intentWas .getIntExtra(keyIndex,0));
 
     }
 
@@ -178,26 +175,6 @@ public class FullPlaybackActivity  extends AbstractControls
             cursor.moveToFirst();
             return cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
         }
-    }
-
-    @Override
-    protected void onServiceAbstractConnected()
-    {
-        playingService.setOnLoadingTrackListener(new PlayingService.OnLoadingTrackListener()
-        {
-            @Override
-            public void onLoadingTrackStarted()
-            {
-                viewPager.setEnabled(false);
-            }
-
-            @Override
-            public void onLoadingTrackEnded()
-            {
-
-                viewPager.setEnabled(true);
-            }
-        });
     }
 
     @Override
@@ -277,10 +254,17 @@ public class FullPlaybackActivity  extends AbstractControls
 
     private void initializeService()
     {
-        if(!PlayingService.isOnline)
-            intentService.putExtra(keyService, tracks);
-        else
+
+        if(intentWas.getAction().equals(actionReturnFull) && PlayingService.isOnline)
+        {
+            intentService.setAction(PlayingService.actionOnline);
             intentService.putExtra(keyService, audios);
+        }
+        else
+        {
+            intentService.setAction(PlayingService.actionOffline);
+            intentService.putExtra(keyService, tracks);
+        }
 
         bindService(intentService,serviceConnection,BIND_IMPORTANT);
         startService(intentService);

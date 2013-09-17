@@ -7,9 +7,7 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
-import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.example.DoomPlay.R;
 import com.perm.vkontakte.api.Audio;
 
 import java.util.ArrayList;
@@ -19,12 +17,7 @@ abstract class AbstractVkItems extends AbstractReceiver
     static boolean isLoading;
     LinearLayout linearLoading;
     ListView listView;
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        getSupportMenuInflater().inflate(R.menu.bar_vk_pgf,menu);
-        return super.onCreateOptionsMenu(menu);
-    }
+
     protected abstract void onClickRefresh();
     protected abstract ArrayList<Audio> getAudios(int position);
 

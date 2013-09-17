@@ -8,8 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.widget.RemoteViews;
-import com.example.DoomPlay.R;
 import com.perm.DoomPlay.PlayingService;
+import com.perm.DoomPlay.R;
 import com.perm.DoomPlay.Song;
 
 public class BigWidget extends AppWidgetProvider
@@ -26,7 +26,7 @@ public class BigWidget extends AppWidgetProvider
     static void updateWidget(Context context)
     {
 
-        final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_big);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_big);
 
         if(!PlayingService.isOnline)
         {
@@ -37,11 +37,11 @@ public class BigWidget extends AppWidgetProvider
             Bitmap cover = song.getBitmap(context);
             if (cover == null)
             {
-                views.setImageViewResource(R.id.widgetAlbum, R.drawable.fallback_cover);
+                views.setImageViewResource(R.id.imageWidgetCover, R.drawable.fallback_cover);
             }
             else
             {
-                views.setImageViewBitmap(R.id.widgetAlbum, cover);
+                views.setImageViewBitmap(R.id.imageWidgetCover, cover);
             }
         }
         else
@@ -52,15 +52,15 @@ public class BigWidget extends AppWidgetProvider
             views.setImageViewResource(R.id.widgetAlbum, R.drawable.fallback_cover);
         }
 
-        final int playButton = PlayingService.isPlaying ? R.drawable.pause : R.drawable.play;
-        final int shuffleBtn = PlayingService.shuffle ? R.drawable.shuffle_enable :  R.drawable.shuffle_disable;
-        final int loopBtn = PlayingService.looping ? R.drawable.repeat_enable : R.drawable.repeat_disable;
+        int playButton = PlayingService.isPlaying ? R.drawable.pause : R.drawable.play;
+        int shuffleBtn = PlayingService.isShuffle ? R.drawable.shuffle_enable :  R.drawable.shuffle_disable;
+        int loopBtn = PlayingService.isLoop ? R.drawable.repeat_enable : R.drawable.repeat_disable;
 
         views.setImageViewResource(R.id.imagePlay, playButton);
         views.setImageViewResource(R.id.imageShuffle, shuffleBtn);
         views.setImageViewResource(R.id.imageRepeat, loopBtn);
 
-        final ComponentName componentService = new ComponentName(context,PlayingService.class);
+        ComponentName componentService = new ComponentName(context,PlayingService.class);
 
         Intent intentPlay = new Intent(PlayingService.actionPlay);
         intentPlay.setComponent(componentService);
@@ -85,8 +85,7 @@ public class BigWidget extends AppWidgetProvider
 
         AppWidgetManager manager = AppWidgetManager.getInstance(context);
 
-        final ComponentName componentWidget = new ComponentName(context,BigWidget.class);
-        final int ids[] = manager.getAppWidgetIds(componentWidget);
+        final int ids[] = manager.getAppWidgetIds(new ComponentName(context,BigWidget.class));
 
         for (int widgetID : ids)
             manager.updateAppWidget(widgetID, views);

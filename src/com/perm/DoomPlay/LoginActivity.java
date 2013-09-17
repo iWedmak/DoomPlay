@@ -11,7 +11,6 @@ import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import com.example.DoomPlay.R;
 import com.perm.vkontakte.api.Auth;
 
 public class LoginActivity extends Activity

@@ -29,7 +29,6 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockDialogFragment;
-import com.example.DoomPlay.R;
 
 public class SleepDialog extends SherlockDialogFragment
 {
@@ -38,7 +37,7 @@ public class SleepDialog extends SherlockDialogFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.sleep_dialog,container,false);
+        View view = inflater.inflate(R.layout.dialog_sleep,container,false);
         Button btnEnable = (Button)view.findViewById(R.id.buttonDEnable);
         btnEnable .setOnClickListener(onClickEnableHandler);
         Button btnDisable = (Button)view.findViewById(R.id.buttonDDisable);
@@ -88,12 +87,13 @@ public class SleepDialog extends SherlockDialogFragment
     }
     private void disableTracks()
     {
-        PlayingService.setSleepTrack(PlayingService.valueTrackNotChanged);
+        PlayingService.setSleepTrack(PlayingService.valueIncredible);
     }
 
-    CountDownTimer timer;
+    private static CountDownTimer timer;
     private void enableSpleep(int time, int tracks)
     {
+        disableTime();
         if(time != 0)
         {
             timer = new CountDownTimer((long)time * 600,1000000)
@@ -109,8 +109,6 @@ public class SleepDialog extends SherlockDialogFragment
             };
             timer.start();
         }
-        else
-            disableTime();
 
         if(tracks != 0)
             PlayingService.setSleepTrack(tracks);

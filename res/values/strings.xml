@@ -58,7 +58,9 @@
     <string name="refresh">refresh</string>
     <string name="please_wait">please wait</string>
     <string name="dislike">dislike</string>
-    <string name="interrupt">interrupt</string>
+    <string name="interrupt">interrupt refreshing</string>
+    <string name="download">download</string>
+    <string name="edit">edit</string>
     <string-array name ="count_values">
         <item>10</item>
         <item>30</item>

@@ -29,7 +29,6 @@ import android.widget.*;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.example.DoomPlay.R;
 
 public class AlbumArtistActivity extends AbstractReceiver
 {

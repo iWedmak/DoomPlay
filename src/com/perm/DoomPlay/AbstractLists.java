@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import com.actionbarsherlock.view.MenuItem;
-import com.example.DoomPlay.R;
 
 import java.util.Arrays;
 
@@ -26,7 +25,7 @@ abstract class AbstractLists extends AbstractControls
                 listView.smoothScrollToPosition(position);
         }
         else
-            adapter.notifyDataSetChanged();
+            adapter.setMarkedItem(PlayingService.valueIncredible);
     }
     @Override
     protected void trackChanged()

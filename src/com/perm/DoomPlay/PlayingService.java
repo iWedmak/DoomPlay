@@ -40,7 +40,6 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.widget.RemoteViews;
 import android.widget.Toast;
-import com.example.DoomPlay.R;
 import com.perm.Widgets.SimpleSWidget;
 import com.perm.vkontakte.api.Audio;
 
@@ -57,13 +56,12 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     static boolean isPrepared ;
     public static String[] tracks;
     public static int indexCurrentTrack = 0;
-    static Random random;
-    public static boolean shuffle;
+    public static boolean isShuffle;
     public static boolean isPlaying;
-    public static boolean looping;
+    public static boolean isLoop;
     final static int nextTrack = 1;
     final static int previousTrack = -1;
-    public final static int valueTrackNotChanged = 519815;
+    public final static int valueIncredible = 519815;
     final MyBinder binder = new MyBinder();
     public final static int idForeground = 931;
     public final static String actionPlay = "DoomePlay";
@@ -73,10 +71,10 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     public final static String actionShuffle = "DoomShuffle";
     public final static String actionLoop = "DoomLooping";
     public static boolean serviceAlive ;
-    static  int trackCountTotal = valueTrackNotChanged;
+    static  int trackCountTotal = valueIncredible;
     static  int trackCountCurrent = 0;
     public final static String actionOffline = "FromlPlayback";
-    public static boolean isOnline;
+    public static boolean isOnline = false ;
     public static final String actionOnline = "vkOnline";
     AudioManager audioManager ;
     public static ArrayList<Audio> audios ;
@@ -99,7 +97,10 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     public void onCreate()
     {
         super.onCreate();
-        initialize();
+        isLoadingTrack = false;
+        isShuffle = false;
+        isPlaying = true;
+        isLoop = false;
         ((TelephonyManager)getSystemService(TELEPHONY_SERVICE)).listen(new CallListener(),CallListener.LISTEN_CALL_STATE);
         audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
@@ -270,14 +271,6 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         return notification;
     }
 
-    private void initialize()
-    {
-        isLoadingTrack = false;
-        random = new Random();
-        shuffle = false;
-        isPlaying = true;
-        looping = false;
-    }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
@@ -287,12 +280,12 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         {
             isOnline = action.equals(actionOnline);
 
-            if(action.equals(actionOffline))
+            if(!isOnline)
                 tracks = intent.getStringArrayExtra(FullPlaybackActivity.keyService);
             else
                 audios = intent.getParcelableArrayListExtra(FullPlaybackActivity.keyService);
 
-            if(intent.getIntExtra(FullPlaybackActivity.keyIndex,0) != valueTrackNotChanged)
+            if(intent.getIntExtra(FullPlaybackActivity.keyIndex,0) != valueIncredible)
                 indexCurrentTrack = intent.getIntExtra(FullPlaybackActivity.keyIndex,0);
 
             loadMusic();
@@ -460,7 +453,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
     public void setLoop()
     {
-        looping = !looping;
+        isLoop = !isLoop;
         sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
     }
 
@@ -484,8 +477,9 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     public static void setTrack(int direction)
     {
 
-        if(shuffle)
+        if(isShuffle)
         {
+            Random random = new Random();
             if(!isOnline)
             {
                 indexCurrentTrack = random.nextInt(tracks.length-1);
@@ -496,7 +490,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
             }
         }
-        else if(looping);
+        else if(isLoop);
         else
             changeTrack(direction);
 
@@ -528,7 +522,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
     public void setShuffle()
     {
-        shuffle = !shuffle;
+        isShuffle = !isShuffle;
         sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
     }
     int getDuration()
@@ -589,12 +583,12 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     @Override
     public void onCompletion(MediaPlayer mp)
     {
-        if(trackCountTotal != valueTrackNotChanged)
+        if(trackCountTotal != valueIncredible)
         {
             trackCountCurrent++;
             if(trackCountCurrent == trackCountTotal)
                 sendBroadcast(new Intent(AbstractReceiver.actionKill));
-            trackCountTotal = PlayingService.valueTrackNotChanged;
+            trackCountTotal = PlayingService.valueIncredible;
         }
 
         nextSong();

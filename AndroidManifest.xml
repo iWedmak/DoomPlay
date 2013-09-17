@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.example.DoomPlay"
+          package="com.perm.DoomPlay"
           android:versionCode="1"
           android:versionName="1.11">
     <uses-sdk android:minSdkVersion="4"
@@ -33,10 +33,8 @@
             <intent-filter>
                 <action android:name="android.intent.action.MUSIC_PLAYER"/>
                 <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.APP_MUSIC" />
                 <data android:mimeType="audio/*"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.MUSIC_PLAYER"/>
             </intent-filter>
         </activity>
 
@@ -50,7 +48,7 @@
                   android:launchMode="singleTop"/>
 
         <activity android:name="com.perm.DoomPlay.ListTracksActivity"
-                  android:launchMode="singleTop"/>
+                  android:launchMode="singleTask"/>
 
         <activity android:name="com.perm.DoomPlay.AlbumArtistActivity"
                   android:launchMode="singleTop"/>
@@ -62,7 +60,7 @@
                   android:launchMode="singleTask"/>
 
         <activity android:name="com.perm.DoomPlay.ListVkActivity"
-                  android:launchMode="singleTop"/>
+                  android:launchMode="singleTask"/>
 
         <activity android:name="com.perm.DoomPlay.VkPopularActivity"
                   android:launchMode="singleTop"/>
@@ -86,6 +84,11 @@
                 android:name="com.perm.DoomPlay.PlayingService"
                 android:launchMode ="singleTask"
                 android:configChanges="orientation">
+        </service>
+
+        <service
+                android:name="com.perm.DoomPlay.DownloadingService"
+                android:process=":download_track_vk">
         </service>
 
 

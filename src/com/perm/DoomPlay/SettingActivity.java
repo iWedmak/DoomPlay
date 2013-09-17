@@ -19,11 +19,14 @@ package com.perm.DoomPlay;
  */
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Window;
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
-import com.example.DoomPlay.R;
+
+import java.io.File;
 
 public class SettingActivity extends SherlockPreferenceActivity
 {
@@ -56,6 +59,35 @@ public class SettingActivity extends SherlockPreferenceActivity
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pref);
+
+
+        /*
+        findPreference("download_folder").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
+        {
+            @Override
+            public boolean onPreferenceClick(Preference preference)
+            {
+                Intent theIntent = new Intent(Intent.ACTION_PICK);
+
+                theIntent.setData(Uri.parse("folder://"));
+                theIntent.putExtra(Intent.EXTRA_TITLE,"Choose directory");
+                startActivityForResult(theIntent, 1);
+                return true;
+            }
+        });
+        */
+
+    }
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (resultCode == RESULT_OK)
+        {
+           SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(this).edit();
+           assert new File(data.getData().getPath()).isDirectory();
+           edit.putString("download_folder",data.getData().getPath());
+           edit.apply();
+           edit.commit();
+        }
     }
 
 }

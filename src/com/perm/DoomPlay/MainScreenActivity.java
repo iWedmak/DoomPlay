@@ -29,7 +29,6 @@ import android.support.v4.view.ViewPager;
 import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.example.DoomPlay.R;
 import com.perm.vkontakte.api.Account;
 import com.perm.vkontakte.api.Api;
 
@@ -143,6 +142,7 @@ public class MainScreenActivity extends AbstractReceiver
                 Account.account.user_id=data.getLongExtra("user_id", 0);
                 Account.account.save(this);
                 api = new Api(Account.account.access_token, LoginActivity.API_ID);
+                isRegister = true;
             }
             else
                 Toast.makeText(getBaseContext(),"registration's error", Toast.LENGTH_SHORT).show();

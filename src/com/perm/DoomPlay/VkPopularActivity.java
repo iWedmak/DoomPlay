@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.example.DoomPlay.R;
 import com.perm.vkontakte.api.Audio;
 import com.perm.vkontakte.api.KException;
 import org.json.JSONException;
@@ -59,7 +58,6 @@ public class VkPopularActivity extends AbstractVkItems
         }
         return null;
     }
-
 
 
     class VkPopularAdapter extends BaseAdapter

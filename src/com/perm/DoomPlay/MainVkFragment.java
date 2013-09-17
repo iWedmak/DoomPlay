@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.example.DoomPlay.R;
 import com.perm.vkontakte.api.Account;
 import com.perm.vkontakte.api.KException;
 import org.json.JSONException;
@@ -116,12 +115,6 @@ public class MainVkFragment extends SherlockFragment
         intent.putExtra(MainScreenActivity.keyOpenInListTrack,TracksHolder.tempAudiosMine);
         startActivity(intent);
     }
-    void startGroups()
-    {
-        Intent intent = new Intent(activity,ListVkActivity.class);
-        intent.putExtra(MainScreenActivity.keyOpenInListTrack,TracksHolder.tempAudiosRecomended);
-        startActivity(intent);
-    }
     Handler handler = new Handler()
     {
         @Override
@@ -140,10 +133,6 @@ public class MainVkFragment extends SherlockFragment
             else if(msg.what == 3)
             {
                 intentToAllTracks();
-            }
-            else if(msg.what == 4)
-            {
-                startGroups();
             }
 
         }

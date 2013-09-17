@@ -26,7 +26,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import com.example.DoomPlay.R;
 
 
 public class ListTracksAdapter extends BaseAdapter
@@ -40,7 +39,7 @@ public class ListTracksAdapter extends BaseAdapter
     public ListTracksAdapter(String[] tracks,Context context)
     {
         inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        markedItem = PlayingService.valueTrackNotChanged;
+        markedItem = PlayingService.valueIncredible;
         this.tracks = tracks;
         this.context = context;
     }

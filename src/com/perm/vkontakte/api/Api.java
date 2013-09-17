@@ -482,7 +482,8 @@ public class Api {
     }
 
     //http://vk.com/dev/audio.add
-    public String addAudio(Long aid, Long oid) throws MalformedURLException, IOException, JSONException, KException{
+    public String addAudio(Long aid, Long oid) throws MalformedURLException, IOException, JSONException, KException
+    {
         Params params = new Params("audio.add");
         params.put("aid", aid);
         params.put("oid", oid);

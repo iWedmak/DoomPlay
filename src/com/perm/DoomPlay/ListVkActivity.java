@@ -8,7 +8,6 @@ import android.widget.*;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.example.DoomPlay.R;
 import com.perm.vkontakte.api.Account;
 import com.perm.vkontakte.api.Audio;
 import com.perm.vkontakte.api.KException;
@@ -52,7 +51,9 @@ public class ListVkActivity extends AbstractListVk
 
                 return true;
             case R.id.itemInterrupt:
-
+                asyncTask.cancel(true);
+                isLoading = false;
+                linearLoading.setVisibility(View.GONE);
 
                 return true;
 

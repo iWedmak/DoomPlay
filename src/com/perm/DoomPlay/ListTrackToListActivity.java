@@ -27,7 +27,6 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
-import com.example.DoomPlay.R;
 
 
 public class ListTrackToListActivity extends AbstractReceiver

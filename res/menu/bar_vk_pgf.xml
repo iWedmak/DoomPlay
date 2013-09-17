@@ -11,8 +11,7 @@
     </item>
     <item
             android:id="@+id/itemInterrupt"
-            android:icon="@drawable/cancel_list"
-            android:showAsAction="always"
+            android:showAsAction="never"
             android:title="@string/interrupt">
     </item>
     <item

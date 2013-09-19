@@ -6,18 +6,26 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class AudioAlbum {
+public class AudioAlbum
+{
     public long album_id;
     public String title;
 
-    public static AudioAlbum parse(JSONObject o) throws JSONException {
-        AudioAlbum a = new AudioAlbum();
-        a.title = Api.unescape(o.optString("title"));
-        a.album_id = o.getLong("album_id");
-        return a;
+    public static AudioAlbum parse(JSONObject o) throws JSONException
+    {
+        return new AudioAlbum(o.getLong("album_id"),Api.unescape(o.optString("title")));
     }
+
+
+    public AudioAlbum(long album_id,String title)
+    {
+        this.title = title;
+        this.album_id = album_id;
+    }
+
     
-    public static ArrayList<AudioAlbum> parseAlbums(JSONArray array) throws JSONException {
+    public static ArrayList<AudioAlbum> parseAlbums(JSONArray array) throws JSONException
+    {
         ArrayList<AudioAlbum> albums = new ArrayList<AudioAlbum>();
         if (array == null) 
             return albums;

@@ -91,7 +91,7 @@ public class MainScreenFragment extends SherlockFragment
                         goArtist();
                         break;
                     case R.id.linearPlaylists:
-                        if(!AddTrackFromPlaybackDialog.isAdding)
+                        if(!AddTrackToAlbumDialog.isAdding)
                             startActivity(new Intent(activity,PlaylistActivity.class));
                         else
                             Toast.makeText(activity, "please wait, tracks didn't added yet", Toast.LENGTH_SHORT);

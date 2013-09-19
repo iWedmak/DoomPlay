@@ -23,6 +23,7 @@ package com.perm.DoomPlay;
 
 
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,6 +61,7 @@ public class AddTrackFromPlaybackDialog extends SherlockDialogFragment
             tracks = new String[]{PlayingService.tracks[PlayingService.indexCurrentTrack]};
 
         return view;
+
     }
     AdapterView.OnItemClickListener onItemClickHandler = new AdapterView.OnItemClickListener()
     {
@@ -69,8 +71,17 @@ public class AddTrackFromPlaybackDialog extends SherlockDialogFragment
 
             if(!isAdding)
             {
-                PlaylistActivity.selectedPlaylist = listPlaylist[position];
-                startAddedThread();
+                new AsyncTask<String, Void, Void>()
+                {
+                    @Override
+                    protected Void doInBackground(String... params)
+                    {
+                        isAdding = true;
+                        playlistDB.addTracks(tracks, params[0]);
+                        isAdding = false;
+                        return null;
+                    }
+                }.execute(listPlaylist[position]);
                 dismiss();
                 Toast.makeText(getActivity(),"tracks added",Toast.LENGTH_SHORT).show();
             }
@@ -78,20 +89,6 @@ public class AddTrackFromPlaybackDialog extends SherlockDialogFragment
                 Toast.makeText(getActivity(),"please wait, tracks didn't added yet",Toast.LENGTH_SHORT);
         }
     };
-    void startAddedThread()
-    {
-          Thread thread = new Thread(new Runnable() {
-              @Override
-              public void run()
-              {
-                  isAdding = true;
-                  playlistDB.addTracks(tracks, PlaylistActivity.selectedPlaylist);
-                  isAdding = false;
-              }
-          });
-        thread.start();
-    }
-
 
     class DialogAddAdapter extends BaseAdapter
     {

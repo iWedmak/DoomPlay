@@ -77,7 +77,6 @@ abstract class AbstractControls extends AbstractReceiver
     {
         super.onResume();
         checkImage();
-        connectServer();
 
         if(isShown)
             loadUpdateThread();
@@ -133,7 +132,7 @@ abstract class AbstractControls extends AbstractReceiver
             imgShuffle.setImageResource(R.drawable.shuffle_disable);
     }
 
-    private void connectServer()
+    protected void connectService()
     {
         bindService(intentService,serviceConnection,BIND_IMPORTANT);
         isBound = true;
@@ -179,13 +178,17 @@ abstract class AbstractControls extends AbstractReceiver
             }
             @Override
             public void onServiceDisconnected(ComponentName name)
-            {
-
-            }
+            {}
         };
-        bindService(intentService, serviceConnection, BIND_IMPORTANT);
-        isBound = true;
     }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        connectService();
+    }
+
     protected void clickWithoutAction()
     {
 

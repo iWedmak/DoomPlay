@@ -2,12 +2,6 @@
 <menu
         xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-            android:id="@+id/itemMoveToAlbum"
-            android:icon="@drawable/to_album"
-            android:showAsAction="always"
-            android:title="@string/add_to_album">
-    </item>
-    <item
             android:id="@+id/itemGetLiricks"
             android:icon="@drawable/lyrics"
             android:showAsAction="always"

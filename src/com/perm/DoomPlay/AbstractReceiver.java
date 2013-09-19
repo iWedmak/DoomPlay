@@ -188,8 +188,7 @@ abstract class AbstractReceiver extends SherlockFragmentActivity
     {
         if(item.getItemId() == android.R.id.home)
         {
-            Intent intent = new Intent(this, MainScreenActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, MainScreenActivity.class));
             return true;
         }
         return super.onMenuItemSelected(featureId, item);

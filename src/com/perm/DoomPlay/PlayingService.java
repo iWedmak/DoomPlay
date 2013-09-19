@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.audiofx.AudioEffect;
@@ -141,7 +142,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
             Bitmap cover = song.getBitmap(this);
             if (cover == null)
             {
-                views.setImageViewResource(R.id.notifAlbum, R.drawable.fallback_cover);
+                views.setImageViewBitmap(R.id.notifAlbum, BitmapFactory.decodeResource(getResources(), R.drawable.fallback_cover));
             }
             else
             {
@@ -209,7 +210,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
             Bitmap cover = song.getBitmap(this);
             if (cover == null)
             {
-                views.setImageViewResource(R.id.notifJellyAlbum, R.drawable.fallback_cover);
+                views.setImageViewBitmap(R.id.notifJellyAlbum , BitmapFactory.decodeResource(getResources(), R.drawable.fallback_cover));
             }
             else
             {

@@ -787,38 +787,36 @@ public class Api {
     }
     
     //http://vk.com/dev/audio.addAlbum
-    public Long addAudioAlbum(String title, Long gid) throws MalformedURLException, IOException, JSONException, KException {
+    public Long addAudioAlbum(String title) throws MalformedURLException, IOException, JSONException, KException {
         Params params = new Params("audio.addAlbum");
         params.put("title", title);
-        params.put("gid", gid);
         JSONObject root = sendRequest(params);
         JSONObject obj = root.getJSONObject("response");
         return obj.optLong("album_id");
     }
     
     //http://vk.com/dev/audio.editAlbum
-    public Integer editAudioAlbum(String title, long album_id, Long gid) throws MalformedURLException, IOException, JSONException, KException {
+    public Integer editAudioAlbum(String title, long album_id) throws MalformedURLException, IOException, JSONException, KException {
         Params params = new Params("audio.editAlbum");
         params.put("title", title);
         params.put("album_id", album_id);
-        params.put("gid", gid);
         JSONObject root = sendRequest(params);
         return root.optInt("response");
     }
     
     //http://vk.com/dev/audio.deleteAlbum
-    public Integer deleteAudioAlbum(long album_id, Long gid) throws MalformedURLException, IOException, JSONException, KException {
+    public Integer deleteAudioAlbum(long album_id) throws MalformedURLException, IOException, JSONException, KException {
         Params params = new Params("audio.deleteAlbum");
         params.put("album_id", album_id);
-        params.put("gid", gid);
         JSONObject root = sendRequest(params);
         return root.optInt("response");
     }
     
     //http://vk.com/dev/audio.moveToAlbum
-    public Integer moveToAudioAlbum(Long aid) throws MalformedURLException, IOException, JSONException, KException {
+    public Integer moveToAudioAlbum(long album_id,long audioAids) throws MalformedURLException, IOException, JSONException, KException {
         Params params = new Params("audio.moveToAlbum");
-        params.put("aids", String.valueOf(aid));
+        params.put("aid", String.valueOf(album_id));
+        params.put("aids",String.valueOf(audioAids));
         JSONObject root = sendRequest(params);
         return root.optInt("response");
     }

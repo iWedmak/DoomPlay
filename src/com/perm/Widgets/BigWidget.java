@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.widget.RemoteViews;
 import com.perm.DoomPlay.PlayingService;
 import com.perm.DoomPlay.R;
@@ -35,21 +36,19 @@ public class BigWidget extends AppWidgetProvider
             views.setTextViewText(R.id.textWidgetArtist, song.getArtist() );
             views.setTextViewText(R.id.textWidgetCount,String.valueOf(PlayingService.indexCurrentTrack + 1)+ "/" +String.valueOf(PlayingService.tracks.length));
             Bitmap cover = song.getBitmap(context);
-            if (cover == null)
-            {
-                views.setImageViewResource(R.id.imageWidgetCover, R.drawable.fallback_cover);
-            }
-            else
+            if (cover != null)
             {
                 views.setImageViewBitmap(R.id.imageWidgetCover, cover);
             }
+            else
+                views.setImageViewBitmap(R.id.imageWidgetCover,BitmapFactory.decodeResource(context.getResources(), R.drawable.fallback_cover));
+
         }
         else
         {
             views.setTextViewText(R.id.textWidgetlTitle, PlayingService.audios.get(PlayingService.indexCurrentTrack).title);
             views.setTextViewText(R.id.textWidgetArtist,PlayingService.audios.get(PlayingService.indexCurrentTrack).artist);
             views.setTextViewText(R.id.textWidgetCount,String.valueOf(PlayingService.indexCurrentTrack + 1)+ "/" +String.valueOf(PlayingService.audios.size()));
-            views.setImageViewResource(R.id.widgetAlbum, R.drawable.fallback_cover);
         }
 
         int playButton = PlayingService.isPlaying ? R.drawable.pause : R.drawable.play;

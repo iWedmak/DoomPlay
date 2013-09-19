@@ -47,12 +47,14 @@ public class MainVkFragment extends SherlockFragment
                     {
                         TracksHolder.tempAudiosMine = MainScreenActivity.api.getAudio(Account.account.user_id,
                                 null,null,SettingActivity.getPreference(activity,"countvkall"));
+
+
                     } catch (IOException e) {
-                        e.printStackTrace();Toast.makeText(activity,"failed",Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
                     } catch (JSONException e) {
-                        e.printStackTrace(); Toast.makeText(activity,"failed",Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
                     } catch (KException e) {
-                        e.printStackTrace();Toast.makeText(activity,"failed",Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
                     }
                     handler.sendEmptyMessage(2);
                     handler.sendEmptyMessage(3);

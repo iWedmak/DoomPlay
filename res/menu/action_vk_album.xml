@@ -3,7 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android">
     <item
             android:id="@+id/itemEditAlbum"
-            android:icon="@drawable/lyrics"
+            android:icon="@drawable/edit"
             android:showAsAction="always"
             android:title="@string/edit">
     </item>

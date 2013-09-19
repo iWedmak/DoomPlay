@@ -1,6 +1,7 @@
 package com.perm.DoomPlay;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,7 +24,8 @@ import java.util.ArrayList;
 public class VkAlbumsActivity extends AbstractVkItems
 {
     static ArrayList<AudioAlbum> albums;
-    static long currentAlbumId;
+    static int currentAlbum;
+    VkAlbumsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -38,6 +40,7 @@ public class VkAlbumsActivity extends AbstractVkItems
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
             {
+                currentAlbum = position;
                 startActionMode(callback).setTag(position);
                 return true;
             }
@@ -50,7 +53,8 @@ public class VkAlbumsActivity extends AbstractVkItems
         }
         else
         {
-            listView.setAdapter(new VkAlbumsAdapter());
+            adapter = new VkAlbumsAdapter();
+            listView.setAdapter(adapter);
         }
     }
 
@@ -70,7 +74,110 @@ public class VkAlbumsActivity extends AbstractVkItems
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item)
         {
+            //int position = (Integer)mode.getTag();
+            switch (item.getItemId())
+            {
+                case R.id.itemEditAlbum:
+                {
+                     AddListDialog dialog = new AddListDialog()
+                     {
+                         @Override
+                         boolean isPlaylistExist(String playlist)
+                         {
+                             for(AudioAlbum album : albums)
+                             {
+                                 if(album.title.equals(playlist))
+                                     return true;
+                             }
+                             return false;
+                         }
 
+                         @Override
+                         void createPlatlist(String playlist)
+                         {
+                             new AsyncTask<String,Void,Void>()
+                             {
+
+                                 @Override
+                                 protected Void doInBackground(String... params)
+                                 {
+                                     try
+                                     {
+                                         handler.sendEmptyMessage(1);
+                                         MainScreenActivity.api.editAudioAlbum(params[0], albums.get(currentAlbum).album_id);
+                                         albums.set(currentAlbum,new AudioAlbum(albums.get(currentAlbum).album_id,params[0]));
+                                         handler.sendEmptyMessage(2);
+                                     }
+
+
+                                     catch (IOException e)
+                                     {
+                                         e.printStackTrace();
+                                     } catch (JSONException e)
+                                     {
+                                         e.printStackTrace();
+                                     } catch (KException e)
+                                     {
+                                         e.printStackTrace();
+                                     }
+                                     return null;
+                                 }
+
+                                 @Override
+                                 protected void onPostExecute(Void aVoid)
+                                 {
+                                     super.onPostExecute(aVoid);
+                                     adapter.notifyDataSetChanged();
+                                 }
+                             }.execute(playlist) ;
+                         }
+                     };
+                    dialog.show(getSupportFragmentManager(),"tag");
+                    break;
+                }
+                case R.id.itemDeleteAlbum:
+                {
+                    new AsyncTask<Void,Void,Void>()
+                    {
+
+                        @Override
+                        protected Void doInBackground(Void... params)
+                        {
+                            try
+                            {
+                                handler.sendEmptyMessage(1);
+                                MainScreenActivity.api.deleteAudioAlbum(albums.get(currentAlbum).album_id);
+                                albums.remove(currentAlbum);
+                                handler.sendEmptyMessage(2);
+                            }
+
+
+                            catch (IOException e)
+                            {
+                                e.printStackTrace();
+                            } catch (JSONException e)
+                            {
+                                e.printStackTrace();
+                            } catch (KException e)
+                            {
+                                e.printStackTrace();
+                            }
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void aVoid)
+                        {
+                            super.onPostExecute(aVoid);
+                            adapter.notifyDataSetChanged();
+                        }
+                    }.execute();
+                    break;
+                }
+
+
+            }
+            mode.finish();
             return true;
         }
 
@@ -85,7 +192,74 @@ public class VkAlbumsActivity extends AbstractVkItems
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        if(item.getItemId() == R.id.itemNewAlbum)
+        {
+            AddListDialog dialog = new AddListDialog()
+            {
+                @Override
+                boolean isPlaylistExist(String playlist)
+                {
+                    for(AudioAlbum album : albums)
+                    {
+                        if(album.title.equals(playlist))
+                            return true;
+                    }
+                    return false;
+                }
 
+                @Override
+                void createPlatlist(String playlist)
+                {
+
+
+                    new AsyncTask<String,Void,Void>()
+                    {
+
+                        @Override
+                        protected Void doInBackground(String... params)
+                        {
+                            try
+                            {
+                                handler.sendEmptyMessage(1);
+                                albums.add(0,new AudioAlbum(MainScreenActivity.api.addAudioAlbum(params[0]),params[0]));
+                                handler.sendEmptyMessage(2);
+                            }
+
+
+                            catch (IOException e)
+                            {
+                                e.printStackTrace();
+                            } catch (JSONException e)
+                            {
+                                e.printStackTrace();
+                            } catch (KException e)
+                            {
+                                e.printStackTrace();
+                            }
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void aVoid)
+                        {
+                            super.onPostExecute(aVoid);
+                            adapter.notifyDataSetChanged();
+                        }
+                    }.execute(playlist) ;
+
+
+
+                }
+            };
+            dialog.show(getSupportFragmentManager(),"tag");
+            return true;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     void getAlbums()
     {
@@ -95,7 +269,8 @@ public class VkAlbumsActivity extends AbstractVkItems
             public void run()
             {
                 handler.sendEmptyMessage(1);
-                try {
+                try
+                {
                     albums = MainScreenActivity.api.getAudioAlbums(Account.account.user_id,null,
                             SettingActivity.getPreference(getBaseContext(),"countvkall"));
 
@@ -130,7 +305,8 @@ public class VkAlbumsActivity extends AbstractVkItems
             }
             else if(msg.what == 3)
             {
-                listView.setAdapter(new VkAlbumsAdapter());
+                adapter = new VkAlbumsAdapter();
+                listView.setAdapter(adapter);
             }
 
         }
@@ -154,7 +330,7 @@ public class VkAlbumsActivity extends AbstractVkItems
     @Override
     protected ArrayList<Audio> getAudios(int position)
     {
-        currentAlbumId = albums.get(position).album_id;
+        currentAlbum = position;
         try
         {
 

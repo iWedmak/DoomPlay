@@ -26,6 +26,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.widget.RemoteViews;
 import com.perm.DoomPlay.PlayingService;
 import com.perm.DoomPlay.R;
@@ -58,7 +59,7 @@ public class SimpleSWidget extends AppWidgetProvider
             Bitmap cover = song.getBitmap(context);
             if (cover == null)
             {
-                views.setImageViewResource(R.id.widgetAlbum, R.drawable.fallback_cover);
+                views.setImageViewBitmap(R.id.widgetAlbum, BitmapFactory.decodeResource(context.getResources(), R.drawable.fallback_cover));
             }
             else
             {

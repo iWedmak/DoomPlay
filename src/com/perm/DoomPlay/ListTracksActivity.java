@@ -76,7 +76,7 @@ public class ListTracksActivity extends AbstractLists
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
         {
-            if(!AddTrackFromPlaybackDialog.isAdding)
+            if(!AddTrackToAlbumDialog.isAdding)
             {
                 actionMode = startActionMode(callback);
                 actionMode.setTag(position);
@@ -199,9 +199,9 @@ public class ListTracksActivity extends AbstractLists
             @Override
             protected Void doInBackground(Integer... params)
             {
-                AddTrackFromPlaybackDialog.isAdding = true;
+                AddTrackToAlbumDialog.isAdding = true;
                 playlistDB.setAcordingPositions(params[0],PlaylistActivity.selectedPlaylist);
-                AddTrackFromPlaybackDialog.isAdding = false;
+                AddTrackToAlbumDialog.isAdding = false;
                 return null;
             }
         };
@@ -277,7 +277,7 @@ public class ListTracksActivity extends AbstractLists
         else if(tempTracks != null)
             tracks = tempTracks;
 
-
+        adapter.changeData(tracks);
         currentAction  = intent.getAction();
     }
 

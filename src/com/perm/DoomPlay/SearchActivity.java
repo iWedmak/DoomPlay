@@ -162,13 +162,7 @@ public class SearchActivity extends AbstractLists
             switch(item.getItemId())
             {
                 case R.id.itemToPlaylist:
-                    AddTrackFromPlaybackDialog dialog = new AddTrackFromPlaybackDialog();
-                    Bundle bundle = new Bundle();
-                    bundle.putStringArray(AddTrackFromPlaybackDialog.keyBundleDialog,
-                            new String[]{tracks[(Integer)mode.getTag()]});
-
-                    dialog.setArguments(bundle);
-                    dialog.show(getSupportFragmentManager(), "tag");
+                    FileSystemActivity.showPlaybackDialog(new String[]{tracks[(Integer)mode.getTag()]} ,getSupportFragmentManager());
                     mode.finish();
                     break;
                 case R.id.itemSetAsRingtone:

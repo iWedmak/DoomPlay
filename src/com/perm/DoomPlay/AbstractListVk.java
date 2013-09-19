@@ -116,7 +116,6 @@ abstract class AbstractListVk extends AbstractControls
                 sleepDialog.show(getSupportFragmentManager(),FullPlaybackActivity.tagSleepDialog);
                 return true;
             case R.id.itemFullScreen:
-                finish();
                 goFullScreen();
                 return true;
             case R.id.itemSettings:
@@ -141,6 +140,7 @@ abstract class AbstractListVk extends AbstractControls
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu)
         {
+
             getSupportMenuInflater().inflate(R.menu.action_vk,menu);
             return true;
         }
@@ -152,14 +152,11 @@ abstract class AbstractListVk extends AbstractControls
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item)
         {
-            if(!Utils.isOnline(getBaseContext()))
-                return false;
-            else
-            {
-                handleActionMode(item.getItemId(), (Integer) mode.getTag());
-                mode.finish();
-                return true;
-            }
+
+            handleActionMode(item.getItemId(), (Integer) mode.getTag());
+            mode.finish();
+            return true;
+
         }
 
         @Override
@@ -168,24 +165,42 @@ abstract class AbstractListVk extends AbstractControls
 
     void handleActionMode(int itemId,int position)
     {
-        switch (itemId)
+        if(Utils.isOnline(getBaseContext()))
         {
-            case  R.id.itemGetLiricks:
-                getLyriks(position);
-                break;
-            case R.id.itemLike:
-                likeTrack(position);
-                break;
-            case R.id.itemDislike:
-                dislikeTrack(position);
-                break;
-            case R.id.itemDownload:
-                Intent downloadIntent = new Intent(this,DownloadingService.class);
-                downloadIntent.putExtra(DownloadingService.keyDownload,(Parcelable)audios.get(position));
-                startService(downloadIntent);
-                break;
+            switch (itemId)
+            {
+                case  R.id.itemGetLiricks:
+                    getLyriks(position);
+                    break;
+                case R.id.itemLike:
+                    likeTrack(position);
+                    break;
+                case R.id.itemDislike:
+                    dislikeTrack(position);
+                    break;
+                case R.id.itemDownload:
+                    Intent downloadIntent = new Intent(this,DownloadingService.class);
+                    downloadIntent.putExtra(DownloadingService.keyDownload,(Parcelable)audios.get(position));
+                    startService(downloadIntent);
+                    break;
+                case R.id.itemMoveToAlbum:
+                    moveToAlbum(position);
+                    break;
+            }
         }
+
+
     }
+    void moveToAlbum(int position)
+    {
+        AddTrackToAlbumDialog dialog = new AddTrackToAlbumDialog();
+        Bundle bundle = new Bundle();
+        bundle.putLong(AddTrackToAlbumDialog.keyDialogAlbum,audios.get(position).aid);
+        dialog.setArguments(bundle);
+        dialog.show(getSupportFragmentManager(),"tag");
+
+    }
+
 
     void dislikeTrack(int position)
     {
@@ -291,7 +306,7 @@ abstract class AbstractListVk extends AbstractControls
             intentService.putExtra(FullPlaybackActivity.keyIndex,position);
             intentService.putExtra(FullPlaybackActivity.keyService,audios);
 
-            bindService(intentService,serviceConnection,BIND_IMPORTANT);
+            connectService();
             startService(intentService);
         }
         else

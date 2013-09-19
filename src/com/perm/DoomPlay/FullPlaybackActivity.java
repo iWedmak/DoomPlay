@@ -225,7 +225,7 @@ public class FullPlaybackActivity  extends AbstractControls
         switch (item.getItemId())
         {
             case R.id.itemAdd:
-                AddTrackFromPlaybackDialog dialog = new AddTrackFromPlaybackDialog();
+                AddTrackToAlbumDialog dialog = new AddTrackToAlbumDialog();
                 dialog.show(getSupportFragmentManager(),"tag");
                 return true;
             case R.id.itemEqualizer:

@@ -70,12 +70,6 @@ abstract class AbstractVkItems extends AbstractReceiver
 
     };
 
-    @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item)
-    {
-
-        return super.onMenuItemSelected(featureId, item);
-    }
     void cancelLoading()
     {
         if(isLoading && taskLoader != null)

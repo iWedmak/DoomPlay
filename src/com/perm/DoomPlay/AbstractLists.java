@@ -65,7 +65,6 @@ abstract class AbstractLists extends AbstractControls
                 sleepDialog.show(getSupportFragmentManager(),FullPlaybackActivity.tagSleepDialog);
                 return true;
             case R.id.itemFullScreen:
-                finish();
                 goFullScreen();
                 return true;
             case R.id.itemAddMusic:
@@ -102,7 +101,7 @@ abstract class AbstractLists extends AbstractControls
         {
             intentService.putExtra(FullPlaybackActivity.keyIndex,position);
             intentService.putExtra(FullPlaybackActivity.keyService,tracks);
-            bindService(intentService,serviceConnection,BIND_IMPORTANT);
+            connectService();
             startService(intentService);
         }
         else

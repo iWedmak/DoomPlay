@@ -45,10 +45,7 @@ public class ListVkActivity extends AbstractListVk
         switch (item.getItemId())
         {
             case R.id.itemRefresh:
-                if(currentAction.equals(actionMyMusic) && !isLoading)
-                    refreshAudios();
-
-
+                refreshAudios();
                 return true;
             case R.id.itemInterrupt:
                 asyncTask.cancel(true);
@@ -80,8 +77,15 @@ public class ListVkActivity extends AbstractListVk
             {
                 try
                 {
-                    audios = TracksHolder.tempAudiosMine = MainScreenActivity.api.getAudio(Account.account.user_id,
+                    if(currentAction.equals(actionMyMusic))
+                        audios = TracksHolder.tempAudiosMine = MainScreenActivity.api.getAudio(Account.account.user_id,
                             null,null,SettingActivity.getPreference(getBaseContext(),"countvkall"));
+
+                    else if(currentAction.equals(actionMyAlbums))
+                        audios =  MainScreenActivity.api.getAudio(null,
+                                null,VkAlbumsActivity.albums.get(VkAlbumsActivity.currentAlbum).album_id,
+                                SettingActivity.getPreference(getBaseContext(),"countvkall"));
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
@@ -109,7 +113,11 @@ public class ListVkActivity extends AbstractListVk
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu)
         {
-            getSupportMenuInflater().inflate(R.menu.action_vk_my,menu);
+
+            if(currentAction.equals(actionMyMusic))
+                getSupportMenuInflater().inflate(R.menu.action_vk_my,menu);
+            else
+                getSupportMenuInflater().inflate(R.menu.action_vk_list_album,menu);
             return true;
         }
 
@@ -120,14 +128,10 @@ public class ListVkActivity extends AbstractListVk
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item)
         {
-            if(!Utils.isOnline(getBaseContext()))
-                return false;
-            else
-            {
-                handleActionMode(item.getItemId(), (Integer) mode.getTag());
-                mode.finish();
-                return true;
-            }
+
+            handleActionMode(item.getItemId(), (Integer) mode.getTag());
+            mode.finish();
+            return true;
         }
 
         @Override
@@ -140,7 +144,7 @@ public class ListVkActivity extends AbstractListVk
         listView = (ListView)findViewById(R.id.listAllSongs);
         listView.setOnItemClickListener(onItemTrackClick);
         listView.setAdapter(adapter);
-        if(currentAction.equals(actionMyMusic))
+        if(currentAction.equals(actionMyMusic) || currentAction.equals(actionMyAlbums))
         {
             listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
             {
@@ -177,7 +181,7 @@ public class ListVkActivity extends AbstractListVk
         if(tempTracks != null)
             audios = tempTracks;
 
-
+        adapter.changeData(audios);
         currentAction  = intent.getAction();
     }
 

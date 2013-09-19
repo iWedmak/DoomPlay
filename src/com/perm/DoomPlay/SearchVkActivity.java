@@ -170,7 +170,7 @@ public class SearchVkActivity extends AbstractListVk
             isLoading = false;
             linearLoading.setVisibility(View.GONE);
             adapter.changeData(audios);
-            adapter.setMarkedItem(PlayingService.indexCurrentTrack);
+            markItem(PlayingService.indexCurrentTrack,false);
         }
     }
 }

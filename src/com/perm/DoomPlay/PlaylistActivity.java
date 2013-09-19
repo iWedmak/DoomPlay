@@ -18,15 +18,15 @@ package com.perm.DoomPlay;
  *    You can contact me <DoomPlaye@gmail.com>
  */
 
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 public class PlaylistActivity extends AbstractReceiver
 {
@@ -143,8 +143,27 @@ public class PlaylistActivity extends AbstractReceiver
         switch (item.getItemId())
         {
             case R.id.itemNewPlaylist:
-                AddListDialog dialog = new AddListDialog();
-                dialog.show(getFragmentManager(),tagNewDialog);
+                AddListDialog dialog = new AddListDialog()
+                {
+                    @Override
+                    boolean isPlaylistExist(String playlist)
+                    {
+                        for(int i = 0 ; i < playlistDB.getListPlaylist().length ; i++)
+                        {
+                            if(playlistDB.getListPlaylist()[i].equals(playlist))
+                                return true;
+                        }
+                        return false;
+                    }
+
+                    @Override
+                    void createPlatlist(String playlist)
+                    {
+                        playlistDB.addPlaylist(playlist);
+                        updateList();
+                    }
+                };
+                dialog.show(getSupportFragmentManager(),tagNewDialog);
                 return true;
             case R.id.itemSettings:
                 startActivity(new Intent(this,SettingActivity.class));
@@ -197,72 +216,5 @@ public class PlaylistActivity extends AbstractReceiver
         playlists = playlistDB.getListPlaylist();
         adapter.notifyDataSetChanged();
     }
-    class AddListDialog extends DialogFragment
-    {
-        EditText editNewDialog;
-        TextView textInvalid;
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-        {
-            View view  = inflater.inflate(R.layout.dialog_addlist,container,false);
-            Button buttonCancel = (Button)view.findViewById(R.id.buttonCancelNewDialog);
-            buttonCancel.setOnClickListener(onClickNewDialogHandler);
-            Button buttonSave = (Button)view.findViewById(R.id.buttonSaveNewDialog);
-            buttonSave.setOnClickListener(onClickNewDialogHandler);
-            editNewDialog = (EditText)view.findViewById(R.id.editNewPlaylist);
-            textInvalid = (TextView)view.findViewById(R.id.textDialogWrongName);
-            textInvalid.setVisibility(View.GONE);
-            Dialog dialog = getDialog();
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            return view;
-        }
 
-        boolean isPlaylistExist(String playlist)
-        {
-            for(int i = 0 ; i < playlistDB.getListPlaylist().length ; i++)
-            {
-                if(playlistDB.getListPlaylist()[i].equals(playlist))
-                    return true;
-            }
-            return false;
-        }
-
-        View.OnClickListener onClickNewDialogHandler = new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                String query = editNewDialog.getText().toString();
-                if(v.getId() == R.id.buttonSaveNewDialog)
-                {
-                    if(Utils.checkSpecialCharacters(query) && !isPlaylistExist(query) && query.length() >= 4)
-                    {
-                        playlistDB.addPlaylist(query);
-                        textInvalid.setVisibility(View.GONE);
-                        updateList();
-                        dismiss();
-                    }
-                    else if(isPlaylistExist(query))
-                    {
-                        textInvalid.setVisibility(View.VISIBLE);
-                        textInvalid.setText("playlist already exist");
-                    }
-                    else if(query.length() < 4)
-                    {
-                        textInvalid.setVisibility(View.VISIBLE);
-                        textInvalid.setText("enter more symbol");
-                    }
-                    else
-                    {
-                        textInvalid.setVisibility(View.VISIBLE);
-                        textInvalid.setText("delete special symbols and blank");
-                    }
-                }
-                else if (v.getId() == R.id.buttonCancelNewDialog)
-                {
-                    dismiss();
-                }
-            }
-        };
-    }
 }

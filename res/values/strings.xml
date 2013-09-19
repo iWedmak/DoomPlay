@@ -61,6 +61,7 @@
     <string name="interrupt">interrupt refreshing</string>
     <string name="download">download</string>
     <string name="edit">edit</string>
+    <string name="add_to_album">add to album</string>
     <string-array name ="count_values">
         <item>10</item>
         <item>30</item>

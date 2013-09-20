@@ -24,7 +24,7 @@ import com.perm.vkontakte.api.Audio;
 
 import java.util.ArrayList;
 
-public final class TracksHolder
+public class TracksHolder
 {
     public static volatile boolean isScanned = false;
     public static String[] songAllPath;

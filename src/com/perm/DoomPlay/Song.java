@@ -110,8 +110,11 @@ public class Song
         {
             byte[] bitmap = metadata.getEmbeddedPicture();
 
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.outWidth = 400;
+            options.outHeight = 400;
             if(bitmap != null)
-                return BitmapFactory.decodeByteArray(bitmap,0,bitmap.length);
+                return BitmapFactory.decodeByteArray(bitmap,0,bitmap.length,options);
             else
                 return null;
         }

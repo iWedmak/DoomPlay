@@ -1,36 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:yourapp="http://schemas.android.com/apk/res-auto">
 
     <item
             android:id="@+id/itemReturnSmall"
             android:icon="@drawable/smallscreen"
-            android:showAsAction="always"
+            yourapp:showAsAction="always"
             android:title="@string/return_small">
     </item>
     <item
             android:id="@+id/itemAdd"
-            android:showAsAction="never"
+            yourapp:showAsAction="never"
             android:title="@string/add_to_playlist">
     </item>
     <item
             android:id="@+id/itemSetAsRingtone"
-            android:showAsAction="never"
+            yourapp:showAsAction="never"
             android:title="@string/set_track_as_ringtone">
     </item>
     <item
             android:id="@+id/itemSleep"
-            android:showAsAction="never"
+            yourapp:showAsAction="never"
             android:title="@string/sleep_timer">
     </item>
     <item
             android:id="@+id/itemSettings"
-            android:showAsAction="never"
+            yourapp:showAsAction="never"
             android:title ="@string/settings">
     </item>
     <item
             android:id="@+id/itemExit"
-            android:showAsAction="never"
+            yourapp:showAsAction="never"
             android:title ="@string/exit">
     </item>
 </menu>

@@ -136,7 +136,12 @@ public class Api {
         String args = "";
         if(!is_post)
             args=params.getParamsString();
-        
+
+        /*
+        for(int i = 0 ; i < 10 ; i ++)
+            Log.d("TAGGGGG", BASE_URL+params.method_name+"?"+args );
+        */
+
         return BASE_URL+params.method_name+"?"+args;
     }
     

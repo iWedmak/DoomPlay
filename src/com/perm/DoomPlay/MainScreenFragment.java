@@ -3,16 +3,16 @@ package com.perm.DoomPlay;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-import com.actionbarsherlock.app.SherlockFragment;
 
 import java.util.Random;
 
-public class MainScreenFragment extends SherlockFragment
+public class MainScreenFragment extends Fragment
 {
     MainScreenActivity activity;
     LinearLayout linearLoading;

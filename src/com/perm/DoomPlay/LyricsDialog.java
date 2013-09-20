@@ -2,17 +2,17 @@ package com.perm.DoomPlay;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.*;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.perm.vkontakte.api.KException;
 import org.json.JSONException;
 
 import java.io.IOException;
 
-public class LyricsDialog extends SherlockDialogFragment
+public class LyricsDialog extends DialogFragment
 {
     LinearLayout linearLoading;
     TextView textView ;

@@ -21,14 +21,14 @@ package com.perm.DoomPlay;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.support.v7.view.ActionMode;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 
 import java.util.ArrayList;
 
@@ -55,7 +55,7 @@ public class SearchActivity extends AbstractLists
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
         {
-            startActionMode(callback).setTag(position);
+            startSupportActionMode(callback).setTag(position);
             return true;
         }
     };
@@ -149,7 +149,7 @@ public class SearchActivity extends AbstractLists
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu)
         {
-            getSupportMenuInflater().inflate(R.menu.action_option,menu);
+            getMenuInflater().inflate(R.menu.action_option,menu);
             return true;
         }
         @Override
@@ -201,9 +201,9 @@ public class SearchActivity extends AbstractLists
     public boolean onCreateOptionsMenu(Menu menu)
     {
         if(!MainScreenActivity.isOldSDK)
-            getSupportMenuInflater().inflate(R.menu.bar_search,menu);
+            getMenuInflater().inflate(R.menu.bar_search,menu);
         else
-            getSupportMenuInflater().inflate(R.menu.bar_search_old,menu);
+            getMenuInflater().inflate(R.menu.bar_search_old,menu);
         return true;
     }
 

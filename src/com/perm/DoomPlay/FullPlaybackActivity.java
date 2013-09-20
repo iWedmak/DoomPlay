@@ -29,12 +29,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.perm.vkontakte.api.Audio;
 
 import java.io.File;
@@ -98,7 +98,7 @@ public class FullPlaybackActivity  extends AbstractControls
         intentWas = getIntent();
         intentService = new Intent(this,PlayingService.class);
 
-        getTracks();
+        getTracks(intentWas);
         initialize();
         initializeAbstract();
 
@@ -123,16 +123,18 @@ public class FullPlaybackActivity  extends AbstractControls
     protected void onNewIntent(Intent intent)
     {
         super.onNewIntent(intent);
-        setIntent(intent);
+        intentWas = intent;
+        getTracks(intent);
+        adapterPager.notifyDataSetChanged();
     }
 
-    void getTracks()
+    void getTracks(Intent intent)
     {
-        if(intentWas.getAction().equals(Intent.ACTION_VIEW))
+        if(intent.getAction().equals(Intent.ACTION_VIEW))
         {
             if(!TracksHolder.isScanned)
                 startScan();
-            tracks = new String[]{getRealPathFromIntent(intentWas)};
+            tracks = new String[]{getRealPathFromIntent(intent)};
         }
         else if(PlayingService.isOnline)
         {
@@ -140,19 +142,19 @@ public class FullPlaybackActivity  extends AbstractControls
         }
         else
         {
-            if(intentWas.getAction().equals(actionPlayFull))
+            if(intent.getAction().equals(actionPlayFull))
             {
-                tracks =  intentWas.getStringArrayExtra((FileSystemActivity.keyMusic));
+                tracks =  intent.getStringArrayExtra((FileSystemActivity.keyMusic));
             }
-            else if(intentWas.getAction().equals(actionReturnFull))
+            else if(intent.getAction().equals(actionReturnFull))
             {
                 tracks = PlayingService.tracks;
             }
 
         }
 
-        if(intentWas.getIntExtra(keyIndex,11116) != 11116)
-            intentService.putExtra(keyIndex,intentWas .getIntExtra(keyIndex,0));
+        if(intent.getIntExtra(keyIndex,11116) != 11116)
+            intentService.putExtra(keyIndex,intent.getIntExtra(keyIndex,0));
 
     }
 
@@ -180,17 +182,12 @@ public class FullPlaybackActivity  extends AbstractControls
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        if(PlayingService.isOnline)
-        {
-            getSupportMenuInflater().inflate(R.menu.bar_online_playing,menu);
-        }
+
+        if(!MainScreenActivity.isOldSDK)
+            getMenuInflater().inflate(R.menu.bar_playing,menu);
         else
-        {
-            if(!MainScreenActivity.isOldSDK)
-                getSupportMenuInflater().inflate(R.menu.bar_playing,menu);
-            else
-                getSupportMenuInflater().inflate(R.menu.bar_playing_old,menu);
-        }
+            getMenuInflater().inflate(R.menu.bar_playing_old,menu);
+
         return true;
     }
     public static Intent returnSmall(Context context)

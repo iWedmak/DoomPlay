@@ -23,11 +23,11 @@ package com.perm.DoomPlay;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 
 import java.io.File;
 import java.util.Arrays;
@@ -78,7 +78,7 @@ public class ListTracksActivity extends AbstractLists
         {
             if(!AddTrackToAlbumDialog.isAdding)
             {
-                actionMode = startActionMode(callback);
+                actionMode = startSupportActionMode(callback);
                 actionMode.setTag(position);
                 return true;
             }
@@ -95,10 +95,10 @@ public class ListTracksActivity extends AbstractLists
         public boolean onCreateActionMode(ActionMode mode, Menu menu)
         {
             if(currentAction.equals(actionPlaylist))
-                getSupportMenuInflater().inflate(R.menu.action_edit,menu);
+                getMenuInflater().inflate(R.menu.action_edit,menu);
 
             else
-                getSupportMenuInflater().inflate(R.menu.action_option,menu);
+                getMenuInflater().inflate(R.menu.action_option,menu);
             isFirstCall = true;
             return true;
 
@@ -317,15 +317,15 @@ public class ListTracksActivity extends AbstractLists
         if(!currentAction.equals(actionPlaylist))
         {
             if(!MainScreenActivity.isOldSDK)
-                getSupportMenuInflater().inflate(R.menu.bar_list,menu);
+                getMenuInflater().inflate(R.menu.bar_list,menu);
             else
-                getSupportMenuInflater().inflate(R.menu.bar_list_old,menu);
+                getMenuInflater().inflate(R.menu.bar_list_old,menu);
         }
         else
         {   if(!MainScreenActivity.isOldSDK)
-                getSupportMenuInflater().inflate(R.menu.bar_list_edit,menu);
+                getMenuInflater().inflate(R.menu.bar_list_edit,menu);
             else
-                getSupportMenuInflater().inflate(R.menu.bar_edit_old,menu);
+                getMenuInflater().inflate(R.menu.bar_edit_old,menu);
         }
         return true;
     }

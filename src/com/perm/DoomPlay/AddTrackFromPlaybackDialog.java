@@ -21,18 +21,16 @@ package com.perm.DoomPlay;
  */
 
 
-
-
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.*;
-import com.actionbarsherlock.app.SherlockDialogFragment;
 
-public class AddTrackFromPlaybackDialog extends SherlockDialogFragment
+public class AddTrackFromPlaybackDialog extends DialogFragment
 {
 
     ListView listView;

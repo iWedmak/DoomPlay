@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <menu
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:yourapp="http://schemas.android.com/apk/res-auto">
 
     <item
             android:id="@+id/itemNewAlbum"
             android:icon="@drawable/add_album"
-            android:showAsAction="always"
+            yourapp:showAsAction="always"
             android:title="@string/add_to_album">
     </item>
     <item
             android:id="@+id/itemRefresh"
             android:icon="@drawable/refresh"
-            android:showAsAction="always"
+            yourapp:showAsAction="always"
             android:title="@string/refresh">
     </item>
     <item
             android:id="@+id/itemInterrupt"
-            android:showAsAction="never"
+            yourapp:showAsAction="never"
             android:title="@string/interrupt">
     </item>
     <item
             android:id="@+id/itemSettings"
-            android:showAsAction="never"
+            yourapp:showAsAction="never"
             android:title ="@string/settings">
     </item>
     <item
             android:id="@+id/itemExit"
-            android:showAsAction="never"
+            yourapp:showAsAction="never"
             android:title ="@string/exit">
     </item>
 </menu>

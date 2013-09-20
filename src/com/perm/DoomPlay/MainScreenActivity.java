@@ -26,9 +26,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.perm.vkontakte.api.Account;
 import com.perm.vkontakte.api.Api;
 
@@ -91,11 +91,12 @@ public class MainScreenActivity extends AbstractReceiver
     public boolean onCreateOptionsMenu(Menu menu)
     {
         if(viewPager.getCurrentItem() == 0)
-            getSupportMenuInflater().inflate(R.menu.bar_main,menu);
+            getMenuInflater().inflate(R.menu.bar_main,menu);
         else
-            getSupportMenuInflater().inflate(R.menu.bar_vk,menu);
+            getMenuInflater().inflate(R.menu.bar_vk,menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {

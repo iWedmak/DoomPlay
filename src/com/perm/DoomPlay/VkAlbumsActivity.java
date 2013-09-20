@@ -5,13 +5,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.v7.view.ActionMode;
+import android.view.*;
 import android.widget.*;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.perm.vkontakte.api.Account;
 import com.perm.vkontakte.api.Audio;
 import com.perm.vkontakte.api.AudioAlbum;
@@ -41,7 +37,7 @@ public class VkAlbumsActivity extends AbstractVkItems
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
             {
                 currentAlbum = position;
-                startActionMode(callback).setTag(position);
+                startSupportActionMode(callback).setTag(position);
                 return true;
             }
         });
@@ -64,7 +60,7 @@ public class VkAlbumsActivity extends AbstractVkItems
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu)
         {
-            getSupportMenuInflater().inflate(R.menu.action_vk_album,menu);
+            getMenuInflater().inflate(R.menu.action_vk_album,menu);
             return true;
         }
 
@@ -188,7 +184,7 @@ public class VkAlbumsActivity extends AbstractVkItems
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        getSupportMenuInflater().inflate(R.menu.bar_vk_album,menu);
+        getMenuInflater().inflate(R.menu.bar_vk_album,menu);
         return true;
     }
 

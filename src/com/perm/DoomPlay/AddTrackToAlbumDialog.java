@@ -21,23 +21,22 @@ package com.perm.DoomPlay;
  */
 
 
-
-
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.*;
-import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.perm.vkontakte.api.Account;
 import com.perm.vkontakte.api.KException;
 import org.json.JSONException;
 
 import java.io.IOException;
 
-public class AddTrackToAlbumDialog extends SherlockDialogFragment
+public class AddTrackToAlbumDialog extends DialogFragment
 {
 
     ListView listView;
@@ -126,7 +125,7 @@ public class AddTrackToAlbumDialog extends SherlockDialogFragment
                 {
                     try
                     {
-                        MainScreenActivity.api.moveToAudioAlbum(params[0],trackId);
+                       Log.e("taGVK!!!!",String.valueOf(MainScreenActivity.api.moveToAudioAlbum(params[0],trackId)));
 
 
 

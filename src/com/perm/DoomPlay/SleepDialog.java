@@ -21,6 +21,7 @@ package com.perm.DoomPlay;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,9 +29,8 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import com.actionbarsherlock.app.SherlockDialogFragment;
 
-public class SleepDialog extends SherlockDialogFragment
+public class SleepDialog extends DialogFragment
 {
     TextView textSeekTrack;
     TextView textSeekMin;
@@ -93,10 +93,11 @@ public class SleepDialog extends SherlockDialogFragment
     private static CountDownTimer timer;
     private void enableSpleep(int time, int tracks)
     {
-        disableTime();
+
         if(time != 0)
         {
-            timer = new CountDownTimer((long)time * 600,1000000)
+            disableTime();
+            timer = new CountDownTimer((long)time * 60000,0)
             {
                 @Override
                 public void onTick(long millisUntilFinished){}
@@ -104,14 +105,17 @@ public class SleepDialog extends SherlockDialogFragment
                 @Override
                 public void onFinish()
                 {
-                    getActivity().sendBroadcast(new Intent(AbstractReceiver.actionKill));
+                    MyApplication.getInstance().sendBroadcast(new Intent(AbstractReceiver.actionKill));
+                    disableTracks();
                 }
             };
             timer.start();
         }
 
         if(tracks != 0)
+        {
             PlayingService.setSleepTrack(tracks);
+        }
         else
             disableTracks();
     }

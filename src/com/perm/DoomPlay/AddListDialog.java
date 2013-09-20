@@ -1,6 +1,7 @@
 package com.perm.DoomPlay;
 
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,9 +9,8 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import com.actionbarsherlock.app.SherlockDialogFragment;
 
-abstract class AddListDialog extends SherlockDialogFragment
+abstract class AddListDialog extends DialogFragment
 {
     EditText editNewDialog;
     TextView textInvalid;

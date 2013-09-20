@@ -1,15 +1,15 @@
 package com.perm.DoomPlay;
 
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
-import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.perm.ExceptionHandler.GMailSender;
 
-class ReportDialog extends SherlockDialogFragment
+class ReportDialog extends DialogFragment
 {
     EditText editSubject;
     EditText editMessage;

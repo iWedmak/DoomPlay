@@ -21,13 +21,8 @@ package com.perm.DoomPlay;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.*;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -123,7 +118,7 @@ public class FileSystemActivity extends AbstractReceiver
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu)
         {
-            getSupportMenuInflater().inflate(R.menu.action_filesystem,menu);
+            getMenuInflater().inflate(R.menu.action_filesystem,menu);
             return true;
         }
         @Override

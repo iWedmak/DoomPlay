@@ -15,6 +15,7 @@ public class Audio implements Serializable ,Parcelable
     public String title;
     public String url;
     public long lyrics_id;
+    public long owner_id;
 
     public static Audio parse(JSONObject o) throws NumberFormatException, JSONException{
         Audio audio = new Audio();
@@ -23,9 +24,12 @@ public class Audio implements Serializable ,Parcelable
             audio.artist = Api.unescape(o.optString("performer"));
         else if(o.has("artist"))
             audio.artist = Api.unescape(o.optString("artist"));
+
+
         audio.title = Api.unescape(o.optString("title"));
         audio.url = o.optString("url", null);
-        
+        audio.owner_id = Long.parseLong(o.getString("owner_id"));
+
         String tmp=o.optString("lyrics_id");
         if(tmp!=null && !tmp.equals(""))
             audio.lyrics_id = Long.parseLong(tmp);
@@ -47,6 +51,7 @@ public class Audio implements Serializable ,Parcelable
         url = source.readString();
         aid = source.readLong();
         lyrics_id = source.readLong();
+        owner_id = source.readLong();
     }
 
     @Override
@@ -57,6 +62,7 @@ public class Audio implements Serializable ,Parcelable
         dest.writeString(url);
         dest.writeLong(aid);
         dest.writeLong(lyrics_id);
+        dest.writeLong(owner_id);
     }
 
 

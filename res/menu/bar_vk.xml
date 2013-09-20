@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <menu
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:yourapp="http://schemas.android.com/apk/res-auto">
 
     <item
             android:id="@+id/itemSignIn"
             android:icon="@drawable/sign_in"
-            android:showAsAction="always"
+            yourapp:showAsAction="always"
             android:title="@string/sign_in">
     </item>
     <item
             android:id="@+id/itemSettings"
-            android:showAsAction="never"
+            yourapp:showAsAction="never"
             android:title ="@string/settings">
     </item>
     <item
             android:id="@+id/itemSendReport"
-            android:showAsAction="never"
+            yourapp:showAsAction="never"
             android:title ="@string/send_report">
     </item>
     <item
             android:id="@+id/itemExit"
-            android:showAsAction="never"
+            yourapp:showAsAction="never"
             android:title ="@string/exit">
     </item>
 </menu>

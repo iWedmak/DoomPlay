@@ -27,7 +27,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class PlaylistDB extends SQLiteOpenHelper
 {
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 6;
     private static final String DATABASE_NAME = "playlistsData";
     private static final String TABLE_LISTPLAYLIST = "listplaylist";
     private static final String KEY_ID = "id";
@@ -64,10 +64,10 @@ public class PlaylistDB extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        final String createListPlaylistTable = "CREATE TABLE " + TABLE_LISTPLAYLIST + "(" + KEY_ID +
+        String createListPlaylistTable = "CREATE TABLE " + TABLE_LISTPLAYLIST + "(" + KEY_ID +
                 " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_NAME_PLAYLIST + " TEXT" +")";
 
-        final String createDefaultPlaylistTable = "CREATE TABLE IF NOT EXISTS " + TABLE_DEFAULT + "("
+        String createDefaultPlaylistTable = "CREATE TABLE IF NOT EXISTS " + TABLE_DEFAULT + "("
                 + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_NAME_TRACK + " TEXT," + KEY_POSITION_TRACK + " INTEGER"+ ")";
 
         db.execSQL(createDefaultPlaylistTable);

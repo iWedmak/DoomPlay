@@ -23,14 +23,14 @@ package com.perm.DoomPlay;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.actionbarsherlock.app.SherlockFragment;
 
-public class PageFragment extends SherlockFragment
+public class PageFragment extends Fragment
 {
     static final String argumentPageNumber = "arg_page_number";
 

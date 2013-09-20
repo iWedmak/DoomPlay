@@ -5,14 +5,14 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v7.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.perm.vkontakte.api.Account;
 import com.perm.vkontakte.api.Audio;
 import com.perm.vkontakte.api.KException;
@@ -141,7 +141,7 @@ abstract class AbstractListVk extends AbstractControls
         public boolean onCreateActionMode(ActionMode mode, Menu menu)
         {
 
-            getSupportMenuInflater().inflate(R.menu.action_vk,menu);
+            getMenuInflater().inflate(R.menu.action_vk,menu);
             return true;
         }
 
@@ -263,7 +263,9 @@ abstract class AbstractListVk extends AbstractControls
                 {
                     try
                     {
-                        MainScreenActivity.api.addAudio(audios.get(params[0]).aid, Account.account.user_id);
+                       MainScreenActivity.api.addAudio(audios.get(params[0]).aid, audios.get(params[0]).owner_id);
+                       if(TracksHolder.tempAudiosMine != null)
+                            TracksHolder.tempAudiosMine.add(0,audios.get(params[0]));
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -273,6 +275,7 @@ abstract class AbstractListVk extends AbstractControls
                         e.printStackTrace();
                     }
                     return null;
+
                 }
 
             }.execute(position);
@@ -283,7 +286,7 @@ abstract class AbstractListVk extends AbstractControls
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
         {
-            startActionMode(callback).setTag(position);
+            startSupportActionMode(callback).setTag(position);
             return true;
         }
     };

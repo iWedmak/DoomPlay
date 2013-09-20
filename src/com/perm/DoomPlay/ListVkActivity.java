@@ -3,11 +3,11 @@ package com.perm.DoomPlay;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.perm.vkontakte.api.Account;
 import com.perm.vkontakte.api.Audio;
 import com.perm.vkontakte.api.KException;
@@ -115,9 +115,9 @@ public class ListVkActivity extends AbstractListVk
         {
 
             if(currentAction.equals(actionMyMusic))
-                getSupportMenuInflater().inflate(R.menu.action_vk_my,menu);
+                getMenuInflater().inflate(R.menu.action_vk_my,menu);
             else
-                getSupportMenuInflater().inflate(R.menu.action_vk_list_album,menu);
+                getMenuInflater().inflate(R.menu.action_vk_list_album,menu);
             return true;
         }
 
@@ -151,7 +151,7 @@ public class ListVkActivity extends AbstractListVk
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
                 {
-                    startActionMode(callback).setTag(position);
+                    startSupportActionMode(callback).setTag(position);
                     return true;
                 }
             });
@@ -189,9 +189,9 @@ public class ListVkActivity extends AbstractListVk
     public boolean onCreateOptionsMenu(Menu menu)
     {
         if(currentAction.equals(actionJust))
-            getSupportMenuInflater().inflate(R.menu.bar_list,menu);
+            getMenuInflater().inflate(R.menu.bar_list,menu);
         else
-            getSupportMenuInflater().inflate(R.menu.bar_vk_mymusic,menu);
+            getMenuInflater().inflate(R.menu.bar_vk_mymusic,menu);
         return true;
     }
 }

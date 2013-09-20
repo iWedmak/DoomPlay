@@ -22,13 +22,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.v7.view.ActionMode;
+import android.view.*;
 import android.widget.*;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 
 public class AlbumArtistActivity extends AbstractReceiver
 {
@@ -104,7 +100,7 @@ public class AlbumArtistActivity extends AbstractReceiver
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
         {
             if(!currentAction.equals(actionAddAlbum))
-                startActionMode(callback).setTag(position);
+                startSupportActionMode(callback).setTag(position);
 
             else
             {
@@ -175,7 +171,7 @@ public class AlbumArtistActivity extends AbstractReceiver
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu)
         {
-            getSupportMenuInflater().inflate(R.menu.action_filesystem,menu);
+            getMenuInflater().inflate(R.menu.action_filesystem,menu);
             return true;
         }
 

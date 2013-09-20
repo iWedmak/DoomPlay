@@ -22,13 +22,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.view.Window;
-import com.actionbarsherlock.app.SherlockPreferenceActivity;
 
 import java.io.File;
 
-public class SettingActivity extends SherlockPreferenceActivity
+public class SettingActivity extends PreferenceActivity
 {
     public static final String keyOnCall = "oncall";
     public static final String keyAfterCall = "aftercall";
@@ -69,7 +69,7 @@ public class SettingActivity extends SherlockPreferenceActivity
             {
                 Intent theIntent = new Intent(Intent.ACTION_PICK);
 
-                theIntent.setData(Uri.parse("folder://"));
+                theIntent.setData(Uri.parse("filePath://"));
                 theIntent.putExtra(Intent.EXTRA_TITLE,"Choose directory");
                 startActivityForResult(theIntent, 1);
                 return true;

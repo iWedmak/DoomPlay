@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <menu
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:yourapp="http://schemas.android.com/apk/res-auto">
 
     <item
             android:id="@+id/itemVoiceSearch"
             android:icon="@drawable/voice"
-            android:showAsAction="ifRoom"
+            yourapp:showAsAction="ifRoom"
             android:title="@string/voice_search">
     </item>
 
     <item
             android:id="@+id/itemShowHide"
             android:icon="@drawable/show_hide"
-            android:showAsAction="always"
+            yourapp:showAsAction="always"
             android:title="@string/hide_controls">
     </item>
     <item
             android:id="@+id/itemFullScreen"
             android:icon="@drawable/fullscreen"
-            android:showAsAction="always"
+            yourapp:showAsAction="always"
             android:title="@string/full_screen">
     </item>
     <item

@@ -360,12 +360,13 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
     AFListener afListener = new AFListener();
 
-    private synchronized void loadMusic()
+    private void loadMusic()
     {
         sendBroadcast(new Intent(actionTrackChanged));
         dispose();
         startNotif();
         sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
+        sendBroadcast(new Intent(actionIconPause));
 
         try
         {
@@ -436,7 +437,6 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         if(isPlaying)
         {
             mediaPlayer.start();
-            sendBroadcast(new Intent(actionIconPause));
         }
 
         if(!MainScreenActivity.isOldSDK)

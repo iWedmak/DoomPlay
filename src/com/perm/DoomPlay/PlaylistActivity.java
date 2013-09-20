@@ -20,9 +20,8 @@ package com.perm.DoomPlay;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.v7.view.ActionMode;
+import android.view.*;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
@@ -76,25 +75,25 @@ public class PlaylistActivity extends AbstractReceiver
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
         {
             selectedPlaylist = playlists[position];
-            startActionMode(callback);
+            startSupportActionMode(callback);
             return true;
         }
     };
 
-    com.actionbarsherlock.view.ActionMode.Callback callback = new com.actionbarsherlock.view.ActionMode.Callback()
+    ActionMode.Callback callback = new ActionMode.Callback()
     {
         @Override
-        public boolean onCreateActionMode(com.actionbarsherlock.view.ActionMode mode, com.actionbarsherlock.view.Menu menu)
+        public boolean onCreateActionMode(ActionMode mode, Menu menu)
         {
-            getSupportMenuInflater().inflate(R.menu.action_option_playlist, menu);
+            getMenuInflater().inflate(R.menu.action_option_playlist, menu);
             return true;
         }
 
         @Override
-        public boolean onPrepareActionMode(com.actionbarsherlock.view.ActionMode mode, com.actionbarsherlock.view.Menu menu){return false;}
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu){return false;}
 
         @Override
-        public boolean onActionItemClicked(com.actionbarsherlock.view.ActionMode mode, com.actionbarsherlock.view.MenuItem item)
+        public boolean onActionItemClicked(ActionMode mode,MenuItem item)
         {
             switch (item.getItemId())
             {
@@ -123,22 +122,22 @@ public class PlaylistActivity extends AbstractReceiver
         }
 
         @Override
-        public void onDestroyActionMode(com.actionbarsherlock.view.ActionMode mode)
+        public void onDestroyActionMode(ActionMode mode)
         {
 
         }
     };
 
     @Override
-    public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu)
+    public boolean onCreateOptionsMenu(Menu menu)
     {
-        getSupportMenuInflater().inflate(R.menu.bar_playlist,menu);
+        getMenuInflater().inflate(R.menu.bar_playlist,menu);
         return true;
     }
 
 
     @Override
-    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item)
+    public boolean onOptionsItemSelected(MenuItem item)
     {
         switch (item.getItemId())
         {

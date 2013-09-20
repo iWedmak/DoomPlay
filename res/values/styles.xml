@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="MyFuckingTheme" parent="Theme.Sherlock">
+    <style name="MyFuckingTheme" parent="Theme.AppCompat">
         <item name="actionBarStyle">@style/MyFuckingActionBar</item>
     </style>
 
-    <style name="MyFuckingActionBar" parent = "Widget.Sherlock.ActionBar">
+    <style name="MyFuckingActionBar" parent = "Widget.AppCompat.ActionBar">
         <item name="background">@drawable/my_action_bar</item>
     </style>
 </resources>

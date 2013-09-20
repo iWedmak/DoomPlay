@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.actionbarsherlock.view.Menu;
 import com.perm.vkontakte.api.*;
 import org.json.JSONException;
 
@@ -29,7 +29,7 @@ public class VkFrGrActivity extends AbstractVkItems
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        getSupportMenuInflater().inflate(R.menu.bar_vk_pgf,menu);
+        getMenuInflater().inflate(R.menu.bar_vk_pgf,menu);
         return true;
     }
 

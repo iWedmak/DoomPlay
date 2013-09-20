@@ -26,13 +26,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.MenuItem;
 
-abstract class AbstractReceiver extends SherlockFragmentActivity
+abstract class AbstractReceiver extends ActionBarActivity
 {
     protected BroadcastReceiver broadcastReceiver;
     protected IntentFilter intentFilter;
@@ -184,13 +184,13 @@ abstract class AbstractReceiver extends SherlockFragmentActivity
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item)
+    public boolean onOptionsItemSelected(MenuItem item)
     {
         if(item.getItemId() == android.R.id.home)
         {
             startActivity(new Intent(this, MainScreenActivity.class));
             return true;
         }
-        return super.onMenuItemSelected(featureId, item);
+        return super.onOptionsItemSelected(item);
     }
 }

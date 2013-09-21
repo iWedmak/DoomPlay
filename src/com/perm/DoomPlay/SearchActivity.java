@@ -158,20 +158,24 @@ public class SearchActivity extends AbstractLists
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item)
         {
+            int position = (Integer)mode.getTag();
 
             switch(item.getItemId())
             {
                 case R.id.itemToPlaylist:
-                    FileSystemActivity.showPlaybackDialog(new String[]{tracks[(Integer)mode.getTag()]} ,getSupportFragmentManager());
-                    mode.finish();
+                    FileSystemActivity.showPlaybackDialog(new String[]{tracks[position]} ,getSupportFragmentManager());
                     break;
                 case R.id.itemSetAsRingtone:
-                    Utils.setRingtone(getBaseContext(), tracks[(Integer) mode.getTag()]);
-                    mode.finish();
+                    Utils.setRingtone(getBaseContext(), tracks[position]);
+                    break;
+                case R.id.itemGetLiricks:
+                    Song song = new Song(tracks[position]);
+                    ListTracksActivity.startLiryctDialog(getSupportFragmentManager(),song.getArtist(),song.getTitle());
                     break;
             }
 
-              return true;
+            mode.finish();
+            return true;
         }
         @Override
         public void onDestroyActionMode(ActionMode mode){}

@@ -18,16 +18,11 @@ package com.perm.DoomPlay;
  *    You can contact me <DoomPlaye@gmail.com>
  */
 
-import android.content.ContentUris;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
-import android.provider.MediaStore;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class Song
 {
@@ -85,26 +80,21 @@ public class Song
         else
             return metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
     }
-
-    public static final Uri artworkUri = Uri.parse("content://media/external/audio/albumart");
-    public Bitmap getBitmap(Context context)
+    public int getAlbumId()
     {
         if(isFound)
-        {
+            return TracksHolder.songAlbumId[currentPosition];
+        else
+            return 0;
+    }
 
-            Uri uri = ContentUris.withAppendedId(artworkUri, TracksHolder.songAlbumId[currentPosition]);
-            try
-            {
-                return MediaStore.Images.Media.getBitmap(context.getContentResolver(),uri);
-            }
-            catch (FileNotFoundException e)
-            {
-                return null;
-            }
-            catch (IOException e)
-            {
-                return null;
-            }
+    public static final Uri artworkUri = Uri.parse("content://media/external/audio/albumart");
+    public Bitmap getAlbumArt(Context context)
+    {
+        int id = getAlbumId();
+        if(id != 0)
+        {
+            return AlbumArtGetter.getBitmapById(id, context);
         }
         else
         {
@@ -118,9 +108,5 @@ public class Song
             else
                 return null;
         }
-    }
-    public static void insertBitmapInMediaStore(Context context,Bitmap bitmap,long id)
-    {
-        MediaStore.Images.Media.insertImage(context.getContentResolver(),bitmap,String.valueOf(id),null);
     }
 }

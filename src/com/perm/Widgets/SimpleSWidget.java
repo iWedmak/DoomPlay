@@ -28,9 +28,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.RemoteViews;
+import com.perm.DoomPlay.AlbumArtGetter;
 import com.perm.DoomPlay.PlayingService;
 import com.perm.DoomPlay.R;
 import com.perm.DoomPlay.Song;
+import com.perm.vkontakte.api.Audio;
 
 
 public class SimpleSWidget extends AppWidgetProvider
@@ -56,7 +58,7 @@ public class SimpleSWidget extends AppWidgetProvider
             views.setTextViewText(R.id.widgetTitle, song.getTitle());
             views.setTextViewText(R.id.widgetArtist, song.getArtist() );
 
-            Bitmap cover = song.getBitmap(context);
+            Bitmap cover = song.getAlbumArt(context);
             if (cover == null)
             {
                 views.setImageViewBitmap(R.id.widgetAlbum, BitmapFactory.decodeResource(context.getResources(), R.drawable.fallback_cover));
@@ -68,9 +70,17 @@ public class SimpleSWidget extends AppWidgetProvider
         }
         else
         {
-            views.setTextViewText(R.id.widgetTitle, PlayingService.audios.get(PlayingService.indexCurrentTrack).title);
-            views.setTextViewText(R.id.widgetArtist,PlayingService.audios.get(PlayingService.indexCurrentTrack).artist);
-            views.setImageViewResource(R.id.widgetAlbum, R.drawable.fallback_cover);
+            Audio audio = PlayingService.audios.get(PlayingService.indexCurrentTrack);
+            views.setTextViewText(R.id.widgetlTitle, audio.title);
+            views.setTextViewText(R.id.widgetArtist,audio.artist);
+
+            Bitmap cover = AlbumArtGetter.getBitmapById(audio.aid, context);
+            if (cover != null)
+            {
+                views.setImageViewBitmap(R.id.widgetAlbum, cover);
+            }
+            else
+                views.setImageViewBitmap(R.id.widgetAlbum,BitmapFactory.decodeResource(context.getResources(), R.drawable.fallback_cover));
         }
 
 

@@ -23,6 +23,7 @@ package com.perm.DoomPlay;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,6 +49,7 @@ public class ListTracksActivity extends AbstractLists
                 playlistDB.deleteTrack(i,PlaylistActivity.selectedPlaylist);
         }
     }
+
 
 
     @Override
@@ -151,6 +153,13 @@ public class ListTracksActivity extends AbstractLists
                         updateList();
                         break;
                     }
+                    case R.id.itemGetLiricks:
+                        LyricsDialog dialog = new LyricsDialog();
+                        Bundle bundle = new Bundle();
+                        bundle.putString(LyricsDialog.keyLyricsTitle,new Song(tracks[position]).getTitle());
+                        dialog.setArguments(bundle);
+                        dialog.show(getSupportFragmentManager(),"tag");
+                        break;
                 }
             }
             else
@@ -159,13 +168,16 @@ public class ListTracksActivity extends AbstractLists
                 {
                     case R.id.itemToPlaylist:
                         FileSystemActivity.showPlaybackDialog(new String[]{tracks[position]},getSupportFragmentManager());
-                        mode.finish();
                         break;
                     case R.id.itemSetAsRingtone:
                         Utils.setRingtone(getBaseContext(), tracks[(Integer) mode.getTag()]);
-                        mode.finish();
+                        break;
+                    case R.id.itemGetLiricks:
+                        Song song = new Song(tracks[position]);
+                        startLiryctDialog(getSupportFragmentManager(),song.getArtist(),song.getTitle());
                         break;
                 }
+                mode.finish();
             }
             return true;
         }
@@ -173,6 +185,16 @@ public class ListTracksActivity extends AbstractLists
         @Override
         public void onDestroyActionMode(ActionMode mode){}
     };
+
+    static void startLiryctDialog(FragmentManager fragmentManager,String artist,String title)
+    {
+        LyricsDialog dialog = new LyricsDialog();
+        Bundle bundle = new Bundle();
+        bundle.putString(LyricsDialog.keyLyricsTitle,artist+" "+title);
+        dialog.setArguments(bundle);
+        dialog.show(fragmentManager,"tag");
+    }
+
     static boolean isEquals = false;
 
     void updateList()

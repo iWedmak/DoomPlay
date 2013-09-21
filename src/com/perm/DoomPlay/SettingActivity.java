@@ -35,7 +35,6 @@ public class SettingActivity extends PreferenceActivity
     public static final String keyShortFocus = "shortfocus";
     public static final String keyLongFocus = "longfocus";
     public static final String keyDownloadArt = "downloadart";
-    public static final String keySaveArt = "saveart";
     public static final String keyScroll = "scroll";
     public static final String keyOnGain = "gainfocus";
     public static final String keyOnClickNotif = "notifreturn";

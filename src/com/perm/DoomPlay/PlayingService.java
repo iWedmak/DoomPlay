@@ -130,18 +130,19 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
     }
 
-    public Notification createNotification()
+    private RemoteViews getNotifViews(int layoutId)
     {
-        RemoteViews views = new RemoteViews(getPackageName(), R.layout.notif);
+        RemoteViews views = new RemoteViews(getPackageName(), layoutId);
 
         if(!isOnline)
         {
             Song song = new Song(tracks[indexCurrentTrack]);
             views.setTextViewText(R.id.notifTitle, song.getTitle());
             views.setTextViewText(R.id.notifArtist, song.getArtist() );
-            Bitmap cover = song.getBitmap(this);
+            Bitmap cover = song.getAlbumArt(this);
             if (cover == null)
             {
+
                 views.setImageViewBitmap(R.id.notifAlbum, BitmapFactory.decodeResource(getResources(), R.drawable.fallback_cover));
             }
             else
@@ -151,9 +152,20 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         }
         else
         {
-            views.setTextViewText(R.id.notifTitle, audios.get(indexCurrentTrack).title);
-            views.setTextViewText(R.id.notifArtist,audios.get(indexCurrentTrack).artist);
-            views.setImageViewResource(R.id.notifAlbum, R.drawable.fallback_cover);
+            Audio audio = audios.get(indexCurrentTrack);
+
+            views.setTextViewText(R.id.notifTitle,audio.title);
+            views.setTextViewText(R.id.notifArtist,audio.artist);
+
+            Bitmap cover = AlbumArtGetter.getBitmapById(audio.aid,this);
+            if (cover == null)
+            {
+                views.setImageViewBitmap(R.id.notifAlbum, BitmapFactory.decodeResource(getResources(), R.drawable.fallback_cover));
+            }
+            else
+            {
+                views.setImageViewBitmap(R.id.notifAlbum, cover);
+            }
         }
 
         views.setImageViewResource(R.id.notifPlay, isPlaying ? R.drawable.widget_pause : R.drawable.widget_play);
@@ -176,6 +188,12 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         intentClose.setComponent(componentName);
         views.setOnClickPendingIntent(R.id.notifClose, PendingIntent.getService(this, 0, intentClose, 0));
 
+        return views;
+    }
+
+    public Notification createNotification()
+    {
+
         Intent intentActivity;
 
         if(SettingActivity.getPreferences(this,SettingActivity.keyOnClickNotif))
@@ -190,7 +208,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         }
         intentActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         Notification notification = new Notification();
-        notification.contentView = views;
+        notification.contentView = getNotifViews(R.layout.notif);
         notification.flags |= Notification.FLAG_FOREGROUND_SERVICE;
         notification.contentIntent = PendingIntent.getActivity(this,0,intentActivity,PendingIntent.FLAG_UPDATE_CURRENT);
         notification.icon =  isPlaying ?  R.drawable.status_icon_pause : R.drawable.status_icon_play;
@@ -199,76 +217,17 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     }
     public Notification createJellyBeanNotif()
     {
-        RemoteViews views = new RemoteViews(getPackageName(),R.layout.notif_jelly);
-
+        RemoteViews views = getNotifViews(R.layout.notif_jelly);
+        Notification notification = createNotification();
         if(!isOnline)
         {
-            Song song = new Song(tracks[indexCurrentTrack]);
-            views.setTextViewText(R.id.notifJellyTitle, song.getTitle());
-            views.setTextViewText(R.id.notifJellyArtist, song.getArtist() );
             views.setTextViewText(R.id.textNotifCount,String.valueOf(indexCurrentTrack + 1)+ "/" +String.valueOf(tracks.length));
-            Bitmap cover = song.getBitmap(this);
-            if (cover == null)
-            {
-                views.setImageViewBitmap(R.id.notifJellyAlbum , BitmapFactory.decodeResource(getResources(), R.drawable.fallback_cover));
-            }
-            else
-            {
-                views.setImageViewBitmap(R.id.notifJellyAlbum, cover);
-            }
         }
         else
         {
-            views.setTextViewText(R.id.notifJellyTitle, audios.get(indexCurrentTrack).title);
-            views.setTextViewText(R.id.notifJellyArtist,audios.get(indexCurrentTrack).artist);
             views.setTextViewText(R.id.textNotifCount,String.valueOf(indexCurrentTrack + 1)+ "/" +String.valueOf(audios.size()));
-            views.setImageViewResource(R.id.notifJellyAlbum, R.drawable.fallback_cover);
         }
-
-
-        views.setImageViewResource(R.id.notifJellyPlay,isPlaying ? R.drawable.widget_pause : R.drawable.widget_play);
-
-        ComponentName componentName = new ComponentName(this,PlayingService.class);
-
-        Intent intentPlay = new Intent(actionPlay);
-        intentPlay.setComponent(componentName);
-        views.setOnClickPendingIntent(R.id.notifJellyPlay, PendingIntent.getService(this, 0, intentPlay, 0));
-
-        Intent intentNext = new Intent(actionNext);
-        intentNext.setComponent(componentName);
-        views.setOnClickPendingIntent(R.id.notifJellyNext, PendingIntent.getService(this, 0, intentNext, 0));
-
-        Intent intentPrevious = new Intent(actionPrevious);
-        intentPrevious.setComponent(componentName);
-        views.setOnClickPendingIntent(R.id.notifJellyPrevious, PendingIntent.getService(this, 0, intentPrevious, 0));
-
-        Intent intentClose = new Intent(actionClose);
-        intentClose.setComponent(componentName);
-        views.setOnClickPendingIntent(R.id.notifJellyClose, PendingIntent.getService(this, 0, intentClose, 0));
-
-        Intent intentActivity;
-
-
-        if(SettingActivity.getPreferences(this,SettingActivity.keyOnClickNotif))
-        {
-            intentActivity = new Intent(FullPlaybackActivity.actionReturnFull);
-            intentActivity.setClass(this,FullPlaybackActivity.class);
-            intentActivity.putExtra(FileSystemActivity.keyMusic,tracks);
-        }
-        else
-        {
-            intentActivity = FullPlaybackActivity.returnSmall(this);
-        }
-        intentActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        Notification notification = new Notification();
-        notification.flags |= Notification.FLAG_FOREGROUND_SERVICE;
-        notification.priority = Notification.PRIORITY_MAX;
-        notification.contentView = views;
         notification.bigContentView = views;
-        notification.contentIntent = PendingIntent.getActivity(this,0,intentActivity,PendingIntent.FLAG_UPDATE_CURRENT);
-        notification.icon =  isPlaying ?  R.drawable.status_icon_pause : R.drawable.status_icon_play;
-
         return notification;
     }
 
@@ -491,8 +450,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
             }
         }
-        else if(isLoop);
-        else
+        else if(!isLoop)
             changeTrack(direction);
 
     }

@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:yourapp="http://schemas.android.com/apk/res-auto">
     <item
             android:id="@+id/itemMoveToAlbum"
             android:icon="@drawable/to_album"
-            android:showAsAction="always"
+            yourapp:showAsAction="always"
             android:title="@string/add_to_album">
     </item>
     <item
             android:id="@+id/itemGetLiricks"
             android:icon="@drawable/lyrics"
-            android:showAsAction="always"
+            yourapp:showAsAction="always"
             android:title="@string/lyrics">
     </item>
     <item
             android:id="@+id/itemDislike"
             android:icon="@drawable/dislike"
-            android:showAsAction="always"
+            yourapp:showAsAction="always"
             android:title="@string/dislike">
     </item>
     <item
             android:id="@+id/itemDownload"
             android:icon="@drawable/action_download"
-            android:showAsAction="always"
+            yourapp:showAsAction="always"
             android:title="@string/download">
     </item>
 </menu>

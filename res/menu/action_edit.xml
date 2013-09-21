@@ -1,22 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:yourapp="http://schemas.android.com/apk/res-auto">
     <item
             android:id="@+id/itemTrackUp"
             android:icon="@drawable/item_up"
-            android:showAsAction="always"
+            yourapp:showAsAction="always"
             android:title="@string/track_up">
     </item>
     <item
             android:id="@+id/itemTrackDown"
             android:icon="@drawable/item_down"
-            android:showAsAction="always"
+            yourapp:showAsAction="always"
             android:title="@string/track_down">
     </item>
     <item
             android:id="@+id/itemDeleteTrack"
             android:icon="@drawable/cancel_list"
-            android:showAsAction="always"
+            yourapp:showAsAction="always"
             android:title="@string/delete_track">
+    </item>
+    <item
+            android:id="@+id/itemGetLiricks"
+            android:icon="@drawable/lyrics"
+            yourapp:showAsAction="always"
+            android:title="@string/lyrics">
     </item>
 </menu>

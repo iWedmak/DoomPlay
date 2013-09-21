@@ -16,7 +16,7 @@ public class Auth {
     
     public static String getSettings(){
         //http://vk.com/dev/permission
-        return "notify,friends,audio,status,groups,offline";
+        return "friends,audio,status,groups,offline";
     }
     
     public static String[] parseRedirectUrl(String url) throws Exception {

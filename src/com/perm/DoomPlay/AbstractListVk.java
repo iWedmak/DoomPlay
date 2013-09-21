@@ -243,7 +243,7 @@ abstract class AbstractListVk extends AbstractControls
         if(lid != 0 && Utils.isOnline(getBaseContext()))
         {
             Bundle bundle = new Bundle();
-            bundle.putLong(LyricsDialog.keyLyrics, lid);
+            bundle.putLong(LyricsDialog.keyLyricsId, lid);
             LyricsDialog dialog = new LyricsDialog();
             dialog.setArguments(bundle);
             dialog.show(getSupportFragmentManager(),"tag");

@@ -97,7 +97,7 @@ public class SleepDialog extends DialogFragment
         if(time != 0)
         {
             disableTime();
-            timer = new CountDownTimer((long)time * 60000,0)
+            timer = new CountDownTimer((long)time * 60000,10000000)
             {
                 @Override
                 public void onTick(long millisUntilFinished){}

@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:yourapp="http://schemas.android.com/apk/res-auto">
     <item
             android:id="@+id/itemPlayAll"
             android:icon="@drawable/simple_play"
-            android:showAsAction="always"
+            yourapp:showAsAction="always"
             android:title="@string/play_all">
     </item>
     <item
             android:id="@+id/itemToPlaylist"
             android:icon="@drawable/add_to_playlist"
-            android:showAsAction="always"
+            yourapp:showAsAction="always"
             android:title="@string/add_to_playlist">
     </item>
     <item
             android:id="@+id/itemDeleteFile"
             android:icon="@drawable/cancel_list"
-            android:showAsAction="always"
+            yourapp:showAsAction="always"
             android:title="@string/delete">
     </item>
 </menu>

@@ -9,9 +9,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.RemoteViews;
+import com.perm.DoomPlay.AlbumArtGetter;
 import com.perm.DoomPlay.PlayingService;
 import com.perm.DoomPlay.R;
 import com.perm.DoomPlay.Song;
+import com.perm.vkontakte.api.Audio;
 
 public class BigWidget extends AppWidgetProvider
 {
@@ -24,31 +26,43 @@ public class BigWidget extends AppWidgetProvider
             updateWidget(context);
 
     }
-    static void updateWidget(Context context)
+    private static void updateWidget(Context context)
     {
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_big);
 
+
+
         if(!PlayingService.isOnline)
         {
             Song song = new Song(PlayingService.tracks[PlayingService.indexCurrentTrack]);
-            views.setTextViewText(R.id.textWidgetlTitle, song.getTitle());
-            views.setTextViewText(R.id.textWidgetArtist, song.getArtist() );
-            views.setTextViewText(R.id.textWidgetCount,String.valueOf(PlayingService.indexCurrentTrack + 1)+ "/" +String.valueOf(PlayingService.tracks.length));
-            Bitmap cover = song.getBitmap(context);
+            views.setTextViewText(R.id.widgetlTitle, song.getTitle());
+            views.setTextViewText(R.id.widgetArtist, song.getArtist() );
+            views.setTextViewText(R.id.widgetCount,String.valueOf(PlayingService.indexCurrentTrack + 1)+ "/" +String.valueOf(PlayingService.tracks.length));
+            Bitmap cover = song.getAlbumArt(context);
             if (cover != null)
             {
-                views.setImageViewBitmap(R.id.imageWidgetCover, cover);
+                views.setImageViewBitmap(R.id.widgetAlbum, cover);
             }
             else
-                views.setImageViewBitmap(R.id.imageWidgetCover,BitmapFactory.decodeResource(context.getResources(), R.drawable.fallback_cover));
+                views.setImageViewBitmap(R.id.widgetAlbum,BitmapFactory.decodeResource(context.getResources(), R.drawable.fallback_cover));
 
         }
         else
         {
-            views.setTextViewText(R.id.textWidgetlTitle, PlayingService.audios.get(PlayingService.indexCurrentTrack).title);
-            views.setTextViewText(R.id.textWidgetArtist,PlayingService.audios.get(PlayingService.indexCurrentTrack).artist);
-            views.setTextViewText(R.id.textWidgetCount,String.valueOf(PlayingService.indexCurrentTrack + 1)+ "/" +String.valueOf(PlayingService.audios.size()));
+            Audio audio = PlayingService.audios.get(PlayingService.indexCurrentTrack);
+            views.setTextViewText(R.id.widgetlTitle, audio.title);
+            views.setTextViewText(R.id.widgetArtist,audio.artist);
+            views.setTextViewText(R.id.widgetCount,String.valueOf(PlayingService.indexCurrentTrack + 1)+ "/" +String.valueOf(PlayingService.audios.size()));
+
+            Bitmap cover = AlbumArtGetter.getBitmapById(audio.aid, context);
+            if (cover != null)
+            {
+                views.setImageViewBitmap(R.id.widgetAlbum, cover);
+            }
+            else
+                views.setImageViewBitmap(R.id.widgetAlbum,BitmapFactory.decodeResource(context.getResources(), R.drawable.fallback_cover));
+
         }
 
         int playButton = PlayingService.isPlaying ? R.drawable.pause : R.drawable.play;

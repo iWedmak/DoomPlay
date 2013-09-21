@@ -820,8 +820,8 @@ public class Api {
     //http://vk.com/dev/audio.moveToAlbum
     public Integer moveToAudioAlbum(long album_id,long audioAids) throws MalformedURLException, IOException, JSONException, KException {
         Params params = new Params("audio.moveToAlbum");
-        params.put("aid", String.valueOf(album_id));
-        params.put("aids",String.valueOf(audioAids));
+        params.put("album_id", String.valueOf(album_id));
+        params.put("album_ids",String.valueOf(audioAids));
         JSONObject root = sendRequest(params);
         return root.optInt("response");
     }

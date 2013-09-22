@@ -26,7 +26,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.*;
 
@@ -62,7 +61,7 @@ abstract class AbstractControls extends AbstractReceiver
 
 
 
-    @Override
+   /* @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
         if ((keyCode == KeyEvent.KEYCODE_HOME))
@@ -71,7 +70,7 @@ abstract class AbstractControls extends AbstractReceiver
         }
         return super.onKeyDown(keyCode, event);
     }
-
+       */
     @Override
     protected void onResume()
     {
@@ -110,7 +109,7 @@ abstract class AbstractControls extends AbstractReceiver
             }
             isShown = savedState;
         }
-        else if(!isShown && SettingActivity.getPreferences(this,SettingActivity.keyShowControls))
+        else if(!isShown && SettingActivity.getPreferences(SettingActivity.keyShowControls))
             showHide();
     }
 
@@ -333,17 +332,27 @@ abstract class AbstractControls extends AbstractReceiver
     };
     protected void startEqualizer()
     {
-        if(playingService != null)
-        {
-            Intent intentEqualizer = new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL);
-            intentEqualizer.putExtra(AudioEffect.EXTRA_AUDIO_SESSION,playingService.getAudioSessionId());
-            startActivityForResult(intentEqualizer,0);
-        }
+         if(isEqualizerAvailable(this))
+         {
+             if(playingService != null)
+                startActivityForResult(getEqualizerIntent(playingService.getAudioSessionId()),0);
+             else
+                 startActivityForResult(getEqualizerIntent(0),0);
+         }
         else
-        {
-            Intent intentEqualizer = new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL);
-            intentEqualizer.putExtra(AudioEffect.EXTRA_AUDIO_SESSION,0);
-            startActivityForResult(intentEqualizer,0);
-        }
+             Toast.makeText(this,"sorry,this function doesn't available on your device",Toast.LENGTH_SHORT).show();
     }
+
+    public static Intent getEqualizerIntent(int audioSessionId)
+    {
+        Intent intentEqualizer = new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL);
+        intentEqualizer.putExtra(AudioEffect.EXTRA_AUDIO_SESSION,audioSessionId);
+        return intentEqualizer;
+    }
+
+    public static boolean isEqualizerAvailable(Context context)
+    {
+        return Utils.isIntentAvailable(context, new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL));
+    }
+
 }

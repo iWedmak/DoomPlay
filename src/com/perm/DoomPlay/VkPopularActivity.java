@@ -65,7 +65,7 @@ public class VkPopularActivity extends AbstractVkItems
     {
         try {
             return MainScreenActivity.api.getAudioPopular(acordingIds[position],
-                    SettingActivity.getPreference(getBaseContext(),"countvkpopular"));
+                    SettingActivity.getPreference("countvkpopular"));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {

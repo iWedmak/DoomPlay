@@ -97,12 +97,12 @@ public class ListVkActivity extends AbstractListVk
                 {
                     if(currentAction.equals(actionMyMusic))
                         audios = TracksHolder.tempAudiosMine = MainScreenActivity.api.getAudio(Account.account.user_id,
-                            null,null,SettingActivity.getPreference(getBaseContext(),"countvkall"));
+                            null,null,SettingActivity.getPreference("countvkall"));
 
                     else if(currentAction.equals(actionMyAlbums))
                         audios =  MainScreenActivity.api.getAudio(null,
                                 null,VkAlbumsActivity.albums.get(VkAlbumsActivity.currentAlbum).album_id,
-                                SettingActivity.getPreference(getBaseContext(),"countvkall"));
+                                SettingActivity.getPreference("countvkall"));
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -202,6 +202,9 @@ public class ListVkActivity extends AbstractListVk
         adapter.changeData(audios);
         currentAction  = intent.getAction();
     }
+
+    @Override
+    protected void onClickActionBar() {}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)

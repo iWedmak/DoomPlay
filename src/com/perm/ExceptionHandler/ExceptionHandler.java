@@ -32,7 +32,6 @@ final public class ExceptionHandler implements Thread.UncaughtExceptionHandler
     private final DateFormat formatter = new SimpleDateFormat("dd.MM.yy HH:mm");
     private String versionName = "0";
     private int versionCode = 0;
-    public final String stacktraceDir;
     Thread.UncaughtExceptionHandler oldHandler;
 
     public ExceptionHandler(Context context)
@@ -49,7 +48,7 @@ final public class ExceptionHandler implements Thread.UncaughtExceptionHandler
         catch (PackageManager.NameNotFoundException e)
         {}
 
-        stacktraceDir = String.format("/Android/data/%s/files/", context.getPackageName());
+
     }
 
     @Override

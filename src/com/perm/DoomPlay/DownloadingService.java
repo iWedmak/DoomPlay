@@ -42,14 +42,14 @@ public class DownloadingService extends Service
 
     int notifId;
     String filePath;
-
-
-
     NotificationManager manager;
     Notification notification;
     RemoteViews views ;
-
     private Audio track;
+    Downloader task;
+
+
+
 
     @Override
     public void onCreate()
@@ -57,7 +57,6 @@ public class DownloadingService extends Service
         super.onCreate();
         manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
-    AsyncTask<Void,Integer,Void> task;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
@@ -77,14 +76,16 @@ public class DownloadingService extends Service
             String defaultFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/download/";
             File defaultFile = new File(defaultFolder);
 
-            assert  defaultFile.exists() && defaultFile.mkdir();
+            if(!defaultFile.exists())
+                defaultFile.mkdir();
 
             filePath = defaultFolder +track.artist + "-" + track.title + ".mp3";
 
 
 
 
-            new Downloader().execute();
+            task = new Downloader();
+            task.execute();
         }
 
         return START_NOT_STICKY;

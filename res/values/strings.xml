@@ -70,6 +70,16 @@
         <item>200</item>
         <item>600</item>
     </string-array>
+    <string-array name ="quality">
+        <item>bad</item>
+        <item>middle</item>
+        <item>hight</item>
+    </string-array>
+    <string-array name ="quality_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
 
 
 </resources>

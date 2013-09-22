@@ -10,10 +10,10 @@
             android:title="@string/return_small">
     </item>
     <item
-            android:id="@+id/itemLike"
-            android:icon="@drawable/like"
+            android:id="@+id/itemGetLiricks"
+            android:icon="@drawable/lyrics"
             yourapp:showAsAction="always"
-            android:title="@string/like">
+            android:title="@string/lyrics">
     </item>
     <item
             android:id="@+id/itemSleep"

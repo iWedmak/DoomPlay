@@ -64,15 +64,6 @@ public class SearchActivity extends AbstractLists
         editQuery = (EditText) findViewById(R.id.editQuery);
         listView = (ListView) findViewById(R.id.listSearch);
         editQuery.addTextChangedListener(onTextChangeHandler);
-        editQuery.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                linearControls.setVisibility(View.GONE);
-                isShown = false;
-            }
-        });
         textNoResults = (TextView)findViewById(R.id.textNoResult);
         linearControls = (RelativeLayout)findViewById(R.id.linearControls);
         intentService = new Intent(this,PlayingService.class);
@@ -184,11 +175,7 @@ public class SearchActivity extends AbstractLists
 
     void startVoice()
     {
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "voice search");
-        startActivityForResult(intent, REQUEST_CODE);
+        startActivityForResult(SearchVkActivity.getVoiceIntent(), REQUEST_CODE);
     }
 
     @Override
@@ -204,10 +191,7 @@ public class SearchActivity extends AbstractLists
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        if(!MainScreenActivity.isOldSDK)
-            getMenuInflater().inflate(R.menu.bar_search,menu);
-        else
-            getMenuInflater().inflate(R.menu.bar_search_old,menu);
+        getMenuInflater().inflate(R.menu.bar_search,menu);
         return true;
     }
 

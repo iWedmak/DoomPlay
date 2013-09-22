@@ -20,8 +20,10 @@ package com.perm.DoomPlay;
  */
 
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -54,6 +56,7 @@ public class FullPlaybackActivity  extends AbstractControls
     public final static String actionReturnFull = "android.action.return";
     public final static String actionPlayFull = "android.action.play";
     public final static String keyReturn = "keyForsaveService";
+    public final static String actionDataChanged = "notifyDataChanged";
     PagePlaybackAdapter adapterPager;
     Intent intentWas;
 
@@ -62,8 +65,6 @@ public class FullPlaybackActivity  extends AbstractControls
     {
         viewPager.setCurrentItem(PlayingService.indexCurrentTrack,false);
     }
-
-
 
     @Override
     protected void onResume()
@@ -74,6 +75,43 @@ public class FullPlaybackActivity  extends AbstractControls
 
     }
 
+    @Override
+    protected void createBroadcastRec()
+    {
+        broadcastReceiver = new BroadcastReceiver()
+        {
+            @Override
+            public void onReceive(Context context, Intent intent)
+            {
+                String action = intent.getAction();
+
+                if(action.equals(PlayingService.actionTrackChanged))
+                {
+                    trackChanged();
+                    updateActionBar();
+                }
+                else if(action.equals(PlayingService.actionIconPlay))
+                {
+                    imgPlay.setImageResource(R.drawable.play);
+                }
+
+                else if(action.equals(PlayingService.actionIconPause))
+                {
+                    imgPlay.setImageResource(R.drawable.pause);
+                }
+                else if(action.equals(actionDataChanged))
+                {
+                    adapterPager.notifyDataSetChanged();
+                }
+            }
+        };
+        intentFilter = new IntentFilter(PlayingService.actionTrackChanged);
+        intentFilter.addAction(PlayingService.actionIconPause);
+        intentFilter.addAction(PlayingService.actionIconPlay);
+        intentFilter.addAction(actionDataChanged);
+        registerReceiver(broadcastReceiver, intentFilter);
+        isRegister = true;
+    }
 
     void startScan()
     {
@@ -183,10 +221,11 @@ public class FullPlaybackActivity  extends AbstractControls
     public boolean onCreateOptionsMenu(Menu menu)
     {
 
-        if(!MainScreenActivity.isOldSDK)
+        if(!PlayingService.isOnline)
             getMenuInflater().inflate(R.menu.bar_playing,menu);
         else
-            getMenuInflater().inflate(R.menu.bar_playing_old,menu);
+            getMenuInflater().inflate(R.menu.bar_online_playing,menu);
+
 
         return true;
     }
@@ -221,9 +260,8 @@ public class FullPlaybackActivity  extends AbstractControls
     {
         switch (item.getItemId())
         {
-            case R.id.itemAdd:
-                AddTrackToAlbumDialog dialog = new AddTrackToAlbumDialog();
-                dialog.show(getSupportFragmentManager(),"tag");
+            case R.id.itemAddtoPlaylist:
+                FileSystemActivity.showPlaybackDialog(new String[]{tracks[PlayingService.indexCurrentTrack]},getSupportFragmentManager());
                 return true;
             case R.id.itemEqualizer:
                 startEqualizer();
@@ -244,6 +282,15 @@ public class FullPlaybackActivity  extends AbstractControls
                 return true;
             case R.id.itemSettings:
                 startActivity(new Intent(this,SettingActivity.class));
+                return true;
+            case R.id.itemGetLiricks:
+                if(PlayingService.isOnline)
+                   AbstractListVk.startLyricsDialog(getSupportFragmentManager(),audios.get(PlayingService.indexCurrentTrack).lyrics_id);
+                else
+                {
+                    Song song = new Song(tracks[PlayingService.indexCurrentTrack]);
+                    ListTracksActivity.startLiryctDialog(getSupportFragmentManager(),song.getArtist(),song.getTitle());
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);

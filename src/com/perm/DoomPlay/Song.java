@@ -103,6 +103,7 @@ public class Song
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.outWidth = 400;
             options.outHeight = 400;
+
             if(bitmap != null)
                 return BitmapFactory.decodeByteArray(bitmap,0,bitmap.length,options);
             else

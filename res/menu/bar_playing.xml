@@ -10,7 +10,13 @@
             android:title="@string/return_small">
     </item>
     <item
-            android:id="@+id/itemAdd"
+            android:id="@+id/itemGetLiricks"
+            android:icon="@drawable/lyrics"
+            yourapp:showAsAction="always"
+            android:title="@string/lyrics">
+    </item>
+    <item
+            android:id="@+id/itemAddtoPlaylist"
             yourapp:showAsAction="never"
             android:title="@string/add_to_playlist">
     </item>
@@ -31,7 +37,7 @@
     </item>
     <item
             android:id="@+id/itemSettings"
-            yourappshowAsAction="never"
+            yourapp:showAsAction="never"
             android:title ="@string/settings">
     </item>
     <item

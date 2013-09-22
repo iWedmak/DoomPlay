@@ -18,7 +18,6 @@ package com.perm.DoomPlay;
  *    You can contact me <DoomPlaye@gmail.com>
  */
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -34,20 +33,19 @@ public class SettingActivity extends PreferenceActivity
     public static final String keyAfterCall = "aftercall";
     public static final String keyShortFocus = "shortfocus";
     public static final String keyLongFocus = "longfocus";
-    public static final String keyDownloadArt = "downloadart";
     public static final String keyScroll = "scroll";
     public static final String keyOnGain = "gainfocus";
     public static final String keyOnClickNotif = "notifreturn";
     public static final String keyShowControls = "hideoncreate";
 
 
-    public static boolean getPreferences(Context context, String key)
+    public static boolean getPreferences(String key)
     {
-         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(key,false);
+         return PreferenceManager.getDefaultSharedPreferences(MyApplication.getInstance()).getBoolean(key,false);
     }
-    public static int getPreference(Context context, String key)
+    public static int getPreference(String key)
     {
-        return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(key,"10"));
+        return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(MyApplication.getInstance()).getString(key,"666"));
     }
 
 

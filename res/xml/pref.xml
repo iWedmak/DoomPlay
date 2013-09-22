@@ -116,12 +116,21 @@
                      android:title="Download album art"
                      android:defaultValue="true">
              </CheckBoxPreference>
+             <ListPreference
+                     android:entryValues="@array/quality_values"
+                     android:entries="@array/quality"
+                     android:dependency="downloadart"
+                     android:key="qualityart"
+                     android:summary="choose quality of album art"
+                     android:defaultValue="1"
+                     android:title="Quality">
+             </ListPreference>
              <CheckBoxPreference
                      android:dependency="downloadart"
-                     android:key="saveart"
-                     android:summary="save downloaded album art from internet"
-                     android:defaultValue="true"
-                     android:title="Save downloaded album art">
+                     android:key="artonline"
+                     android:summary="download albumArt if play track from internet"
+                     android:defaultValue="false"
+                     android:title="When play from internet">
              </CheckBoxPreference>
          </PreferenceScreen>
 

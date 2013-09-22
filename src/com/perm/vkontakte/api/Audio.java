@@ -39,6 +39,17 @@ public class Audio implements Serializable ,Parcelable
     }
     private Audio(){}
 
+    public Audio(String artist,String title,long aid)
+    {
+        this.artist = artist;
+        this.title = title;
+        this.aid = aid;
+        url = "";
+    }
+
+
+
+
     @Override
     public int describeContents()
     {

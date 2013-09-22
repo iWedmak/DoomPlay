@@ -338,19 +338,17 @@ public class ListTracksActivity extends AbstractLists
     {
         if(!currentAction.equals(actionPlaylist))
         {
-            if(!MainScreenActivity.isOldSDK)
-                getMenuInflater().inflate(R.menu.bar_list,menu);
-            else
-                getMenuInflater().inflate(R.menu.bar_list_old,menu);
+            getMenuInflater().inflate(R.menu.bar_list,menu);
         }
         else
-        {   if(!MainScreenActivity.isOldSDK)
-                getMenuInflater().inflate(R.menu.bar_list_edit,menu);
-            else
-                getMenuInflater().inflate(R.menu.bar_edit_old,menu);
+        {
+            getMenuInflater().inflate(R.menu.bar_list_edit,menu);
         }
         return true;
     }
+
+    @Override
+    protected void onClickActionBar() {}
 
     public static String getReadableName(String track)
     {

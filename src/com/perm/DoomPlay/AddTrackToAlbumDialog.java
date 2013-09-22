@@ -84,7 +84,7 @@ public class AddTrackToAlbumDialog extends DialogFragment
                     try
                     {
                         VkAlbumsActivity.albums = MainScreenActivity.api.getAudioAlbums(Account.account.user_id,null,
-                                SettingActivity.getPreference(getActivity(),"countvkall"));
+                                SettingActivity.getPreference("countvkall"));
 
                     } catch (IOException e) {
                         e.printStackTrace();

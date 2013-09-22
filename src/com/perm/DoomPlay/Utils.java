@@ -20,6 +20,9 @@ package com.perm.DoomPlay;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -30,6 +33,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 public class Utils
 {
@@ -118,13 +122,7 @@ public class Utils
     {
         final NetworkInfo netInfo = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
 
-        if(netInfo != null && netInfo.isConnected())
-            return true;
-        else
-        {
-            Toast.makeText(context,"check your internet connection",Toast.LENGTH_SHORT).show();
-            return false;
-        }
+        return (netInfo != null && netInfo.isConnected());
     }
 
     public static String[] getShuffledTracks(String[] tracks)
@@ -133,4 +131,10 @@ public class Utils
         return tracks;
     }
 
+    public static boolean isIntentAvailable(Context context, Intent intent)
+    {
+        PackageManager packageManager = context.getPackageManager();
+        List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        return list.size() > 0;
+    }
 }

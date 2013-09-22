@@ -177,11 +177,11 @@ public class VkFrGrActivity extends AbstractVkItems
         {
             if(isFriend)
                 return MainScreenActivity.api.getAudio(users.get(position).uid,null,null,
-                            SettingActivity.getPreference(getBaseContext(),"countfrgr"));
+                            SettingActivity.getPreference("countfrgr"));
 
             else
                 return MainScreenActivity.api.getAudio(null,groups.get(position).gid,null,
-                        SettingActivity.getPreference(getBaseContext(),"countfrgr"));
+                        SettingActivity.getPreference("countfrgr"));
         }
         catch (IOException e) {
             e.printStackTrace();

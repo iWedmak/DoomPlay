@@ -63,7 +63,7 @@ public class MainVkFragment extends Fragment
                     try
                     {
                         TracksHolder.tempAudiosMine = MainScreenActivity.api.getAudio(Account.account.user_id,
-                                null,null,SettingActivity.getPreference(activity,"countvkall"));
+                                null,null,SettingActivity.getPreference("countvkall"));
 
 
                     } catch (IOException e) {

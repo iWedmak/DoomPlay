@@ -285,7 +285,7 @@ public class VkAlbumsActivity extends AbstractVkItems
                 try
                 {
                     albums = MainScreenActivity.api.getAudioAlbums(Account.account.user_id,null,
-                            SettingActivity.getPreference(getBaseContext(),"countvkall"));
+                            SettingActivity.getPreference("countvkall"));
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -348,7 +348,7 @@ public class VkAlbumsActivity extends AbstractVkItems
         {
 
             return MainScreenActivity.api.getAudio(null,null,albums.get(position).album_id
-                    ,SettingActivity.getPreference(getBaseContext(),"countvkall"));
+                    ,SettingActivity.getPreference("countvkall"));
 
         } catch (IOException e) {
             e.printStackTrace();

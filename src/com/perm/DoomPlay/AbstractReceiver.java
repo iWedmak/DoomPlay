@@ -52,7 +52,7 @@ abstract class AbstractReceiver extends ActionBarActivity
             unregisterReceiver(broadcastReceiver);
         }
     }
-    private void onClickActionBar()
+    protected void onClickActionBar()
     {
         if((!PlayingService.isOnline && PlayingService.tracks != null)
                 || (PlayingService.isOnline && PlayingService.audios != null))

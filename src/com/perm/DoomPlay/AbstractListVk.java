@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -60,7 +61,7 @@ abstract class AbstractListVk extends AbstractControls
         {
 
             adapter.setMarkedItem(position);
-            if(withScroll && SettingActivity.getPreferences(this,SettingActivity.keyScroll) && Build.VERSION.SDK_INT >= 8)
+            if(withScroll && SettingActivity.getPreferences(SettingActivity.keyScroll) && Build.VERSION.SDK_INT >= 8)
                 listView.smoothScrollToPosition(position);
         }
         else
@@ -170,7 +171,7 @@ abstract class AbstractListVk extends AbstractControls
             switch (itemId)
             {
                 case  R.id.itemGetLiricks:
-                    getLyriks(position);
+                    startLyricsDialog(getSupportFragmentManager(),audios.get(position).lyrics_id);
                     break;
                 case R.id.itemLike:
                     likeTrack(position);
@@ -184,20 +185,20 @@ abstract class AbstractListVk extends AbstractControls
                     startService(downloadIntent);
                     break;
                 case R.id.itemMoveToAlbum:
-                    moveToAlbum(position);
+                    moveToAlbum(getSupportFragmentManager(),audios.get(position).aid);
                     break;
             }
         }
 
 
     }
-    void moveToAlbum(int position)
+    static void moveToAlbum(FragmentManager manager,long aid)
     {
         AddTrackToAlbumDialog dialog = new AddTrackToAlbumDialog();
         Bundle bundle = new Bundle();
-        bundle.putLong(AddTrackToAlbumDialog.keyDialogAlbum,audios.get(position).aid);
+        bundle.putLong(AddTrackToAlbumDialog.keyDialogAlbum,aid);
         dialog.setArguments(bundle);
-        dialog.show(getSupportFragmentManager(),"tag");
+        dialog.show(manager,"tag");
 
     }
 
@@ -236,22 +237,16 @@ abstract class AbstractListVk extends AbstractControls
             }.execute(position);
         }
     }
-
-    void getLyriks(int position)
+    public static void startLyricsDialog(FragmentManager manager, long lid)
     {
-        long lid = audios.get(position).lyrics_id;
-        if(lid != 0 && Utils.isOnline(getBaseContext()))
-        {
-            Bundle bundle = new Bundle();
-            bundle.putLong(LyricsDialog.keyLyricsId, lid);
-            LyricsDialog dialog = new LyricsDialog();
-            dialog.setArguments(bundle);
-            dialog.show(getSupportFragmentManager(),"tag");
-
-        }
-        else
-            Toast.makeText(this,"can't find lyrics",Toast.LENGTH_SHORT);
+        Bundle bundle = new Bundle();
+        bundle.putLong(LyricsDialog.keyLyricsId, lid);
+        LyricsDialog dialog = new LyricsDialog();
+        dialog.setArguments(bundle);
+        dialog.show(manager,"tag");
     }
+
+
     void likeTrack(int position)
     {
         if(Utils.isOnline(getBaseContext()))

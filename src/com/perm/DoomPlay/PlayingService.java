@@ -129,6 +129,54 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         sendBroadcast(new Intent(actionIconPlay));
         sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
     }
+    private void downloadAlbumArt(Song song)
+    {
+        if(SettingActivity.getPreferences("downloadart") && !AlbumArtGetter.isLoadById(song.getAlbumId())
+                && Utils.isOnline(this) && song.getAlbumId() != 0 && song.getTitle() != null && song.getArtist() != null)
+        {
+            new AlbumArtGetter(song.getAlbumId(),song.getArtist(),song.getTitle())
+            {
+                @Override
+                protected void onGetBitmap(Bitmap bitmap)
+                {
+
+                }
+                @Override
+                protected void onBitmapSaved(long albumId)
+                {
+                    sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
+                    startNotif();
+
+                    sendBroadcast(new Intent(FullPlaybackActivity.actionDataChanged));
+                }
+            }.execute();
+        }
+    }
+
+    private void downloadAlbumArt(Audio audio)
+    {
+        if(SettingActivity.getPreferences("downloadart")&& SettingActivity.getPreferences("artonline")
+                && !AlbumArtGetter.isLoadById(audio.aid)&& audio.title != null && audio.artist != null)
+        {
+            new AlbumArtGetter(audio.aid,audio.artist,audio.title)
+            {
+                @Override
+                protected void onGetBitmap(Bitmap bitmap)
+                {
+
+                }
+                @Override
+                protected void onBitmapSaved(long albumId)
+                {
+                    sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
+                    startNotif();
+
+                    sendBroadcast(new Intent(FullPlaybackActivity.actionDataChanged));
+                }
+            }.execute();
+        }
+    }
+
 
     private RemoteViews getNotifViews(int layoutId)
     {
@@ -142,7 +190,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
             Bitmap cover = song.getAlbumArt(this);
             if (cover == null)
             {
-
+                downloadAlbumArt(song);
                 views.setImageViewBitmap(R.id.notifAlbum, BitmapFactory.decodeResource(getResources(), R.drawable.fallback_cover));
             }
             else
@@ -160,6 +208,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
             Bitmap cover = AlbumArtGetter.getBitmapById(audio.aid,this);
             if (cover == null)
             {
+                downloadAlbumArt(audio);
                 views.setImageViewBitmap(R.id.notifAlbum, BitmapFactory.decodeResource(getResources(), R.drawable.fallback_cover));
             }
             else
@@ -196,7 +245,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
         Intent intentActivity;
 
-        if(SettingActivity.getPreferences(this,SettingActivity.keyOnClickNotif))
+        if(SettingActivity.getPreferences(SettingActivity.keyOnClickNotif))
         {
             intentActivity = new Intent(FullPlaybackActivity.actionReturnFull);
             intentActivity.setClass(this,FullPlaybackActivity.class);
@@ -607,13 +656,13 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
             if((TelephonyManager.CALL_STATE_RINGING == state && isPlaying) ||
                     (TelephonyManager.CALL_STATE_OFFHOOK == state && isPlaying))
             {
-                if(SettingActivity.getPreferences(getBaseContext(), SettingActivity.keyOnCall))
+                if(SettingActivity.getPreferences(SettingActivity.keyOnCall))
                     playPause();
                 wasPlaying = true;
             }
             else if(TelephonyManager.CALL_STATE_IDLE == state && wasPlaying && !isPlaying)
             {
-                if(SettingActivity.getPreferences(getBaseContext(), SettingActivity.keyAfterCall))
+                if(SettingActivity.getPreferences(SettingActivity.keyAfterCall))
                     playPause();
                 wasPlaying = false;
             }
@@ -629,7 +678,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
             switch (focusChange)
             {
                 case AudioManager.AUDIOFOCUS_LOSS:
-                    if(SettingActivity.getPreferences(getBaseContext(), SettingActivity.keyLongFocus)&& isPlaying)
+                    if(SettingActivity.getPreferences(SettingActivity.keyLongFocus)&& isPlaying)
                         playPause();
                     wasPlaying = true;
 
@@ -637,14 +686,14 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
 
-                    if(SettingActivity.getPreferences(getBaseContext(), SettingActivity.keyShortFocus) && isPlaying)
+                    if(SettingActivity.getPreferences(SettingActivity.keyShortFocus) && isPlaying)
                         playPause();
                     wasPlaying = true;
 
                     break;
                 case AudioManager.AUDIOFOCUS_GAIN:
 
-                    if(SettingActivity.getPreferences(getBaseContext(), SettingActivity.keyOnGain) && wasPlaying && !isPlaying)
+                    if(SettingActivity.getPreferences(SettingActivity.keyOnGain) && wasPlaying && !isPlaying)
                         playPause();
                     wasPlaying = false;
 

@@ -34,12 +34,13 @@ abstract class AbstractLists extends AbstractControls
     ListTracksAdapter adapter;
     static protected String[] tracks;
 
+
     protected void markItem(int position , boolean withScroll)
     {
         if(PlayingService.serviceAlive && !PlayingService.isOnline && Arrays.equals(PlayingService.tracks, tracks))
         {
             adapter.setMarkedItem(position);
-            if(withScroll && SettingActivity.getPreferences(this,SettingActivity.keyScroll) && Build.VERSION.SDK_INT >= 8)
+            if(withScroll && SettingActivity.getPreferences(SettingActivity.keyScroll) && Build.VERSION.SDK_INT >= 8)
                 listView.smoothScrollToPosition(position);
         }
         else

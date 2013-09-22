@@ -83,13 +83,19 @@ public class SearchVkActivity extends AbstractListVk
         }
         return super.onOptionsItemSelected(item);
     }
-    void startVoice()
+
+    public static Intent getVoiceIntent()
     {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "voice search");
-        startActivityForResult(intent, 23);
+        return intent;
+    }
+
+    void startVoice()
+    {
+        startActivityForResult(getVoiceIntent(), 23);
     }
 
     @Override
@@ -159,7 +165,7 @@ public class SearchVkActivity extends AbstractListVk
             try
             {
                 audios = MainScreenActivity.api.searchAudio(params[0],
-                        SettingActivity.getPreference(getBaseContext(),"countvksearch"));
+                        SettingActivity.getPreference("countvksearch"));
 
             } catch (IOException e) {
                 e.printStackTrace();

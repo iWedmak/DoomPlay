@@ -48,9 +48,15 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
     String artist;
     String title;
     long albumId;
-    static HashSet<Long> set = new HashSet<Long>();
+    private static HashSet<Long> set = new HashSet<Long>();
 
-    abstract void onGetBitmap(Bitmap bitmap);
+    protected abstract void onGetBitmap(Bitmap bitmap);
+    protected abstract void onBitmapSaved(long albumId);
+
+    static boolean isLoadById(long id)
+    {
+        return set.contains(id);
+    }
 
 
     public AlbumArtGetter(long albumId,String artist,String title)
@@ -60,6 +66,7 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
         this.artist = artist;
         this.title = title;
         set.add(albumId);
+        Log.i("TAG URL","albumId "+ String.valueOf(albumId));
     }
 
     @Override
@@ -82,7 +89,7 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
         }
         if(src == null || src.equals(""))
             return null;
-        Log.d("TAG URL", src);
+        Log.i("TAG URL", src);
         return downloadBitmap(src);
     }
 
@@ -91,34 +98,43 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
     {
         super.onPostExecute(bitmap);
         isLoading = false;
-        set.remove(albumId);
+
         if(bitmap != null)
         {
             onGetBitmap(bitmap);
-            if(SettingActivity.getPreferences(MyApplication.getInstance(),"saveart"))
+            //if(SettingActivity.getPreferences(MyApplication.getInstance(),"saveart"))
+            new AsyncTask<Bitmap,Void,Void>()
             {
-                new AsyncTask<Bitmap,Void,Void>()
+                @Override
+                protected Void doInBackground(Bitmap... params)
                 {
-                    @Override
-                    protected Void doInBackground(Bitmap... params)
-                    {
-                        insertBitmapInMediaStore(params[0],albumId);
-                        return null;
-                    }
+                    insertBitmapInMediaStore(params[0],albumId);
+                    return null;
+                }
 
-                }.execute(bitmap);
-            }
+                @Override
+                protected void onPostExecute(Void aVoid)
+                {
+                    super.onPostExecute(aVoid);
+                    onBitmapSaved(albumId);
+                    set.remove(albumId);
+                }
+            }.execute(bitmap);
+
 
         }
-
-
     }
 
 
     static String findSrc(String artist,String title) throws ParserConfigurationException, SAXException, IOException
     {
 
-        URL url = new URL("http://ws.audioscrobbler.com/2.0/?method=track.search&limit=1&track="
+        if(artist.length() > 15)
+            artist = artist.substring(0,15);
+        if(title.length() > 15)
+            title = title.substring(0,15);
+
+         URL url = new URL("http://ws.audioscrobbler.com/2.0/?method=track.search&limit=1&track="
                 +URLEncoder.encode(title,"utf-8")+"&artist="
                 +URLEncoder.encode(artist,"utf-8")+"&api_key=" +lastFmApiId);
 
@@ -132,8 +148,7 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
             connection.setDoInput(true);
             connection.setRequestMethod("GET");
 
-            DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+            DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document doc = docBuilder.parse(connection.getInputStream());
             connection.disconnect();
 
@@ -141,7 +156,7 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
             NodeList nodeList = doc.getElementsByTagName("image");
 
             if(nodeList != null && nodeList.getLength() != 0)
-                return nodeList.item(1).getTextContent();
+                return nodeList.item(SettingActivity.getPreference("qualityart")).getTextContent();
             else
                 return null;
 
@@ -168,12 +183,11 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
             connection.setDoInput(true);
             connection.connect();
             in = connection.getInputStream();
-            BitmapFactory.decodeStream(in);
             return  BitmapFactory.decodeStream(in);
         }
         catch (IOException e)
         {
-            Log.e("TAG EXCEPTION",e.toString());
+            Log.e("TAG URL",e.toString());
             return null;
         }
         finally
@@ -191,7 +205,11 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
     public static void insertBitmapInMediaStore(Bitmap bitmap,long albumId)
     {
         OutputStream stream;
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/download/" + String.valueOf(albumId);
+        File file  = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/download/albumArts/");
+        if(!file.exists())
+            file.mkdir();
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/download/albumArts/" + String.valueOf(albumId) + ".jpeg";
+        Log.e("TAG URL",path);
         try
         {
             stream = new FileOutputStream(path);
@@ -199,16 +217,16 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
         catch (FileNotFoundException e)
         {
             e.printStackTrace();
-            Log.e("FILENOTFOUND",e.toString());
+            Log.e("TAG URL",e.toString());
             return;
         }
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 300, stream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         try
         {
             stream.flush();
             stream.close();
         } catch (IOException e) {
-            e.printStackTrace(); Log.e("EXCEPTION",e.toString());
+            e.printStackTrace(); Log.e("TAG URL",e.toString());
         }
 
 
@@ -216,7 +234,8 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
         ContentValues cv = new ContentValues();
         cv.put("album_id", albumId);
         cv.put("_data", path);
-        MyApplication.getInstance().getContentResolver().insert(Song.artworkUri, cv);
+        String insert = MyApplication.getInstance().getContentResolver().insert(Song.artworkUri, cv).toString();
+        Log.i("TAG URL",insert);
     }
 
     public static Bitmap getBitmapById(long id,Context context)

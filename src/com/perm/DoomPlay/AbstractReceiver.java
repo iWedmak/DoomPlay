@@ -54,8 +54,7 @@ abstract class AbstractReceiver extends ActionBarActivity
     }
     protected void onClickActionBar()
     {
-        if((!PlayingService.isOnline && PlayingService.tracks != null)
-                || (PlayingService.isOnline && PlayingService.audios != null))
+        if(PlayingService.audios != null)
         {
             startActivity(FullPlaybackActivity.returnSmall(this));
         }
@@ -123,17 +122,7 @@ abstract class AbstractReceiver extends ActionBarActivity
 
     protected void updateActionBar()
     {
-        if(PlayingService.serviceAlive && PlayingService.tracks != null && !PlayingService.isOnline)
-        {
-            Song song = new Song(PlayingService.tracks[PlayingService.indexCurrentTrack]);
-
-            textTitle.setText(song.getTitle());
-            textArtist.setText(song.getArtist());
-            textArtist.setVisibility(View.VISIBLE);
-            textTitle.setTextColor(getResources().getColor(R.color.blue_text));
-
-        }
-        else if(PlayingService.serviceAlive && PlayingService.audios != null && PlayingService.isOnline)
+        if(PlayingService.serviceAlive && PlayingService.audios != null)
         {
             textTitle.setText(PlayingService.audios.get(PlayingService.indexCurrentTrack).title);
             textArtist.setText(PlayingService.audios.get(PlayingService.indexCurrentTrack).artist);

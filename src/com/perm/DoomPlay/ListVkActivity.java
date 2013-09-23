@@ -34,7 +34,7 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ListVkActivity extends AbstractListVk
+public class ListVkActivity extends AbstractList
 {
     static String currentAction ;
     public static final String actionMyMusic ="actionMyMusic";
@@ -158,7 +158,7 @@ public class ListVkActivity extends AbstractListVk
 
     void initializeUi()
     {
-        adapter = new ListVkAdapter(audios,this);
+        adapter = new ListsAdapter(audios,this);
         listView = (ListView)findViewById(R.id.listAllSongs);
         listView.setOnItemClickListener(onItemTrackClick);
         listView.setAdapter(adapter);

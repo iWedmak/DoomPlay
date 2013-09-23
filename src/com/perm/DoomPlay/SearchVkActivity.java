@@ -34,7 +34,7 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class SearchVkActivity extends AbstractListVk
+public class SearchVkActivity extends AbstractList
 {
 
     EditText editQuery;
@@ -116,7 +116,7 @@ public class SearchVkActivity extends AbstractListVk
         buttonSearch = (ImageView)findViewById(R.id.imageSearchVk);
         buttonSearch.setOnClickListener(onClickSearch);
         listView.setOnItemClickListener(onItemTrackClick);
-        adapter = new ListVkAdapter(new ArrayList<Audio>(),this);
+        adapter = new ListsAdapter(new ArrayList<Audio>(),this);
         listView.setAdapter(adapter);
         listView.setOnItemLongClickListener(onItemLongVkListener);
         linearControls = (RelativeLayout)findViewById(R.id.linearControls);

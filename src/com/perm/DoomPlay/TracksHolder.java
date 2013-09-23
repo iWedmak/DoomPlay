@@ -27,39 +27,25 @@ import java.util.ArrayList;
 public class TracksHolder
 {
     public static volatile boolean isScanned = false;
-    public static String[] songAllPath;
-    public static String[] songArtist;
-    public static String[] songTitle;
-    public static int[] songAlbumId;
     public static String[] allArtist;
     public static String[] allAlbums;
     public static String[] allAcordingArtists;
     public static ArrayList<Audio> tempAudiosMine ;
+    public static ArrayList<Audio> allAudios;
+
+
+
+    public final static String[] projection = {MediaStore.Audio.Media.ARTIST,MediaStore.Audio.Media.TITLE,MediaStore.Audio.Media.ALBUM_ID,MediaStore.Audio.Media.DATA};
+    public final static String[] projectionPlusId = {MediaStore.Audio.Media.ARTIST,MediaStore.Audio.Media.TITLE,MediaStore.Audio.Media.ALBUM_ID,MediaStore.Audio.Media.DATA,MediaStore.Audio.Media._ID};
 
     private TracksHolder(){}
     public static void scanCard(Context context)
     {
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                MainScreenActivity.STAR,MediaStore.Audio.Media.IS_MUSIC + " != 0", null, null);
+                projection,MediaStore.Audio.Media.IS_MUSIC + " != 0", null, null);
+        cursor.moveToFirst();
 
-
-        songAlbumId = new int[cursor.getCount()];
-        songArtist = new String[cursor.getCount()];
-        songTitle = new String[cursor.getCount()];
-        songAllPath = new String[cursor.getCount()];
-
-        if(cursor.moveToFirst())
-        {
-            do
-            {
-                songAllPath[cursor.getPosition()]= cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-                songAlbumId[cursor.getPosition()]= cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
-                songArtist[cursor.getPosition()]= cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-                songTitle[cursor.getPosition()]= cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-
-            }
-            while (cursor.moveToNext());
-        }
+        allAudios = Audio.parseAudio(cursor);
 
         Cursor cursorAlbum = context.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
                 new String[]{MediaStore.Audio.Albums.ALBUM,MediaStore.Audio.Albums.ARTIST },null, null,null );
@@ -92,6 +78,15 @@ public class TracksHolder
         }
 
         isScanned = true;
+
+        cursor.close();
+        cursorAlbum.close();
+        cursorArtist.close();
     }
 
+
+    public static String getArtistFromAlbum(int positionAlbum)
+    {
+        return allAcordingArtists[positionAlbum];
+    }
 }

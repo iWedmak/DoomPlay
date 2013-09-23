@@ -40,8 +40,6 @@ import android.preference.PreferenceManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.widget.RemoteViews;
-import android.widget.Toast;
-import com.perm.Widgets.SimpleSWidget;
 import com.perm.vkontakte.api.Audio;
 
 import java.io.IOException;
@@ -55,7 +53,6 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     public final static String actionIconPause = "DoomedPlaPause";
     static MediaPlayer mediaPlayer;
     static boolean isPrepared ;
-    public static String[] tracks;
     public static int indexCurrentTrack = 0;
     public static boolean isShuffle;
     public static boolean isPlaying;
@@ -114,7 +111,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     {
         super.onConfigurationChanged(newConfig);
 
-        if(serviceAlive && tracks != null)
+        if(serviceAlive && audios != null)
             startNotif();
     }
 
@@ -129,34 +126,10 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         sendBroadcast(new Intent(actionIconPlay));
         sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
     }
-    private void downloadAlbumArt(Song song)
-    {
-        if(SettingActivity.getPreferences("downloadart") && !AlbumArtGetter.isLoadById(song.getAlbumId())
-                && Utils.isOnline(this) && song.getAlbumId() != 0 && song.getTitle() != null && song.getArtist() != null)
-        {
-            new AlbumArtGetter(song.getAlbumId(),song.getArtist(),song.getTitle())
-            {
-                @Override
-                protected void onGetBitmap(Bitmap bitmap)
-                {
-
-                }
-                @Override
-                protected void onBitmapSaved(long albumId)
-                {
-                    sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
-                    startNotif();
-
-                    sendBroadcast(new Intent(FullPlaybackActivity.actionDataChanged));
-                }
-            }.execute();
-        }
-    }
-
     private void downloadAlbumArt(Audio audio)
     {
-        if(SettingActivity.getPreferences("downloadart")&& SettingActivity.getPreferences("artonline")
-                && !AlbumArtGetter.isLoadById(audio.aid)&& audio.title != null && audio.artist != null)
+        if(SettingActivity.getPreferences("downloadart")&& !AlbumArtGetter.isLoadById(audio.aid)
+                && audio.title != null && audio.artist != null)
         {
             new AlbumArtGetter(audio.aid,audio.artist,audio.title)
             {
@@ -182,40 +155,22 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     {
         RemoteViews views = new RemoteViews(getPackageName(), layoutId);
 
-        if(!isOnline)
+        Audio audio = audios.get(indexCurrentTrack);
+
+        views.setTextViewText(R.id.notifTitle,audio.title);
+        views.setTextViewText(R.id.notifArtist,audio.artist);
+
+        Bitmap cover = AlbumArtGetter.getBitmapById(audio.aid,this);
+        if (cover == null)
         {
-            Song song = new Song(tracks[indexCurrentTrack]);
-            views.setTextViewText(R.id.notifTitle, song.getTitle());
-            views.setTextViewText(R.id.notifArtist, song.getArtist() );
-            Bitmap cover = song.getAlbumArt(this);
-            if (cover == null)
-            {
-                downloadAlbumArt(song);
-                views.setImageViewBitmap(R.id.notifAlbum, BitmapFactory.decodeResource(getResources(), R.drawable.fallback_cover));
-            }
-            else
-            {
-                views.setImageViewBitmap(R.id.notifAlbum, cover);
-            }
+            downloadAlbumArt(audio);
+            views.setImageViewBitmap(R.id.notifAlbum, BitmapFactory.decodeResource(getResources(), R.drawable.fallback_cover));
         }
         else
         {
-            Audio audio = audios.get(indexCurrentTrack);
-
-            views.setTextViewText(R.id.notifTitle,audio.title);
-            views.setTextViewText(R.id.notifArtist,audio.artist);
-
-            Bitmap cover = AlbumArtGetter.getBitmapById(audio.aid,this);
-            if (cover == null)
-            {
-                downloadAlbumArt(audio);
-                views.setImageViewBitmap(R.id.notifAlbum, BitmapFactory.decodeResource(getResources(), R.drawable.fallback_cover));
-            }
-            else
-            {
-                views.setImageViewBitmap(R.id.notifAlbum, cover);
-            }
+            views.setImageViewBitmap(R.id.notifAlbum, cover);
         }
+
 
         views.setImageViewResource(R.id.notifPlay, isPlaying ? R.drawable.widget_pause : R.drawable.widget_play);
 
@@ -249,7 +204,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         {
             intentActivity = new Intent(FullPlaybackActivity.actionReturnFull);
             intentActivity.setClass(this,FullPlaybackActivity.class);
-            intentActivity.putExtra(FileSystemActivity.keyMusic,tracks);
+            intentActivity.putExtra(FileSystemActivity.keyMusic,audios);
         }
         else
         {
@@ -268,15 +223,10 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     {
         RemoteViews views = getNotifViews(R.layout.notif_jelly);
         Notification notification = createNotification();
-        if(!isOnline)
-        {
-            views.setTextViewText(R.id.textNotifCount,String.valueOf(indexCurrentTrack + 1)+ "/" +String.valueOf(tracks.length));
-        }
-        else
-        {
-            views.setTextViewText(R.id.textNotifCount,String.valueOf(indexCurrentTrack + 1)+ "/" +String.valueOf(audios.size()));
-        }
+        views.setTextViewText(R.id.textNotifCount,String.valueOf(indexCurrentTrack + 1)+ "/" +String.valueOf(audios.size()));
+
         notification.bigContentView = views;
+        notification.priority = Notification.PRIORITY_MAX;
         return notification;
     }
 
@@ -289,10 +239,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         {
             isOnline = action.equals(actionOnline);
 
-            if(!isOnline)
-                tracks = intent.getStringArrayExtra(FullPlaybackActivity.keyService);
-            else
-                audios = intent.getParcelableArrayListExtra(FullPlaybackActivity.keyService);
+            audios = intent.getParcelableArrayListExtra(FullPlaybackActivity.keyService);
 
             if(intent.getIntExtra(FullPlaybackActivity.keyIndex,0) != valueIncredible)
                 indexCurrentTrack = intent.getIntExtra(FullPlaybackActivity.keyIndex,0);
@@ -319,19 +266,11 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         {
             if(mediaPlayer == null)
             {
-                Intent intent = new Intent(this,PlayingService.class);
-                intent.putExtra(FullPlaybackActivity.keyIndex,indexCurrentTrack);
-
-                if(!isOnline && tracks != null)
+                if(audios != null)
                 {
-                    intent.setAction(actionOffline);
-                    intent.putExtra(FullPlaybackActivity.keyService,tracks);
-
-                    startService(intent);
-                }
-                else if(isOnline && audios != null)
-                {
-                    intent.setAction(actionOnline);
+                    Intent intent = new Intent(this,PlayingService.class);
+                    intent.putExtra(FullPlaybackActivity.keyIndex,indexCurrentTrack);
+                    intent.setAction(isOnline ? actionOnline : actionOffline);
                     intent.putExtra(FullPlaybackActivity.keyService,audios);
 
                     startService(intent);
@@ -376,65 +315,46 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
         sendBroadcast(new Intent(actionIconPause));
 
-        try
+        mediaPlayer = new MediaPlayer();
+
+        new AsyncTask<Void,Void,Void>()
         {
-            mediaPlayer = new MediaPlayer();
-            if(!isOnline)
+            @Override
+            protected void onPreExecute()
             {
-                mediaPlayer.setDataSource(tracks[indexCurrentTrack]);
-                mediaPlayer.prepare();
-            }
-            else
-            {
+                super.onPreExecute();
+                isLoadingTrack = true;
 
-                new AsyncTask<Void,Void,Void>()
-                {
-                    @Override
-                    protected void onPreExecute()
-                    {
-                        super.onPreExecute();
-                        isLoadingTrack = true;
-
-                        if(loadingListener != null)
-                            loadingListener.onLoadingTrackStarted();
-                    }
-
-                    @Override
-                    protected Void doInBackground(Void... params)
-                    {
-
-                        try {
-                            mediaPlayer.setDataSource(audios.get(indexCurrentTrack).url);
-                            mediaPlayer.prepare();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            startNotif();
-                        }
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void aVoid)
-                    {
-                        super.onPostExecute(aVoid);
-                        isLoadingTrack = false;
-                        if(loadingListener != null)
-                            loadingListener.onLoadingTrackEnded();
-                        partOfLoadMusic();
-                    }
-                }.execute();
-                return;
+                if(loadingListener != null)
+                    loadingListener.onLoadingTrackStarted();
             }
 
+            @Override
+            protected Void doInBackground(Void... params)
+            {
 
-        }
-        catch (IOException e)
-        {
-            Toast.makeText(this,"can't find file",Toast.LENGTH_SHORT).show();
-            return;
-        }
+                try {
+                    mediaPlayer.setDataSource(audios.get(indexCurrentTrack).url);
+                    mediaPlayer.prepare();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    startNotif();
+                }
+                return null;
+            }
 
-        partOfLoadMusic();
+            @Override
+            protected void onPostExecute(Void aVoid)
+            {
+                super.onPostExecute(aVoid);
+                isLoadingTrack = false;
+                if(loadingListener != null)
+                    loadingListener.onLoadingTrackEnded();
+                partOfLoadMusic();
+            }
+        }.execute();
+
+
     }
     void partOfLoadMusic()
     {
@@ -489,15 +409,8 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         if(isShuffle)
         {
             Random random = new Random();
-            if(!isOnline)
-            {
-                indexCurrentTrack = random.nextInt(tracks.length-1);
-            }
-            else
-            {
-                indexCurrentTrack = random.nextInt(audios.size()-1);
+            indexCurrentTrack = random.nextInt(audios.size()-1);
 
-            }
         }
         else if(!isLoop)
             changeTrack(direction);
@@ -511,16 +424,13 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
             {
                 indexCurrentTrack--;
                 if(indexCurrentTrack  == -1 )
-                    if(!isOnline)
-                        indexCurrentTrack = tracks.length-1;
-                    else
-                        indexCurrentTrack = audios.size()-1;
+                    indexCurrentTrack = audios.size()-1;
                 break;
             }
             case nextTrack:
             {
                 indexCurrentTrack++;
-                if((!isOnline && indexCurrentTrack > tracks.length-1) || (isOnline && indexCurrentTrack > audios.size()-1))
+                if(indexCurrentTrack > audios.size()-1)
                     indexCurrentTrack = 0;
 
                 break;
@@ -634,7 +544,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
     {
-         if(PlayingService.serviceAlive && key.equals(SettingActivity.keyOnClickNotif) && tracks != null)
+         if(PlayingService.serviceAlive && key.equals(SettingActivity.keyOnClickNotif) && audios != null)
              startNotif();
     }
 

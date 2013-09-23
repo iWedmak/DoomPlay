@@ -112,7 +112,7 @@ public class DownloadingService extends Service
             stream = new FileOutputStream(new File(filePath));
             in  = new BufferedInputStream(url.openStream());
             byte[] buffer = new byte[1024];
-            int count = 0;
+            int count ;
 
             while((count = in.read(buffer)) > 0 && !isCancelled())
             {
@@ -190,7 +190,7 @@ public class DownloadingService extends Service
 
             views.setProgressBar(R.id.progressDownload,100,100,false);
             views.setTextViewText(R.id.notifTitle,"Finish");
-            notification.flags = Notification.FLAG_ONLY_ALERT_ONCE;
+            notification.flags = Notification.FLAG_AUTO_CANCEL;
             notification.icon = R.drawable.downloaded;
             Intent intent = new Intent();
             intent.setAction(android.content.Intent.ACTION_VIEW);
@@ -231,7 +231,6 @@ public class DownloadingService extends Service
             }
             catch (IOException e)
             {
-                e.printStackTrace();
                 Log.e("EXCEPTION",e.toString());
                 release();
 

@@ -61,11 +61,10 @@ public class PlaylistActivity extends AbstractReceiver
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
             selectedPlaylist = playlists[position];
-            String[] tracks = playlistDB.getTracks(selectedPlaylist);
 
             Intent intent = new Intent(getBaseContext(),ListTracksActivity.class);
             intent.setAction(ListTracksActivity.actionPlaylist);
-            intent.putExtra(MainScreenActivity.keyOpenInListTrack,tracks);
+            intent.putExtra(MainScreenActivity.keyOpenInListTrack,playlistDB.getTracks(selectedPlaylist));
             startActivity(intent);
         }
     };
@@ -109,9 +108,8 @@ public class PlaylistActivity extends AbstractReceiver
                     mode.finish();
                     return true;
                 case R.id.itemPlayAll:
-                    String[] tracks = playlistDB.getTracks(selectedPlaylist);
                     Intent intent = new Intent(getBaseContext(),FullPlaybackActivity.class);
-                    intent.putExtra(FileSystemActivity.keyMusic,tracks);
+                    intent.putExtra(FileSystemActivity.keyMusic,playlistDB.getTracks(selectedPlaylist));
                     intent.setAction(FullPlaybackActivity.actionPlayFull);
                     startActivity(intent);
                     mode.finish();

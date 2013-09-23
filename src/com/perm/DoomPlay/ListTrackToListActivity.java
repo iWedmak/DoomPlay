@@ -27,15 +27,18 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
+import com.perm.vkontakte.api.Audio;
+
+import java.util.ArrayList;
 
 
 public class ListTrackToListActivity extends AbstractReceiver
 {
-    String[] tracks ;
+    ArrayList<Audio> audios;
     ListView listView;
     PlaylistDB playlistDB ;
     public final static String keyAllTracks = "keytracksall";
-    ListTracksAdapter adapter;
+    ListsAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -44,15 +47,15 @@ public class ListTrackToListActivity extends AbstractReceiver
         prepareActionBar();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        tracks = getIntent().getStringArrayExtra(keyAllTracks);
-        if(tracks == null)
-            tracks = TracksHolder.songAllPath;
+        audios = getIntent().getParcelableArrayListExtra(keyAllTracks);
+        if(audios == null)
+            audios = TracksHolder.allAudios;
 
         listView = (ListView)findViewById(R.id.listAlbumArtist);
-        adapter = new ListTracksAdapter(tracks,this);
+        adapter = new ListsAdapter(audios,this);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(onItemClickHandler);
-        playlistDB = PlaylistDB.getInstance(this);;
+        playlistDB = PlaylistDB.getInstance(this);
         LinearLayout linearAddToList = (LinearLayout)findViewById(R.id.linearToPlaylist);
         linearAddToList.setOnClickListener(onClickAddToList);
 
@@ -74,10 +77,9 @@ public class ListTrackToListActivity extends AbstractReceiver
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
 
-            playlistDB.addTracks(new String[]{tracks[position]}, PlaylistActivity.selectedPlaylist);
+            playlistDB.addTrack(audios.get(position), PlaylistActivity.selectedPlaylist);
 
-            Toast.makeText(getBaseContext(),ListTracksActivity.getReadableName(tracks[position]) +
-                    " was added",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(),audios.get(position).title +" was added",Toast.LENGTH_SHORT).show();
         }
     };
 }

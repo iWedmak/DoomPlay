@@ -29,34 +29,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
+import com.perm.vkontakte.api.Audio;
 
-import java.io.File;
-import java.util.Arrays;
+import java.util.ArrayList;
 
-public class ListTracksActivity extends AbstractLists
+public class ListTracksActivity extends AbstractList
 {
     public final static String actionJust = "actionPlayFull";
     public final static String actionPlaylist = "actionPlaylist";
     ActionMode actionMode;
     static String currentAction;
-
-    public void checkDeletedTracks()
-    {
-        String[] tracks = playlistDB.getTracks(PlaylistActivity.selectedPlaylist);
-        for(int i = 0 ; i < tracks.length ; i++)
-        {
-            if(!new File(tracks[i]).exists())
-                playlistDB.deleteTrack(i,PlaylistActivity.selectedPlaylist);
-        }
-    }
-
+    PlaylistDB playlistDB;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_tracks);
+        setContentView(R.layout.list_vk_with_controlls);
 
         getTracksFromIntent();
 
@@ -68,9 +58,9 @@ public class ListTracksActivity extends AbstractLists
 
     void getTracksFromIntent()
     {
-        tracks = getIntent().getStringArrayExtra(MainScreenActivity.keyOpenInListTrack);
-        if(tracks == null)
-            tracks = TracksHolder.songAllPath;
+        audios = getIntent().getParcelableArrayListExtra(MainScreenActivity.keyOpenInListTrack);
+        if(audios == null)
+            audios = TracksHolder.allAudios;
     }
 
     protected AdapterView.OnItemLongClickListener onItemLongTrackClick = new AdapterView.OnItemLongClickListener()
@@ -134,7 +124,7 @@ public class ListTracksActivity extends AbstractLists
                     {
                         trackChange(false, position);
 
-                        if(position == tracks.length - 1)
+                        if(position == audios.size() - 1)
                             position = 0;
                         else
                             position++;
@@ -146,7 +136,7 @@ public class ListTracksActivity extends AbstractLists
                     {
                         trackChange(true, position);
                         if(position == 0)
-                            position = tracks.length - 1;
+                            position = audios.size() - 1;
                         else
                             position--;
 
@@ -156,7 +146,7 @@ public class ListTracksActivity extends AbstractLists
                     case R.id.itemGetLiricks:
                         LyricsDialog dialog = new LyricsDialog();
                         Bundle bundle = new Bundle();
-                        bundle.putString(LyricsDialog.keyLyricsTitle,new Song(tracks[position]).getTitle());
+                        bundle.putString(LyricsDialog.keyLyricsTitle,audios.get(PlayingService.indexCurrentTrack).title);
                         dialog.setArguments(bundle);
                         dialog.show(getSupportFragmentManager(),"tag");
                         break;
@@ -167,14 +157,16 @@ public class ListTracksActivity extends AbstractLists
                 switch(item.getItemId())
                 {
                     case R.id.itemToPlaylist:
-                        FileSystemActivity.showPlaybackDialog(new String[]{tracks[position]},getSupportFragmentManager());
+                        ArrayList<Audio> temp = new ArrayList<Audio>();
+                        temp.add(audios.get(position));
+                        FileSystemActivity.showPlaybackDialog(temp,getSupportFragmentManager());
                         break;
                     case R.id.itemSetAsRingtone:
-                        Utils.setRingtone(getBaseContext(), tracks[(Integer) mode.getTag()]);
+                        Utils.setRingtone(getBaseContext(), audios.get(position));
                         break;
                     case R.id.itemGetLiricks:
-                        Song song = new Song(tracks[position]);
-                        startLiryctDialog(getSupportFragmentManager(),song.getArtist(),song.getTitle());
+                        Audio audio = audios.get(PlayingService.indexCurrentTrack);
+                        startLiryctDialog(getSupportFragmentManager(), audio.artist, audio.title);
                         break;
                 }
                 mode.finish();
@@ -199,16 +191,16 @@ public class ListTracksActivity extends AbstractLists
 
     void updateList()
     {
-        isEquals = Arrays.equals(PlayingService.tracks,tracks);
-        tracks = playlistDB.getTracks(PlaylistActivity.selectedPlaylist);
+        isEquals = AbstractList.equalsCollections(audios,PlayingService.audios);
+        audios = playlistDB.getTracks(PlaylistActivity.selectedPlaylist);
 
         if(isEquals)
         {
-            PlayingService.tracks = tracks;
+            PlayingService.audios = audios;
             markItem(PlayingService.indexCurrentTrack, false);
         }
 
-        adapter.changeData(tracks);
+        adapter.changeData(audios);
 
     }
 
@@ -229,7 +221,7 @@ public class ListTracksActivity extends AbstractLists
         };
         asyncAdder.execute(position);
 
-        if(position == PlayingService.indexCurrentTrack && Arrays.equals(PlayingService.tracks,tracks))
+        if(position == PlayingService.indexCurrentTrack && AbstractList.equalsCollections(audios,PlayingService.audios))
         {
             playingService.playTrackFromList(PlayingService.indexCurrentTrack);
         }
@@ -243,7 +235,7 @@ public class ListTracksActivity extends AbstractLists
         {
             if(position == 0)
             {
-                to  = tracks.length - 1;
+                to  = audios.size() - 1;
             }
             else
             {
@@ -252,7 +244,7 @@ public class ListTracksActivity extends AbstractLists
         }
         else
         {
-            if(position == tracks.length-1)
+            if(position == audios.size()-1)
             {
                 to = 0;
             }
@@ -261,7 +253,7 @@ public class ListTracksActivity extends AbstractLists
                 to = position + 1 ;
             }
         }
-        if(Arrays.equals(PlayingService.tracks,tracks))
+        if(AbstractList.equalsCollections(audios,PlayingService.audios))
         {
             if(PlayingService.indexCurrentTrack == to)
                 PlayingService.indexCurrentTrack = position;
@@ -272,19 +264,7 @@ public class ListTracksActivity extends AbstractLists
 
 
 
-        playlistDB.changeColumns(PlaylistActivity.selectedPlaylist,position,to);
-    }
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-
-        if(currentAction.equals(actionPlaylist))
-        {
-            checkDeletedTracks();
-            updateList();
-        }
-
+        playlistDB.changeColumns(PlaylistActivity.selectedPlaylist, position, to);
     }
 
     @Override
@@ -292,14 +272,12 @@ public class ListTracksActivity extends AbstractLists
     {
         super.onNewIntent(intent);
         setIntent(intent);
-        String[] tempTracks = intent.getStringArrayExtra(MainScreenActivity.keyOpenInListTrack);
+        ArrayList<Audio> tempTracks = intent.getParcelableArrayListExtra(MainScreenActivity.keyOpenInListTrack);
 
-        if(tempTracks == null && tracks == null)
-            tracks = TracksHolder.songAllPath;
-        else if(tempTracks != null)
-            tracks = tempTracks;
+        if(tempTracks != null)
+            audios = tempTracks;
 
-        adapter.changeData(tracks);
+        adapter.changeData(audios);
         currentAction  = intent.getAction();
     }
 
@@ -311,9 +289,9 @@ public class ListTracksActivity extends AbstractLists
         listView = (ListView)findViewById(R.id.listAllSongs);
         playlistDB = PlaylistDB.getInstance(this);
         intentService = new Intent(this,PlayingService.class);
-        intentService.setAction(PlayingService.actionOffline);
-        intentService.putExtra(FullPlaybackActivity.keyService, tracks);
-        adapter = new ListTracksAdapter(tracks,this);
+        intentService.setAction(PlayingService.actionOnline);
+        intentService.putExtra(FullPlaybackActivity.keyService, audios);
+        adapter = new ListsAdapter(audios,this);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(onItemTrackClick);
         listView.setOnItemLongClickListener(onItemLongTrackClick);
@@ -329,7 +307,7 @@ public class ListTracksActivity extends AbstractLists
         textCurrentTime = (TextView)findViewById(R.id.textElapsed);
         textTotalTime = (TextView)findViewById(R.id.textDuration);
         linearControls = (RelativeLayout)findViewById(R.id.linearControls);
-
+        linearLoading = (LinearLayout)findViewById(R.id.linearLoading);
         currentAction = getIntent().getAction();
 
     }
@@ -350,8 +328,4 @@ public class ListTracksActivity extends AbstractLists
     @Override
     protected void onClickActionBar() {}
 
-    public static String getReadableName(String track)
-    {
-        return new File(track).getName().substring(0, new File(track).getName().length() - 4);
-    }
 }

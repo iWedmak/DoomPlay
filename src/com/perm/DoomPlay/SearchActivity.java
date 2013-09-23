@@ -29,10 +29,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import com.perm.vkontakte.api.Audio;
 
 import java.util.ArrayList;
 
-public class SearchActivity extends AbstractLists
+public class SearchActivity extends AbstractList
 {
     EditText editQuery;
     TextView textNoResults;
@@ -67,7 +68,7 @@ public class SearchActivity extends AbstractLists
         textNoResults = (TextView)findViewById(R.id.textNoResult);
         linearControls = (RelativeLayout)findViewById(R.id.linearControls);
         intentService = new Intent(this,PlayingService.class);
-        intentService.setAction(PlayingService.actionOffline);
+        intentService.setAction(PlayingService.actionOnline);
         imgPlay = (ImageView)findViewById(R.id.imagePlay) ;
         imgShuffle = (ImageView)findViewById(R.id.imageShuffle);
         imgRepeat = (ImageView)findViewById(R.id.imageRepeat);
@@ -79,7 +80,7 @@ public class SearchActivity extends AbstractLists
 
         listView.setOnItemClickListener(onItemTrackClick);
         listView.setOnItemLongClickListener(onItemLongTrackClick);
-        adapter = new ListTracksAdapter(new String[0],getBaseContext());
+        adapter = new ListsAdapter(new ArrayList<Audio>(),getBaseContext());
         listView.setAdapter(adapter);
 
     }
@@ -108,30 +109,27 @@ public class SearchActivity extends AbstractLists
         @Override
         public void afterTextChanged(Editable s)
         {
-            ArrayList<String> list = new ArrayList<String>();
             String query = s.toString();
+            audios.clear();
 
             if(query.equals(""))
             {
                 textNoResults.setVisibility(View.GONE);
-                adapter.changeData(new String[0]);
+                adapter.changeData(audios);
                 return;
             }
 
-            for(String track : TracksHolder.songAllPath)
+            for(Audio audio : TracksHolder.allAudios)
             {
-                if(track.toLowerCase().contains(query.toLowerCase()))
-                    list.add(track);
+                if(audio.url.toLowerCase().contains(query.toLowerCase()))
+                    audios.add(audio);
             }
-            tracks = new String[list.size()];
-            tracks = list.toArray(tracks);
-
-            if(tracks.length == 0)
+            if(audios.size() == 0)
                 textNoResults.setVisibility(View.VISIBLE);
             else
                 textNoResults.setVisibility(View.GONE);
 
-            adapter.changeData(tracks);
+            adapter.changeData(audios);
             adapter.setMarkedItem(PlayingService.valueIncredible);
         }
     };
@@ -154,14 +152,16 @@ public class SearchActivity extends AbstractLists
             switch(item.getItemId())
             {
                 case R.id.itemToPlaylist:
-                    FileSystemActivity.showPlaybackDialog(new String[]{tracks[position]} ,getSupportFragmentManager());
+                    ArrayList<Audio> temp = new ArrayList<Audio>();
+                    temp.add(audios.get(position));
+                    FileSystemActivity.showPlaybackDialog(temp ,getSupportFragmentManager());
                     break;
                 case R.id.itemSetAsRingtone:
-                    Utils.setRingtone(getBaseContext(), tracks[position]);
+                    Utils.setRingtone(getBaseContext(), audios.get(position));
                     break;
                 case R.id.itemGetLiricks:
-                    Song song = new Song(tracks[position]);
-                    ListTracksActivity.startLiryctDialog(getSupportFragmentManager(),song.getArtist(),song.getTitle());
+                    Audio audio = audios.get(position);
+                    ListTracksActivity.startLiryctDialog(getSupportFragmentManager(), audio.artist, audio.title);
                     break;
             }
 

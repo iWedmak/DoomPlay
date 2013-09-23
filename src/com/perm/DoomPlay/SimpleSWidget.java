@@ -1,4 +1,4 @@
-package com.perm.Widgets;
+package com.perm.DoomPlay;
 
 
 /*
@@ -28,10 +28,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.RemoteViews;
-import com.perm.DoomPlay.AlbumArtGetter;
-import com.perm.DoomPlay.PlayingService;
-import com.perm.DoomPlay.R;
-import com.perm.DoomPlay.Song;
 import com.perm.vkontakte.api.Audio;
 
 
@@ -52,36 +48,18 @@ public class SimpleSWidget extends AppWidgetProvider
     {
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_small);
-        if(!PlayingService.isOnline)
-        {
-            Song song = new Song(PlayingService.tracks[PlayingService.indexCurrentTrack]);
-            views.setTextViewText(R.id.widgetTitle, song.getTitle());
-            views.setTextViewText(R.id.widgetArtist, song.getArtist() );
 
-            Bitmap cover = song.getAlbumArt(context);
-            if (cover == null)
-            {
-                views.setImageViewBitmap(R.id.widgetAlbum, BitmapFactory.decodeResource(context.getResources(), R.drawable.fallback_cover));
-            }
-            else
-            {
-                views.setImageViewBitmap(R.id.widgetAlbum, cover);
-            }
+        Audio audio = PlayingService.audios.get(PlayingService.indexCurrentTrack);
+        views.setTextViewText(R.id.widgetlTitle, audio.title);
+        views.setTextViewText(R.id.widgetArtist,audio.artist);
+
+        Bitmap cover = AlbumArtGetter.getBitmapById(audio.aid, context);
+        if (cover != null)
+        {
+            views.setImageViewBitmap(R.id.widgetAlbum, cover);
         }
         else
-        {
-            Audio audio = PlayingService.audios.get(PlayingService.indexCurrentTrack);
-            views.setTextViewText(R.id.widgetlTitle, audio.title);
-            views.setTextViewText(R.id.widgetArtist,audio.artist);
-
-            Bitmap cover = AlbumArtGetter.getBitmapById(audio.aid, context);
-            if (cover != null)
-            {
-                views.setImageViewBitmap(R.id.widgetAlbum, cover);
-            }
-            else
-                views.setImageViewBitmap(R.id.widgetAlbum,BitmapFactory.decodeResource(context.getResources(), R.drawable.fallback_cover));
-        }
+            views.setImageViewBitmap(R.id.widgetAlbum,BitmapFactory.decodeResource(context.getResources(), R.drawable.fallback_cover));
 
 
         int playButton = PlayingService.isPlaying ? R.drawable.widget_pause : R.drawable.widget_play;

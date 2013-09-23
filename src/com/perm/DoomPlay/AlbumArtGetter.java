@@ -23,6 +23,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -44,11 +45,27 @@ import java.util.HashSet;
 public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
 {
     public final static String lastFmApiId = "2827ff9b2eb0158b80e7c6d0b511f25d";
+    public static final Uri artworkUri = Uri.parse("content://media/external/audio/albumart");
     boolean isLoading = false;
     String artist;
     String title;
     long albumId;
     private static HashSet<Long> set = new HashSet<Long>();
+
+    public static Bitmap getBitmapMetadata(MediaMetadataRetriever metadata)
+    {
+        byte[] bitmap = metadata.getEmbeddedPicture();
+        metadata.release();
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.outWidth = 400;
+        options.outHeight = 400;
+
+        if(bitmap != null)
+            return BitmapFactory.decodeByteArray(bitmap,0,bitmap.length,options);
+        else
+            return null;
+    }
 
     protected abstract void onGetBitmap(Bitmap bitmap);
     protected abstract void onBitmapSaved(long albumId);
@@ -129,14 +146,18 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
     static String findSrc(String artist,String title) throws ParserConfigurationException, SAXException, IOException
     {
 
-        if(artist.length() > 15)
-            artist = artist.substring(0,15);
-        if(title.length() > 15)
-            title = title.substring(0,15);
+        if(artist.length() > 20)
+            artist = artist.substring(0,20);
+        if(title.length() > 20)
+            title = title.substring(0,20);
 
-         URL url = new URL("http://ws.audioscrobbler.com/2.0/?method=track.search&limit=1&track="
-                +URLEncoder.encode(title,"utf-8")+"&artist="
-                +URLEncoder.encode(artist,"utf-8")+"&api_key=" +lastFmApiId);
+        title ="&track=" + URLEncoder.encode(title,"utf-8");
+        if(artist != null && artist != "" && artist != "unknown")
+            artist ="&artist=" + URLEncoder.encode(artist,"utf-8");
+        else
+            artist ="";
+
+        URL url = new URL("http://ws.audioscrobbler.com/2.0/?method=track.search&limit=1"+artist+title+"&api_key=" +lastFmApiId);
 
         HttpURLConnection connection=null;
         try
@@ -234,13 +255,13 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
         ContentValues cv = new ContentValues();
         cv.put("album_id", albumId);
         cv.put("_data", path);
-        String insert = MyApplication.getInstance().getContentResolver().insert(Song.artworkUri, cv).toString();
+        String insert = MyApplication.getInstance().getContentResolver().insert(artworkUri, cv).toString();
         Log.i("TAG URL",insert);
     }
 
     public static Bitmap getBitmapById(long id,Context context)
     {
-        Uri uri = ContentUris.withAppendedId(Song.artworkUri, id);
+        Uri uri = ContentUris.withAppendedId(artworkUri, id);
         try
         {
             return MediaStore.Images.Media.getBitmap(context.getContentResolver(),uri);

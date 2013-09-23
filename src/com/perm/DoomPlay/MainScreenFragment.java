@@ -27,8 +27,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import java.util.Random;
-
 public class MainScreenFragment extends Fragment
 {
     MainScreenActivity activity;
@@ -126,24 +124,9 @@ public class MainScreenFragment extends Fragment
         }
     };
 
-
-    static String[] getRandomTracks()
-    {
-        Random random = new Random();
-        String[] randomTracks = new String[10];
-
-        for(int i = 0 ; i < 10 ; i++)
-        {
-            randomTracks[i] = TracksHolder.songAllPath[random.nextInt(TracksHolder.songAllPath.length)];
-        }
-
-        return randomTracks;
-    }
     void goArtist()
     {
-        Intent intent = new Intent(AlbumArtistActivity.actionPlayArtist);
-        intent.setClass(activity,AlbumArtistActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(AlbumArtistActivity.actionPlayArtist).setClass(activity,AlbumArtistActivity.class));
     }
     void goAlbums()
     {
@@ -155,7 +138,7 @@ public class MainScreenFragment extends Fragment
     {
         Intent intent = new Intent(activity,ListTracksActivity.class);
         intent.setAction(ListTracksActivity.actionJust);
-        intent.putExtra(MainScreenActivity.keyOpenInListTrack,TracksHolder.songAllPath);
+        intent.putExtra(MainScreenActivity.keyOpenInListTrack,TracksHolder.allAudios);
         startActivity(intent);
     }
 

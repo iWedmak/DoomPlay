@@ -21,11 +21,12 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
-abstract class AbstractListVk extends AbstractControls
+abstract class AbstractList extends AbstractControls
 {
     ListView listView;
-    ListVkAdapter adapter;
+    ListsAdapter adapter;
     static protected ArrayList<Audio> audios;
     static boolean isLoading = false;
     LinearLayout linearLoading;
@@ -57,7 +58,7 @@ abstract class AbstractListVk extends AbstractControls
 
     protected void markItem(int position , boolean withScroll)
     {
-        if(PlayingService.serviceAlive && PlayingService.isOnline && equalsCollections(PlayingService.audios, audios))
+        if(PlayingService.serviceAlive && equalsCollections(PlayingService.audios, audios))
         {
 
             adapter.setMarkedItem(position);
@@ -67,7 +68,7 @@ abstract class AbstractListVk extends AbstractControls
         else
             adapter.setMarkedItem(PlayingService.valueIncredible);
     }
-     public static boolean equalsCollections(ArrayList<Audio> first, ArrayList<Audio> second)
+     public static boolean equalsCollections(List<Audio> first,List<Audio> second)
      {
          if(first == null || first.size() != second.size())
              return false;
@@ -210,7 +211,7 @@ abstract class AbstractListVk extends AbstractControls
             audios.remove(position);
             adapter.changeData(audios);
 
-            if(PlayingService.isOnline && position == PlayingService.indexCurrentTrack && equalsCollections(PlayingService.audios,audios))
+            if(position == PlayingService.indexCurrentTrack && equalsCollections(PlayingService.audios,audios))
                 playingService.playTrackFromList(PlayingService.indexCurrentTrack);
 
 
@@ -291,12 +292,6 @@ abstract class AbstractListVk extends AbstractControls
         {
             Toast.makeText(getBaseContext(),"please wait",Toast.LENGTH_SHORT).show();
             return;
-        }
-
-        if(!PlayingService.isOnline)
-        {
-            stopService(new Intent(getBaseContext(),PlayingService.class));
-            PlayingService.serviceAlive = false;
         }
 
         if(!PlayingService.serviceAlive)

@@ -62,27 +62,11 @@ public class PageFragment extends Fragment
         ImageView imgAlbum = (ImageView)page.findViewById(R.id.imageAlbum);
         TextView textNumberSong = (TextView)page.findViewById(R.id.textNumberSong);
 
-        if(!PlayingService.isOnline)
-        {
-            Song song = new Song(FullPlaybackActivity.tracks[pageNumber]);
-            Bitmap background = song.getAlbumArt(getActivity());
+        textNumberSong.setText(pageNumber + 1 + "/" + FullPlaybackActivity.audios.size());
 
-            if(background != null)
-                 imgAlbum.setImageBitmap(background);
-
-            textNumberSong.setText(pageNumber+1 + "/" + FullPlaybackActivity.tracks.length);
-        }
-        else
-        {
-            textNumberSong.setText(pageNumber + 1 + "/" + FullPlaybackActivity.audios.size());
-
-            Bitmap bitmap =  AlbumArtGetter.getBitmapById(PlayingService.audios.get(pageNumber).aid,getActivity());
-            if(bitmap != null)
-                imgAlbum.setImageBitmap(bitmap);
-
-
-        }
-
+        Bitmap bitmap =  AlbumArtGetter.getBitmapById(PlayingService.audios.get(pageNumber).aid,getActivity());
+        if(bitmap != null)
+            imgAlbum.setImageBitmap(bitmap);
 
 
         return page;

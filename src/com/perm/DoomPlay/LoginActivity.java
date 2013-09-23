@@ -60,7 +60,8 @@ public class LoginActivity extends Activity
         webview.loadUrl(url);
     }
 
-    class VkontakteWebViewClient extends WebViewClient {
+    class VkontakteWebViewClient extends WebViewClient
+    {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon)
         {

@@ -1,11 +1,13 @@
 package com.perm.vkontakte.api;
 
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Audio implements Serializable ,Parcelable
 {
@@ -39,13 +41,33 @@ public class Audio implements Serializable ,Parcelable
     }
     private Audio(){}
 
-    public Audio(String artist,String title,long aid)
+    public Audio(String artist,String title,String url,long aid)
     {
         this.artist = artist;
         this.title = title;
         this.aid = aid;
-        url = "";
+        this.url = url;
     }
+    public Audio(Cursor cursor)
+    {
+        this.url = cursor.getString(3);
+        this.title = cursor.getString(1);
+        this.artist = cursor.getString(0);
+        this.aid = cursor.getLong(2);
+
+    }
+    public static ArrayList<Audio> parseAudio(Cursor cursor)
+    {
+        ArrayList<Audio> audios = new ArrayList<Audio>();
+        do
+        {
+            audios.add(new Audio(cursor));
+
+        }while (cursor.moveToNext());
+
+        return audios;
+    }
+
 
 
 
@@ -79,7 +101,7 @@ public class Audio implements Serializable ,Parcelable
 
     public boolean equal(Audio o)
     {
-        return o.title.equals(title) && o.artist.equals(artist) && o.url.equals(url) && o.aid == aid && o.lyrics_id == lyrics_id;
+        return o.title.equals(title) && o.artist.equals(artist);
     }
 
     public static final Parcelable.Creator<Audio> CREATOR = new Parcelable.Creator<Audio>()

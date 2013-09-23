@@ -29,6 +29,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.widget.Toast;
+import com.perm.vkontakte.api.Audio;
 
 import java.io.File;
 import java.util.Arrays;
@@ -95,23 +96,22 @@ public class Utils
         }
         return true;
     }
-    public static void setRingtone(Context context,String track)
+    public static void setRingtone(Context context,Audio audio)
     {
-        Song song = new Song(track);
 
         ContentValues values = new ContentValues();
-        values.put(MediaStore.MediaColumns.DATA, track);
-        values.put(MediaStore.MediaColumns.TITLE, song.getTitle());
-        values.put(MediaStore.MediaColumns.SIZE, new File(track).getTotalSpace());
+        values.put(MediaStore.MediaColumns.DATA, audio.url);
+        values.put(MediaStore.MediaColumns.TITLE, audio.title);
+        values.put(MediaStore.MediaColumns.SIZE, new File(audio.url).getTotalSpace());
         values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/*");
-        values.put(MediaStore.Audio.Media.ARTIST, song.getArtist());
+        values.put(MediaStore.Audio.Media.ARTIST, audio.artist);
         values.put(MediaStore.Audio.Media.DURATION, 5000);
         values.put(MediaStore.Audio.Media.IS_RINGTONE, true);
         values.put(MediaStore.Audio.Media.IS_NOTIFICATION, false);
         values.put(MediaStore.Audio.Media.IS_ALARM, false);
         values.put(MediaStore.Audio.Media.IS_MUSIC, false);
 
-        Uri uri = MediaStore.Audio.Media.getContentUriForPath(track);
+        Uri uri = MediaStore.Audio.Media.getContentUriForPath(audio.url);
         Uri newUri = context.getContentResolver().insert(uri, values);
         RingtoneManager.setActualDefaultRingtoneUri(context,RingtoneManager.TYPE_RINGTONE,newUri);
 

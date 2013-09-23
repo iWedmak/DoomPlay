@@ -20,9 +20,13 @@ package com.perm.DoomPlay;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
+import com.perm.vkontakte.api.Audio;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -72,22 +76,15 @@ public class FileSystemActivity extends AbstractReceiver
         outState.putString(keyCurrentDir, currentDirectory.getAbsolutePath());
     }
 
-    private void toFullPlayback(int postion)
-    {
-        String[] filesToPlay = getRealPathes(currentDirectory);
-        int realPosition = postion - entriesFiles.length + filesToPlay.length;
-        startActivity(getToFullIntent(this,filesToPlay,realPosition));
-    }
-    public static Intent getToFullIntent(Context context,String[] toPlay,int position)
+    public static Intent getToFullIntent(Context context,ArrayList<Audio> audios)
     {
         Intent intent = new Intent(context,FullPlaybackActivity.class);
         intent.setAction(FullPlaybackActivity.actionPlayFull);
-        intent.putExtra(FileSystemActivity.keyMusic,toPlay);
-        intent.putExtra(FullPlaybackActivity.keyIndex,position);
+        intent.putExtra(FileSystemActivity.keyMusic,audios);
         return intent;
     }
 
-    FileFilter fileFilter = new FileFilter()
+    static FileFilter fileFilter = new FileFilter()
     {
         @Override
         public boolean accept(File file)
@@ -100,19 +97,31 @@ public class FileSystemActivity extends AbstractReceiver
         }
     };
 
-    public static String[] getRealPathes(File rootFile)
+    public static ArrayList<Audio> getAudiosFromFolder(File file)
     {
-        ArrayList<String> temp = new ArrayList<String>();
-            for(File file : rootFile.listFiles())
-            {
-                if(Utils.trackChecker(file.getName()))
-                    temp.add(file.getAbsolutePath());
-            }
-        String[] result = new String[temp.size()];
-        result = temp.toArray(result);
-        return result;
-    }
 
+        Cursor cursor = MyApplication.getInstance().getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+        TracksHolder.projection,MediaStore.Audio.Media.DATA + " LIKE ? ",new String[]{"%" + file.getAbsolutePath() +"%"},null);
+
+        if(!cursor.moveToFirst())
+        {
+            Log.i("TAG AUDIO","cursor is empty");
+            return null;
+        }
+
+        ArrayList<Audio> audios = Audio.parseAudio(cursor);
+        cursor.close();
+        return audios;
+    }
+    public static Audio getAudioFromFile(File file)
+    {
+        Cursor cursor = MyApplication.getInstance().getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                TracksHolder.projection,MediaStore.Audio.Media.DATA + " = ? ",new String[]{file.getAbsolutePath()},null);
+        cursor.moveToFirst();
+        Audio audio = new Audio(cursor);
+        cursor.close();
+        return audio;
+    }
     ActionMode.Callback callback = new ActionMode.Callback()
     {
         @Override
@@ -128,31 +137,34 @@ public class FileSystemActivity extends AbstractReceiver
         {
             int position =(Integer) mode.getTag();
 
-            String[] filesToPlay;
 
-
-            if(entriesFiles[position].isDirectory())
-            {
-                filesToPlay = getRealPathes(entriesFiles[position]);
-            }
-            else
-                filesToPlay = new String[]{entriesFiles[position].getAbsolutePath()};
-
-            if(filesToPlay.length == 0 )
-            {
-                Toast.makeText(getBaseContext(),"There's no valid files in this directory",Toast.LENGTH_SHORT).show();
-                return false ;
-            }
             switch(item.getItemId())
             {
                 case R.id.itemPlayAll:
                 {
-                    startActivity(getToFullIntent(getBaseContext(),filesToPlay,0));
+                    ArrayList<Audio> audios = getAudiosFromFolder(entriesFiles[position]);
+
+                    if(audios.size() == 0 )
+                    {
+                        Toast.makeText(getBaseContext(),"There's no valid files in this directory",Toast.LENGTH_SHORT).show();
+                        mode.finish();
+                        return false ;
+                    }
+
+                    startActivity(getToFullIntent(getBaseContext(),audios));
                     break;
                 }
                 case R.id.itemToPlaylist:
                 {
-                    showPlaybackDialog(filesToPlay,getSupportFragmentManager());
+                    ArrayList<Audio> audios = getAudiosFromFolder(entriesFiles[position]);
+
+                    if(audios.size() == 0 )
+                    {
+                        Toast.makeText(getBaseContext(),"There's no valid files in this directory",Toast.LENGTH_SHORT).show();
+                        mode.finish();
+                        return false ;
+                    }
+                    showPlaybackDialog(audios,getSupportFragmentManager());
                     break;
                 }
                 case R.id.itemDeleteFile:
@@ -172,11 +184,11 @@ public class FileSystemActivity extends AbstractReceiver
 
         }
     };
-    public static void showPlaybackDialog(String[] tracks, android.support.v4.app.FragmentManager fragmentManager)
+    public static void showPlaybackDialog(ArrayList<Audio> audios, android.support.v4.app.FragmentManager fragmentManager)
     {
         AddTrackFromPlaybackDialog dialog = new AddTrackFromPlaybackDialog();
         Bundle bundle = new Bundle();
-        bundle.putStringArray(AddTrackFromPlaybackDialog.keyBundleDialog,tracks);
+        bundle.putParcelableArrayList(AddTrackFromPlaybackDialog.keyBundleDialog, audios);
         dialog.setArguments(bundle);
         dialog.show(fragmentManager,"tag");
     }
@@ -207,7 +219,12 @@ public class FileSystemActivity extends AbstractReceiver
             if(entriesFiles[position].isDirectory())
                 fill(entriesFiles[position]);
             else
-                toFullPlayback(position);
+            {
+                ArrayList<Audio> audios = new ArrayList<Audio>();
+                audios.add(getAudioFromFile(entriesFiles[position]));
+                startActivity(getToFullIntent(getBaseContext(),audios));
+            }
+
         }
     };
     AdapterView.OnItemLongClickListener onItemLongClickListener = new AdapterView.OnItemLongClickListener()

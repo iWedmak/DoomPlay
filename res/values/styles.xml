@@ -5,6 +5,6 @@
     </style>
 
     <style name="MyActionBar" parent = "Widget.AppCompat.ActionBar">
-        <item name="background">@drawable/my_action_bar</item>
+        <item name="android:divider">@color/pressed</item>
     </style>
 </resources>

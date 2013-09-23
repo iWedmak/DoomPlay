@@ -25,6 +25,9 @@ import android.provider.MediaStore;
 import android.support.v7.view.ActionMode;
 import android.view.*;
 import android.widget.*;
+import com.perm.vkontakte.api.Audio;
+
+import java.util.ArrayList;
 
 public class AlbumArtistActivity extends AbstractReceiver
 {
@@ -129,31 +132,24 @@ public class AlbumArtistActivity extends AbstractReceiver
 
         startActivity(intent);
     }
-    String[] getTracksFromAlbumArtist(int position ,boolean fromAlbum)
+    ArrayList<Audio> getTracksFromAlbumArtist(int position ,boolean fromAlbum)
     {
 
         Cursor cursor;
 
         if(fromAlbum)
-            cursor = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, new String[]{MediaStore.Audio.Media.DATA},
+            cursor = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, TracksHolder.projection,
                 MediaStore.Audio.Media.IS_MUSIC + " != 0 AND " + MediaStore.Audio.Media.ALBUM + " = ?",
                 new String[]{albumArtist[position]}, null);
         else
-            cursor = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,  new String[]{MediaStore.Audio.Media.DATA},
+            cursor = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,  TracksHolder.projection,
                     MediaStore.Audio.Media.IS_MUSIC + " != 0 AND " + MediaStore.Audio.Media.ARTIST+ " = ?",
                     new String[]{albumArtist[position]}, null);
 
-        String[] result = new String[cursor.getCount()];
-        final int index = cursor.getColumnIndex(MediaStore.Audio.Media.DATA) ;
+        cursor.moveToFirst();
 
-        if(cursor.moveToFirst())
-        {
-            do
-            {
-                result[cursor.getPosition()] =( cursor.getString(index));
+        ArrayList<Audio> result = Audio.parseAudio(cursor);
 
-            } while(cursor.moveToNext());
-        }
         cursor.close();
 
         return result;
@@ -189,11 +185,11 @@ public class AlbumArtistActivity extends AbstractReceiver
                 {
                     if(currentAction.equals(actionPlayAlbum))
                     {
-                        startActivity(FileSystemActivity.getToFullIntent(getBaseContext(),getTracksFromAlbumArtist(position,true),0));
+                        startActivity(FileSystemActivity.getToFullIntent(getBaseContext(),getTracksFromAlbumArtist(position,true)));
                     }
                     else
                     {
-                        startActivity(FileSystemActivity.getToFullIntent(getBaseContext(),getTracksFromAlbumArtist(position,false),0));
+                        startActivity(FileSystemActivity.getToFullIntent(getBaseContext(),getTracksFromAlbumArtist(position,false)));
                     }
 
                     break;
@@ -257,7 +253,7 @@ public class AlbumArtistActivity extends AbstractReceiver
             if(!currentAction.equals(actionPlayArtist))
             {
                 view = inflater.inflate(R.layout.item_album,parent,false);
-                ((TextView)view.findViewById(R.id.textOnlyArtist)).setText(Song.getArtistFromAlbum(position));
+                ((TextView)view.findViewById(R.id.textOnlyArtist)).setText(TracksHolder.getArtistFromAlbum(position));
             }
             else
             {

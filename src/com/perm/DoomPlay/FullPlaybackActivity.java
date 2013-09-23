@@ -46,7 +46,6 @@ import java.util.ArrayList;
 
 public class FullPlaybackActivity  extends AbstractControls
 {
-    static String[] tracks;
     static ArrayList<Audio> audios;
     LinearLayout linearBackground;
     CustomViewPager viewPager;
@@ -172,23 +171,17 @@ public class FullPlaybackActivity  extends AbstractControls
         {
             if(!TracksHolder.isScanned)
                 startScan();
-            tracks = new String[]{getRealPathFromIntent(intent)};
+
+            audios = new ArrayList<Audio>();
+            audios.add(getRealPathFromIntent(intent));
         }
-        else if(PlayingService.isOnline)
+        else if(intent.getAction().equals(actionPlayFull))
         {
-           audios = PlayingService.audios;
+            audios =  intent.getParcelableArrayListExtra((FileSystemActivity.keyMusic));
         }
         else
         {
-            if(intent.getAction().equals(actionPlayFull))
-            {
-                tracks =  intent.getStringArrayExtra((FileSystemActivity.keyMusic));
-            }
-            else if(intent.getAction().equals(actionReturnFull))
-            {
-                tracks = PlayingService.tracks;
-            }
-
+            audios = PlayingService.audios;
         }
 
         if(intent.getIntExtra(keyIndex,11116) != 11116)
@@ -203,18 +196,25 @@ public class FullPlaybackActivity  extends AbstractControls
         outState.putBoolean(keyReturn,true);
     }
 
-    public String getRealPathFromIntent(Intent intent)
+    public Audio getRealPathFromIntent(Intent intent)
     {
+        Cursor cursor;
         if(intent.getScheme().equals("file"))
-            return new File(URI.create(intent.getData().toString())).getAbsolutePath();
+        {
+            String[] selectionArgs = new String[]{new File(URI.create(intent.getData().toString())).getAbsolutePath()};
+            cursor = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,TracksHolder.projection,
+                    MediaStore.Audio.Media.DATA + " = ? ",selectionArgs,null);
+        }
         else
         {
-            Cursor cursor = getContentResolver().query(intent.getData(),
-                    new String[]{MediaStore.Audio.Media.DATA} , null, null, null);
-
-            cursor.moveToFirst();
-            return cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
+            cursor = getContentResolver().query(intent.getData(),
+                    TracksHolder.projection , null, null, null);
         }
+        cursor.moveToFirst();
+        Audio audio = new Audio(cursor);
+        cursor.close();
+
+        return audio;
     }
 
     @Override
@@ -248,7 +248,7 @@ public class FullPlaybackActivity  extends AbstractControls
             else
                 intent.setAction(ListTracksActivity.actionJust);
 
-            intent.putExtra(MainScreenActivity.keyOpenInListTrack,PlayingService.tracks);
+            intent.putExtra(MainScreenActivity.keyOpenInListTrack,audios);
             return intent;
         }
 
@@ -261,7 +261,9 @@ public class FullPlaybackActivity  extends AbstractControls
         switch (item.getItemId())
         {
             case R.id.itemAddtoPlaylist:
-                FileSystemActivity.showPlaybackDialog(new String[]{tracks[PlayingService.indexCurrentTrack]},getSupportFragmentManager());
+                ArrayList<Audio> temp = new ArrayList<Audio>();
+                temp.add(audios.get(PlayingService.indexCurrentTrack));
+                FileSystemActivity.showPlaybackDialog(temp,getSupportFragmentManager());
                 return true;
             case R.id.itemEqualizer:
                 startEqualizer();
@@ -275,7 +277,7 @@ public class FullPlaybackActivity  extends AbstractControls
                 finish();
                 return true;
             case R.id.itemSetAsRingtone:
-                Utils.setRingtone(getBaseContext(), tracks[PlayingService.indexCurrentTrack]);
+                Utils.setRingtone(getBaseContext(), audios.get(PlayingService.indexCurrentTrack));
                 return true;
             case R.id.itemExit:
                 sendBroadcast(new Intent(actionKill));
@@ -285,11 +287,11 @@ public class FullPlaybackActivity  extends AbstractControls
                 return true;
             case R.id.itemGetLiricks:
                 if(PlayingService.isOnline)
-                   AbstractListVk.startLyricsDialog(getSupportFragmentManager(),audios.get(PlayingService.indexCurrentTrack).lyrics_id);
+                   AbstractList.startLyricsDialog(getSupportFragmentManager(), audios.get(PlayingService.indexCurrentTrack).lyrics_id);
                 else
                 {
-                    Song song = new Song(tracks[PlayingService.indexCurrentTrack]);
-                    ListTracksActivity.startLiryctDialog(getSupportFragmentManager(),song.getArtist(),song.getTitle());
+                    Audio audio = audios.get(PlayingService.indexCurrentTrack);
+                    ListTracksActivity.startLiryctDialog(getSupportFragmentManager(),audio.artist,audio.title);
                 }
                 return true;
         }
@@ -299,17 +301,12 @@ public class FullPlaybackActivity  extends AbstractControls
     private void initializeService()
     {
 
-        if(intentWas.getAction().equals(actionReturnFull) && PlayingService.isOnline)
-        {
+        if(PlayingService.isOnline)
             intentService.setAction(PlayingService.actionOnline);
-            intentService.putExtra(keyService, audios);
-        }
         else
-        {
             intentService.setAction(PlayingService.actionOffline);
-            intentService.putExtra(keyService, tracks);
-        }
 
+        intentService.putExtra(keyService, audios);
         bindService(intentService,serviceConnection,BIND_IMPORTANT);
         startService(intentService);
         PlayingService.serviceAlive = true;
@@ -380,11 +377,7 @@ public class FullPlaybackActivity  extends AbstractControls
         @Override
         public int getCount()
         {
-
-            if(PlayingService.isOnline)
-                return audios.size();
-            else
-                return tracks.length;
+            return audios.size();
         }
     }
 

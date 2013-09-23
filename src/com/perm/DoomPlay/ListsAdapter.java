@@ -19,33 +19,34 @@ package com.perm.DoomPlay;
  *    You can contact me <DoomPlaye@gmail.com>
  */
 
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import com.perm.vkontakte.api.Audio;
 
+import java.util.ArrayList;
 
-public class ListTracksAdapter extends BaseAdapter
+public class ListsAdapter extends BaseAdapter
 {
-    String[] tracks ;
     LayoutInflater inflater;
     Context context;
-    private int markedItem ;
+    int markedItem ;
+    ArrayList<Audio> audios;
 
 
-    public ListTracksAdapter(String[] tracks,Context context)
+    public ListsAdapter(ArrayList<Audio> audios, Context context)
     {
         inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         markedItem = PlayingService.valueIncredible;
-        this.tracks = tracks;
+        this.audios = audios;
         this.context = context;
     }
-    public void changeData(String[] tracks)
+    public void changeData(ArrayList<Audio> audios)
     {
-        this.tracks = tracks;
+        this.audios = audios;
         notifyDataSetChanged();
     }
 
@@ -58,13 +59,13 @@ public class ListTracksAdapter extends BaseAdapter
     @Override
     public int getCount()
     {
-        return tracks.length;
+        return audios.size();
     }
 
     @Override
     public Object getItem(int position)
     {
-        return tracks[position];
+        return audios.get(position);
     }
 
     @Override
@@ -78,7 +79,6 @@ public class ListTracksAdapter extends BaseAdapter
     {
         View view ;
         ViewHolder holder;
-        Song song = new Song(tracks[position]);
         if(convertView == null)
         {
             view = inflater.inflate(R.layout.item_song,parent,false);
@@ -95,11 +95,11 @@ public class ListTracksAdapter extends BaseAdapter
             holder =(ViewHolder)view.getTag();
         }
 
-        holder.textArtist.setText(song.getArtist());
-        holder.textTitle.setText(song.getTitle());
+        holder.textArtist.setText(audios.get(position).artist);
+        holder.textTitle.setText(audios.get(position).title);
 
         if(markedItem == position)
-             holder.textTitle.setTextColor(context.getResources().getColor(R.color.blue_text));
+            holder.textTitle.setTextColor(context.getResources().getColor(R.color.blue_text));
         else
             holder.textTitle.setTextColor(context.getResources().getColor(R.color.almost_white));
 

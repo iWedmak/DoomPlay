@@ -29,6 +29,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.*;
+import com.perm.vkontakte.api.Audio;
+
+import java.util.ArrayList;
 
 public class AddTrackFromPlaybackDialog extends DialogFragment
 {
@@ -36,7 +39,7 @@ public class AddTrackFromPlaybackDialog extends DialogFragment
     ListView listView;
     PlaylistDB playlistDB;
     String[] listPlaylist;
-    String[] tracks;
+    ArrayList<Audio> audios ;
     public static boolean isAdding = false;
     public final static String keyBundleDialog = "keybndleed";
 
@@ -54,9 +57,9 @@ public class AddTrackFromPlaybackDialog extends DialogFragment
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(onItemClickHandler);
         if(getArguments() != null)
-            tracks = getArguments().getStringArray(keyBundleDialog);
+            audios = getArguments().getParcelableArrayList(keyBundleDialog);
         else
-            tracks = new String[]{PlayingService.tracks[PlayingService.indexCurrentTrack]};
+            throw new IllegalArgumentException("tracks is null in AddTrackFromPlaybackDiaglog");
 
         return view;
 
@@ -75,7 +78,7 @@ public class AddTrackFromPlaybackDialog extends DialogFragment
                     protected Void doInBackground(String... params)
                     {
                         isAdding = true;
-                        playlistDB.addTracks(tracks, params[0]);
+                        playlistDB.addTracks(audios, params[0]);
                         isAdding = false;
                         return null;
                     }

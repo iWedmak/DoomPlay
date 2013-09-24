@@ -37,7 +37,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import com.perm.vkontakte.api.Audio;
 
 import java.io.File;
 import java.net.URI;
@@ -248,7 +247,7 @@ public class FullPlaybackActivity  extends AbstractControls
             else
                 intent.setAction(ListTracksActivity.actionJust);
 
-            intent.putExtra(MainScreenActivity.keyOpenInListTrack,audios);
+            intent.putExtra(MainScreenActivity.keyOpenInListTrack,PlayingService.audios);
             return intent;
         }
 

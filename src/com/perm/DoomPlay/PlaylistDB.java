@@ -23,7 +23,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.perm.vkontakte.api.Audio;
 
 import java.util.ArrayList;
 
@@ -32,13 +31,13 @@ import static android.provider.MediaStore.Audio.Media;
 public class PlaylistDB extends SQLiteOpenHelper
 {
 
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 8;
     private static final String DATABASE_NAME = "playlistsData";
     private static final String TABLE_LISTPLAYLIST = "listplaylist";
     private static final String KEY_POSITION_TRACK = "postiontak";
     private static final String TABLE_DEFAULT = "defaultTable";
     private static final String KEY_NAME_PLAYLIST = "playlistName";
-
+    static final String TABLE_VK = "vk_table";
 
 
 
@@ -65,18 +64,23 @@ public class PlaylistDB extends SQLiteOpenHelper
         return temp;
     }
 
+    private static void createTable(String table,SQLiteDatabase db)
+    {
+          db.execSQL("CREATE TABLE IF NOT EXISTS " + table + "("
+                  + Media._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + Media.DATA + " TEXT,"+
+                  Media.ARTIST + " TEXT,"+ Media.TITLE + " TEXT," + Media.ALBUM_ID +" LONG," + KEY_POSITION_TRACK + " INTEGER"+ ")");
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db)
     {
         String createListPlaylistTable = "CREATE TABLE " + TABLE_LISTPLAYLIST + "(" + Media._ID +
                 " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_NAME_PLAYLIST + " TEXT" +")";
 
-        String createDefaultPlaylistTable = "CREATE TABLE IF NOT EXISTS " + TABLE_DEFAULT + "("
-                + Media._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + Media.DATA + " TEXT,"+
-                Media.ARTIST + " TEXT,"+ Media.TITLE + " TEXT," + Media.ALBUM_ID +" LONG," + KEY_POSITION_TRACK + " INTEGER"+ ")";
-
-        db.execSQL(createDefaultPlaylistTable);
         db.execSQL(createListPlaylistTable);
+        createTable(TABLE_DEFAULT,db);
+        createTable(TABLE_VK,db);
+
 
         ContentValues cv = new ContentValues();
         cv.put(KEY_NAME_PLAYLIST, TABLE_DEFAULT);
@@ -87,17 +91,16 @@ public class PlaylistDB extends SQLiteOpenHelper
         {
             if(!table.equals(TABLE_DEFAULT))
             {
-                String createTable = "CREATE TABLE IF NOT EXISTS " + table + "("
-                    + Media._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + Media.DATA + " TEXT,"+
-                    Media.ARTIST + " TEXT,"+ Media.TITLE + " TEXT," + Media.ALBUM_ID +" LONG," + KEY_POSITION_TRACK + " INTEGER"+ ")";
-                db.execSQL(createTable);
+                createTable(table,db);
             }
         }
     }
-    public int getLastPosition(String playlist, SQLiteDatabase db)
+    private int getLastPosition(String playlist, SQLiteDatabase db)
     {
         Cursor c = db.query(playlist,new String[]{Media._ID},null, null, null, null, null);
-        return c.getCount() ;
+        int count = c.getCount();
+        c.close();
+        return  count;
     }
 
     @Override
@@ -111,7 +114,7 @@ public class PlaylistDB extends SQLiteOpenHelper
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_LISTPLAYLIST);
         onCreate(db);
     }
-    public void addTracks(ArrayList<Audio> audios, String playlist)
+    void addTracks(ArrayList<Audio> audios, String playlist)
     {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv;
@@ -130,7 +133,7 @@ public class PlaylistDB extends SQLiteOpenHelper
         }
         db.close();
     }
-    public void addTrack(Audio audio,String playlist)
+    void addTrack(Audio audio,String playlist)
     {
         SQLiteDatabase db = getWritableDatabase();
         int position = getLastPosition(playlist,db);
@@ -145,14 +148,14 @@ public class PlaylistDB extends SQLiteOpenHelper
         db.close();
     }
 
-    public void deleteTrack(int positionTrack,String playlist)
+    void deleteTrack(int positionTrack,String playlist)
     {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(playlist, KEY_POSITION_TRACK + " = ?", new String[]{String.valueOf(positionTrack)});
 
         db.close();
     }
-    public void setAcordingPositions(int positionTrack,String playlist)
+    void setAcordingPositions(int positionTrack,String playlist)
     {
         SQLiteDatabase db = getWritableDatabase();
         int lastPos = getLastPosition(playlist,db);
@@ -168,14 +171,18 @@ public class PlaylistDB extends SQLiteOpenHelper
         db.close();
     }
 
-    public ArrayList<Audio> getTracks(String playlist)
+    ArrayList<Audio> getTracks(String playlist)
     {
         SQLiteDatabase db = getWritableDatabase();
 
         Cursor c = db.query(playlist,TracksHolder.projection,null, null, null, null, null);
 
-        c.moveToFirst();
-        ArrayList<Audio> result = Audio.parseAudio(c);
+        ArrayList<Audio> result ;
+
+        if(c.moveToFirst())
+            result = Audio.parseAudio(c);
+        else
+            result = new ArrayList<Audio>();
 
         c.close();
         db.close();
@@ -183,7 +190,7 @@ public class PlaylistDB extends SQLiteOpenHelper
 
 
     }
-    public String[] getListPlaylistForDatabase(SQLiteDatabase db)
+    private String[] getListPlaylistForDatabase(SQLiteDatabase db)
     {
         Cursor c = db.query(TABLE_LISTPLAYLIST,new String[]{KEY_NAME_PLAYLIST},null,null,null,null,null);
 
@@ -200,7 +207,7 @@ public class PlaylistDB extends SQLiteOpenHelper
         c.close();
         return  result;
     }
-    public String[] getListPlaylist()
+    String[] getListPlaylist()
     {
 
         SQLiteDatabase db = getWritableDatabase();
@@ -225,11 +232,10 @@ public class PlaylistDB extends SQLiteOpenHelper
     {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_LISTPLAYLIST,KEY_NAME_PLAYLIST + " = ?", new String[]{playlist});
-        db.delete(playlist,null,null);
         db.execSQL("DROP TABLE IF EXISTS " + playlist);
         db.close();
     }
-    public void changeColumns(String playlist , int first,int second)
+    void changeColumns(String playlist , int first,int second)
     {
         SQLiteDatabase db = getWritableDatabase();
 
@@ -237,12 +243,18 @@ public class PlaylistDB extends SQLiteOpenHelper
         cFirst.moveToFirst();
         String idFirst = cFirst.getString(cFirst.getColumnIndex(Media._ID));
         String trackFirst = cFirst.getString(cFirst.getColumnIndex(Media.DATA));
+        String artistFirst  = cFirst.getString(cFirst.getColumnIndex(Media.ARTIST));
+        String titleFirst  = cFirst.getString(cFirst.getColumnIndex(Media.TITLE));
+        long albumIdFirst  = cFirst.getLong(cFirst.getColumnIndex(Media.ALBUM_ID));
         cFirst.close();
 
         Cursor cSecond = db.query(playlist,TracksHolder.projectionPlusId,KEY_POSITION_TRACK + " = ?",new String[]{String.valueOf(second)},null,null,null);
         cSecond.moveToFirst();
         String idSecond = cSecond.getString(cSecond.getColumnIndex(Media._ID));
         String trackSecond = cSecond.getString(cSecond.getColumnIndex(Media.DATA));
+        String artistSecond  = cSecond.getString(cSecond.getColumnIndex(Media.ARTIST));
+        String titleSecond  = cSecond.getString(cSecond.getColumnIndex(Media.TITLE));
+        long albumIdSecond  = cSecond.getLong(cSecond.getColumnIndex(Media.ALBUM_ID));
         cSecond.close();
 
 
@@ -250,10 +262,16 @@ public class PlaylistDB extends SQLiteOpenHelper
         ContentValues cv = new ContentValues();
         cv.put (KEY_POSITION_TRACK, first);
         cv.put(Media.DATA,trackSecond);
+        cv.put(Media.TITLE,titleSecond);
+        cv.put(Media.ARTIST,artistSecond);
+        cv.put(Media.ALBUM_ID,albumIdSecond);
 
         ContentValues cv2 = new ContentValues();
         cv2.put (KEY_POSITION_TRACK, second);
         cv2.put(Media.DATA,trackFirst);
+        cv2.put(Media.TITLE,titleFirst);
+        cv2.put(Media.ARTIST,artistFirst);
+        cv2.put(Media.ALBUM_ID,albumIdFirst);
 
         db.update (playlist, cv,Media._ID + " = ?",  new String[]{idFirst});
 
@@ -262,16 +280,13 @@ public class PlaylistDB extends SQLiteOpenHelper
         db.close();
 
     }
-    public void addPlaylist(String playlist)
+    void addPlaylist(String playlist)
     {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(KEY_NAME_PLAYLIST,playlist);
         db.insert(TABLE_LISTPLAYLIST,null,cv);
-        String createTable = "CREATE TABLE IF NOT EXISTS " + playlist + "("
-                + Media._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + Media.DATA + " TEXT,"+
-                Media.ARTIST + " TEXT,"+ Media.TITLE + " TEXT," + Media.ALBUM_ID +" LONG," + KEY_POSITION_TRACK + " INTEGER"+ ")";
-        db.execSQL(createTable);
+        createTable(playlist,db);
         db.close();
     }
 }

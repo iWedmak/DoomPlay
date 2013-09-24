@@ -26,7 +26,7 @@ public class Auth {
         String user_id=Utils.extractPattern(url, "user_id=(\\d*)");
         Log.i(TAG, "user_id=" + user_id);
         if(user_id==null || user_id.length()==0 || access_token==null || access_token.length()==0)
-            throw new Exception("Failed to parse redirect url "+url);
+            throw new Exception("Failed to parseAudio redirect url "+url);
         return new String[]{access_token, user_id};
     }
 }

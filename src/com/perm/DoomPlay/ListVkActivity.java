@@ -27,7 +27,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import com.perm.vkontakte.api.Account;
-import com.perm.vkontakte.api.Audio;
 import com.perm.vkontakte.api.KException;
 import org.json.JSONException;
 
@@ -40,6 +39,12 @@ public class ListVkActivity extends AbstractList
     public static final String actionMyMusic ="actionMyMusic";
     public static final String actionMyAlbums = "actionMyAlbums";
     public static final String actionJust = "actionJust";
+    private static boolean isFirst;
+    static
+    {
+        isFirst = true;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -53,6 +58,13 @@ public class ListVkActivity extends AbstractList
         initializeUi();
         initializeAbstract();
         checkIsShown(savedInstanceState);
+
+        if(audios.size() == 0 && currentAction.equals(actionMyMusic) && isFirst)
+        {
+            refreshAudios();
+            isFirst = false;
+        }
+
     }
 
     AsyncTask<Void,Void,Void> asyncTask;
@@ -96,8 +108,11 @@ public class ListVkActivity extends AbstractList
                 try
                 {
                     if(currentAction.equals(actionMyMusic))
-                        audios = TracksHolder.tempAudiosMine = MainScreenActivity.api.getAudio(Account.account.user_id,
+                    {
+                        audios = TracksHolder.audiosVk = MainScreenActivity.api.getAudio(Account.account.user_id,
                             null,null,SettingActivity.getPreference("countvkall"));
+                        PlaylistDB.getInstance(getBaseContext()).addTracks(audios,PlaylistDB.TABLE_VK);
+                    }
 
                     else if(currentAction.equals(actionMyAlbums))
                         audios =  MainScreenActivity.api.getAudio(null,

@@ -1,6 +1,7 @@
 package com.perm.vkontakte.api;
 
 import android.util.Log;
+import com.perm.DoomPlay.Audio;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -339,7 +340,7 @@ public class Api {
             status.text = unescape(obj.getString("text"));
             JSONObject jaudio = obj.optJSONObject("audio");
             if (jaudio != null) 
-                status.audio = Audio.parse(jaudio);
+                status.audio = Audio.parseAudio(jaudio);
         }
         return status;
     }
@@ -412,7 +413,7 @@ public class Api {
         params.put("title",title);
         JSONObject root = sendRequest(params);
         JSONObject response=root.getJSONObject("response");
-        return Audio.parse(response);
+        return Audio.parseAudio(response);
     }
 
     
@@ -437,7 +438,7 @@ public class Api {
         if (array != null) {
             for(int i = type_array; i<array.length(); ++i) { //get(0) is integer, it is audio count
                 JSONObject o = (JSONObject)array.get(i);
-                audios.add(Audio.parse(o));
+                audios.add(Audio.parseAudio(o));
             }
         }
         return audios;

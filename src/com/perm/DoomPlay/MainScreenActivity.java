@@ -34,7 +34,6 @@ import com.perm.vkontakte.api.Api;
 
 public class MainScreenActivity extends AbstractReceiver
 {
-    public final static String[] STAR = { "*" };
     public final static String keyOpenInListTrack = "gtsity";
     public static final boolean isJellyBean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
     public static final boolean isOldSDK =  Build.VERSION.SDK_INT <= 8;
@@ -42,7 +41,7 @@ public class MainScreenActivity extends AbstractReceiver
     public static boolean isLoading;
     public static boolean isRegister = false;
     ViewPager viewPager;
-    public static Api api;
+    static Api api;
 
     interface IScanCallback
     {

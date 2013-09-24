@@ -20,7 +20,6 @@ package com.perm.DoomPlay;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
-import com.perm.vkontakte.api.Audio;
 
 import java.util.ArrayList;
 
@@ -30,7 +29,7 @@ public class TracksHolder
     public static String[] allArtist;
     public static String[] allAlbums;
     public static String[] allAcordingArtists;
-    public static ArrayList<Audio> tempAudiosMine ;
+    public static ArrayList<Audio> audiosVk;
     public static ArrayList<Audio> allAudios;
 
 
@@ -53,6 +52,7 @@ public class TracksHolder
         Cursor cursorArtist = context.getContentResolver().query(MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI,
                 new String[]{MediaStore.Audio.Artists.ARTIST},null, null,null );
 
+        audiosVk = PlaylistDB.getInstance(context).getTracks(PlaylistDB.TABLE_VK);
 
         allAlbums = new String[cursorAlbum.getCount()];
         allArtist = new String[cursorArtist.getCount()];

@@ -66,7 +66,7 @@ public class SettingActivity extends PreferenceActivity
             {
                 Intent theIntent = new Intent(Intent.ACTION_PICK);
 
-                theIntent.setData(Uri.parse("filePath://"));
+                theIntent.setData(Uri.parseAudio("filePath://"));
                 theIntent.putExtra(Intent.EXTRA_TITLE,"Choose directory");
                 startActivityForResult(theIntent, 1);
                 return true;

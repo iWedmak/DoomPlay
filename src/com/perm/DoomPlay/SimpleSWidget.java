@@ -28,7 +28,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.RemoteViews;
-import com.perm.vkontakte.api.Audio;
 
 
 public class SimpleSWidget extends AppWidgetProvider
@@ -50,7 +49,7 @@ public class SimpleSWidget extends AppWidgetProvider
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_small);
 
         Audio audio = PlayingService.audios.get(PlayingService.indexCurrentTrack);
-        views.setTextViewText(R.id.widgetlTitle, audio.title);
+        views.setTextViewText(R.id.widgetTitle, audio.title);
         views.setTextViewText(R.id.widgetArtist,audio.artist);
 
         Bitmap cover = AlbumArtGetter.getBitmapById(audio.aid, context);

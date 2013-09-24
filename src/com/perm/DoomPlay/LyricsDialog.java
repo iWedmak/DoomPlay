@@ -24,7 +24,6 @@ import android.view.*;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.perm.vkontakte.api.Audio;
 import com.perm.vkontakte.api.KException;
 import org.json.JSONException;
 

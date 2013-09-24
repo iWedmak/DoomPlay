@@ -27,7 +27,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
-import com.perm.vkontakte.api.Audio;
 import com.perm.vkontakte.api.KException;
 import org.json.JSONException;
 

@@ -26,7 +26,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.RemoteViews;
-import com.perm.vkontakte.api.Audio;
 
 public class BigWidget extends AppWidgetProvider
 {

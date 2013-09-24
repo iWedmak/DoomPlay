@@ -1,5 +1,6 @@
 package com.perm.vkontakte.api;
 
+import com.perm.DoomPlay.Audio;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,7 +14,7 @@ public class Attachment implements Serializable {
     public String type; //photo,posted_photo,video,audio,link,note,app,poll,doc,geo,message,page
     public Photo photo; 
     //public Photo posted_photo;
-    public Audio audio; 
+    public Audio audio;
     public Link link;
     public VkPoll poll;
 
@@ -37,7 +38,7 @@ public class Attachment implements Serializable {
                 if(attachment.type.equals("link"))
                     attachment.link=Link.parse(json_attachment.getJSONObject("link"));
                 if(attachment.type.equals("audio"))
-                    attachment.audio=Audio.parse(json_attachment.getJSONObject("audio"));
+                    attachment.audio=Audio.parseAudio(json_attachment.getJSONObject("audio"));
                 if(attachment.type.equals("poll")){
                     attachment.poll=VkPoll.parse(json_attachment.getJSONObject("poll"));
                     if(attachment.poll.owner_id==0){

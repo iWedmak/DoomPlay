@@ -58,8 +58,8 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
         metadata.release();
 
         BitmapFactory.Options options = new BitmapFactory.Options();
-        options.outWidth = 400;
-        options.outHeight = 400;
+        options.outWidth = 500;
+        options.outHeight = 500;
 
         if(bitmap != null)
             return BitmapFactory.decodeByteArray(bitmap,0,bitmap.length,options);

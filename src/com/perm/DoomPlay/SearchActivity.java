@@ -29,7 +29,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
-import com.perm.vkontakte.api.Audio;
 
 import java.util.ArrayList;
 
@@ -68,7 +67,7 @@ public class SearchActivity extends AbstractList
         textNoResults = (TextView)findViewById(R.id.textNoResult);
         linearControls = (RelativeLayout)findViewById(R.id.linearControls);
         intentService = new Intent(this,PlayingService.class);
-        intentService.setAction(PlayingService.actionOnline);
+        intentService.setAction(PlayingService.actionOffline);
         imgPlay = (ImageView)findViewById(R.id.imagePlay) ;
         imgShuffle = (ImageView)findViewById(R.id.imageShuffle);
         imgRepeat = (ImageView)findViewById(R.id.imageRepeat);

@@ -26,7 +26,6 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
-import com.perm.vkontakte.api.Audio;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -97,26 +96,27 @@ public class FileSystemActivity extends AbstractReceiver
         }
     };
 
-    public static ArrayList<Audio> getAudiosFromFolder(File file)
+    public static ArrayList<Audio> getAudiosFromFolder(File file,Context context)
     {
 
-        Cursor cursor = MyApplication.getInstance().getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-        TracksHolder.projection,MediaStore.Audio.Media.DATA + " LIKE ? ",new String[]{"%" + file.getAbsolutePath() +"%"},null);
 
-        if(!cursor.moveToFirst())
-        {
-            Log.i("TAG AUDIO","cursor is empty");
-            return null;
-        }
+        Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                TracksHolder.projection,MediaStore.Audio.Media.IS_MUSIC + " != 0 AND "+
+                MediaStore.Audio.Media.DATA + " LIKE ? ",new String[]{"%"+file.getAbsolutePath().substring(4) +"%"},null);
+
+        cursor.moveToFirst();
 
         ArrayList<Audio> audios = Audio.parseAudio(cursor);
         cursor.close();
         return audios;
     }
-    public static Audio getAudioFromFile(File file)
+    public static Audio getAudioFromFile(File file,Context context)
     {
-        Cursor cursor = MyApplication.getInstance().getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                TracksHolder.projection,MediaStore.Audio.Media.DATA + " = ? ",new String[]{file.getAbsolutePath()},null);
+        Log.i("TAG AUDIO",file.getAbsolutePath().substring(4));
+
+        Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                TracksHolder.projection,MediaStore.Audio.Media.DATA + " LIKE ? ",new String[]{file.getAbsolutePath().substring(4)}, null);
+
         cursor.moveToFirst();
         Audio audio = new Audio(cursor);
         cursor.close();
@@ -142,7 +142,7 @@ public class FileSystemActivity extends AbstractReceiver
             {
                 case R.id.itemPlayAll:
                 {
-                    ArrayList<Audio> audios = getAudiosFromFolder(entriesFiles[position]);
+                    ArrayList<Audio> audios = getAudiosFromFolder(entriesFiles[position],getBaseContext());
 
                     if(audios.size() == 0 )
                     {
@@ -156,7 +156,7 @@ public class FileSystemActivity extends AbstractReceiver
                 }
                 case R.id.itemToPlaylist:
                 {
-                    ArrayList<Audio> audios = getAudiosFromFolder(entriesFiles[position]);
+                    ArrayList<Audio> audios = getAudiosFromFolder(entriesFiles[position],getBaseContext());
 
                     if(audios.size() == 0 )
                     {
@@ -220,8 +220,8 @@ public class FileSystemActivity extends AbstractReceiver
                 fill(entriesFiles[position]);
             else
             {
-                ArrayList<Audio> audios = new ArrayList<Audio>();
-                audios.add(getAudioFromFile(entriesFiles[position]));
+                ArrayList <Audio> audios = new ArrayList<Audio>();
+                audios.add(getAudioFromFile(entriesFiles[position],getBaseContext()));
                 startActivity(getToFullIntent(getBaseContext(),audios));
             }
 

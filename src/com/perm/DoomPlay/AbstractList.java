@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.perm.vkontakte.api.Account;
-import com.perm.vkontakte.api.Audio;
 import com.perm.vkontakte.api.KException;
 import org.json.JSONException;
 
@@ -74,7 +73,7 @@ abstract class AbstractList extends AbstractControls
              return false;
 
          for (int i = 0 ; i < first.size(); i++)
-             if (!first.get(i).equal(second.get(i)))
+             if (!first.get(i).equals(second.get(i)))
                 return false;
 
          return true;
@@ -260,8 +259,8 @@ abstract class AbstractList extends AbstractControls
                     try
                     {
                        MainScreenActivity.api.addAudio(audios.get(params[0]).aid, audios.get(params[0]).owner_id);
-                       if(TracksHolder.tempAudiosMine != null)
-                            TracksHolder.tempAudiosMine.add(0,audios.get(params[0]));
+                       if(TracksHolder.audiosVk != null)
+                            TracksHolder.audiosVk.add(0,audios.get(params[0]));
 
                     } catch (IOException e) {
                         e.printStackTrace();

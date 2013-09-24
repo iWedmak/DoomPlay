@@ -30,7 +30,6 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.RemoteViews;
-import com.perm.vkontakte.api.Audio;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -196,7 +195,9 @@ public class DownloadingService extends Service
             intent.setAction(android.content.Intent.ACTION_VIEW);
             intent.setDataAndType(Uri.fromFile(new File(filePath)), "audio/*");
 
-            notification.contentIntent = PendingIntent.getActivity(getBaseContext(),0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+            notification.contentIntent = PendingIntent.getActivity(getBaseContext(),0,intent,0);
+
+            MyApplication.getInstance().sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + filePath)));
 
             manager.notify(notifId,notification);
 

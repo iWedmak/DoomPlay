@@ -1,8 +1,9 @@
-package com.perm.vkontakte.api;
+package com.perm.DoomPlay;
 
 import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.perm.vkontakte.api.Api;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,7 +20,7 @@ public class Audio implements Serializable ,Parcelable
     public long lyrics_id;
     public long owner_id;
 
-    public static Audio parse(JSONObject o) throws NumberFormatException, JSONException{
+    public static Audio parseAudio(JSONObject o) throws NumberFormatException, JSONException{
         Audio audio = new Audio();
         audio.aid = Long.parseLong(o.getString("aid"));
         if(o.has("performer"))
@@ -58,6 +59,7 @@ public class Audio implements Serializable ,Parcelable
     }
     public static ArrayList<Audio> parseAudio(Cursor cursor)
     {
+
         ArrayList<Audio> audios = new ArrayList<Audio>();
         do
         {
@@ -67,10 +69,6 @@ public class Audio implements Serializable ,Parcelable
 
         return audios;
     }
-
-
-
-
 
     @Override
     public int describeContents()
@@ -98,10 +96,16 @@ public class Audio implements Serializable ,Parcelable
         dest.writeLong(owner_id);
     }
 
-
-    public boolean equal(Audio o)
+    @Override
+    public boolean equals(Object o)
     {
-        return o.title.equals(title) && o.artist.equals(artist);
+        return o.getClass() == Audio.class && url.equals(((Audio)o).url);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return url.hashCode();
     }
 
     public static final Parcelable.Creator<Audio> CREATOR = new Parcelable.Creator<Audio>()

@@ -29,7 +29,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
-import com.perm.vkontakte.api.Audio;
 
 import java.util.ArrayList;
 
@@ -289,7 +288,7 @@ public class ListTracksActivity extends AbstractList
         listView = (ListView)findViewById(R.id.listAllSongs);
         playlistDB = PlaylistDB.getInstance(this);
         intentService = new Intent(this,PlayingService.class);
-        intentService.setAction(PlayingService.actionOnline);
+        intentService.setAction(PlayingService.actionOffline);
         intentService.putExtra(FullPlaybackActivity.keyService, audios);
         adapter = new ListsAdapter(audios,this);
         listView.setAdapter(adapter);

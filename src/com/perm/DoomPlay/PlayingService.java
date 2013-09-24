@@ -40,7 +40,6 @@ import android.preference.PreferenceManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.widget.RemoteViews;
-import com.perm.vkontakte.api.Audio;
 
 import java.io.IOException;
 import java.util.ArrayList;

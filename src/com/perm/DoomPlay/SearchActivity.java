@@ -79,7 +79,8 @@ public class SearchActivity extends AbstractList
 
         listView.setOnItemClickListener(onItemTrackClick);
         listView.setOnItemLongClickListener(onItemLongTrackClick);
-        adapter = new ListsAdapter(new ArrayList<Audio>(),getBaseContext());
+        audios = new ArrayList<Audio>();
+        adapter = new ListsAdapter(audios,getBaseContext());
         listView.setAdapter(adapter);
 
     }

@@ -47,9 +47,9 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
     public final static String lastFmApiId = "2827ff9b2eb0158b80e7c6d0b511f25d";
     public static final Uri artworkUri = Uri.parse("content://media/external/audio/albumart");
     boolean isLoading = false;
-    String artist;
-    String title;
-    long albumId;
+    private String artist;
+    private String title;
+    private long albumId;
     private static HashSet<Long> set = new HashSet<Long>();
 
     public static Bitmap getBitmapMetadata(MediaMetadataRetriever metadata)
@@ -152,10 +152,10 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
             title = title.substring(0,20);
 
         title ="&track=" + URLEncoder.encode(title,"utf-8");
-        if(artist != null && artist != "" && artist != "unknown")
+        if(artist != null && !artist.equals("")  && !artist.equals("unknown"))
             artist ="&artist=" + URLEncoder.encode(artist,"utf-8");
         else
-            artist ="";
+            artist = "";
 
         URL url = new URL("http://ws.audioscrobbler.com/2.0/?method=track.search&limit=1"+artist+title+"&api_key=" +lastFmApiId);
 

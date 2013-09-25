@@ -66,21 +66,24 @@ abstract class AbstractVkItems extends AbstractReceiver
         cancelLoading();
         super.onBackPressed();
     }
-    AdapterView.OnItemClickListener onClickListener = new AdapterView.OnItemClickListener()
-    {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-        {
-
-            if(!isLoading)
+            AdapterView.OnItemClickListener onClickListener = new AdapterView.OnItemClickListener()
             {
-                if(Utils.isOnline(getBaseContext()))
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id)
                 {
-                    taskLoader = new TaskLoader();
-                    taskLoader.execute(position);
-                }
 
-            }
+                    if(!isLoading)
+                    {
+                        if(Utils.isOnline(getBaseContext()))
+                        {
+                            taskLoader = new TaskLoader();
+                            taskLoader.execute(position);
+                        }
+                        else
+                        {
+                            Toast.makeText(getBaseContext(), "check internet connection", Toast.LENGTH_SHORT).show();
+                        }
+                    }
             else
                 Toast.makeText(getBaseContext(), "please wait", Toast.LENGTH_SHORT).show();
         }

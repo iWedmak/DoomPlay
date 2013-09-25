@@ -35,26 +35,6 @@ abstract class AbstractList extends AbstractControls
     {
         super.onCreate(savedInstanceState);
     }
-
-    @Override
-    protected void onServiceAbstractConnected()
-    {
-        playingService.setOnLoadingTrackListener(new PlayingService.OnLoadingTrackListener()
-        {
-            @Override
-            public void onLoadingTrackStarted()
-            {
-                linearLoading.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onLoadingTrackEnded()
-            {
-                linearLoading.setVisibility(View.GONE);
-            }
-        });
-    }
-
     protected void markItem(int position , boolean withScroll)
     {
         if(PlayingService.serviceAlive && equalsCollections(PlayingService.audios, audios))

@@ -31,8 +31,6 @@ import android.provider.MediaStore;
 import android.widget.Toast;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class Utils
@@ -122,12 +120,6 @@ public class Utils
         final NetworkInfo netInfo = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
 
         return (netInfo != null && netInfo.isConnected());
-    }
-
-    public static String[] getShuffledTracks(String[] tracks)
-    {
-        Collections.shuffle(Arrays.asList(tracks));
-        return tracks;
     }
 
     public static boolean isIntentAvailable(Context context, Intent intent)

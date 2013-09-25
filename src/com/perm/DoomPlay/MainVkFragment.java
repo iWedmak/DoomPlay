@@ -87,6 +87,8 @@ public class MainVkFragment extends Fragment
                             break;
                     }
                 }
+                else
+                    Toast.makeText(activity,"check your internet connection",Toast.LENGTH_SHORT).show();
             }
             else
                 Toast.makeText(activity,"please wait",Toast.LENGTH_SHORT).show();

@@ -52,7 +52,7 @@ public class TracksHolder
         Cursor cursorArtist = context.getContentResolver().query(MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI,
                 new String[]{MediaStore.Audio.Artists.ARTIST},null, null,null );
 
-        audiosVk = PlaylistDB.getInstance(context).getTracks(PlaylistDB.TABLE_VK);
+        audiosVk = PlaylistDB.getInstance(context).getVkAudios();
 
         allAlbums = new String[cursorAlbum.getCount()];
         allArtist = new String[cursorArtist.getCount()];

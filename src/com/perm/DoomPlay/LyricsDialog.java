@@ -39,13 +39,21 @@ public class LyricsDialog extends DialogFragment
     public final static String keyLyricsTitle = "lyr_Title";
     private String title;
     boolean isLoading ;
-    boolean isFirstResume;
+    private boolean isFirstResume;
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        isFirstResume = true;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         isLoading = false;
-        isFirstResume = true;
+
         title = getArguments().getString(keyLyricsTitle);
         View view = inflater.inflate(R.layout.dialog_lyrics,container,false);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -55,6 +63,8 @@ public class LyricsDialog extends DialogFragment
         return view;
     }
     AsyncTask<Void,Void,String> task ;
+
+
 
     private void getLyrics()
     {

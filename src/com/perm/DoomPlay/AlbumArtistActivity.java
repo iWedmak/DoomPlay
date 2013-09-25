@@ -24,7 +24,10 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.view.ActionMode;
 import android.view.*;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -36,7 +39,6 @@ public class AlbumArtistActivity extends AbstractReceiver
 
     public final static String actionPlayArtist ="action.list.playArtist";
     public final static String actionPlayAlbum = "action.list.playAlbum";
-    public final static String actionAddAlbum = "action.add.album";
     PlaylistDB playlistDB ;
     static String currentAction = null;
 
@@ -47,14 +49,7 @@ public class AlbumArtistActivity extends AbstractReceiver
 
         currentAction = getIntent().getAction();
 
-        if(!currentAction.equals(actionAddAlbum))
-            setContentView(R.layout.list_album_artist);
-        else
-        {
-            setContentView(R.layout.list_albumart_add);
-            LinearLayout linearAddToList = (LinearLayout)findViewById(R.id.linearToPlaylist);
-            linearAddToList.setOnClickListener(onClickAddToList);
-        }
+        setContentView(R.layout.list_album_artist);
         listView = (ListView)findViewById(R.id.listAlbumArtist);
 
 
@@ -71,16 +66,6 @@ public class AlbumArtistActivity extends AbstractReceiver
         listView.setOnItemLongClickListener(onLongClickAlbumArtist);
     }
 
-    View.OnClickListener onClickAddToList = new View.OnClickListener()
-    {
-        @Override
-        public void onClick(View v)
-        {
-            startActivity(new Intent(getBaseContext(),PlaylistActivity.class));
-            finish();
-        }
-    };
-
     AdapterView.OnItemClickListener onClickAlbumArtist = new AdapterView.OnItemClickListener()
     {
         @Override
@@ -88,11 +73,11 @@ public class AlbumArtistActivity extends AbstractReceiver
         {
             if(currentAction.equals(actionPlayArtist))
             {
-                onClickOpenArtist(position);
+                onClickOpen(position,false);
             }
             else
             {
-                onClickOpenAlbum(position);
+                onClickOpen(position, true);
             }
         }
     };
@@ -101,34 +86,17 @@ public class AlbumArtistActivity extends AbstractReceiver
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
         {
-            if(!currentAction.equals(actionAddAlbum))
-                startSupportActionMode(callback).setTag(position);
 
-            else
-            {
-                addToPlaylist(position);
-                Toast.makeText(getBaseContext(),"album added",Toast.LENGTH_SHORT).show();
-            }
+            startSupportActionMode(callback).setTag(position);
             return true;
         }
     };
 
-    void onClickOpenAlbum(int position)
+    void onClickOpen(int position,boolean isAlbum)
     {
-        Intent intent = null;
-
-        if(currentAction.equals(actionPlayAlbum))
-        {
-            intent = new Intent(getBaseContext(),ListTracksActivity.class);
-            intent.setAction(ListTracksActivity.actionJust);
-            intent.putExtra(MainScreenActivity.keyOpenInListTrack, getTracksFromAlbumArtist(position, true));
-        }
-        else if(currentAction.equals(actionAddAlbum))
-        {
-            intent = new Intent(getBaseContext(),ListTrackToListActivity.class);
-            intent.putExtra(ListTrackToListActivity.keyAllTracks, getTracksFromAlbumArtist(position, true));
-        }
-
+        Intent intent = new Intent(getBaseContext(),ListTracksActivity.class);
+        intent.setAction(ListTracksActivity.actionJust);
+        intent.putExtra(MainScreenActivity.keyOpenInListTrack, getTracksFromAlbumArtist(position, isAlbum));
         startActivity(intent);
     }
     ArrayList<Audio> getTracksFromAlbumArtist(int position ,boolean fromAlbum)
@@ -154,13 +122,6 @@ public class AlbumArtistActivity extends AbstractReceiver
         return result;
     }
 
-    void onClickOpenArtist(int position)
-    {
-        Intent intent = new Intent(this,ListTracksActivity.class);
-        intent.setAction(ListTracksActivity.actionJust);
-        intent.putExtra(MainScreenActivity.keyOpenInListTrack, getTracksFromAlbumArtist(position, false));
-        startActivity(intent);
-    }
     ActionMode.Callback  callback = new ActionMode.Callback()
     {
         @Override
@@ -196,7 +157,7 @@ public class AlbumArtistActivity extends AbstractReceiver
                 case R.id.itemToPlaylist:
                 {
 
-                    if(currentAction.equals(actionPlayAlbum) || currentAction.equals(actionAddAlbum))
+                    if(currentAction.equals(actionPlayAlbum))
                         FileSystemActivity.showPlaybackDialog(getTracksFromAlbumArtist(position,true),getSupportFragmentManager());
                     else
                         FileSystemActivity.showPlaybackDialog(getTracksFromAlbumArtist(position,false),getSupportFragmentManager());

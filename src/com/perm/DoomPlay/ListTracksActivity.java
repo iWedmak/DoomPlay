@@ -313,14 +313,8 @@ public class ListTracksActivity extends AbstractList
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        if(!currentAction.equals(actionPlaylist))
-        {
-            getMenuInflater().inflate(R.menu.bar_list,menu);
-        }
-        else
-        {
-            getMenuInflater().inflate(R.menu.bar_list_edit,menu);
-        }
+
+        getMenuInflater().inflate(R.menu.bar_list,menu);
         return true;
     }
 

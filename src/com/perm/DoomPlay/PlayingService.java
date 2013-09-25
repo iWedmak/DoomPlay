@@ -76,6 +76,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     AudioManager audioManager ;
     public static ArrayList<Audio> audios ;
     public static boolean isLoadingTrack;
+    AFListener afListener ;
 
     private OnLoadingTrackListener loadingListener;
 
@@ -98,8 +99,10 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         isShuffle = false;
         isPlaying = true;
         isLoop = false;
+        afListener = new AFListener();
         ((TelephonyManager)getSystemService(TELEPHONY_SERVICE)).listen(new CallListener(),CallListener.LISTEN_CALL_STATE);
         audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        audioManager.requestAudioFocus(afListener,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN );
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
 
         serviceAlive = true;
@@ -124,6 +127,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         isPlaying = false;
         sendBroadcast(new Intent(actionIconPlay));
         sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
+        audioManager.abandonAudioFocus(afListener);
     }
     private void downloadAlbumArt(Audio audio)
     {
@@ -304,7 +308,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         }
     }
 
-    AFListener afListener = new AFListener();
+
 
     private void loadMusic()
     {
@@ -357,9 +361,9 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     }
     void partOfLoadMusic()
     {
-        audioManager.requestAudioFocus(afListener,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN );
         isPrepared = true;
         mediaPlayer.setOnCompletionListener(this);
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
         if(isPlaying)
         {

@@ -49,21 +49,37 @@ public class Audio implements Serializable ,Parcelable
         this.aid = aid;
         this.url = url;
     }
-    public Audio(Cursor cursor)
+    public static Audio createAudioCursor(Cursor cursor)
     {
-        this.url = cursor.getString(3);
-        this.title = cursor.getString(1);
-        this.artist = cursor.getString(0);
-        this.aid = cursor.getLong(2);
+        Audio audio = new Audio();
+        audio.url = cursor.getString(3);
+        audio.title = cursor.getString(1);
+        audio.artist = cursor.getString(0);
+        audio.aid = cursor.getLong(2);
 
+        return audio;
     }
+    public static Audio createAudioCursorExtend(Cursor cursor)
+    {
+        Audio audio = new Audio();
+        audio.url = cursor.getString(3);
+        audio.title = cursor.getString(1);
+        audio.artist = cursor.getString(0);
+        audio.aid = cursor.getLong(2);
+        audio.owner_id = cursor.getLong(4);
+        audio.lyrics_id = cursor.getLong(5);
+
+        return audio;
+    }
+
+
     public static ArrayList<Audio> parseAudio(Cursor cursor)
     {
 
         ArrayList<Audio> audios = new ArrayList<Audio>();
         do
         {
-            audios.add(new Audio(cursor));
+            audios.add(createAudioCursor(cursor));
 
         }while (cursor.moveToNext());
 

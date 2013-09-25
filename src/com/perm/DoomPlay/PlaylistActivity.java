@@ -96,12 +96,6 @@ public class PlaylistActivity extends AbstractReceiver
         {
             switch (item.getItemId())
             {
-                case R.id.itemAddTracks:
-                    Intent intentAlb = new Intent(getBaseContext(),AlbumArtistActivity.class);
-                    intentAlb.setAction(AlbumArtistActivity.actionAddAlbum);
-                    startActivity(intentAlb);
-                    mode.finish();
-                    return true;
                 case R.id.itemDeleteList:
                     playlistDB.deletePlaylist(selectedPlaylist);
                     updateList();

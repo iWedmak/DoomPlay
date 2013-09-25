@@ -106,6 +106,26 @@ public class SearchVkActivity extends AbstractList
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    @Override
+    protected void onServiceAbstractConnected()
+    {
+        playingService.setOnLoadingTrackListener(new PlayingService.OnLoadingTrackListener()
+        {
+            @Override
+            public void onLoadingTrackStarted()
+            {
+                linearLoading.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onLoadingTrackEnded()
+            {
+                linearLoading.setVisibility(View.GONE);
+            }
+        });
+    }
+
     TaskLoader taskLoader;
     void initializeUi()
     {
@@ -115,7 +135,9 @@ public class SearchVkActivity extends AbstractList
         buttonSearch = (ImageView)findViewById(R.id.imageSearchVk);
         buttonSearch.setOnClickListener(onClickSearch);
         listView.setOnItemClickListener(onItemTrackClick);
-        adapter = new ListsAdapter(new ArrayList<Audio>(),this);
+
+        audios = new ArrayList<Audio>();
+        adapter = new ListsAdapter(audios,this);
         listView.setAdapter(adapter);
         listView.setOnItemLongClickListener(onItemLongVkListener);
         linearControls = (RelativeLayout)findViewById(R.id.linearControls);
@@ -163,8 +185,9 @@ public class SearchVkActivity extends AbstractList
         {
             try
             {
-                audios = MainScreenActivity.api.searchAudio(params[0],
-                        SettingActivity.getPreference("countvksearch"));
+                audios.clear();
+                audios.addAll(MainScreenActivity.api.searchAudio(params[0],
+                        SettingActivity.getPreference("countvksearch")));
 
             } catch (IOException e) {
                 e.printStackTrace();

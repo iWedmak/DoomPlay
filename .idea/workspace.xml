@@ -50,38 +50,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e368e502-6d83-4f2f-87a0-4a155d5c006e" name="Default" comment="">
-      <change type="MOVED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\src\com\perm\vkontakte\api\Audio.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/Audio.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/CustomViewPager.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LICENSE.txt" />
+      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\layout\list_albumart_add.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\menu\bar_list_edit.xml" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\src\com\perm\DoomPlay\ListTrackToListActivity.java" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/AbstractList.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/AbstractList.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/AbstractVkItems.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/AbstractVkItems.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/AddTrackFromPlaybackDialog.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/AddTrackFromPlaybackDialog.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/AlbumArtGetter.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/AlbumArtGetter.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/AlbumArtistActivity.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/AlbumArtistActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/vkontakte/api/Api.java" afterPath="$PROJECT_DIR$/src/com/perm/vkontakte/api/Api.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/vkontakte/api/Attachment.java" afterPath="$PROJECT_DIR$/src/com/perm/vkontakte/api/Attachment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/vkontakte/api/Auth.java" afterPath="$PROJECT_DIR$/src/com/perm/vkontakte/api/Auth.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/BigWidget.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/BigWidget.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/DownloadingService.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/DownloadingService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/Audio.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/Audio.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/FileSystemActivity.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/FileSystemActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/FullPlaybackActivity.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/FullPlaybackActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/ListTrackToListActivity.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/ListTrackToListActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/ListTracksActivity.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/ListTracksActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/ListVkActivity.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/ListVkActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/ListsAdapter.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/ListsAdapter.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/LyricsDialog.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/LyricsDialog.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/MainScreenActivity.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/MainScreenActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/MainVkFragment.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/MainVkFragment.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/PageFragment.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/PageFragment.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/PlayingService.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/PlayingService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/PlaylistActivity.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/PlaylistActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/PlaylistDB.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/PlaylistDB.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/SearchActivity.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/SearchActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/SearchVkActivity.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/SearchVkActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/SettingActivity.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/SettingActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/SimpleSWidget.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/SimpleSWidget.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/TracksHolder.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/TracksHolder.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/vkontakte/api/User.java" afterPath="$PROJECT_DIR$/src/com/perm/vkontakte/api/User.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/Utils.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/Utils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/VkAlbumsActivity.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/VkAlbumsActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/VkPopularActivity.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/VkPopularActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/vkontakte/api/VkStatus.java" afterPath="$PROJECT_DIR$/src/com/perm/vkontakte/api/VkStatus.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/menu/action_option_playlist.xml" afterPath="$PROJECT_DIR$/res/menu/action_option_playlist.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="DoomPlay.iws" />
@@ -98,55 +91,55 @@
     <file path="$PROJECT_DIR$/actionbarsherlock/res/layout-xlarge/abs__screen_action_bar.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1378539840703" ignored="false" />
     <file path="$PROJECT_DIR$/actionbarsherlock/res/values/abs__ids.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1378539840703" ignored="false" />
     <file path="/MainScreenActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379425864248" ignored="false" />
-    <file path="/SearchVkActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379854242162" ignored="false" />
+    <file path="/SearchVkActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380140496161" ignored="false" />
     <file path="/ExceptionHandler.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1378578111844" ignored="false" />
     <file path="/bar_main.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1378543578881" ignored="false" />
     <file path="/MainScreenFragment.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379955987913" ignored="false" />
-    <file path="/MainVkFragment.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380050229604" ignored="false" />
+    <file path="/MainVkFragment.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380138041024" ignored="false" />
     <file path="/search_vk.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1378551534677" ignored="false" />
     <file path="/main_vk_fragment.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1378650403218" ignored="false" />
     <file path="/AbstractControls.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379854055027" ignored="false" />
-    <file path="/ListVkActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380047971523" ignored="false" />
+    <file path="/ListVkActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380135946918" ignored="false" />
     <file path="/AbstractLists.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379700126062" ignored="false" />
     <file path="/ListTracksAdapter.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379923937110" ignored="false" />
     <file path="/AbstractService.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1378569876320" ignored="false" />
-    <file path="/PlayingService.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379956533539" ignored="false" />
-    <file path="/Audio.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380047271645" ignored="false" />
+    <file path="/PlayingService.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380138818076" ignored="false" />
+    <file path="/Audio.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380135821113" ignored="false" />
     <file path="/AbstractListVk.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379854659252" ignored="false" />
     <file path="/VkActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1378578475758" ignored="false" />
     <file path="/BigWidget.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379923829949" ignored="false" />
     <file path="/AbstractReceiver.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379860959826" ignored="false" />
     <file path="/AndroidManifest.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379869108979" ignored="false" />
-    <file path="/TracksHolder.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380050198168" ignored="false" />
+    <file path="/TracksHolder.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380135968855" ignored="false" />
     <file path="/ListTracksActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380035689076" ignored="false" />
     <file path="/Api.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379764192180" ignored="false" />
-    <file path="/Dummy.txt" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380046994471" ignored="false" />
+    <file path="/Dummy.txt" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380132594460" ignored="false" />
     <file path="/VkPopularActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379421853536" ignored="false" />
     <file path="/list_vk.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379057618266" ignored="false" />
     <file path="/item_genre.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1378641920520" ignored="false" />
     <file path="/fragment.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380031023918" ignored="false" />
     <file path="/VkAlbumsActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379704519786" ignored="false" />
     <file path="/VkFriendsActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1378828315679" ignored="false" />
-    <file path="/LyricsDialog.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379749858730" ignored="false" />
+    <file path="/LyricsDialog.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380140280701" ignored="false" />
     <file path="/lyrics_dialog.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1378740921785" ignored="false" />
     <file path="/Utils.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379962822258" ignored="false" />
-    <file path="/FullPlaybackActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380035660525" ignored="false" />
+    <file path="/FullPlaybackActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380136835889" ignored="false" />
     <file path="/pref.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379855686030" ignored="false" />
     <file path="/strings.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379852112299" ignored="false" />
     <file path="/SettingActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379860220145" ignored="false" />
-    <file path="/PlaylistDB.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380037988873" ignored="false" />
+    <file path="/PlaylistDB.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380137525479" ignored="false" />
     <file path="/PlaylistActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379962291187" ignored="false" />
     <file path="/Account.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1378829473615" ignored="false" />
-    <file path="/AlbumArtistActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379961604787" ignored="false" />
+    <file path="/AlbumArtistActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380139407364" ignored="false" />
     <file path="/VkFrGrActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379446585343" ignored="false" />
-    <file path="/PageFragment.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379786181160" ignored="false" />
+    <file path="/PageFragment.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380138003947" ignored="false" />
     <file path="/bar_menu_fullonline.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1378923436494" ignored="false" />
-    <file path="/SearchActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380035724541" ignored="false" />
+    <file path="/SearchActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380134924746" ignored="false" />
     <file path="/action_vk_my.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379535889415" ignored="false" />
     <file path="/playing.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1378995131517" ignored="false" />
-    <file path="/AlbumArtGetter.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379920829348" ignored="false" />
+    <file path="/AlbumArtGetter.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380139549915" ignored="false" />
     <file path="/bar_vk_pgf.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379314178999" ignored="false" />
-    <file path="/AbstractVkItems.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379055917808" ignored="false" />
+    <file path="/AbstractVkItems.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380133559959" ignored="false" />
     <file path="/CustomViewPager.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379015779738" ignored="false" />
     <file path="/bar_vk_mymusic.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379055118059" ignored="false" />
     <file path="/SleepDialog.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379697061170" ignored="false" />
@@ -157,7 +150,7 @@
     <file path="/AddListDialog.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379530571791" ignored="false" />
     <file path="/AudioAlbum.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379529742744" ignored="false" />
     <file path="/AddTrackToAlbumDialog.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379615354583" ignored="false" />
-    <file path="/FileSystemActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380049348651" ignored="false" />
+    <file path="/FileSystemActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380139893911" ignored="false" />
     <file path="/SimpleSWidget.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379923837865" ignored="false" />
     <file path="/VkDatabase.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379617939391" ignored="false" />
     <file path="/notif.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379694578876" ignored="false" />
@@ -169,9 +162,10 @@
     <file path="/my_new_action_bar.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379869278585" ignored="false" />
     <file path="D:/workspace/VanilaMusic/src/org/kreed/vanilla/PlaybackActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379925740592" ignored="false" />
     <file path="/ListsAdapter.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379960287220" ignored="false" />
-    <file path="/AbstractList.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380032439827" ignored="false" />
+    <file path="/AbstractList.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380139128659" ignored="false" />
     <file path="/AddTrackFromPlaybackDialog.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379961430244" ignored="false" />
     <file path="/ListTrackToListActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379962169430" ignored="false" />
+    <file path="D:/workspace/VanilaMusic/src/org/kreed/vanilla/PlaybackService.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380138568520" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -186,7 +180,6 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -223,6 +216,7 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </breakpoint_any>
+    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <line_breakpoints default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint url="file://$PROJECT_DIR$/src/com/perm/DoomPlay/AlbumArtistActivity.java" line="20" class="AlbumArtistActivity.java" package="">
         <option name="ENABLED" value="true" />
@@ -279,75 +273,58 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="SimpleSWidget.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/SimpleSWidget.java">
+      <file leaf-file-name="MainVkFragment.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/MainVkFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="47" column="59" selection-start="1439" selection-end="1439" vertical-scroll-proportion="0.0">
+            <state line="28" column="13" selection-start="975" selection-end="975" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FileSystemActivity.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="FileSystemActivity.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/FileSystemActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="93" column="71" selection-start="2986" selection-end="2986" vertical-scroll-proportion="0.3231939">
+            <state line="97" column="10" selection-start="3043" selection-end="3043" vertical-scroll-proportion="0.0">
               <folding>
-                <element signature="e#7542#7549#0" expanded="true" />
+                <element signature="e#7984#7991#0" expanded="true" />
+                <element signature="e#8829#8835#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VkAlbumsActivity.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/VkAlbumsActivity.java">
+      <file leaf-file-name="ListTracksActivity.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/ListTracksActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="13" selection-start="1162" selection-end="1162" vertical-scroll-proportion="0.0">
+            <state line="181" column="14" selection-start="5866" selection-end="5866" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PlaylistDB.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/PlaylistDB.java">
+      <file leaf-file-name="PageFragment.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/PageFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="182" column="28" selection-start="5906" selection-end="5906" vertical-scroll-proportion="0.0">
+            <state line="32" column="13" selection-start="1021" selection-end="1021" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ListVkActivity.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/ListVkActivity.java">
+      <file leaf-file-name="PlayingService.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/PlayingService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="178" column="0" selection-start="5502" selection-end="5502" vertical-scroll-proportion="0.0">
+            <state line="47" column="13" selection-start="1517" selection-end="1517" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TracksHolder.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/TracksHolder.java">
+      <file leaf-file-name="PlaylistActivity.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/PlaylistActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="54" column="82" selection-start="2352" selection-end="2352" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ListsAdapter.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/ListsAdapter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="60" column="0" selection-start="1660" selection-end="1660" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MainVkFragment.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/MainVkFragment.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="71" column="108" selection-start="3006" selection-end="3006" vertical-scroll-proportion="0.0">
+            <state line="97" column="13" selection-start="3410" selection-end="3410" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -356,16 +333,25 @@
       <file leaf-file-name="LyricsDialog.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/LyricsDialog.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="75" column="45" selection-start="2537" selection-end="2537" vertical-scroll-proportion="0.0">
+            <state line="40" column="26" selection-start="1378" selection-end="1378" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MainScreenActivity.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/MainScreenActivity.java">
+      <file leaf-file-name="AbstractList.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/AbstractList.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="1" selection-start="1189" selection-end="1189" vertical-scroll-proportion="0.0">
+            <state line="46" column="0" selection-start="1416" selection-end="1416" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SearchVkActivity.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/SearchVkActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="187" column="31" selection-start="5921" selection-end="5921" vertical-scroll-proportion="5.330241">
               <folding />
             </state>
           </provider>
@@ -389,22 +375,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/BigWidget.java" />
+        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/Utils.java" />
+        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/FullPlaybackActivity.java" />
+        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/PlaylistDB.java" />
+        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/PageFragment.java" />
+        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/MainVkFragment.java" />
+        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/ListVkActivity.java" />
         <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/PlayingService.java" />
         <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/AbstractList.java" />
-        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/DownloadingService.java" />
-        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/FullPlaybackActivity.java" />
+        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/AlbumArtistActivity.java" />
         <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/ListTracksActivity.java" />
-        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/SearchActivity.java" />
-        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/PlaylistDB.java" />
         <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/AlbumArtGetter.java" />
-        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/Audio.java" />
-        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/SimpleSWidget.java" />
-        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/ListVkActivity.java" />
+        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/PlaylistActivity.java" />
+        <option value="$PROJECT_DIR$/res/menu/action_option_playlist.xml" />
         <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/FileSystemActivity.java" />
-        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/MainScreenActivity.java" />
-        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/MainVkFragment.java" />
-        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/TracksHolder.java" />
+        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/LyricsDialog.java" />
+        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/SearchVkActivity.java" />
       </list>
     </option>
   </component>
@@ -443,8 +429,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -519,21 +503,23 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="GenerateAntBuildDialog.generateIdeaHomeProperty" value="false" />
     <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.15" />
     <property name="OverrideImplement.combined" value="false" />
+    <property name="project.structure.proportion" value="0.15" />
     <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="recentsLimit" value="5" />
-    <property name="MemberChooser.sorted" value="false" />
     <property name="GenerateAntBuildDialog.generateSingleFile" value="false" />
-    <property name="last_opened_file_path" value="D:/workspace/VanilaMusic" />
+    <property name="MemberChooser.sorted" value="false" />
+    <property name="recentsLimit" value="5" />
     <property name="GenerateAntBuildDialog.inclineRuntiemClasspath" value="false" />
-    <property name="GoToClass.includeJavaFiles" value="false" />
+    <property name="last_opened_file_path" value="D:/workspace/VanilaMusic" />
     <property name="GenerateAntBuildDialog.outputFileNameProperty" value="doomplay" />
+    <property name="GoToClass.includeJavaFiles" value="false" />
     <property name="GenerateAntBuildDialog.enableUiFormCompile" value="true" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="FullScreen" value="false" />
@@ -605,19 +591,6 @@
       <option name="PORT" value="5005" />
       <method />
     </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <method />
-    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <module name="" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -643,6 +616,19 @@
       <envs />
       <properties />
       <listeners />
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -781,7 +767,11 @@
       <created>1379968117313</created>
       <updated>1379968117313</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="working on structure">
+      <created>1380050652493</created>
+      <updated>1380050652493</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -810,26 +800,26 @@
     <layout>
       <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3248848" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3275862" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33870968" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3329493" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32949308" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.50230414" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5011521" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3329493" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32949308" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24878444" sideWeight="0.6751152" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24878444" sideWeight="0.49884793" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298217" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="left" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22447325" sideWeight="0.6751152" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22528364" sideWeight="0.6751152" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3248848" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22609401" sideWeight="0.6751152" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25283632" sideWeight="0.6751152" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3275862" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -876,7 +866,7 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="finally change structure of all player , delete class Song , and i've got A LOT of bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="working on structure" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -899,6 +889,7 @@
     <MESSAGE value="almost done albumArtGetter" />
     <MESSAGE value="done albumArtGetter!!!" />
     <MESSAGE value="finally change structure of all player , delete class Song , and i've got A LOT of bugs" />
+    <MESSAGE value="working on structure" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -908,125 +899,118 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/BigWidget.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="13" selection-start="1048" selection-end="1048" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/layout/widget_big.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="32" selection-start="923" selection-end="923" vertical-scroll-proportion="0.33333334">
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/layout/widget_small.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="45" selection-start="1414" selection-end="1414" vertical-scroll-proportion="0.20551379">
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/FullPlaybackActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="299" column="17" selection-start="9488" selection-end="9488" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/MainScreenActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="1" selection-start="1189" selection-end="1189" vertical-scroll-proportion="0.0">
+        <state line="34" column="13" selection-start="1144" selection-end="1144" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/ListVkActivity.java">
+    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/MainScreenFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="178" column="0" selection-start="5502" selection-end="5502" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/ListsAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="60" column="0" selection-start="1660" selection-end="1660" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/VkAlbumsActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="13" selection-start="1162" selection-end="1162" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/PlaylistDB.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="182" column="28" selection-start="5906" selection-end="5906" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/Audio.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="35" selection-start="1741" selection-end="1741" vertical-scroll-proportion="0.33252132">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/SimpleSWidget.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="47" column="59" selection-start="1439" selection-end="1439" vertical-scroll-proportion="0.0">
+        <state line="29" column="13" selection-start="1004" selection-end="1004" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/MainVkFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="71" column="108" selection-start="3006" selection-end="3006" vertical-scroll-proportion="0.0">
+        <state line="28" column="13" selection-start="975" selection-end="975" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/TracksHolder.java">
+    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/MyApplication.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="82" selection-start="2352" selection-end="2352" vertical-scroll-proportion="0.0">
+        <state line="22" column="13" selection-start="803" selection-end="803" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/perm/vkontakte/api/Api.java">
+    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/PageFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="444" column="51" selection-start="18471" selection-end="18471" vertical-scroll-proportion="0.54331684">
-          <folding>
-            <element signature="e#18173#18180#0" expanded="true" />
-          </folding>
+        <state line="32" column="13" selection-start="1021" selection-end="1021" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/LyricsDialog.java">
+    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/PlayingService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="75" column="45" selection-start="2537" selection-end="2537" vertical-scroll-proportion="0.0">
+        <state line="47" column="13" selection-start="1517" selection-end="1517" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/PlaylistActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="97" column="13" selection-start="3410" selection-end="3410" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/menu/bar_playlist.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/menu/action_option_playlist.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="27" selection-start="510" selection-end="510" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/menu/action_option.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="816" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/menu/action_filesystem.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/FileSystemActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="93" column="71" selection-start="2986" selection-end="2986" vertical-scroll-proportion="0.3231939">
+        <state line="97" column="10" selection-start="3043" selection-end="3043" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="e#7542#7549#0" expanded="true" />
+            <element signature="e#7984#7991#0" expanded="true" />
+            <element signature="e#8829#8835#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/ListTracksActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="181" column="14" selection-start="5866" selection-end="5866" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/LyricsDialog.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="40" column="26" selection-start="1378" selection-end="1378" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/AbstractList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="46" column="0" selection-start="1416" selection-end="1416" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/SearchVkActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="187" column="31" selection-start="5921" selection-end="5921" vertical-scroll-proportion="5.330241">
+          <folding />
         </state>
       </provider>
     </entry>

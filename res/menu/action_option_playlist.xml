@@ -10,12 +10,6 @@
             android:title="@string/play_all">
     </item>
     <item
-            android:id="@+id/itemAddTracks"
-            android:icon="@drawable/music_add"
-            yourapp:showAsAction="always"
-            android:title="@string/add_music">
-    </item>
-    <item
             android:id="@+id/itemDeleteList"
             android:icon="@drawable/cancel_list"
             yourapp:showAsAction="always"

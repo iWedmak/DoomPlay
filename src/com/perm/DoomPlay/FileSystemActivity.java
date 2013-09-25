@@ -95,14 +95,18 @@ public class FileSystemActivity extends AbstractReceiver
                 return true;
         }
     };
-
+    //it's fucking crooked nail , fix it!!!
     public static ArrayList<Audio> getAudiosFromFolder(File file,Context context)
     {
 
-
-        Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+        Cursor cursor;
+        if(file.getAbsolutePath().length() < 13)
+            cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                    TracksHolder.projection,MediaStore.Audio.Media.IS_MUSIC + " != 0",null,null);
+        else
+            cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 TracksHolder.projection,MediaStore.Audio.Media.IS_MUSIC + " != 0 AND "+
-                MediaStore.Audio.Media.DATA + " LIKE ? ",new String[]{"%"+file.getAbsolutePath().substring(4) +"%"},null);
+                MediaStore.Audio.Media.DATA + " LIKE ? ",new String[]{"%"+file.getAbsolutePath().substring(12) +"%"},null);
 
         cursor.moveToFirst();
 
@@ -110,15 +114,16 @@ public class FileSystemActivity extends AbstractReceiver
         cursor.close();
         return audios;
     }
+    //it's fucking crooked nail , fix it too!!!
     public static Audio getAudioFromFile(File file,Context context)
     {
-        Log.i("TAG AUDIO",file.getAbsolutePath().substring(4));
+        Log.i("TAG AUDIO",file.getAbsolutePath().substring(12) + " ****** "+ TracksHolder.allAudios.get(420).url);
 
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                TracksHolder.projection,MediaStore.Audio.Media.DATA + " LIKE ? ",new String[]{file.getAbsolutePath().substring(4)}, null);
+                TracksHolder.projection,MediaStore.Audio.Media.DATA + " LIKE ? ",new String[]{"%"+file.getAbsolutePath().substring(12)}, null);
 
         cursor.moveToFirst();
-        Audio audio = new Audio(cursor);
+        Audio audio = Audio.createAudioCursor(cursor);
         cursor.close();
         return audio;
     }

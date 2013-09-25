@@ -89,6 +89,24 @@ public class ListVkActivity extends AbstractList
         }
 
     }
+    @Override
+    protected void onServiceAbstractConnected()
+    {
+        playingService.setOnLoadingTrackListener(new PlayingService.OnLoadingTrackListener()
+        {
+            @Override
+            public void onLoadingTrackStarted()
+            {
+                linearLoading.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onLoadingTrackEnded()
+            {
+                linearLoading.setVisibility(View.GONE);
+            }
+        });
+    }
 
     void refreshAudios()
     {
@@ -111,7 +129,7 @@ public class ListVkActivity extends AbstractList
                     {
                         audios = TracksHolder.audiosVk = MainScreenActivity.api.getAudio(Account.account.user_id,
                             null,null,SettingActivity.getPreference("countvkall"));
-                        PlaylistDB.getInstance(getBaseContext()).addTracks(audios,PlaylistDB.TABLE_VK);
+                        PlaylistDB.getInstance(getBaseContext()).addVkTracks(audios);
                     }
 
                     else if(currentAction.equals(actionMyAlbums))

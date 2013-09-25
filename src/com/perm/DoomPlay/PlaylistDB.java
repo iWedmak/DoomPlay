@@ -31,16 +31,15 @@ import static android.provider.MediaStore.Audio.Media;
 public class PlaylistDB extends SQLiteOpenHelper
 {
 
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 10;
     private static final String DATABASE_NAME = "playlistsData";
     private static final String TABLE_LISTPLAYLIST = "listplaylist";
     private static final String KEY_POSITION_TRACK = "postiontak";
     private static final String TABLE_DEFAULT = "defaultTable";
     private static final String KEY_NAME_PLAYLIST = "playlistName";
     static final String TABLE_VK = "vk_table";
-
-
-
+    private static final String KEY_OID = "owner_id";
+    private static final String KEY_LID = "lyrics_id";
 
     private PlaylistDB(Context context)
     {
@@ -74,12 +73,17 @@ public class PlaylistDB extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        String createListPlaylistTable = "CREATE TABLE " + TABLE_LISTPLAYLIST + "(" + Media._ID +
+        String createListPlaylistTable = "CREATE TABLE IF NOT EXISTS " + TABLE_LISTPLAYLIST + "(" + Media._ID +
                 " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_NAME_PLAYLIST + " TEXT" +")";
 
         db.execSQL(createListPlaylistTable);
         createTable(TABLE_DEFAULT,db);
-        createTable(TABLE_VK,db);
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_VK + "("
+                + Media._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + Media.DATA + " TEXT,"+
+                Media.ARTIST + " TEXT,"+ Media.TITLE + " TEXT," + Media.ALBUM_ID +" LONG,"+
+                KEY_OID + " LONG,"+ KEY_LID + " LONG,"+ KEY_POSITION_TRACK + " INTEGER"+ ")");
+
 
 
         ContentValues cv = new ContentValues();
@@ -112,8 +116,55 @@ public class PlaylistDB extends SQLiteOpenHelper
             db.execSQL("DROP TABLE IF EXISTS " + table);
         }
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_LISTPLAYLIST);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_VK);
         onCreate(db);
     }
+
+    ArrayList<Audio> getVkAudios()
+    {
+        SQLiteDatabase db = getWritableDatabase();
+
+        Cursor c = db.query(TABLE_VK,new String[]{Media.ARTIST,Media.TITLE,
+                Media.ALBUM_ID,Media.DATA,KEY_OID,KEY_LID} ,null, null, null, null, null);
+
+        ArrayList<Audio> result  = new ArrayList<Audio>();
+
+        if(c.moveToFirst())
+        {
+            do
+            {
+                result.add(Audio.createAudioCursorExtend(c));
+
+            }while (c.moveToNext());
+        }
+
+        c.close();
+        db.close();
+        return result;
+    }
+
+    void addVkTracks(ArrayList<Audio> audios)
+    {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues cv;
+        int position = getLastPosition(TABLE_VK,db);
+
+        for(Audio audio : audios)
+        {
+            cv = new ContentValues();
+            cv.put(Media.DATA, audio.url);
+            cv.put(Media.ARTIST, audio.artist);
+            cv.put(Media.ALBUM_ID, audio.aid);
+            cv.put(Media.TITLE, audio.title);
+            cv.put(KEY_OID, audio.owner_id);
+            cv.put(KEY_LID, audio.lyrics_id);
+            cv.put(KEY_POSITION_TRACK,position);
+            position++;
+            db.insert(TABLE_VK, null, cv);
+        }
+        db.close();
+    }
+
     void addTracks(ArrayList<Audio> audios, String playlist)
     {
         SQLiteDatabase db = getWritableDatabase();

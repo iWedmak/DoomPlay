@@ -98,6 +98,7 @@ public class SearchActivity extends AbstractList
         super.onClickTrack(position);
         hideKeyboard();
         ListTracksActivity.currentAction = ListVkActivity.actionJust;
+        PlayingService.isOnline = false;
     }
 
     TextWatcher onTextChangeHandler = new TextWatcher()
@@ -121,7 +122,7 @@ public class SearchActivity extends AbstractList
 
             for(Audio audio : TracksHolder.allAudios)
             {
-                if(audio.url.toLowerCase().contains(query.toLowerCase()))
+                if(audio.getUrl().toLowerCase().contains(query.toLowerCase()))
                     audios.add(audio);
             }
             if(audios.size() == 0)
@@ -161,7 +162,7 @@ public class SearchActivity extends AbstractList
                     break;
                 case R.id.itemGetLiricks:
                     Audio audio = audios.get(position);
-                    ListTracksActivity.startLiryctDialog(getSupportFragmentManager(), audio.artist, audio.title);
+                    ListTracksActivity.startLiryctDialog(getSupportFragmentManager(), audio.getArtist(), audio.getTitle());
                     break;
             }
 

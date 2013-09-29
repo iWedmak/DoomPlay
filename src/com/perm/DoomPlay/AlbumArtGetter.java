@@ -83,7 +83,6 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
         this.artist = artist;
         this.title = title;
         set.add(albumId);
-        Log.i("TAG URL","albumId "+ String.valueOf(albumId));
     }
 
     @Override
@@ -106,7 +105,6 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
         }
         if(src == null || src.equals(""))
             return null;
-        Log.i("TAG URL", src);
         return downloadBitmap(src);
     }
 
@@ -145,14 +143,8 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
 
     static String findSrc(String artist,String title) throws ParserConfigurationException, SAXException, IOException
     {
-
-        if(artist.length() > 20)
-            artist = artist.substring(0,20);
-        if(title.length() > 20)
-            title = title.substring(0,20);
-
         title ="&track=" + URLEncoder.encode(title,"utf-8");
-        if(artist != null && !artist.equals("")  && !artist.equals("unknown"))
+        if(artist != null && !artist.equals("")  && !artist.equals("<unknown>"))
             artist ="&artist=" + URLEncoder.encode(artist,"utf-8");
         else
             artist = "";

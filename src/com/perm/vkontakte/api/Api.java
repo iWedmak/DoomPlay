@@ -235,7 +235,8 @@ public class Api {
 
     /*** methods for friends ***/
     //http://vk.com/dev/friends.get
-    public ArrayList<User> getFriends(Long user_id) throws MalformedURLException, IOException, JSONException, KException{
+    public ArrayList<User> getFriends(Long user_id) throws IOException, JSONException, KException
+    {
         Params params = new Params("friends.get");
         params.put("fields","first_name,last_name,photo_medium");
         params.put("uid",user_id);

@@ -70,7 +70,7 @@ public class DownloadingService extends Service
         else
         {
             track = intent.getParcelableExtra(keyDownload);
-            notifId = (int)track.aid;
+            notifId = (int) track.getAid();
 
             String defaultFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/download/";
             File defaultFile = new File(defaultFolder);
@@ -78,7 +78,7 @@ public class DownloadingService extends Service
             if(!defaultFile.exists())
                 defaultFile.mkdir();
 
-            filePath = defaultFolder +track.artist + "-" + track.title + ".mp3";
+            filePath = defaultFolder + track.getArtist() + "-" + track.getTitle() + ".mp3";
 
 
 
@@ -102,7 +102,7 @@ public class DownloadingService extends Service
 
         void download() throws IOException
         {
-            URL url = new URL(track.url);
+            URL url = new URL(track.getUrl());
             connection = (HttpURLConnection)url.openConnection();
             connection.setRequestMethod("GET");
             connection.setDoOutput(true);
@@ -162,7 +162,7 @@ public class DownloadingService extends Service
             views = new RemoteViews(getPackageName(),R.layout.notif_download);
             views.setProgressBar(R.id.progressDownload,100,0,true);
             views.setTextViewText(R.id.notifTitle,"Downloading");
-            views.setTextViewText(R.id.notifArtist,track.artist + "-" + track.title);
+            views.setTextViewText(R.id.notifArtist, track.getArtist() + "-" + track.getTitle());
 
             Intent intentClose = new Intent(PlayingService.actionClose);
             intentClose.putExtra("notificationId",notifId);

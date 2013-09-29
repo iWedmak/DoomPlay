@@ -91,7 +91,11 @@ public class AddTrackToAlbumDialog extends DialogFragment
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (KException e) {
-                        e.printStackTrace();
+                        isLoading = false;
+                        AbstractVkItems.handleKException(e, getActivity());
+                        dismiss();
+                        getActivity().finish();
+                        cancel(true);
                     }
                     return null;
                 }

@@ -40,6 +40,7 @@ public class PlaylistDB extends SQLiteOpenHelper
     static final String TABLE_VK = "vk_table";
     private static final String KEY_OID = "owner_id";
     private static final String KEY_LID = "lyrics_id";
+    static boolean isLoading  = false;
 
     private PlaylistDB(Context context)
     {
@@ -145,6 +146,7 @@ public class PlaylistDB extends SQLiteOpenHelper
 
     void addVkTracks(ArrayList<Audio> audios)
     {
+
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv;
         int position = getLastPosition(TABLE_VK,db);
@@ -152,21 +154,40 @@ public class PlaylistDB extends SQLiteOpenHelper
         for(Audio audio : audios)
         {
             cv = new ContentValues();
-            cv.put(Media.DATA, audio.url);
-            cv.put(Media.ARTIST, audio.artist);
-            cv.put(Media.ALBUM_ID, audio.aid);
-            cv.put(Media.TITLE, audio.title);
-            cv.put(KEY_OID, audio.owner_id);
-            cv.put(KEY_LID, audio.lyrics_id);
+            cv.put(Media.DATA, audio.getUrl());
+            cv.put(Media.ARTIST, audio.getArtist());
+            cv.put(Media.ALBUM_ID, audio.getAid());
+            cv.put(Media.TITLE, audio.getTitle());
+            cv.put(KEY_OID, audio.getOwner_id());
+            cv.put(KEY_LID, audio.getLyrics_id());
             cv.put(KEY_POSITION_TRACK,position);
             position++;
             db.insert(TABLE_VK, null, cv);
         }
         db.close();
     }
+    void addVkTrack(Audio audio)
+    {
+
+        SQLiteDatabase db = getWritableDatabase();
+        int position = getLastPosition(TABLE_VK,db);
+
+        ContentValues cv = new ContentValues();
+        cv.put(Media.DATA, audio.getUrl());
+        cv.put(Media.ARTIST, audio.getArtist());
+        cv.put(Media.ALBUM_ID, audio.getAid());
+        cv.put(Media.TITLE, audio.getTitle());
+        cv.put(KEY_OID, audio.getOwner_id());
+        cv.put(KEY_LID, audio.getLyrics_id());
+        cv.put(KEY_POSITION_TRACK,position);
+        db.insert(TABLE_VK, null, cv);
+
+        db.close();
+    }
 
     void addTracks(ArrayList<Audio> audios, String playlist)
     {
+        isLoading = true;
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv;
         int position = getLastPosition(playlist,db);
@@ -174,15 +195,16 @@ public class PlaylistDB extends SQLiteOpenHelper
         for(Audio audio : audios)
         {
             cv = new ContentValues();
-            cv.put(Media.DATA, audio.url);
-            cv.put(Media.ARTIST, audio.artist);
-            cv.put(Media.ALBUM_ID, audio.aid);
-            cv.put(Media.TITLE, audio.title);
+            cv.put(Media.DATA, audio.getUrl());
+            cv.put(Media.ARTIST, audio.getArtist());
+            cv.put(Media.ALBUM_ID, audio.getAid());
+            cv.put(Media.TITLE, audio.getTitle());
             cv.put(KEY_POSITION_TRACK,position);
             position++;
             db.insert(playlist, null, cv);
         }
         db.close();
+        isLoading = false;
     }
     void addTrack(Audio audio,String playlist)
     {
@@ -190,10 +212,10 @@ public class PlaylistDB extends SQLiteOpenHelper
         int position = getLastPosition(playlist,db);
 
         ContentValues cv = new ContentValues();
-        cv.put(Media.DATA, audio.url);
-        cv.put(Media.ARTIST, audio.artist);
-        cv.put(Media.ALBUM_ID, audio.aid);
-        cv.put(Media.TITLE, audio.title);
+        cv.put(Media.DATA, audio.getUrl());
+        cv.put(Media.ARTIST, audio.getArtist());
+        cv.put(Media.ALBUM_ID, audio.getAid());
+        cv.put(Media.TITLE, audio.getTitle());
         cv.put(KEY_POSITION_TRACK,position);
         db.insert(playlist, null, cv);
         db.close();
@@ -208,6 +230,7 @@ public class PlaylistDB extends SQLiteOpenHelper
     }
     void setAcordingPositions(int positionTrack,String playlist)
     {
+        isLoading = true;
         SQLiteDatabase db = getWritableDatabase();
         int lastPos = getLastPosition(playlist,db);
         int pos = positionTrack;
@@ -220,10 +243,12 @@ public class PlaylistDB extends SQLiteOpenHelper
             pos ++ ;
         }
         db.close();
+        isLoading = false;
     }
 
     ArrayList<Audio> getTracks(String playlist)
     {
+        isLoading = true;
         SQLiteDatabase db = getWritableDatabase();
 
         Cursor c = db.query(playlist,TracksHolder.projection,null, null, null, null, null);
@@ -237,6 +262,7 @@ public class PlaylistDB extends SQLiteOpenHelper
 
         c.close();
         db.close();
+        isLoading = false;
         return result;
 
 
@@ -288,6 +314,7 @@ public class PlaylistDB extends SQLiteOpenHelper
     }
     void changeColumns(String playlist , int first,int second)
     {
+
         SQLiteDatabase db = getWritableDatabase();
 
         Cursor cFirst = db.query(playlist,TracksHolder.projectionPlusId,KEY_POSITION_TRACK + " = ?",new String[]{String.valueOf(first)},null,null,null);

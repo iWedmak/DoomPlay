@@ -67,6 +67,13 @@ public class ListVkActivity extends AbstractList
 
     }
 
+    @Override
+    protected void onClickTrack(int position)
+    {
+        super.onClickTrack(position);
+        PlayingService.isOnline = true;
+    }
+
     AsyncTask<Void,Void,Void> asyncTask;
 
     @Override
@@ -77,18 +84,19 @@ public class ListVkActivity extends AbstractList
             case R.id.itemRefresh:
                 refreshAudios();
                 return true;
-            case R.id.itemInterrupt:
-                asyncTask.cancel(true);
-                isLoading = false;
-                linearLoading.setVisibility(View.GONE);
-
-                return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        if(asyncTask != null)
+            asyncTask.cancel(true);
+        super.onBackPressed();
+    }
+
     @Override
     protected void onServiceAbstractConnected()
     {
@@ -142,7 +150,10 @@ public class ListVkActivity extends AbstractList
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (KException e) {
-                    e.printStackTrace();
+                    isLoading = false;
+                    AbstractVkItems.handleKException(e, getBaseContext());
+                    finish();
+                    cancel(true);
                 }
                 return null;
             }

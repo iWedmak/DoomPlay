@@ -49,10 +49,10 @@ public class SimpleSWidget extends AppWidgetProvider
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_small);
 
         Audio audio = PlayingService.audios.get(PlayingService.indexCurrentTrack);
-        views.setTextViewText(R.id.widgetTitle, audio.title);
-        views.setTextViewText(R.id.widgetArtist,audio.artist);
+        views.setTextViewText(R.id.widgetTitle, audio.getTitle());
+        views.setTextViewText(R.id.widgetArtist, audio.getArtist());
 
-        Bitmap cover = AlbumArtGetter.getBitmapById(audio.aid, context);
+        Bitmap cover = AlbumArtGetter.getBitmapById(audio.getAid(), context);
         if (cover != null)
         {
             views.setImageViewBitmap(R.id.widgetAlbum, cover);

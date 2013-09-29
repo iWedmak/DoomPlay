@@ -94,8 +94,8 @@ public class ListsAdapter extends BaseAdapter
             holder =(ViewHolder)view.getTag();
         }
 
-        holder.textArtist.setText(audios.get(position).artist);
-        holder.textTitle.setText(audios.get(position).title);
+        holder.textArtist.setText(audios.get(position).getArtist());
+        holder.textTitle.setText(audios.get(position).getTitle());
 
         if(markedItem == position)
             holder.textTitle.setTextColor(context.getResources().getColor(R.color.blue_text));

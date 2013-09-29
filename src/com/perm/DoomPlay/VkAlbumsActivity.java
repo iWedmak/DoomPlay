@@ -287,11 +287,15 @@ public class VkAlbumsActivity extends AbstractVkItems
                             SettingActivity.getPreference("countvkall"));
 
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    e.printStackTrace();  return;
                 } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (KException e) {
-                    e.printStackTrace();
+                    e.printStackTrace(); return;
+                } catch (KException e)
+                {
+                    isLoading = false;
+                    handleKException(e, getBaseContext());
+                    finish();
+                    return;
                 }
                 handler.sendEmptyMessage(2);
                 handler.sendEmptyMessage(3);
@@ -340,23 +344,13 @@ public class VkAlbumsActivity extends AbstractVkItems
     }
 
     @Override
-    protected ArrayList<Audio> getAudios(int position)
+    protected ArrayList<Audio> getAudios(int position)  throws KException,JSONException,IOException
     {
         currentAlbum = position;
-        try
-        {
+
 
             return MainScreenActivity.api.getAudio(null,null,albums.get(position).album_id
                     ,SettingActivity.getPreference("countvkall"));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (KException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
 

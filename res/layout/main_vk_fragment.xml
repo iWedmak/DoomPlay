@@ -19,9 +19,9 @@
                 android:clickable="true"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/linearVkAll"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:gravity="center_vertical">
+                android:paddingTop="11dp"
+                android:paddingBottom="11dp"
+                android:gravity="center_vertical" android:background="@drawable/abc_item_background_holo_dark">
             <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -41,9 +41,10 @@
                 android:clickable="true"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/linearVkTop"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:gravity="center_vertical" android:layout_below="@+id/linearVkGroup">
+                android:paddingTop="11dp"
+                android:paddingBottom="11dp"
+                android:gravity="center_vertical" android:layout_below="@+id/linearVkGroup"
+                android:background="@drawable/abc_item_background_holo_dark">
             <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -63,9 +64,10 @@
                 android:clickable="true"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/linearVkFriends"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:gravity="center_vertical" android:layout_below="@+id/linearVkAlbum">
+                android:paddingTop="11dp"
+                android:paddingBottom="11dp"
+                android:gravity="center_vertical" android:layout_below="@+id/linearVkAlbum"
+                android:background="@drawable/abc_item_background_holo_dark">
             <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -85,9 +87,10 @@
                 android:clickable="true"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/linearVkGroup"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:gravity="center_vertical" android:layout_below="@+id/linearVkFriends">
+                android:paddingTop="11dp"
+                android:paddingBottom="11dp"
+                android:gravity="center_vertical" android:layout_below="@+id/linearVkFriends"
+                android:background="@drawable/abc_item_background_holo_dark">
             <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -107,9 +110,10 @@
                 android:clickable="true"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/linearVkSearch"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:gravity="center_vertical" android:layout_below="@+id/linearVkTop">
+                android:paddingTop="11dp"
+                android:paddingBottom="11dp"
+                android:gravity="center_vertical" android:layout_below="@+id/linearVkTop"
+                android:background="@drawable/abc_item_background_holo_dark">
             <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -129,9 +133,10 @@
                 android:clickable="true"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/linearVkAlbum"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:gravity="center_vertical" android:layout_below="@+id/linearVkAll">
+                android:paddingTop="11dp"
+                android:paddingBottom="11dp"
+                android:gravity="center_vertical" android:layout_below="@+id/linearVkAll"
+                android:background="@drawable/abc_item_background_holo_dark">
             <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

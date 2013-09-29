@@ -29,11 +29,13 @@ abstract class AbstractList extends AbstractControls
     static protected ArrayList<Audio> audios;
     static boolean isLoading = false;
     LinearLayout linearLoading;
+    protected PlaylistDB playlistDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        playlistDB = PlaylistDB.getInstance(this);
     }
     protected void markItem(int position , boolean withScroll)
     {
@@ -151,7 +153,7 @@ abstract class AbstractList extends AbstractControls
             switch (itemId)
             {
                 case  R.id.itemGetLiricks:
-                    startLyricsDialog(getSupportFragmentManager(),audios.get(position).lyrics_id);
+                    startLyricsDialog(getSupportFragmentManager(), audios.get(position).getLyrics_id());
                     break;
                 case R.id.itemLike:
                     likeTrack(position);
@@ -165,7 +167,7 @@ abstract class AbstractList extends AbstractControls
                     startService(downloadIntent);
                     break;
                 case R.id.itemMoveToAlbum:
-                    moveToAlbum(getSupportFragmentManager(),audios.get(position).aid);
+                    moveToAlbum(getSupportFragmentManager(), audios.get(position).getAid());
                     break;
             }
         }
@@ -187,33 +189,40 @@ abstract class AbstractList extends AbstractControls
     {
         if(Utils.isOnline(getBaseContext()))
         {
-            audios.remove(position);
-            adapter.changeData(audios);
-
-            if(position == PlayingService.indexCurrentTrack && equalsCollections(PlayingService.audios,audios))
-                playingService.playTrackFromList(PlayingService.indexCurrentTrack);
-
-
-
-            new AsyncTask<Integer, Void, Void>()
+            new AsyncTask<Integer, Void, Integer>()
             {
                 @Override
-                protected Void doInBackground(Integer... params)
+                protected Integer doInBackground(Integer... params)
                 {
                     try
                     {
-                        MainScreenActivity.api.deleteAudio(audios.get(params[0]).aid,Account.account.user_id);
+                        MainScreenActivity.api.deleteAudio(audios.get(params[0]).getAid(),Account.account.user_id);
+                        playlistDB.deleteTrack(params[0],PlaylistDB.TABLE_VK);
+                        playlistDB.setAcordingPositions(params[0],PlaylistDB.TABLE_VK);
 
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (JSONException e) {
                         e.printStackTrace();
-                    } catch (KException e) {
-                        e.printStackTrace();
+                    } catch (KException e)
+                    {
+                        isLoading = false;
+                        AbstractVkItems.handleKException(e, getBaseContext());
+                        finish();
                     }
-                    return null;
+                    return params[0];
                 }
 
+                @Override
+                protected void onPostExecute(Integer position)
+                {
+                    super.onPostExecute(position);
+                    audios.remove(position);
+                    adapter.changeData(audios);
+
+                    if(position == PlayingService.indexCurrentTrack && equalsCollections(PlayingService.audios,audios))
+                        playingService.playTrackFromList(PlayingService.indexCurrentTrack);
+                }
             }.execute(position);
         }
     }
@@ -238,16 +247,19 @@ abstract class AbstractList extends AbstractControls
                 {
                     try
                     {
-                       MainScreenActivity.api.addAudio(audios.get(params[0]).aid, audios.get(params[0]).owner_id);
+                       MainScreenActivity.api.addAudio(audios.get(params[0]).getAid(), audios.get(params[0]).getOwner_id());
                        if(TracksHolder.audiosVk != null)
                             TracksHolder.audiosVk.add(0,audios.get(params[0]));
+                       playlistDB.addVkTrack(audios.get(params[0]));
 
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (KException e) {
-                        e.printStackTrace();
+                        isLoading = false;
+                        AbstractVkItems.handleKException(e, getBaseContext());
+                        finish();
                     }
                     return null;
 

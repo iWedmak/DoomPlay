@@ -68,9 +68,6 @@
         <activity android:name="com.perm.DoomPlay.AlbumArtistActivity"
                   android:launchMode="singleTop"/>
 
-        <activity android:name="com.perm.DoomPlay.ListTrackToListActivity"
-                  android:launchMode="singleTop"/>
-
         <activity android:name="com.perm.DoomPlay.SearchVkActivity"
                   android:launchMode="singleTask"/>
 
@@ -81,7 +78,9 @@
                   android:launchMode="singleTop"/>
         <activity android:name="com.perm.DoomPlay.VkAlbumsActivity"
                   android:launchMode="singleTop"/>
-        <activity android:name="com.perm.DoomPlay.VkFrGrActivity"
+        <activity android:name="com.perm.DoomPlay.VkFrActivity"
+                  android:launchMode="singleTop"/>
+        <activity android:name="com.perm.DoomPlay.VkGrActivity"
                   android:launchMode="singleTop"/>
 
         <activity android:name="com.perm.DoomPlay.LoginActivity"/>

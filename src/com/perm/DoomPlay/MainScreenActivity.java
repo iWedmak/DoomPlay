@@ -172,7 +172,7 @@ public class MainScreenActivity extends AbstractReceiver
             if(position == 0)
                 return "offline";
             else
-                return "online";
+                return "vk";
         }
 
         @Override

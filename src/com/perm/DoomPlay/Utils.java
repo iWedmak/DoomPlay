@@ -97,18 +97,18 @@ public class Utils
     {
 
         ContentValues values = new ContentValues();
-        values.put(MediaStore.MediaColumns.DATA, audio.url);
-        values.put(MediaStore.MediaColumns.TITLE, audio.title);
-        values.put(MediaStore.MediaColumns.SIZE, new File(audio.url).getTotalSpace());
+        values.put(MediaStore.MediaColumns.DATA, audio.getUrl());
+        values.put(MediaStore.MediaColumns.TITLE, audio.getTitle());
+        values.put(MediaStore.MediaColumns.SIZE, new File(audio.getUrl()).getTotalSpace());
         values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/*");
-        values.put(MediaStore.Audio.Media.ARTIST, audio.artist);
+        values.put(MediaStore.Audio.Media.ARTIST, audio.getArtist());
         values.put(MediaStore.Audio.Media.DURATION, 5000);
         values.put(MediaStore.Audio.Media.IS_RINGTONE, true);
         values.put(MediaStore.Audio.Media.IS_NOTIFICATION, false);
         values.put(MediaStore.Audio.Media.IS_ALARM, false);
         values.put(MediaStore.Audio.Media.IS_MUSIC, false);
 
-        Uri uri = MediaStore.Audio.Media.getContentUriForPath(audio.url);
+        Uri uri = MediaStore.Audio.Media.getContentUriForPath(audio.getUrl());
         Uri newUri = context.getContentResolver().insert(uri, values);
         RingtoneManager.setActualDefaultRingtoneUri(context,RingtoneManager.TYPE_RINGTONE,newUri);
 
@@ -128,4 +128,10 @@ public class Utils
         List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         return list.size() > 0;
     }
+
+    public static void onKException(Context context)
+    {
+
+    }
+
 }

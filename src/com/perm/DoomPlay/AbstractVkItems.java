@@ -18,6 +18,8 @@ package com.perm.DoomPlay;
  *
  *    You can contact me <DoomPlaye@gmail.com>
  */
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.MenuItem;
@@ -26,7 +28,11 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
+import com.perm.vkontakte.api.Account;
+import com.perm.vkontakte.api.KException;
+import org.json.JSONException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 abstract class AbstractVkItems extends AbstractReceiver
@@ -35,8 +41,21 @@ abstract class AbstractVkItems extends AbstractReceiver
     LinearLayout linearLoading;
     ListView listView;
 
+    public static void handleKException(KException e, Context context)
+    {
+        e.printStackTrace();
+        if(e.getMessage().contains("autorization failded"))
+        {
+            Account.account.access_token = null;
+            Account.account.save(context);
+            MainScreenActivity.isRegister = false;
+            context.startActivity(new Intent(context, MainScreenActivity.class));
+            Toast.makeText(context,"autorization error",Toast.LENGTH_SHORT).show();
+        }
+    }
+
     protected abstract void onClickRefresh();
-    protected abstract ArrayList<Audio> getAudios(int position);
+    protected abstract ArrayList<Audio> getAudios(int position) throws KException,JSONException,IOException;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
@@ -134,7 +153,20 @@ abstract class AbstractVkItems extends AbstractReceiver
         @Override
         protected ArrayList<Audio> doInBackground(Integer... params)
         {
-            return getAudios(params[0]);
+            try {
+                return getAudios(params[0]);
+            } catch (KException e)
+            {
+                isLoading = false;
+                handleKException(e, getBaseContext());
+                finish();
+                cancel(true);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
 
         @Override

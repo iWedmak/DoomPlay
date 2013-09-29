@@ -124,8 +124,8 @@ abstract class AbstractReceiver extends ActionBarActivity
     {
         if(PlayingService.serviceAlive && PlayingService.audios != null)
         {
-            textTitle.setText(PlayingService.audios.get(PlayingService.indexCurrentTrack).title);
-            textArtist.setText(PlayingService.audios.get(PlayingService.indexCurrentTrack).artist);
+            textTitle.setText(PlayingService.audios.get(PlayingService.indexCurrentTrack).getTitle());
+            textArtist.setText(PlayingService.audios.get(PlayingService.indexCurrentTrack).getArtist());
             textArtist.setVisibility(View.VISIBLE);
             textTitle.setTextColor(getResources().getColor(R.color.blue_text));
         }

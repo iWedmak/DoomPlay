@@ -136,7 +136,7 @@ abstract class AbstractControls extends AbstractReceiver
         bindService(intentService,serviceConnection,BIND_IMPORTANT);
         isBound = true;
     }
-    private void unConnecServer()
+    protected void unConnecServer()
     {
         if(isBound)
         {
@@ -189,9 +189,8 @@ abstract class AbstractControls extends AbstractReceiver
     }
 
     protected void clickWithoutAction()
-    {
+    {}
 
-    }
     private View.OnClickListener onClickControlsListener = new View.OnClickListener()
     {
         @Override
@@ -199,7 +198,7 @@ abstract class AbstractControls extends AbstractReceiver
         {
             if(playingService == null || !PlayingService.serviceAlive)
                 clickWithoutAction();
-            else
+            else if(PlayingService.isLoadingTrack && !playingService.isNull())
             {
                 onClickControl(v.getId());
             }
@@ -207,8 +206,6 @@ abstract class AbstractControls extends AbstractReceiver
     };
     void onClickControl(int id)
     {
-        if(!PlayingService.isLoadingTrack)
-        {
             switch (id)
             {
                 case (R.id.imageShuffle):
@@ -235,10 +232,6 @@ abstract class AbstractControls extends AbstractReceiver
                         imgRepeat.setImageResource(R.drawable.repeat_disable);
                     break;
             }
-        }
-        else
-            Toast.makeText(this, "please wait", Toast.LENGTH_SHORT);
-
     }
 
     SeekBar.OnSeekBarChangeListener seekBarHandler = new SeekBar.OnSeekBarChangeListener()
@@ -246,7 +239,7 @@ abstract class AbstractControls extends AbstractReceiver
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
         {
-            if(fromUser && playingService != null && !PlayingService.isLoadingTrack)
+            if(fromUser && playingService != null && !playingService.isNull() && !PlayingService.isLoadingTrack)
                 playingService.setCurrentPosition(playingService.getDuration()*progress / 100);
         }
         @Override

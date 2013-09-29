@@ -17,6 +17,8 @@ package com.perm.DoomPlay;
  *
  *    You can contact me <DoomPlaye@gmail.com>
  */
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -45,53 +47,57 @@ public class MainVkFragment extends Fragment
         return view;
     }
 
+    public static boolean trippleCheckToast(Context context,boolean isLoading)
+    {
+        if(!MainScreenActivity.isRegister)
+        {
+            Toast.makeText(context, "please sign in", Toast.LENGTH_SHORT).show();  return false;
+        }
+        else if(!Utils.isOnline(context))
+        {
+            Toast.makeText(context,"check your internet connection",Toast.LENGTH_SHORT).show();  return false;
+        }
+        else if(isLoading)
+        {
+            Toast.makeText(context,"please wait",Toast.LENGTH_SHORT).show();   return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
 
     View.OnClickListener onClickVkListener = new View.OnClickListener()
     {
         @Override
         public void onClick(View v)
         {
-            if(!MainScreenActivity.isRegister)
+            if(trippleCheckToast(activity,MainScreenActivity.isLoading))
             {
-                Toast.makeText(getActivity(), "please sign in", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if(!MainScreenActivity.isLoading )
-            {
-                if(Utils.isOnline(activity))
+                switch (v.getId())
                 {
-                    switch (v.getId())
-                    {
-                        case R.id.linearVkAll:
-                            startActivity(new Intent(activity,ListVkActivity.class).setAction(ListVkActivity.actionMyMusic)
-                                    .putExtra(MainScreenActivity.keyOpenInListTrack,TracksHolder.audiosVk));
-                            break;
-                        case R.id.linearVkAlbum:
-                            startActivity(new Intent(activity,VkAlbumsActivity.class));
-                            break;
-                        case R.id.linearVkGroup:
-                            Intent intentGroup = new Intent(activity,VkFrGrActivity.class);
-                            intentGroup.setAction(VkFrGrActivity.actionGroup);
-                            startActivity(intentGroup);
-                            break;
-                        case R.id.linearVkSearch:
-                            startActivity(new Intent(activity,SearchVkActivity.class));
-                            break;
-                        case R.id.linearVkTop:
-                            startActivity(new Intent(activity,VkPopularActivity.class));
-                            break;
-                        case R.id.linearVkFriends:
-                            Intent intentFriends = new Intent(activity,VkFrGrActivity.class);
-                            intentFriends.setAction(VkFrGrActivity.actionFriends);
-                            startActivity(intentFriends);
-                            break;
-                    }
+                    case R.id.linearVkAll:
+                        startActivity(new Intent(activity,ListVkActivity.class).setAction(ListVkActivity.actionMyMusic)
+                                .putExtra(MainScreenActivity.keyOpenInListTrack,TracksHolder.audiosVk));
+                        break;
+                    case R.id.linearVkAlbum:
+                        startActivity(new Intent(activity,VkAlbumsActivity.class));
+                        break;
+                    case R.id.linearVkGroup:
+                        startActivity(new Intent(activity,VkGrActivity.class));
+                        break;
+                    case R.id.linearVkSearch:
+                        startActivity(new Intent(activity,SearchVkActivity.class));
+                        break;
+                    case R.id.linearVkTop:
+                        startActivity(new Intent(activity,VkPopularActivity.class));
+                        break;
+                    case R.id.linearVkFriends:
+                        startActivity(new Intent(activity,VkFrActivity.class));
+                        break;
                 }
-                else
-                    Toast.makeText(activity,"check your internet connection",Toast.LENGTH_SHORT).show();
             }
-            else
-                Toast.makeText(activity,"please wait",Toast.LENGTH_SHORT).show();
         }
     };
 }

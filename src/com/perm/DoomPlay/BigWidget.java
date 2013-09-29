@@ -44,11 +44,11 @@ public class BigWidget extends AppWidgetProvider
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_big);
 
         Audio audio = PlayingService.audios.get(PlayingService.indexCurrentTrack);
-        views.setTextViewText(R.id.widgetlTitle, audio.title);
-        views.setTextViewText(R.id.widgetArtist,audio.artist);
+        views.setTextViewText(R.id.widgetlTitle, audio.getTitle());
+        views.setTextViewText(R.id.widgetArtist, audio.getArtist());
         views.setTextViewText(R.id.widgetCount,String.valueOf(PlayingService.indexCurrentTrack + 1)+ "/" +String.valueOf(PlayingService.audios.size()));
 
-        Bitmap cover = AlbumArtGetter.getBitmapById(audio.aid, context);
+        Bitmap cover = AlbumArtGetter.getBitmapById(audio.getAid(), context);
         if (cover != null)
         {
             views.setImageViewBitmap(R.id.widgetAlbum, cover);

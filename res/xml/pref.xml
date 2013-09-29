@@ -92,19 +92,6 @@
                 android:defaultValue="null">
 
         </PreferenceScreen>
-
-        <CheckBoxPreference
-                android:key="friendsphotos"
-                android:summary="download friends photos"
-                android:title="Friends photos"
-                android:defaultValue="false">
-        </CheckBoxPreference>
-        <CheckBoxPreference
-                android:key="groupphotos"
-                android:summary="downloaded group photos"
-                android:title="Group photos"
-                android:defaultValue="false">
-        </CheckBoxPreference>
     </PreferenceScreen>
 
          <PreferenceScreen

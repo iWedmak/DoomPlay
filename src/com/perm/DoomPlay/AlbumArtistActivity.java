@@ -172,12 +172,6 @@ public class AlbumArtistActivity extends AbstractReceiver
         @Override
         public void onDestroyActionMode(ActionMode mode){}
     };
-
-    void addToPlaylist(int position)
-    {
-         playlistDB.addTracks(getTracksFromAlbumArtist(position,true), PlaylistActivity.selectedPlaylist);
-    }
-
     class AlbumArtistAdapter extends BaseAdapter
     {
         String[] artistAlbums;

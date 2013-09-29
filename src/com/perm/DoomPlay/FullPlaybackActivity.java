@@ -62,7 +62,7 @@ public class FullPlaybackActivity  extends AbstractControls
     @Override
     protected void trackChanged()
     {
-        viewPager.setCurrentItem(PlayingService.indexCurrentTrack,false);
+        viewPager.setCurrentItem(PlayingService.indexCurrentTrack, false);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class FullPlaybackActivity  extends AbstractControls
     {
         super.onResume();
         isShown = true;
-        viewPager.setCurrentItem(PlayingService.indexCurrentTrack,false);
+        viewPager.setCurrentItem(PlayingService.indexCurrentTrack, false);
 
     }
 
@@ -100,7 +100,9 @@ public class FullPlaybackActivity  extends AbstractControls
                 }
                 else if(action.equals(actionDataChanged))
                 {
-                    adapterPager.notifyDataSetChanged();
+                    adapterPager = new PagePlaybackAdapter(getSupportFragmentManager());
+                    viewPager.setAdapter(adapterPager);
+                    viewPager.setCurrentItem(PlayingService.indexCurrentTrack);
                 }
             }
         };
@@ -111,20 +113,6 @@ public class FullPlaybackActivity  extends AbstractControls
         registerReceiver(broadcastReceiver, intentFilter);
         isRegister = true;
     }
-
-    void startScan()
-    {
-        Thread thread = new Thread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                TracksHolder.scanCard(getBaseContext());
-            }
-        });
-        thread.start();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -169,9 +157,6 @@ public class FullPlaybackActivity  extends AbstractControls
     {
         if(intent.getAction().equals(Intent.ACTION_VIEW))
         {
-            if(!TracksHolder.isScanned)
-                startScan();
-
             audios = new ArrayList<Audio>();
             audios.add(getRealPathFromIntent(intent));
         }
@@ -296,11 +281,11 @@ public class FullPlaybackActivity  extends AbstractControls
                 return true;
             case R.id.itemGetLiricks:
                 if(PlayingService.isOnline)
-                   AbstractList.startLyricsDialog(getSupportFragmentManager(), audios.get(PlayingService.indexCurrentTrack).lyrics_id);
+                   AbstractList.startLyricsDialog(getSupportFragmentManager(), audios.get(PlayingService.indexCurrentTrack).getLyrics_id());
                 else
                 {
                     Audio audio = audios.get(PlayingService.indexCurrentTrack);
-                    ListTracksActivity.startLiryctDialog(getSupportFragmentManager(),audio.artist,audio.title);
+                    ListTracksActivity.startLiryctDialog(getSupportFragmentManager(), audio.getArtist(), audio.getTitle());
                 }
                 return true;
         }

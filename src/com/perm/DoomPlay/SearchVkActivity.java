@@ -70,6 +70,7 @@ public class SearchVkActivity extends AbstractList
         super.onClickTrack(position);
         hideKeyboard();
         ListVkActivity.currentAction = ListVkActivity.actionJust;
+        PlayingService.isOnline = true;
     }
 
     @Override
@@ -194,7 +195,10 @@ public class SearchVkActivity extends AbstractList
             } catch (JSONException e) {
                 e.printStackTrace();
             } catch (KException e) {
-                e.printStackTrace();
+
+                isLoading = false;
+                AbstractVkItems.handleKException(e, getBaseContext());
+                finish();
             }
 
             return null;

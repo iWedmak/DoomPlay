@@ -21,6 +21,7 @@ package com.perm.DoomPlay;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -37,11 +38,11 @@ public class FileSystemActivity extends AbstractReceiver
 {
     FileSystemAdapter adapter;
     ListView listView;
-    File currentDirectory ;
+    private File currentDirectory ;
     TextView textCurrentDir;
-    File[] entriesFiles;
+    private File[] entriesFiles;
     public final static String keyMusic = "3kpoid";
-    final static String keyCurrentDir = "wajia";
+    private final static String keyCurrentDir = "currentDij";
 
 
     @Override
@@ -117,13 +118,22 @@ public class FileSystemActivity extends AbstractReceiver
     //it's fucking crooked nail , fix it too!!!
     public static Audio getAudioFromFile(File file,Context context)
     {
-        Log.i("TAG AUDIO",file.getAbsolutePath().substring(12) + " ****** "+ TracksHolder.allAudios.get(420).url);
+        Log.i("TAG AUDIO",file.getAbsolutePath().substring(12) + " ****** "+ TracksHolder.allAudios.get(420).getUrl());
 
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 TracksHolder.projection,MediaStore.Audio.Media.DATA + " LIKE ? ",new String[]{"%"+file.getAbsolutePath().substring(12)}, null);
 
-        cursor.moveToFirst();
-        Audio audio = Audio.createAudioCursor(cursor);
+        Audio audio;
+
+        if(cursor.moveToFirst())
+            audio = Audio.createAudioCursor(cursor);
+        else
+        {
+            MediaMetadataRetriever metadata = new MediaMetadataRetriever();
+            metadata.setDataSource(file.getAbsolutePath());
+            audio = new Audio(metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST),
+                    metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE),file.getAbsolutePath(),0);
+        }
         cursor.close();
         return audio;
     }

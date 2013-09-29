@@ -38,7 +38,6 @@ public class ListTracksActivity extends AbstractList
     public final static String actionPlaylist = "actionPlaylist";
     ActionMode actionMode;
     static String currentAction;
-    PlaylistDB playlistDB;
 
 
     @Override
@@ -145,9 +144,10 @@ public class ListTracksActivity extends AbstractList
                     case R.id.itemGetLiricks:
                         LyricsDialog dialog = new LyricsDialog();
                         Bundle bundle = new Bundle();
-                        bundle.putString(LyricsDialog.keyLyricsTitle,audios.get(PlayingService.indexCurrentTrack).title);
+                        bundle.putString(LyricsDialog.keyLyricsTitle, audios.get(PlayingService.indexCurrentTrack).getTitle());
                         dialog.setArguments(bundle);
                         dialog.show(getSupportFragmentManager(),"tag");
+                        mode.finish();
                         break;
                 }
             }
@@ -165,7 +165,7 @@ public class ListTracksActivity extends AbstractList
                         break;
                     case R.id.itemGetLiricks:
                         Audio audio = audios.get(PlayingService.indexCurrentTrack);
-                        startLiryctDialog(getSupportFragmentManager(), audio.artist, audio.title);
+                        startLiryctDialog(getSupportFragmentManager(), audio.getArtist(), audio.getTitle());
                         break;
                 }
                 mode.finish();
@@ -201,6 +201,13 @@ public class ListTracksActivity extends AbstractList
 
         adapter.changeData(audios);
 
+    }
+
+    @Override
+    protected void onClickTrack(int position)
+    {
+        super.onClickTrack(position);
+        PlayingService.isOnline = false;
     }
 
     void trackDelete(int position)
@@ -286,7 +293,6 @@ public class ListTracksActivity extends AbstractList
     private void initialize()
     {
         listView = (ListView)findViewById(R.id.listAllSongs);
-        playlistDB = PlaylistDB.getInstance(this);
         intentService = new Intent(this,PlayingService.class);
         intentService.setAction(PlayingService.actionOffline);
         intentService.putExtra(FullPlaybackActivity.keyService, audios);

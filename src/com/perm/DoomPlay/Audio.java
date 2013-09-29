@@ -13,14 +13,15 @@ import java.util.ArrayList;
 public class Audio implements Serializable ,Parcelable
 {
     private static final long serialVersionUID = 1L;
-    public long aid;
-    public String artist;
-    public String title;
-    public String url;
-    public long lyrics_id;
-    public long owner_id;
+    private long aid;
+    private String artist;
+    private String title;
+    private String url;
+    private long lyrics_id;
+    private long owner_id;
 
-    public static Audio parseAudio(JSONObject o) throws NumberFormatException, JSONException{
+    public static Audio parseAudio(JSONObject o) throws NumberFormatException, JSONException
+    {
         Audio audio = new Audio();
         audio.aid = Long.parseLong(o.getString("aid"));
         if(o.has("performer"))
@@ -104,24 +105,24 @@ public class Audio implements Serializable ,Parcelable
     @Override
     public void writeToParcel(Parcel dest, int flags)
     {
-        dest.writeString(artist);
-        dest.writeString(title);
-        dest.writeString(url);
-        dest.writeLong(aid);
-        dest.writeLong(lyrics_id);
-        dest.writeLong(owner_id);
+        dest.writeString(getArtist());
+        dest.writeString(getTitle());
+        dest.writeString(getUrl());
+        dest.writeLong(getAid());
+        dest.writeLong(getLyrics_id());
+        dest.writeLong(getOwner_id());
     }
 
     @Override
     public boolean equals(Object o)
     {
-        return o.getClass() == Audio.class && url.equals(((Audio)o).url);
+        return o.getClass() == Audio.class && getUrl().equals(((Audio)o).getUrl());
     }
 
     @Override
     public int hashCode()
     {
-        return url.hashCode();
+        return getUrl().hashCode();
     }
 
     public static final Parcelable.Creator<Audio> CREATOR = new Parcelable.Creator<Audio>()
@@ -138,4 +139,34 @@ public class Audio implements Serializable ,Parcelable
             return new Audio[size];
         }
     };
+
+    public long getAid()
+    {
+        return aid;
+    }
+
+    public String getArtist()
+    {
+        return artist;
+    }
+
+    public String getTitle()
+    {
+        return title;
+    }
+
+    public String getUrl()
+    {
+        return url;
+    }
+
+    public long getLyrics_id()
+    {
+        return lyrics_id;
+    }
+
+    public long getOwner_id()
+    {
+        return owner_id;
+    }
 }

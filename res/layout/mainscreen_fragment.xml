@@ -19,9 +19,10 @@
                 android:clickable="true"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/linearAllSongs"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:gravity="center_vertical">
+                android:paddingTop="11dp"
+                android:paddingBottom="11dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/abc_item_background_holo_dark">
             <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -41,10 +42,11 @@
                 android:clickable="true"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/linearAlbums"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
+                android:paddingTop="11dp"
+                android:paddingBottom="11dp"
                 android:gravity="center_vertical"
-                android:layout_below="@+id/linearAllSongs">
+                android:layout_below="@+id/linearAllSongs"
+                android:background="@drawable/abc_item_background_holo_dark">
             <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -63,9 +65,10 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:id="@+id/linearArtists"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp" android:gravity="center_vertical"
-                android:layout_below="@+id/linearAlbums">
+                android:paddingTop="11dp"
+                android:paddingBottom="11dp" android:gravity="center_vertical"
+                android:layout_below="@+id/linearAlbums"
+                android:background="@drawable/abc_item_background_holo_dark">
             <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -86,9 +89,10 @@
                 android:clickable="true"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/linearPlaylists"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp" android:gravity="center_vertical"
-                android:layout_below="@+id/linearArtists">
+                android:paddingTop="11dp"
+                android:paddingBottom="11dp" android:gravity="center_vertical"
+                android:layout_below="@+id/linearArtists"
+                android:background="@drawable/abc_item_background_holo_dark">
             <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -109,9 +113,10 @@
                 android:clickable="true"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/linearSearch"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:gravity="center_vertical" android:layout_below="@+id/linearPlaylists">
+                android:paddingTop="11dp"
+                android:paddingBottom="11dp"
+                android:gravity="center_vertical" android:layout_below="@+id/linearPlaylists"
+                android:background="@drawable/abc_item_background_holo_dark">
             <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -132,10 +137,11 @@
                 android:clickable="true"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/linearFolders"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
+                android:paddingTop="11dp"
+                android:paddingBottom="11dp"
                 android:gravity="center_vertical"
-                android:layout_below="@+id/linearSearch">
+                android:layout_below="@+id/linearSearch"
+                android:background="@drawable/abc_item_background_holo_dark">
             <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

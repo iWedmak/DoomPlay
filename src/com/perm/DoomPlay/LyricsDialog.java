@@ -89,8 +89,8 @@ public class LyricsDialog extends DialogFragment
                     else
                     {
                         ArrayList<Audio> audios = MainScreenActivity.api.searchAudio(title,1);
-                        if(audios.size() == 1 && audios.get(0).lyrics_id != 0)
-                            return MainScreenActivity.api.getLyrics(audios.get(0).lyrics_id);
+                        if(audios.size() == 1 && audios.get(0).getLyrics_id() != 0)
+                            return MainScreenActivity.api.getLyrics(audios.get(0).getLyrics_id());
                         else
                         {
                             return "Sorry , can't find lyrics";
@@ -102,7 +102,7 @@ public class LyricsDialog extends DialogFragment
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (KException e) {
-                    e.printStackTrace();
+                    e.printStackTrace();  return " *** ERROR **** --> please sign in for get lyrics";
                 }
                 return " ***ERROR*** (check acces to internet or something else) ";
             }

@@ -64,7 +64,7 @@ public class PageFragment extends Fragment
 
         textNumberSong.setText(pageNumber + 1 + "/" + FullPlaybackActivity.audios.size());
 
-        Bitmap bitmap =  AlbumArtGetter.getBitmapById(FullPlaybackActivity.audios.get(pageNumber).aid,getActivity());
+        Bitmap bitmap =  AlbumArtGetter.getBitmapById(FullPlaybackActivity.audios.get(pageNumber).getAid(),getActivity());
         if(bitmap != null)
             imgAlbum.setImageBitmap(bitmap);
 

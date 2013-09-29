@@ -60,19 +60,10 @@ public class VkPopularActivity extends AbstractVkItems
     }
 
     @Override
-    protected ArrayList<Audio> getAudios(int position)
+    protected ArrayList<Audio> getAudios(int position) throws KException,JSONException,IOException
     {
-        try {
-            return MainScreenActivity.api.getAudioPopular(acordingIds[position],
-                    SettingActivity.getPreference("countvkpopular"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (KException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return MainScreenActivity.api.getAudioPopular(acordingIds[position],
+                SettingActivity.getPreference("countvkpopular"));
     }
 
 

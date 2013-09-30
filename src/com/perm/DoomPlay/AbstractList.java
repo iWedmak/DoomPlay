@@ -1,5 +1,6 @@
 package com.perm.DoomPlay;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -30,6 +31,7 @@ abstract class AbstractList extends AbstractControls
     static boolean isLoading = false;
     LinearLayout linearLoading;
     protected PlaylistDB playlistDB;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -156,10 +158,16 @@ abstract class AbstractList extends AbstractControls
                     startLyricsDialog(getSupportFragmentManager(), audios.get(position).getLyrics_id());
                     break;
                 case R.id.itemLike:
-                    likeTrack(position);
+                    if(!PlaylistDB.isLoading)
+                        likeTrack(position);
+                    else
+                        waitMessage(getBaseContext());
                     break;
                 case R.id.itemDislike:
-                    dislikeTrack(position);
+                    if(!PlaylistDB.isLoading)
+                        dislikeTrack(position);
+                    else
+                        waitMessage(getBaseContext());
                     break;
                 case R.id.itemDownload:
                     Intent downloadIntent = new Intent(this,DownloadingService.class);
@@ -171,9 +179,12 @@ abstract class AbstractList extends AbstractControls
                     break;
             }
         }
-
-
     }
+    public static void waitMessage(Context context)
+    {
+        Toast.makeText(context,"please wait",Toast.LENGTH_SHORT).show();
+    }
+
     static void moveToAlbum(FragmentManager manager,long aid)
     {
         AddTrackToAlbumDialog dialog = new AddTrackToAlbumDialog();
@@ -206,9 +217,9 @@ abstract class AbstractList extends AbstractControls
                         e.printStackTrace();
                     } catch (KException e)
                     {
-                        isLoading = false;
-                        AbstractVkItems.handleKException(e, getBaseContext());
-                        finish();
+
+                        if(AbstractVkItems.handleKException(e, getBaseContext()))
+                            finish();
                     }
                     return params[0];
                 }
@@ -217,7 +228,8 @@ abstract class AbstractList extends AbstractControls
                 protected void onPostExecute(Integer position)
                 {
                     super.onPostExecute(position);
-                    audios.remove(position);
+                    audios.remove((int) position);
+                    TracksHolder.audiosVk = audios;
                     adapter.changeData(audios);
 
                     if(position == PlayingService.indexCurrentTrack && equalsCollections(PlayingService.audios,audios))
@@ -248,18 +260,19 @@ abstract class AbstractList extends AbstractControls
                     try
                     {
                        MainScreenActivity.api.addAudio(audios.get(params[0]).getAid(), audios.get(params[0]).getOwner_id());
-                       if(TracksHolder.audiosVk != null)
-                            TracksHolder.audiosVk.add(0,audios.get(params[0]));
-                       playlistDB.addVkTrack(audios.get(params[0]));
+                       TracksHolder.audiosVk.add(0,audios.get(params[0]));
+
+                       playlistDB.addVkTracks(TracksHolder.audiosVk);
+
 
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (KException e) {
-                        isLoading = false;
-                        AbstractVkItems.handleKException(e, getBaseContext());
-                        finish();
+
+                        if(AbstractVkItems.handleKException(e, getBaseContext()))
+                            finish();
                     }
                     return null;
 
@@ -281,7 +294,7 @@ abstract class AbstractList extends AbstractControls
     {
         if(PlayingService.isLoadingTrack)
         {
-            Toast.makeText(getBaseContext(),"please wait",Toast.LENGTH_SHORT).show();
+            waitMessage(this);
             return;
         }
 

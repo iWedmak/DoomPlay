@@ -106,10 +106,10 @@ public class MainScreenFragment extends Fragment
                         goArtist();
                         break;
                     case R.id.linearPlaylists:
-                        if(!AddTrackToAlbumDialog.isAdding)
+                        if(!PlaylistDB.isLoading)
                             startActivity(new Intent(activity,PlaylistActivity.class));
                         else
-                            Toast.makeText(activity, "please wait, tracks didn't added yet", Toast.LENGTH_SHORT);
+                            AbstractList.waitMessage(activity);
                         break;
                     case R.id.linearFolders:
                         startActivity(new Intent(activity,FileSystemActivity.class));

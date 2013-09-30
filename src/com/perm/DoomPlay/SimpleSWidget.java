@@ -52,7 +52,7 @@ public class SimpleSWidget extends AppWidgetProvider
         views.setTextViewText(R.id.widgetTitle, audio.getTitle());
         views.setTextViewText(R.id.widgetArtist, audio.getArtist());
 
-        Bitmap cover = AlbumArtGetter.getBitmapById(audio.getAid(), context);
+        Bitmap cover = ArtCacheUtils.get(audio.getAid());
         if (cover != null)
         {
             views.setImageViewBitmap(R.id.widgetAlbum, cover);

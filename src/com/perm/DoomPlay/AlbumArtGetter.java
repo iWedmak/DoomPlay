@@ -247,8 +247,7 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
         ContentValues cv = new ContentValues();
         cv.put("album_id", albumId);
         cv.put("_data", path);
-        String insert = MyApplication.getInstance().getContentResolver().insert(artworkUri, cv).toString();
-        Log.i("TAG URL",insert);
+        MyApplication.getInstance().getContentResolver().insert(artworkUri, cv);
     }
 
     public static Bitmap getBitmapById(long id,Context context)

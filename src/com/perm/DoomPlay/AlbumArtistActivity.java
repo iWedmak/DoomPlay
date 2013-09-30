@@ -156,7 +156,6 @@ public class AlbumArtistActivity extends AbstractReceiver
                 }
                 case R.id.itemToPlaylist:
                 {
-
                     if(currentAction.equals(actionPlayAlbum))
                         FileSystemActivity.showPlaybackDialog(getTracksFromAlbumArtist(position,true),getSupportFragmentManager());
                     else

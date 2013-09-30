@@ -150,10 +150,14 @@ public class ListVkActivity extends AbstractList
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (KException e) {
-                    isLoading = false;
-                    AbstractVkItems.handleKException(e, getBaseContext());
-                    finish();
-                    cancel(true);
+
+                    if(AbstractVkItems.handleKException(e, getBaseContext()))
+                    {
+                        finish();
+                        isLoading = false;
+                        cancel(true);
+                    }
+
                 }
                 return null;
             }
@@ -165,6 +169,7 @@ public class ListVkActivity extends AbstractList
                 isLoading = false;
                 linearLoading.setVisibility(View.GONE);
                 adapter.changeData(audios);
+                markItem(PlayingService.indexCurrentTrack,false);
             }
         };
         asyncTask.execute();

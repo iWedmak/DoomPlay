@@ -7,10 +7,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.*;
 import com.perm.vkontakte.api.Account;
 import com.perm.vkontakte.api.KException;
 import com.perm.vkontakte.api.User;
@@ -80,15 +77,25 @@ public class VkFrActivity extends AbstractVkItems
                     e.printStackTrace();
                 } catch (JSONException e) {
                     e.printStackTrace();
-                } catch (KException e) {
+                } catch (KException e)
+                {
                     isLoading = false;
-                    handleKException(e,getBaseContext());
-                    finish();
+                    if(handleKException(e,getBaseContext()))
+                    {
+                        finish();
+                    }
+                    else
+                    {
+                        handler.sendEmptyMessage(2);
+                        Toast.makeText(getBaseContext(),"can't get tracks",Toast.LENGTH_SHORT).show();
+                    }
+
                     return;
                 }
                 handler.sendEmptyMessage(2);
+                handler.sendEmptyMessage(3);
                 isLoading = false;
-                listView.setAdapter(new VkAlbumsAdapter());
+
 
             }
         }).start();
@@ -105,7 +112,13 @@ public class VkFrActivity extends AbstractVkItems
             else if(msg.what == 2)
             {
                 linearLoading.setVisibility(View.GONE);
+
             }
+            else if(msg.what == 3)
+            {
+                listView.setAdapter(new VkAlbumsAdapter());
+            }
+
         }
     };
     private class VkAlbumsAdapter extends BaseAdapter

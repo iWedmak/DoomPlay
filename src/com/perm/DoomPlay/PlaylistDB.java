@@ -42,6 +42,7 @@ public class PlaylistDB extends SQLiteOpenHelper
     private static final String KEY_LID = "lyrics_id";
     static boolean isLoading  = false;
 
+
     private PlaylistDB(Context context)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -70,6 +71,13 @@ public class PlaylistDB extends SQLiteOpenHelper
                   + Media._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + Media.DATA + " TEXT,"+
                   Media.ARTIST + " TEXT,"+ Media.TITLE + " TEXT," + Media.ALBUM_ID +" LONG," + KEY_POSITION_TRACK + " INTEGER"+ ")");
     }
+    private static void createVkTable(SQLiteDatabase db)
+    {
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_VK + "("
+                + Media._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + Media.DATA + " TEXT,"+
+                Media.ARTIST + " TEXT,"+ Media.TITLE + " TEXT," + Media.ALBUM_ID +" LONG,"+
+                KEY_OID + " LONG,"+ KEY_LID + " LONG,"+ KEY_POSITION_TRACK + " INTEGER"+ ")");
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db)
@@ -79,11 +87,7 @@ public class PlaylistDB extends SQLiteOpenHelper
 
         db.execSQL(createListPlaylistTable);
         createTable(TABLE_DEFAULT,db);
-
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_VK + "("
-                + Media._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + Media.DATA + " TEXT,"+
-                Media.ARTIST + " TEXT,"+ Media.TITLE + " TEXT," + Media.ALBUM_ID +" LONG,"+
-                KEY_OID + " LONG,"+ KEY_LID + " LONG,"+ KEY_POSITION_TRACK + " INTEGER"+ ")");
+        createVkTable(db);
 
 
 
@@ -146,10 +150,13 @@ public class PlaylistDB extends SQLiteOpenHelper
 
     void addVkTracks(ArrayList<Audio> audios)
     {
+        isLoading = true;
 
         SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DROP TABLE " + TABLE_VK );
+        createVkTable(db);
         ContentValues cv;
-        int position = getLastPosition(TABLE_VK,db);
+        int position = 0;
 
         for(Audio audio : audios)
         {
@@ -165,25 +172,9 @@ public class PlaylistDB extends SQLiteOpenHelper
             db.insert(TABLE_VK, null, cv);
         }
         db.close();
+        isLoading = false;
     }
-    void addVkTrack(Audio audio)
-    {
 
-        SQLiteDatabase db = getWritableDatabase();
-        int position = getLastPosition(TABLE_VK,db);
-
-        ContentValues cv = new ContentValues();
-        cv.put(Media.DATA, audio.getUrl());
-        cv.put(Media.ARTIST, audio.getArtist());
-        cv.put(Media.ALBUM_ID, audio.getAid());
-        cv.put(Media.TITLE, audio.getTitle());
-        cv.put(KEY_OID, audio.getOwner_id());
-        cv.put(KEY_LID, audio.getLyrics_id());
-        cv.put(KEY_POSITION_TRACK,position);
-        db.insert(TABLE_VK, null, cv);
-
-        db.close();
-    }
 
     void addTracks(ArrayList<Audio> audios, String playlist)
     {
@@ -208,6 +199,7 @@ public class PlaylistDB extends SQLiteOpenHelper
     }
     void addTrack(Audio audio,String playlist)
     {
+        isLoading = true;
         SQLiteDatabase db = getWritableDatabase();
         int position = getLastPosition(playlist,db);
 
@@ -219,6 +211,7 @@ public class PlaylistDB extends SQLiteOpenHelper
         cv.put(KEY_POSITION_TRACK,position);
         db.insert(playlist, null, cv);
         db.close();
+        isLoading = false;
     }
 
     void deleteTrack(int positionTrack,String playlist)

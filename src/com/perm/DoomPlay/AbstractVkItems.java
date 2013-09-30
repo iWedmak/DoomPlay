@@ -41,7 +41,7 @@ abstract class AbstractVkItems extends AbstractReceiver
     LinearLayout linearLoading;
     ListView listView;
 
-    public static void handleKException(KException e, Context context)
+    public static boolean handleKException(KException e, Context context)
     {
         e.printStackTrace();
         if(e.getMessage().contains("autorization failded"))
@@ -51,7 +51,9 @@ abstract class AbstractVkItems extends AbstractReceiver
             MainScreenActivity.isRegister = false;
             context.startActivity(new Intent(context, MainScreenActivity.class));
             Toast.makeText(context,"autorization error",Toast.LENGTH_SHORT).show();
+            return true;
         }
+        return false;
     }
 
     protected abstract void onClickRefresh();
@@ -158,8 +160,8 @@ abstract class AbstractVkItems extends AbstractReceiver
             } catch (KException e)
             {
                 isLoading = false;
-                handleKException(e, getBaseContext());
-                finish();
+                if(handleKException(e,getBaseContext()))
+                    finish();
                 cancel(true);
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -100,7 +100,7 @@ public class DownloadingService extends Service
     class Downloader extends AsyncTask<Void, Integer, Void>
     {
 
-        void download() throws IOException
+        private void download() throws IOException
         {
             URL url = new URL(track.getUrl());
             connection = (HttpURLConnection)url.openConnection();
@@ -122,7 +122,7 @@ public class DownloadingService extends Service
             in.close();
         }
 
-        void release()
+        private void release()
         {
             if(connection != null)
                 connection.disconnect();
@@ -223,6 +223,8 @@ public class DownloadingService extends Service
         }
 
 
+
+
         @Override
         protected Void doInBackground(Void... params)
         {
@@ -234,6 +236,13 @@ public class DownloadingService extends Service
             {
                 Log.e("EXCEPTION",e.toString());
                 release();
+
+                views.setProgressBar(R.id.progressDownload,100,100,false);
+                views.setTextViewText(R.id.notifTitle,"Sory,Error");
+                notification.flags = Notification.FLAG_ONLY_ALERT_ONCE;
+                notification.icon = R.drawable.downloaded;
+                manager.notify(notifId,notification);
+                cancel(true);
 
             }
             return null;

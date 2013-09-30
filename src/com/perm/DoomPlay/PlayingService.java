@@ -81,6 +81,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     private CallListener callListener = new CallListener();
     private OnLoadingTrackListener loadingListener;
 
+
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra)
     {
@@ -93,12 +94,14 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
             Toast.makeText(this, "sorry, error", Toast.LENGTH_SHORT).show();
         }
         Log.e("TAG AUDIO","ERROR IN MEDIA PLAYER ,what = "+ what +" ,extra = " + extra);
-        Log.e("TAG AUDIO","ERROR IN MEDIA PLAYER ,what = "+ what +" ,extra = " + extra);
-        Log.e("TAG AUDIO","ERROR IN MEDIA PLAYER ,what = "+ what +" ,extra = " + extra);
 
         handleError();
         return true;
     }
+
+
+
+
 
     private void handleError()
     {
@@ -168,6 +171,8 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
                     @Override
                     protected void onBitmapSaved(long albumId)
                     {
+                        ArtCacheUtils.add(albumId);
+
                         sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
                         startNotif();
 
@@ -188,7 +193,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         views.setTextViewText(R.id.notifTitle, audio.getTitle());
         views.setTextViewText(R.id.notifArtist, audio.getArtist());
 
-        Bitmap cover = AlbumArtGetter.getBitmapById(audio.getAid(),this);
+        Bitmap cover = ArtCacheUtils.get(audio.getAid());
         if (cover == null)
         {
             downloadAlbumArt(audio);
@@ -337,8 +342,12 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
     private void loadMusic()
     {
-        sendBroadcast(new Intent(actionTrackChanged));
+
         dispose();
+
+        ArtCacheUtils.add(audios.get(indexCurrentTrack).getAid());
+
+        sendBroadcast(new Intent(actionTrackChanged));
         startNotif();
         sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
         if(isPlaying)
@@ -375,7 +384,6 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
                 } catch (IOException e) {
                     e.printStackTrace();
-                    startNotif();
                 }
                 return null;
             }
@@ -578,7 +586,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         }
     }
 
-    class CallListener extends PhoneStateListener
+    private class CallListener extends PhoneStateListener
     {
         boolean wasPlaying = false;
 
@@ -600,7 +608,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
             }
         }
     }
-    class AFListener implements AudioManager.OnAudioFocusChangeListener
+    private class AFListener implements AudioManager.OnAudioFocusChangeListener
     {
         boolean wasPlaying = false;
 

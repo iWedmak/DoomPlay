@@ -66,13 +66,9 @@ public class ListTracksActivity extends AbstractList
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
         {
-            if(!AddTrackToAlbumDialog.isAdding)
-            {
-                actionMode = startSupportActionMode(callback);
-                actionMode.setTag(position);
-                return true;
-            }
-            return false;
+            actionMode = startSupportActionMode(callback);
+            actionMode.setTag(position);
+            return true;
 
         }
     };
@@ -113,32 +109,55 @@ public class ListTracksActivity extends AbstractList
 
                     case R.id.itemDeleteTrack:
                     {
-                        trackDelete(position);
+                        if(!PlaylistDB.isLoading)
+                        {
+                            trackDelete(position);
+                        }
+                        else
+                            AbstractList.waitMessage(getBaseContext());
 
                         mode.finish();
                         break;
                     }
                     case R.id.itemTrackDown:
                     {
-                        trackChange(false, position);
+                        if(!PlaylistDB.isLoading)
+                        {
+                            trackChange(false, position);
 
-                        if(position == audios.size() - 1)
-                            position = 0;
+                            if(position == audios.size() - 1)
+                                position = 0;
+                            else
+                                position++;
+
+                            updateList();
+                        }
                         else
-                            position++;
-
-                        updateList();
+                        {
+                            mode.finish();
+                            AbstractList.waitMessage(getBaseContext());
+                        }
                         break;
                     }
                     case R.id.itemTrackUp:
                     {
-                        trackChange(true, position);
-                        if(position == 0)
-                            position = audios.size() - 1;
-                        else
-                            position--;
+                        if(!PlaylistDB.isLoading)
+                        {
+                            trackChange(true, position);
+                            if(position == 0)
+                                position = audios.size() - 1;
+                            else
+                                position--;
 
-                        updateList();
+                            updateList();
+                        }
+                        else
+                        {
+                            mode.finish();
+                            AbstractList.waitMessage(getBaseContext());
+                        }
+
+
                         break;
                     }
                     case R.id.itemGetLiricks:
@@ -210,30 +229,30 @@ public class ListTracksActivity extends AbstractList
         PlayingService.isOnline = false;
     }
 
-    void trackDelete(int position)
+    private void trackDelete(int position)
     {
-        playlistDB.deleteTrack(position, PlaylistActivity.selectedPlaylist);
-        updateList();
-        AsyncTask<Integer,Void,Void> asyncAdder  = new AsyncTask<Integer, Void, Void>()
-        {
-            @Override
-            protected Void doInBackground(Integer... params)
-            {
-                AddTrackToAlbumDialog.isAdding = true;
-                playlistDB.setAcordingPositions(params[0],PlaylistActivity.selectedPlaylist);
-                AddTrackToAlbumDialog.isAdding = false;
-                return null;
-            }
-        };
-        asyncAdder.execute(position);
 
-        if(position == PlayingService.indexCurrentTrack && AbstractList.equalsCollections(audios,PlayingService.audios))
-        {
-            playingService.playTrackFromList(PlayingService.indexCurrentTrack);
-        }
+            playlistDB.deleteTrack(position, PlaylistActivity.selectedPlaylist);
+            updateList();
+            AsyncTask<Integer,Void,Void> asyncAdder  = new AsyncTask<Integer, Void, Void>()
+            {
+                @Override
+                protected Void doInBackground(Integer... params)
+                {
+                    playlistDB.setAcordingPositions(params[0],PlaylistActivity.selectedPlaylist);
+                    return null;
+                }
+            };
+            asyncAdder.execute(position);
+
+            if(position == PlayingService.indexCurrentTrack && AbstractList.equalsCollections(audios,PlayingService.audios))
+            {
+                playingService.playTrackFromList(PlayingService.indexCurrentTrack);
+            }
+
     }
 
-    void trackChange(boolean up, int position)
+    private void trackChange(boolean up, int position)
     {
         int to ;
 

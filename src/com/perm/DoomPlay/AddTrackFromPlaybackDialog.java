@@ -39,7 +39,6 @@ public class AddTrackFromPlaybackDialog extends DialogFragment
     PlaylistDB playlistDB;
     String[] listPlaylist;
     ArrayList<Audio> audios ;
-    public static boolean isAdding = false;
     public final static String keyBundleDialog = "keybndleed";
 
     @Override
@@ -69,16 +68,14 @@ public class AddTrackFromPlaybackDialog extends DialogFragment
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
 
-            if(!isAdding)
+            if(!PlaylistDB.isLoading)
             {
                 new AsyncTask<String, Void, Void>()
                 {
                     @Override
                     protected Void doInBackground(String... params)
                     {
-                        isAdding = true;
                         playlistDB.addTracks(audios, params[0]);
-                        isAdding = false;
                         return null;
                     }
                 }.execute(listPlaylist[position]);
@@ -86,7 +83,7 @@ public class AddTrackFromPlaybackDialog extends DialogFragment
                 Toast.makeText(getActivity(),"tracks added",Toast.LENGTH_SHORT).show();
             }
             else
-                Toast.makeText(getActivity(),"please wait, tracks didn't added yet",Toast.LENGTH_SHORT);
+               AbstractList.waitMessage(getActivity());
         }
     };
 

@@ -42,8 +42,6 @@ public class AddTrackToAlbumDialog extends DialogFragment
     ListView listView;
     LinearLayout linearLoading;
     static boolean isLoading = false;
-
-    public static boolean isAdding = false;
     public final static String keyDialogAlbum = "keybndleed";
     long trackId;
 

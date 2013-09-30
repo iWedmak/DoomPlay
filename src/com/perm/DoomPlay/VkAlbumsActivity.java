@@ -131,6 +131,11 @@ public class VkAlbumsActivity extends AbstractVkItems
                                      } catch (KException e)
                                      {
                                          e.printStackTrace();
+                                         isLoading = false;
+                                         if(handleKException(e,getBaseContext()))
+                                         {
+                                             finish();
+                                         }
                                      }
                                      return null;
                                  }
@@ -173,6 +178,11 @@ public class VkAlbumsActivity extends AbstractVkItems
                             } catch (KException e)
                             {
                                 e.printStackTrace();
+                                isLoading = false;
+                                if(handleKException(e,getBaseContext()))
+                                {
+                                    finish();
+                                }
                             }
                             return null;
                         }
@@ -250,6 +260,11 @@ public class VkAlbumsActivity extends AbstractVkItems
                             } catch (KException e)
                             {
                                 e.printStackTrace();
+                                isLoading = false;
+                                if(handleKException(e,getBaseContext()))
+                                {
+                                    finish();
+                                }
                             }
                             return null;
                         }
@@ -293,8 +308,10 @@ public class VkAlbumsActivity extends AbstractVkItems
                 } catch (KException e)
                 {
                     isLoading = false;
-                    handleKException(e, getBaseContext());
-                    finish();
+                    if(handleKException(e,getBaseContext()))
+                    {
+                        finish();
+                    }
                     return;
                 }
                 handler.sendEmptyMessage(2);

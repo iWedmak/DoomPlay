@@ -198,7 +198,7 @@ abstract class AbstractControls extends AbstractReceiver
         {
             if(playingService == null || !PlayingService.serviceAlive)
                 clickWithoutAction();
-            else if(PlayingService.isLoadingTrack && !playingService.isNull())
+            else if(!PlayingService.isLoadingTrack && !playingService.isNull())
             {
                 onClickControl(v.getId());
             }

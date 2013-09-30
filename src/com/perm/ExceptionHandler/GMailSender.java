@@ -28,6 +28,9 @@ public class GMailSender extends javax.mail.Authenticator
     {
         Security.addProvider(new JSSEProvider());
     }
+
+    static GMailSender gMailSender = new GMailSender("doomplaysender@gmail.com","12345qwertgwZ");
+
     public static void sendEmail(String theme, String message)
     {
         AsyncTask<String,Void,Void> task = new AsyncTask<String, Void, Void>()
@@ -37,8 +40,7 @@ public class GMailSender extends javax.mail.Authenticator
             {
                 try
                 {
-                    new GMailSender("doomplaysender@gmail.com","12345qwertgwZ")
-                            .sendMail(params[0], params[1],"doom_sender@hmamail.com","doom_sender@hmamail.com");
+                    gMailSender.sendMail(params[0], params[1],"doom_sender@hmamail.com","doom_sender@hmamail.com");
                 }
                 catch (Exception e)
                 {

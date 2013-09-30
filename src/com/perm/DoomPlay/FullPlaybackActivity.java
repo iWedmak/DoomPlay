@@ -139,9 +139,7 @@ public class FullPlaybackActivity  extends AbstractControls
         else if(!PlayingService.serviceAlive)
             initializeService();
 
-
-
-
+        viewPager.setAdapter(adapterPager);
     }
 
     @Override
@@ -326,7 +324,6 @@ public class FullPlaybackActivity  extends AbstractControls
         viewPager = (CustomViewPager)findViewById(R.id.viewPager);
         viewPager.setOnPageChangeListener(pageChangeHandler);
         adapterPager = new PagePlaybackAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(adapterPager);
     }
     ViewPager.OnPageChangeListener pageChangeHandler = new ViewPager.OnPageChangeListener()
     {

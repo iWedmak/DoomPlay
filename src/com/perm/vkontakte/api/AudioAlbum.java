@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public class AudioAlbum
 {
-    public long album_id;
-    public String title;
+    public final long album_id;
+    public final String title;
 
     public static AudioAlbum parse(JSONObject o) throws JSONException
     {

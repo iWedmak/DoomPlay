@@ -74,7 +74,7 @@ public class ListVkActivity extends AbstractList
         PlayingService.isOnline = true;
     }
 
-    AsyncTask<Void,Void,Void> asyncTask;
+    private AsyncTask<Void,Void,Void> asyncTask;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
@@ -116,7 +116,7 @@ public class ListVkActivity extends AbstractList
         });
     }
 
-    void refreshAudios()
+    private void refreshAudios()
     {
         asyncTask = new AsyncTask<Void, Void, Void>()
         {
@@ -175,7 +175,7 @@ public class ListVkActivity extends AbstractList
         asyncTask.execute();
     }
 
-    private ActionMode.Callback callback = new ActionMode.Callback()
+    private final ActionMode.Callback callback = new ActionMode.Callback()
     {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu)
@@ -205,7 +205,7 @@ public class ListVkActivity extends AbstractList
         public void onDestroyActionMode(ActionMode mode) {}
     };
 
-    void initializeUi()
+    private void initializeUi()
     {
         adapter = new ListsAdapter(audios,this);
         listView = (ListView)findViewById(R.id.listAllSongs);

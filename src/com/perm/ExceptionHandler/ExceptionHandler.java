@@ -32,7 +32,7 @@ final public class ExceptionHandler implements Thread.UncaughtExceptionHandler
     private final DateFormat formatter = new SimpleDateFormat("dd.MM.yy HH:mm");
     private String versionName = "0";
     private int versionCode = 0;
-    Thread.UncaughtExceptionHandler oldHandler;
+    private final Thread.UncaughtExceptionHandler oldHandler;
 
     public ExceptionHandler(Context context)
     {

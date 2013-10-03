@@ -22,7 +22,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.*;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.perm.vkontakte.api.KException;
 import org.json.JSONException;
@@ -30,11 +29,10 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class LyricsDialog extends DialogFragment
+class LyricsDialog extends DialogFragment
 {
-    LinearLayout linearLoading;
-    TextView textView ;
-    RelativeLayout relativeLyrics;
+    private LinearLayout linearLoading;
+    private TextView textView ;
     public final static String keyLyricsId = "get_lyrics";
     public final static String keyLyricsTitle = "lyr_Title";
     private String title;
@@ -58,11 +56,10 @@ public class LyricsDialog extends DialogFragment
         View view = inflater.inflate(R.layout.dialog_lyrics,container,false);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         linearLoading = (LinearLayout)view.findViewById(R.id.linearLoading);
-        relativeLyrics = (RelativeLayout)view.findViewById(R.id.relativeLyrics);
         textView = (TextView)view.findViewById(R.id.textLyrics);
         return view;
     }
-    AsyncTask<Void,Void,String> task ;
+    private AsyncTask<Void,Void,String> task ;
 
 
 
@@ -82,6 +79,10 @@ public class LyricsDialog extends DialogFragment
             @Override
             protected String doInBackground(Void... params)
             {
+                if(!MainScreenActivity.isRegister)
+                    return "For getting lyrics is necessary to sign in (vk)";
+
+
                 try
                 {
                     if(title == null)

@@ -19,13 +19,12 @@ package com.perm.DoomPlay;
  */
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.view.Window;
-
-import java.io.File;
+import android.widget.Toast;
 
 public class SettingActivity extends PreferenceActivity
 {
@@ -58,33 +57,32 @@ public class SettingActivity extends PreferenceActivity
         addPreferencesFromResource(R.xml.pref);
 
 
-        /*
-        findPreference("download_folder").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
+
+        findPreference("contact").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
         {
             @Override
             public boolean onPreferenceClick(Preference preference)
             {
-                Intent theIntent = new Intent(Intent.ACTION_PICK);
 
-                theIntent.setData(Uri.parseAudio("filePath://"));
-                theIntent.putExtra(Intent.EXTRA_TITLE,"Choose directory");
-                startActivityForResult(theIntent, 1);
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("message/rfc822");
+                i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"doomplaye@gmail.com"});
+                i.putExtra(Intent.EXTRA_SUBJECT, "subject of email");
+                i.putExtra(Intent.EXTRA_TEXT   , "body of email");
+                try
+                {
+                    startActivity(Intent.createChooser(i, "Send mail..."));
+                }
+                catch (android.content.ActivityNotFoundException ex)
+                {
+                    Toast.makeText(getBaseContext(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                }
+
                 return true;
             }
         });
-        */
 
-    }
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if (resultCode == RESULT_OK)
-        {
-           SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(this).edit();
-           assert new File(data.getData().getPath()).isDirectory();
-           edit.putString("download_folder",data.getData().getPath());
-           edit.apply();
-           edit.commit();
-        }
+
     }
 
 }

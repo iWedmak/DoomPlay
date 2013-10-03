@@ -37,7 +37,7 @@ public class Utils
 {
     private Utils(){}
 
-    public static final String[] EXTENSIONS = { ".mp3" , ".flac", ".mp4",".wav",".ogg"};
+    private static final String[] EXTENSIONS = { ".mp3" , ".flac", ".mp4",".wav",".ogg"};
 
     public static boolean trackChecker(String trackToTest)
     {
@@ -127,11 +127,6 @@ public class Utils
         PackageManager packageManager = context.getPackageManager();
         List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         return list.size() > 0;
-    }
-
-    public static void onKException(Context context)
-    {
-
     }
 
 }

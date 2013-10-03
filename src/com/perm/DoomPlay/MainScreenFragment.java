@@ -27,10 +27,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-public class MainScreenFragment extends Fragment
+class MainScreenFragment extends Fragment
 {
-    MainScreenActivity activity;
-    LinearLayout linearLoading;
+    private MainScreenActivity activity;
+    private LinearLayout linearLoading;
 
     void scan()
     {
@@ -88,7 +88,7 @@ public class MainScreenFragment extends Fragment
 
         return view;
     }
-    View.OnClickListener onClickMainLinear = new View.OnClickListener()
+    private final View.OnClickListener onClickMainLinear = new View.OnClickListener()
     {
         @Override
         public void onClick(View v)

@@ -39,11 +39,11 @@ import java.io.IOException;
 public class AddTrackToAlbumDialog extends DialogFragment
 {
 
-    ListView listView;
-    LinearLayout linearLoading;
+    private ListView listView;
+    private LinearLayout linearLoading;
     static boolean isLoading = false;
     public final static String keyDialogAlbum = "keybndleed";
-    long trackId;
+    private long trackId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -114,7 +114,7 @@ public class AddTrackToAlbumDialog extends DialogFragment
         }
     }
 
-    AdapterView.OnItemClickListener onItemClickHandler = new AdapterView.OnItemClickListener()
+    private final AdapterView.OnItemClickListener onItemClickHandler = new AdapterView.OnItemClickListener()
     {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -150,7 +150,7 @@ public class AddTrackToAlbumDialog extends DialogFragment
 
     class DialogAddAdapter extends BaseAdapter
     {
-        LayoutInflater inflater;
+        final LayoutInflater inflater;
         public DialogAddAdapter()
         {
             inflater = getActivity().getLayoutInflater();

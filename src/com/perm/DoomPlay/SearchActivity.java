@@ -34,9 +34,9 @@ import java.util.ArrayList;
 
 public class SearchActivity extends AbstractList
 {
-    EditText editQuery;
-    TextView textNoResults;
-    public final static int REQUEST_CODE = 739;
+    private EditText editQuery;
+    private TextView textNoResults;
+    private final static int REQUEST_CODE = 739;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -50,7 +50,7 @@ public class SearchActivity extends AbstractList
 
     }
 
-    AdapterView.OnItemLongClickListener onItemLongTrackClick =  new AdapterView.OnItemLongClickListener()
+    private final AdapterView.OnItemLongClickListener onItemLongTrackClick =  new AdapterView.OnItemLongClickListener()
     {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
@@ -101,7 +101,7 @@ public class SearchActivity extends AbstractList
         PlayingService.isOnline = false;
     }
 
-    TextWatcher onTextChangeHandler = new TextWatcher()
+    private final TextWatcher onTextChangeHandler = new TextWatcher()
     {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after){}
@@ -134,7 +134,7 @@ public class SearchActivity extends AbstractList
             adapter.setMarkedItem(PlayingService.valueIncredible);
         }
     };
-    ActionMode.Callback callback = new ActionMode.Callback()
+    private final ActionMode.Callback callback = new ActionMode.Callback()
     {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu)

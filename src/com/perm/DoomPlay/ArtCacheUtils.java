@@ -16,12 +16,13 @@ package com.perm.DoomPlay;
  *
  *    You can contact me <DoomPlaye@gmail.com>
  */
-import android.graphics.Bitmap;
-import android.util.LruCache;
 
-public class ArtCacheUtils
+import android.graphics.Bitmap;
+import android.support.v4.util.LruCache;
+
+class ArtCacheUtils
 {
-    private static LruCache<Long,Bitmap> cache = new LruCache<Long, Bitmap>(2*1024*1024);
+    private static final LruCache<Long,Bitmap> cache = new LruCache<Long, Bitmap>(2*1024*1024);
 
     public static void add(long id)
     {

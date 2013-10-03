@@ -61,7 +61,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     final static int previousTrack = -1;
     public final static int valueIncredible = 519815;
     final MyBinder binder = new MyBinder();
-    public final static int idForeground = 931;
+    private final static int idForeground = 931;
     public final static String actionPlay = "DoomePlay";
     public final static String actionClose = "DoomClose";
     public final static String actionNext = "DoomNext";
@@ -78,7 +78,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     public static ArrayList<Audio> audios ;
     public static boolean isLoadingTrack;
     private AFListener afListener ;
-    private CallListener callListener = new CallListener();
+    private final CallListener callListener = new CallListener();
     private OnLoadingTrackListener loadingListener;
 
 
@@ -163,11 +163,6 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
             {
                 new AlbumArtGetter(audio.getAid(), audio.getArtist(), audio.getTitle())
                 {
-                    @Override
-                    protected void onGetBitmap(Bitmap bitmap)
-                    {
-
-                    }
                     @Override
                     protected void onBitmapSaved(long albumId)
                     {
@@ -471,6 +466,8 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
                 break;
             }
+            default:
+                throw new IllegalArgumentException("direction can be 1 or -1");
         }
     }
 

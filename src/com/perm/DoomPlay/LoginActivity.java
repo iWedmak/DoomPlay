@@ -33,9 +33,9 @@ import com.perm.vkontakte.api.Auth;
 public class LoginActivity extends Activity
 {
     private static final String TAG = "Kate.LoginActivity";
-    public static String API_ID = "3861634";
+    public static final String API_ID = "3861634";
 
-    WebView webview;
+    private WebView webview;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -60,7 +60,7 @@ public class LoginActivity extends Activity
         webview.loadUrl(url);
     }
 
-    class VkontakteWebViewClient extends WebViewClient
+    private class VkontakteWebViewClient extends WebViewClient
     {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon)

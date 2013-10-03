@@ -33,10 +33,10 @@ import java.util.ArrayList;
 
 public class VkPopularActivity extends AbstractVkItems
 {
-    public final static String[] genres = {"Rock","Pop","Rap & Hip-Hop","Easy Listening",
+    private final static String[] genres = {"Rock","Pop","Rap & Hip-Hop","Easy Listening",
             "Dance & House","Instrumental","Metal","Alternative","Dubstep","Jazz & Blues","Drum & Bass",
             "Trance","Chanson","Ethnic","Acoustic & Vocal","Reggae","Classical","Indie Pop","Speech","Electropop & Disco","Other"};
-    public final static int[] acordingIds = {1,2,3,4,5,6,7,21,8,9,10,11,12,13,14,15,16,17,19,22,18};
+    private final static int[] acordingIds = {1,2,3,4,5,6,7,21,8,9,10,11,12,13,14,15,16,17,19,22,18};
 
 
     @Override
@@ -69,7 +69,7 @@ public class VkPopularActivity extends AbstractVkItems
 
     class VkPopularAdapter extends BaseAdapter
     {
-        LayoutInflater inflater;
+        final LayoutInflater inflater;
         public VkPopularAdapter()
         {
             inflater = (LayoutInflater)getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);

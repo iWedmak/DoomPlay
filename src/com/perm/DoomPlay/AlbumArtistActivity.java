@@ -34,12 +34,10 @@ import java.util.ArrayList;
 public class AlbumArtistActivity extends AbstractReceiver
 {
 
-    ListView listView;
-    public static String[] albumArtist;
+    private static String[] albumArtist;
 
     public final static String actionPlayArtist ="action.list.playArtist";
     public final static String actionPlayAlbum = "action.list.playAlbum";
-    PlaylistDB playlistDB ;
     static String currentAction = null;
 
     @Override
@@ -50,10 +48,8 @@ public class AlbumArtistActivity extends AbstractReceiver
         currentAction = getIntent().getAction();
 
         setContentView(R.layout.list_album_artist);
-        listView = (ListView)findViewById(R.id.listAlbumArtist);
+        ListView listView = (ListView) findViewById(R.id.listAlbumArtist);
 
-
-        playlistDB = PlaylistDB.getInstance(this);
 
         if(currentAction.equals(actionPlayArtist))
             albumArtist = TracksHolder.allArtist;
@@ -66,7 +62,7 @@ public class AlbumArtistActivity extends AbstractReceiver
         listView.setOnItemLongClickListener(onLongClickAlbumArtist);
     }
 
-    AdapterView.OnItemClickListener onClickAlbumArtist = new AdapterView.OnItemClickListener()
+    final AdapterView.OnItemClickListener onClickAlbumArtist = new AdapterView.OnItemClickListener()
     {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -81,7 +77,7 @@ public class AlbumArtistActivity extends AbstractReceiver
             }
         }
     };
-    AdapterView.OnItemLongClickListener onLongClickAlbumArtist = new AdapterView.OnItemLongClickListener()
+    final AdapterView.OnItemLongClickListener onLongClickAlbumArtist = new AdapterView.OnItemLongClickListener()
     {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
@@ -122,7 +118,7 @@ public class AlbumArtistActivity extends AbstractReceiver
         return result;
     }
 
-    ActionMode.Callback  callback = new ActionMode.Callback()
+    private final ActionMode.Callback  callback = new ActionMode.Callback()
     {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu)
@@ -173,8 +169,8 @@ public class AlbumArtistActivity extends AbstractReceiver
     };
     class AlbumArtistAdapter extends BaseAdapter
     {
-        String[] artistAlbums;
-        LayoutInflater inflater;
+        final String[] artistAlbums;
+        final LayoutInflater inflater;
         public AlbumArtistAdapter(String[] artistAlbums)
         {
             this.artistAlbums = artistAlbums;

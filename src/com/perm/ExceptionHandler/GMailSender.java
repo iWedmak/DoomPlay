@@ -20,16 +20,16 @@ import java.util.Properties;
 public class GMailSender extends javax.mail.Authenticator
 {
 
-    private String user;
-    private String password;
-    private Session session;
+    private final String user;
+    private final String password;
+    private final Session session;
 
     static
     {
         Security.addProvider(new JSSEProvider());
     }
 
-    static GMailSender gMailSender = new GMailSender("doomplaysender@gmail.com","12345qwertgwZ");
+    static final GMailSender gMailSender = new GMailSender("doomplaysender@gmail.com","12345qwertgwZ");
 
     public static void sendEmail(String theme, String message)
     {
@@ -77,25 +77,23 @@ public class GMailSender extends javax.mail.Authenticator
     }
 
     public synchronized void sendMail(String subject, String body, String sender, String recipients) throws Exception {
-        try{
-            MimeMessage message = new MimeMessage(session);
-            DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/plain"));
-            message.setSender(new InternetAddress(sender));
-            message.setSubject(subject);
-            message.setDataHandler(handler);
-            if (recipients.indexOf(',') > 0)
-                message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipients));
-            else
-                message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipients));
-            Transport.send(message);
-        }catch(Exception e){
 
-        }
+        MimeMessage message = new MimeMessage(session);
+        DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/plain"));
+        message.setSender(new InternetAddress(sender));
+        message.setSubject(subject);
+        message.setDataHandler(handler);
+        if (recipients.indexOf(',') > 0)
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipients));
+        else
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipients));
+        Transport.send(message);
+
     }
 
     public class ByteArrayDataSource implements DataSource {
-        private byte[] data;
-        private String type;
+        private final byte[] data;
+        private final String type;
 
         public ByteArrayDataSource(byte[] data, String type) {
             super();

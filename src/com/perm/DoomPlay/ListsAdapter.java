@@ -28,12 +28,12 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class ListsAdapter extends BaseAdapter
+class ListsAdapter extends BaseAdapter
 {
-    LayoutInflater inflater;
-    Context context;
-    int markedItem ;
-    ArrayList<Audio> audios;
+    private final LayoutInflater inflater;
+    private final Context context;
+    private int markedItem ;
+    private ArrayList<Audio> audios;
 
 
     public ListsAdapter(ArrayList<Audio> audios, Context context)

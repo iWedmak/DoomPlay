@@ -29,18 +29,16 @@ import android.widget.TextView;
 
 public class PlaylistActivity extends AbstractReceiver
 {
-    ListView listPlaylist;
-    PlaylistAdapter adapter;
-    PlaylistDB playlistDB;
+    private PlaylistAdapter adapter;
+    private PlaylistDB playlistDB;
     public static String[] playlists;
     public static String selectedPlaylist = null;
-    public final static String tagNewDialog = "tagNewDialog";
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.playlists);
-        listPlaylist = (ListView) findViewById(R.id.listPlaylist);
+        ListView listPlaylist = (ListView) findViewById(R.id.listPlaylist);
         playlistDB = PlaylistDB.getInstance(this);
         playlists = playlistDB.getListPlaylist();
 
@@ -55,7 +53,7 @@ public class PlaylistActivity extends AbstractReceiver
 
         updateList();
     }
-    AdapterView.OnItemClickListener onItemTrackClick = new AdapterView.OnItemClickListener()
+    final AdapterView.OnItemClickListener onItemTrackClick = new AdapterView.OnItemClickListener()
     {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -68,7 +66,7 @@ public class PlaylistActivity extends AbstractReceiver
             startActivity(intent);
         }
     };
-    AdapterView.OnItemLongClickListener onItemLongTrackClick = new AdapterView.OnItemLongClickListener()
+    final AdapterView.OnItemLongClickListener onItemLongTrackClick = new AdapterView.OnItemLongClickListener()
     {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
@@ -79,7 +77,7 @@ public class PlaylistActivity extends AbstractReceiver
         }
     };
 
-    ActionMode.Callback callback = new ActionMode.Callback()
+    final ActionMode.Callback callback = new ActionMode.Callback()
     {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu)
@@ -154,7 +152,7 @@ public class PlaylistActivity extends AbstractReceiver
                         updateList();
                     }
                 };
-                dialog.show(getSupportFragmentManager(),tagNewDialog);
+                dialog.show(getSupportFragmentManager(),"tag");
                 return true;
             case R.id.itemSettings:
                 startActivity(new Intent(this,SettingActivity.class));
@@ -169,7 +167,7 @@ public class PlaylistActivity extends AbstractReceiver
     class PlaylistAdapter extends BaseAdapter
     {
 
-        LayoutInflater inflater;
+        final LayoutInflater inflater;
 
         public PlaylistAdapter()
         {

@@ -34,7 +34,7 @@ public class PageFragment extends Fragment
 {
     static final String argumentPageNumber = "arg_page_number";
 
-    int pageNumber;
+    private int pageNumber;
     static boolean isPortrait;
 
     static PageFragment newInstance(int page)
@@ -62,9 +62,9 @@ public class PageFragment extends Fragment
         ImageView imgAlbum = (ImageView)page.findViewById(R.id.imageAlbum);
         TextView textNumberSong = (TextView)page.findViewById(R.id.textNumberSong);
 
-        textNumberSong.setText(pageNumber + 1 + "/" + PlayingService.audios.size());
+        textNumberSong.setText(pageNumber + 1 + "/" + FullPlaybackActivity.audios.size());
 
-        Bitmap bitmap =  AlbumArtGetter.getBitmapById(PlayingService.audios.get(pageNumber).getAid(),getActivity());
+        Bitmap bitmap =  AlbumArtGetter.getBitmapById(FullPlaybackActivity.audios.get(pageNumber).getAid(),getActivity());
         if(bitmap != null)
             imgAlbum.setImageBitmap(bitmap);
 

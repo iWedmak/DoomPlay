@@ -35,10 +35,10 @@ import java.util.ArrayList;
 public class AddTrackFromPlaybackDialog extends DialogFragment
 {
 
-    ListView listView;
-    PlaylistDB playlistDB;
-    String[] listPlaylist;
-    ArrayList<Audio> audios ;
+    private ListView listView;
+    private PlaylistDB playlistDB;
+    private String[] listPlaylist;
+    private ArrayList<Audio> audios ;
     public final static String keyBundleDialog = "keybndleed";
 
     @Override
@@ -62,7 +62,7 @@ public class AddTrackFromPlaybackDialog extends DialogFragment
         return view;
 
     }
-    AdapterView.OnItemClickListener onItemClickHandler = new AdapterView.OnItemClickListener()
+    private final AdapterView.OnItemClickListener onItemClickHandler = new AdapterView.OnItemClickListener()
     {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -89,7 +89,7 @@ public class AddTrackFromPlaybackDialog extends DialogFragment
 
     class DialogAddAdapter extends BaseAdapter
     {
-        LayoutInflater inflater;
+        final LayoutInflater inflater;
         public DialogAddAdapter()
         {
             inflater = getActivity().getLayoutInflater();

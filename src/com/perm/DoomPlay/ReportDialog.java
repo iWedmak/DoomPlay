@@ -28,8 +28,8 @@ import com.perm.ExceptionHandler.GMailSender;
 
 class ReportDialog extends DialogFragment
 {
-    EditText editSubject;
-    EditText editMessage;
+    private EditText editSubject;
+    private EditText editMessage;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -49,7 +49,7 @@ class ReportDialog extends DialogFragment
 
         return view;
     }
-    View.OnClickListener onClickSendListener = new View.OnClickListener()
+    private final View.OnClickListener onClickSendListener = new View.OnClickListener()
     {
         @Override
         public void onClick(View v)

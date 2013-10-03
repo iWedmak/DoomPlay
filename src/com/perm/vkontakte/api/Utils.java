@@ -8,7 +8,7 @@ import java.io.StringWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Utils {
+class Utils {
     
     public static String extractPattern(String string, String pattern){
         Pattern p = Pattern.compile(pattern);
@@ -48,8 +48,8 @@ public class Utils {
             }
     }
     
-    private static String pattern_string_profile_id = "^(id)?(\\d{1,10})$";
-    private static Pattern pattern_profile_id = Pattern.compile(pattern_string_profile_id);
+    private static final String pattern_string_profile_id = "^(id)?(\\d{1,10})$";
+    private static final Pattern pattern_profile_id = Pattern.compile(pattern_string_profile_id);
     public static String parseProfileId(String text) {
         Matcher m = pattern_profile_id.matcher(text);
         if (!m.find())

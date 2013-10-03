@@ -154,7 +154,8 @@
             </PreferenceScreen>
             <PreferenceScreen
                     android:title="Contact to author"
-                    android:summary="DoomPlaye@gmail.com">
+                    android:summary="DoomPlaye@gmail.com"
+                    android:key="contact">
             </PreferenceScreen>
         </PreferenceScreen>
 

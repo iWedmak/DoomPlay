@@ -112,7 +112,7 @@ abstract class AbstractList extends AbstractControls
         }
         return super.onOptionsItemSelected(item);
     }
-    protected AdapterView.OnItemClickListener onItemTrackClick = new AdapterView.OnItemClickListener()
+    protected final AdapterView.OnItemClickListener onItemTrackClick = new AdapterView.OnItemClickListener()
     {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -120,7 +120,7 @@ abstract class AbstractList extends AbstractControls
             onClickTrack(position);
         }
     };
-    protected ActionMode.Callback callback = new ActionMode.Callback()
+    protected final ActionMode.Callback callback = new ActionMode.Callback()
     {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu)
@@ -170,9 +170,14 @@ abstract class AbstractList extends AbstractControls
                         waitMessage(getBaseContext());
                     break;
                 case R.id.itemDownload:
-                    Intent downloadIntent = new Intent(this,DownloadingService.class);
-                    downloadIntent.putExtra(DownloadingService.keyDownload,(Parcelable)audios.get(position));
-                    startService(downloadIntent);
+                    if(DownloadingService.isDownloading(audios.get(position).getAid()))
+                        Toast.makeText(getBaseContext(),"track is still downloading",Toast.LENGTH_SHORT).show();
+                    else
+                    {
+                        Intent downloadIntent = new Intent(this,DownloadingService.class);
+                        downloadIntent.putExtra(DownloadingService.keyDownload,(Parcelable)audios.get(position));
+                        startService(downloadIntent);
+                    }
                     break;
                 case R.id.itemMoveToAlbum:
                     moveToAlbum(getSupportFragmentManager(), audios.get(position).getAid());
@@ -281,7 +286,7 @@ abstract class AbstractList extends AbstractControls
             }.execute(position);
         }
     }
-    AdapterView.OnItemLongClickListener onItemLongVkListener = new AdapterView.OnItemLongClickListener()
+    final AdapterView.OnItemLongClickListener onItemLongVkListener = new AdapterView.OnItemLongClickListener()
     {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)

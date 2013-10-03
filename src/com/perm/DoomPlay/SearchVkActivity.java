@@ -36,9 +36,7 @@ import java.util.ArrayList;
 public class SearchVkActivity extends AbstractList
 {
 
-    EditText editQuery;
-    TextView textNoResults;
-    ImageView buttonSearch;
+    private EditText editQuery;
 
 
     @Override
@@ -127,13 +125,12 @@ public class SearchVkActivity extends AbstractList
         });
     }
 
-    TaskLoader taskLoader;
-    void initializeUi()
+    private TaskLoader taskLoader;
+    private void initializeUi()
     {
         editQuery = (EditText) findViewById(R.id.editQuery);
         listView = (ListView) findViewById(R.id.listSearch);
-        textNoResults = (TextView)findViewById(R.id.textNoResult);
-        buttonSearch = (ImageView)findViewById(R.id.imageSearchVk);
+        ImageView buttonSearch = (ImageView) findViewById(R.id.imageSearchVk);
         buttonSearch.setOnClickListener(onClickSearch);
         listView.setOnItemClickListener(onItemTrackClick);
 
@@ -154,7 +151,7 @@ public class SearchVkActivity extends AbstractList
         textTotalTime = (TextView)findViewById(R.id.textDuration);
         linearLoading = (LinearLayout)findViewById(R.id.linearLoading);
     }
-    View.OnClickListener onClickSearch = new View.OnClickListener()
+    private final View.OnClickListener onClickSearch = new View.OnClickListener()
     {
         @Override
         public void onClick(View v)
@@ -175,20 +172,20 @@ public class SearchVkActivity extends AbstractList
     public void onBackPressed()
     {
         super.onBackPressed();
-        taskLoader.cancel(true);
+        if(taskLoader != null)
+            taskLoader.cancel(true);
         isLoading = false;
     }
 
-    class TaskLoader extends AsyncTask<String,Void,Void>
+    private class TaskLoader extends AsyncTask<String,Void,ArrayList<Audio>>
     {
         @Override
-        protected Void doInBackground(String... params)
+        protected ArrayList<Audio> doInBackground(String... params)
         {
             try
             {
-                audios.clear();
-                audios.addAll(MainScreenActivity.api.searchAudio(params[0],
-                        SettingActivity.getPreference("countvksearch")));
+                return MainScreenActivity.api.searchAudio(params[0],
+                        SettingActivity.getPreference("countvksearch"));
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -213,11 +210,21 @@ public class SearchVkActivity extends AbstractList
         }
 
         @Override
-        protected void onPostExecute(Void aVoid)
+        protected void onCancelled()
+        {
+            super.onCancelled();
+            linearLoading.setVisibility(View.GONE);
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Audio> aVoid)
         {
             super.onPostExecute(aVoid);
             isLoading = false;
             linearLoading.setVisibility(View.GONE);
+
+            audios.clear();
+            audios.addAll(aVoid);
             adapter.changeData(audios);
             markItem(PlayingService.indexCurrentTrack,false);
         }

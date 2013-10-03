@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class VkGrActivity extends AbstractVkItems
 {
-    static ArrayList<Group> groups;
+    private static ArrayList<Group> groups;
 
 
     @Override
@@ -100,7 +100,7 @@ public class VkGrActivity extends AbstractVkItems
             }
         }).start();
     }
-    Handler handler = new Handler()
+    private final Handler handler = new Handler()
     {
         @Override
         public void handleMessage(Message msg)
@@ -122,7 +122,7 @@ public class VkGrActivity extends AbstractVkItems
     };
     private class VkAlbumsAdapter extends BaseAdapter
     {
-        LayoutInflater inflater;
+        final LayoutInflater inflater;
         public VkAlbumsAdapter()
         {
             inflater = (LayoutInflater)getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);

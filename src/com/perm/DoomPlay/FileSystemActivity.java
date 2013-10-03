@@ -36,10 +36,10 @@ import java.util.Comparator;
 
 public class FileSystemActivity extends AbstractReceiver
 {
-    FileSystemAdapter adapter;
-    ListView listView;
+    private FileSystemAdapter adapter;
+    private ListView listView;
     private File currentDirectory ;
-    TextView textCurrentDir;
+    private TextView textCurrentDir;
     private File[] entriesFiles;
     public final static String keyMusic = "3kpoid";
     private final static String keyCurrentDir = "currentDij";
@@ -84,7 +84,7 @@ public class FileSystemActivity extends AbstractReceiver
         return intent;
     }
 
-    static FileFilter fileFilter = new FileFilter()
+    static final FileFilter fileFilter = new FileFilter()
     {
         @Override
         public boolean accept(File file)
@@ -137,7 +137,7 @@ public class FileSystemActivity extends AbstractReceiver
         cursor.close();
         return audio;
     }
-    ActionMode.Callback callback = new ActionMode.Callback()
+    private final ActionMode.Callback callback = new ActionMode.Callback()
     {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu)
@@ -226,7 +226,7 @@ public class FileSystemActivity extends AbstractReceiver
 
 
     }
-    AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener()
+    final AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener()
     {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -242,7 +242,7 @@ public class FileSystemActivity extends AbstractReceiver
 
         }
     };
-    AdapterView.OnItemLongClickListener onItemLongClickListener = new AdapterView.OnItemLongClickListener()
+    final AdapterView.OnItemLongClickListener onItemLongClickListener = new AdapterView.OnItemLongClickListener()
     {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
@@ -265,7 +265,7 @@ public class FileSystemActivity extends AbstractReceiver
             fill(currentDirectory.getParentFile());
         }
     }
-    Comparator<File> fileComparator = new Comparator<File>()
+    final Comparator<File> fileComparator = new Comparator<File>()
     {
         @Override
         public int compare(File fileFirst, File fileSecond)
@@ -284,7 +284,7 @@ public class FileSystemActivity extends AbstractReceiver
     };
     class FileSystemAdapter extends BaseAdapter
     {
-        LayoutInflater inflater;
+        final LayoutInflater inflater;
 
         public FileSystemAdapter()
         {

@@ -45,11 +45,11 @@ abstract class AbstractControls extends AbstractReceiver
     private final static int messageUpdate = 2957;
     protected PlayingService playingService;
     protected ServiceConnection serviceConnection;
-    protected  boolean isBound;
+    private  boolean isBound;
     protected Intent intentService;
     protected  boolean isShown;
     protected abstract void trackChanged();
-    public static final String keySaveShown = "keySswn";
+    private static final String keySaveShown = "keySswn";
 
     @Override
     protected void onPause()
@@ -191,7 +191,7 @@ abstract class AbstractControls extends AbstractReceiver
     protected void clickWithoutAction()
     {}
 
-    private View.OnClickListener onClickControlsListener = new View.OnClickListener()
+    private final View.OnClickListener onClickControlsListener = new View.OnClickListener()
     {
         @Override
         public void onClick(View v)
@@ -234,7 +234,7 @@ abstract class AbstractControls extends AbstractReceiver
             }
     }
 
-    SeekBar.OnSeekBarChangeListener seekBarHandler = new SeekBar.OnSeekBarChangeListener()
+    private final SeekBar.OnSeekBarChangeListener seekBarHandler = new SeekBar.OnSeekBarChangeListener()
     {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
@@ -288,7 +288,7 @@ abstract class AbstractControls extends AbstractReceiver
         threadUpdate.start();
     }
 
-    private Runnable runnable = new Runnable()
+    private final Runnable runnable = new Runnable()
     {
         @Override
         public void run()
@@ -307,7 +307,7 @@ abstract class AbstractControls extends AbstractReceiver
             }
         }
     };
-    private Handler handler = new Handler()
+    private final Handler handler = new Handler()
     {
         @Override
         public void handleMessage(Message msg)
@@ -336,14 +336,14 @@ abstract class AbstractControls extends AbstractReceiver
              Toast.makeText(this,"sorry,this function doesn't available on your device",Toast.LENGTH_SHORT).show();
     }
 
-    public static Intent getEqualizerIntent(int audioSessionId)
+    private static Intent getEqualizerIntent(int audioSessionId)
     {
         Intent intentEqualizer = new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL);
         intentEqualizer.putExtra(AudioEffect.EXTRA_AUDIO_SESSION,audioSessionId);
         return intentEqualizer;
     }
 
-    public static boolean isEqualizerAvailable(Context context)
+    private static boolean isEqualizerAvailable(Context context)
     {
         return Utils.isIntentAvailable(context, new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL));
     }

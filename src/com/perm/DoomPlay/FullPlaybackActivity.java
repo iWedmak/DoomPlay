@@ -35,7 +35,6 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -47,8 +46,7 @@ import java.util.ArrayList;
 public class FullPlaybackActivity  extends AbstractControls
 {
     static ArrayList<Audio> audios;
-    LinearLayout linearBackground;
-    CustomViewPager viewPager;
+    private CustomViewPager viewPager;
     public final static String keyService = "zajiy";
     public final static String keyIndex = "indKey";
     public final static String tagSleepDialog = "diasTa";
@@ -56,8 +54,8 @@ public class FullPlaybackActivity  extends AbstractControls
     public final static String actionPlayFull = "android.action.play";
     public final static String keyReturn = "keyForsaveService";
     public final static String actionDataChanged = "notifyDataChanged";
-    PagePlaybackAdapter adapterPager;
-    Intent intentWas;
+    private PagePlaybackAdapter adapterPager;
+    private Intent intentWas;
 
     @Override
     protected void trackChanged()
@@ -319,13 +317,12 @@ public class FullPlaybackActivity  extends AbstractControls
         seekBar = (SeekBar)findViewById(R.id.seek_bar);
         textCurrentTime = (TextView)findViewById(R.id.textElapsed);
         textTotalTime = (TextView)findViewById(R.id.textDuration);
-        linearBackground = (LinearLayout)findViewById(R.id.linearPlaying);
         imgPlay = (ImageView)findViewById(R.id.imagePlay);
         viewPager = (CustomViewPager)findViewById(R.id.viewPager);
         viewPager.setOnPageChangeListener(pageChangeHandler);
         adapterPager = new PagePlaybackAdapter(getSupportFragmentManager());
     }
-    ViewPager.OnPageChangeListener pageChangeHandler = new ViewPager.OnPageChangeListener()
+    private final ViewPager.OnPageChangeListener pageChangeHandler = new ViewPager.OnPageChangeListener()
     {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)

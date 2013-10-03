@@ -96,13 +96,13 @@
 
         <service
                 android:name="com.perm.DoomPlay.PlayingService"
-                android:launchMode ="singleTask"
-                android:configChanges="orientation">
+                android:launchMode ="singleTask">
         </service>
 
         <service
                 android:name="com.perm.DoomPlay.DownloadingService"
-                android:process=":remote">
+                android:process=":remote"
+                android:launchMode ="singleTask">
         </service>
 
 

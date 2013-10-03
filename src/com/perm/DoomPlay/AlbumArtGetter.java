@@ -44,13 +44,13 @@ import java.util.HashSet;
 
 public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
 {
-    public final static String lastFmApiId = "2827ff9b2eb0158b80e7c6d0b511f25d";
+    private final static String lastFmApiId = "2827ff9b2eb0158b80e7c6d0b511f25d";
     public static final Uri artworkUri = Uri.parse("content://media/external/audio/albumart");
     boolean isLoading = false;
-    private String artist;
-    private String title;
-    private long albumId;
-    private static HashSet<Long> set = new HashSet<Long>();
+    private final String artist;
+    private final String title;
+    private final long albumId;
+    private static final HashSet<Long> set = new HashSet<Long>();
 
     public static Bitmap getBitmapMetadata(MediaMetadataRetriever metadata)
     {
@@ -67,7 +67,6 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
             return null;
     }
 
-    protected abstract void onGetBitmap(Bitmap bitmap);
     protected abstract void onBitmapSaved(long albumId);
 
     static boolean isLoadById(long id)
@@ -116,8 +115,6 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
 
         if(bitmap != null)
         {
-            onGetBitmap(bitmap);
-            //if(SettingActivity.getPreferences(MyApplication.getInstance(),"saveart"))
             new AsyncTask<Bitmap,Void,Void>()
             {
                 @Override
@@ -141,7 +138,7 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
     }
 
 
-    static String findSrc(String artist,String title) throws ParserConfigurationException, SAXException, IOException
+    private static String findSrc(String artist,String title) throws ParserConfigurationException, SAXException, IOException
     {
         title ="&track=" + URLEncoder.encode(title,"utf-8");
         if(artist != null && !artist.equals("")  && !artist.equals("<unknown>"))

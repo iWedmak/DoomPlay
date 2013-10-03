@@ -87,7 +87,7 @@ abstract class AbstractVkItems extends AbstractReceiver
         cancelLoading();
         super.onBackPressed();
     }
-            AdapterView.OnItemClickListener onClickListener = new AdapterView.OnItemClickListener()
+            final AdapterView.OnItemClickListener onClickListener = new AdapterView.OnItemClickListener()
             {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -143,7 +143,7 @@ abstract class AbstractVkItems extends AbstractReceiver
 
 
 
-    class TaskLoader extends AsyncTask<Integer,Void,ArrayList<Audio>>
+    private class TaskLoader extends AsyncTask<Integer,Void,ArrayList<Audio>>
     {
         @Override
         protected void onPreExecute()

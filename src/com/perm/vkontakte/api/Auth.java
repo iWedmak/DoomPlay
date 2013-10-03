@@ -7,7 +7,7 @@ import java.net.URLEncoder;
 public class Auth {
     
     private static final String TAG = "Kate.Auth";
-    public static String redirect_url="https://oauth.vk.com/blank.html";
+    public static final String redirect_url="https://oauth.vk.com/blank.html";
     
     public static String getUrl(String api_id, String settings){
         String url="https://oauth.vk.com/authorize?client_id="+api_id+"&display=mobile&scope="+settings+"&redirect_uri="+URLEncoder.encode(redirect_url)+"&response_type=token";

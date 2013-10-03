@@ -36,7 +36,6 @@ public class ListTracksActivity extends AbstractList
 {
     public final static String actionJust = "actionPlayFull";
     public final static String actionPlaylist = "actionPlaylist";
-    ActionMode actionMode;
     static String currentAction;
 
 
@@ -61,19 +60,19 @@ public class ListTracksActivity extends AbstractList
             audios = TracksHolder.allAudios;
     }
 
-    protected AdapterView.OnItemLongClickListener onItemLongTrackClick = new AdapterView.OnItemLongClickListener()
+    protected final AdapterView.OnItemLongClickListener onItemLongTrackClick = new AdapterView.OnItemLongClickListener()
     {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
         {
-            actionMode = startSupportActionMode(callback);
+            ActionMode actionMode = startSupportActionMode(callback);
             actionMode.setTag(position);
             return true;
 
         }
     };
 
-    protected ActionMode.Callback callback = new ActionMode.Callback()
+    protected final ActionMode.Callback callback = new ActionMode.Callback()
     {
         int position;
         boolean isFirstCall;

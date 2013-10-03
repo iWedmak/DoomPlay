@@ -28,10 +28,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-public class MainVkFragment extends Fragment
+class MainVkFragment extends Fragment
 {
     private MainScreenActivity activity;
-    LinearLayout linearLoading;
+    private LinearLayout linearLoading;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -68,7 +68,7 @@ public class MainVkFragment extends Fragment
     }
 
 
-    View.OnClickListener onClickVkListener = new View.OnClickListener()
+    private final View.OnClickListener onClickVkListener = new View.OnClickListener()
     {
         @Override
         public void onClick(View v)

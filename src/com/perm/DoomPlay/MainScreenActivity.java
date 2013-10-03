@@ -40,7 +40,7 @@ public class MainScreenActivity extends AbstractReceiver
     private static final int REQUEST_LOGIN = 1093;
     public static boolean isLoading;
     public static boolean isRegister = false;
-    ViewPager viewPager;
+    private ViewPager viewPager;
     static Api api;
 
     interface IScanCallback
@@ -149,7 +149,6 @@ public class MainScreenActivity extends AbstractReceiver
         }
     }
 
-    public int currentFragment = 0;
     class MainPageAdapter extends FragmentPagerAdapter
     {
         public MainPageAdapter(FragmentManager fm)
@@ -159,7 +158,6 @@ public class MainScreenActivity extends AbstractReceiver
         @Override
         public Fragment getItem(int position)
         {
-            currentFragment = position;
             if(position == 0)
                 return new MainScreenFragment();
             else

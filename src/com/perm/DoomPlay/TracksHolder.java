@@ -23,7 +23,7 @@ import android.provider.MediaStore;
 
 import java.util.ArrayList;
 
-public class TracksHolder
+class TracksHolder
 {
     public static volatile boolean isScanned = false;
     public static String[] allArtist;
@@ -42,9 +42,11 @@ public class TracksHolder
     {
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 projection,MediaStore.Audio.Media.IS_MUSIC + " != 0", null, null);
-        cursor.moveToFirst();
 
-        allAudios = Audio.parseAudio(cursor);
+        if(cursor.moveToFirst())
+            allAudios = Audio.parseAudio(cursor);
+        else
+            allAudios = new ArrayList<Audio>();
 
         Cursor cursorAlbum = context.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
                 new String[]{MediaStore.Audio.Albums.ALBUM,MediaStore.Audio.Albums.ARTIST },null, null,null );

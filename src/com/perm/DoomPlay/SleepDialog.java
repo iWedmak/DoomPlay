@@ -30,10 +30,10 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-public class SleepDialog extends DialogFragment
+class SleepDialog extends DialogFragment
 {
-    TextView textSeekTrack;
-    TextView textSeekMin;
+    private TextView textSeekTrack;
+    private TextView textSeekMin;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -55,7 +55,7 @@ public class SleepDialog extends DialogFragment
 
         return view;
     }
-    View.OnClickListener onClickEnableHandler = new View.OnClickListener()
+    private final View.OnClickListener onClickEnableHandler = new View.OnClickListener()
     {
         @Override
         public void onClick(View v)
@@ -66,7 +66,7 @@ public class SleepDialog extends DialogFragment
 
 
     };
-    View.OnClickListener onClickDisableHandler = new View.OnClickListener()
+    private final View.OnClickListener onClickDisableHandler = new View.OnClickListener()
     {
         @Override
         public void onClick(View v)
@@ -125,7 +125,7 @@ public class SleepDialog extends DialogFragment
 
 
 
-    View.OnClickListener onClickCancelHandler = new View.OnClickListener()
+    private final View.OnClickListener onClickCancelHandler = new View.OnClickListener()
     {
         @Override
         public void onClick(View v)
@@ -135,7 +135,7 @@ public class SleepDialog extends DialogFragment
     };
 
 
-    SeekBar.OnSeekBarChangeListener onSeekBarTrack = new SeekBar.OnSeekBarChangeListener()
+    private final SeekBar.OnSeekBarChangeListener onSeekBarTrack = new SeekBar.OnSeekBarChangeListener()
     {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
@@ -168,7 +168,7 @@ public class SleepDialog extends DialogFragment
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {}
     };
-    SeekBar.OnSeekBarChangeListener onSeekBarMin = new SeekBar.OnSeekBarChangeListener() {
+    private final SeekBar.OnSeekBarChangeListener onSeekBarMin = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
         {

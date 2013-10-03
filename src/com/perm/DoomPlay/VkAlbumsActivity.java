@@ -37,7 +37,7 @@ public class VkAlbumsActivity extends AbstractVkItems
 {
     static ArrayList<AudioAlbum> albums;
     static int currentAlbum;
-    VkAlbumsAdapter adapter;
+    private VkAlbumsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -70,7 +70,7 @@ public class VkAlbumsActivity extends AbstractVkItems
         }
     }
 
-    ActionMode.Callback callback = new ActionMode.Callback()
+    private final ActionMode.Callback callback = new ActionMode.Callback()
     {
 
         @Override
@@ -321,7 +321,7 @@ public class VkAlbumsActivity extends AbstractVkItems
     }
 
 
-    Handler handler = new Handler()
+    private final Handler handler = new Handler()
     {
         @Override
         public void handleMessage(Message msg)
@@ -373,7 +373,7 @@ public class VkAlbumsActivity extends AbstractVkItems
 
     class VkAlbumsAdapter extends BaseAdapter
     {
-        LayoutInflater inflater;
+        final LayoutInflater inflater;
         public VkAlbumsAdapter()
         {
             inflater = (LayoutInflater)getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);

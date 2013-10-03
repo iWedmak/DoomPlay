@@ -30,8 +30,8 @@ import android.widget.TextView;
 
 abstract class AddListDialog extends DialogFragment
 {
-    EditText editNewDialog;
-    TextView textInvalid;
+    private EditText editNewDialog;
+    private TextView textInvalid;
 
     abstract boolean isPlaylistExist(String playlist);
     abstract void createPlatlist(String playlist);
@@ -54,7 +54,7 @@ abstract class AddListDialog extends DialogFragment
 
 
 
-    View.OnClickListener onClickNewDialogHandler = new View.OnClickListener()
+    private final View.OnClickListener onClickNewDialogHandler = new View.OnClickListener()
     {
         @Override
         public void onClick(View v)

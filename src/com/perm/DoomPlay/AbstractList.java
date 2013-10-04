@@ -41,7 +41,7 @@ abstract class AbstractList extends AbstractControls
     }
     protected void markItem(int position , boolean withScroll)
     {
-        if(PlayingService.serviceAlive && equalsCollections(PlayingService.audios, audios))
+        if(PlayingService.serviceAlive && equalsCollections(PlayingService.getAudios(), audios))
         {
 
             adapter.setMarkedItem(position);
@@ -66,13 +66,13 @@ abstract class AbstractList extends AbstractControls
     @Override
     protected void trackChanged()
     {
-        markItem(PlayingService.indexCurrentTrack,true);
+        markItem(PlayingService.getIndexCurrentTrack(),true);
     }
     @Override
     protected void onResume()
     {
         super.onResume();
-        markItem(PlayingService.indexCurrentTrack,false);
+        markItem(PlayingService.getIndexCurrentTrack(),false);
     }
 
     protected void goFullScreen()
@@ -213,9 +213,7 @@ abstract class AbstractList extends AbstractControls
                 {
                     try
                     {
-                        MainScreenActivity.api.deleteAudio(audios.get(params[0]).getAid(),Account.account.user_id);
-                        playlistDB.deleteTrack(params[0],PlaylistDB.TABLE_VK);
-                        playlistDB.setAcordingPositions(params[0],PlaylistDB.TABLE_VK);
+                        MainScreenActivity.api.deleteAudio(audios.get(params[0]).getAid(), Account.account.user_id);
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -238,8 +236,8 @@ abstract class AbstractList extends AbstractControls
                     TracksHolder.audiosVk = audios;
                     adapter.changeData(audios);
 
-                    if(position == PlayingService.indexCurrentTrack && equalsCollections(PlayingService.audios,audios))
-                        playingService.playTrackFromList(PlayingService.indexCurrentTrack);
+                    if(position == PlayingService.getIndexCurrentTrack() && equalsCollections(PlayingService.getAudios(),audios))
+                        playingService.playTrackFromList(PlayingService.getIndexCurrentTrack());
                 }
             }.execute(position);
         }
@@ -268,9 +266,6 @@ abstract class AbstractList extends AbstractControls
                        MainScreenActivity.api.addAudio(audios.get(params[0]).getAid(), audios.get(params[0]).getOwner_id());
                        TracksHolder.audiosVk.add(0,audios.get(params[0]));
 
-                       playlistDB.addVkTracks(TracksHolder.audiosVk);
-
-
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (JSONException e) {
@@ -298,32 +293,23 @@ abstract class AbstractList extends AbstractControls
     };
     protected void onClickTrack(int position)
     {
-        if(PlayingService.isLoadingTrack)
+        if(PlayingService.isLoadingTrack())
         {
             waitMessage(this);
             return;
         }
 
-        if(!PlayingService.serviceAlive)
-        {
-            intentService.putExtra(FullPlaybackActivity.keyIndex,position);
-            intentService.putExtra(FullPlaybackActivity.keyService,audios);
+        intentService.putExtra(FullPlaybackActivity.keyIndex,position);
+        intentService.putExtra(FullPlaybackActivity.keyService,audios);
 
-            connectService();
-            startService(intentService);
-        }
-        else
-        {
-            PlayingService.audios = audios;
-            PlayingService.isPlaying = true;
+        connectService();
+        startService(intentService);
 
-            playingService.playTrackFromList(position);
-        }
     }
     @Override
     protected void onClickActionBar()
     {
-        if(equalsCollections(audios,PlayingService.audios) && Build.VERSION.SDK_INT >= 8)
-            listView.smoothScrollToPosition(PlayingService.indexCurrentTrack);
+        if(equalsCollections(audios, PlayingService.getAudios()) && Build.VERSION.SDK_INT >= 8)
+            listView.smoothScrollToPosition(PlayingService.getIndexCurrentTrack());
     }
 }

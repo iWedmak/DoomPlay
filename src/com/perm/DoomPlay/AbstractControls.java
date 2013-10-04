@@ -41,13 +41,13 @@ abstract class AbstractControls extends AbstractReceiver
     protected TextView textCurrentTime;
     protected TextView textTotalTime;
     protected SeekBar seekBar;
-    protected boolean flagT;
+    protected volatile boolean flagT;
     private final static int messageUpdate = 2957;
     protected PlayingService playingService;
     protected ServiceConnection serviceConnection;
     private  boolean isBound;
     protected Intent intentService;
-    protected  boolean isShown;
+    protected boolean isShown;
     protected abstract void trackChanged();
     private static final String keySaveShown = "keySswn";
 
@@ -198,7 +198,7 @@ abstract class AbstractControls extends AbstractReceiver
         {
             if(playingService == null || !PlayingService.serviceAlive)
                 clickWithoutAction();
-            else if(!PlayingService.isLoadingTrack && !playingService.isNull())
+            else if(!PlayingService.isLoadingTrack() && !playingService.isNull())
             {
                 onClickControl(v.getId());
             }
@@ -239,7 +239,7 @@ abstract class AbstractControls extends AbstractReceiver
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
         {
-            if(fromUser && playingService != null && !playingService.isNull() && !PlayingService.isLoadingTrack)
+            if(fromUser && playingService != null && !playingService.isNull() && !PlayingService.isLoadingTrack())
                 playingService.setCurrentPosition(playingService.getDuration()*progress / 100);
         }
         @Override

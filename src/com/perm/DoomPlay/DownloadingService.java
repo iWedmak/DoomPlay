@@ -32,16 +32,69 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 
-public class DownloadingService extends Service implements Observer
+public class DownloadingService extends Service implements DoomObserver
 {
     public static final String keyDownload = "downloadTrack";
     private NotificationManager manager;
 
-    private final static Map<Long,Download> downloads = new HashMap<Long,Download>();
-    private final static Map<Long,DownloadNotifFactory> factories = new HashMap<Long, DownloadNotifFactory>();
+    private final static Map<Long,DownloadHolder> downloads = new HashMap<Long,DownloadHolder>();
+
+
+    @Override
+    public void doomUpdate(Download observable, long aid)
+    {
+        DownloadHolder holder = downloads.get(aid);
+
+        Notification notification = null;
+
+        switch (observable.getStatus())
+        {
+            case DOWNLOADING:
+                notification = holder.downloadBuilder.createStarting();
+                break;
+            case CANCELLED:
+                notification = holder.downloadBuilder.createCanceled();
+                dispose(aid);
+                break;
+            case COMPLETED:
+                notification = holder.downloadBuilder.createCompleted();
+                dispose(aid);
+                break;
+            case ERROR:
+                notification = holder.downloadBuilder.createError();
+                dispose(aid);
+                break;
+            case PAUSED:
+                //
+                break;
+
+        }
+
+        // bad convert , need solve this!!!!
+        manager.notify(holder.notificationId,notification);
+
+    }
+
+
+    private static class DownloadHolder
+    {
+        Download download;
+        DownloadNotifBuilder downloadBuilder;
+
+        int notificationId = 0;
+
+        static int counter  = 0;
+
+        public DownloadHolder()
+        {
+            counter++;
+            if(counter == Integer.MAX_VALUE)
+                counter = 0;
+
+            notificationId = counter;
+        }
+    }
 
 
     public static boolean isDownloading(long aid)
@@ -51,7 +104,6 @@ public class DownloadingService extends Service implements Observer
     private void dispose(long aid)
     {
         downloads.remove(aid);
-        factories.remove(aid);
 
         if(downloads.size() == 0)
             stopSelf();
@@ -68,14 +120,20 @@ public class DownloadingService extends Service implements Observer
         }
         catch (MalformedURLException e)
         {
+            if(downloads.size() == 0)
+                stopSelf();
+
             e.printStackTrace();
             return;
         }
         Download d = new Download(url,filePath,audio.getAid());
         d.addObserver(this);
 
-        downloads.put(audio.getAid(),d);
-        factories.put(audio.getAid(),new DownloadNotifFactory(audio,filePath,getBaseContext()));
+
+        DownloadHolder holder = new DownloadHolder();
+        holder.download = d;
+        holder.downloadBuilder = new DownloadNotifBuilder(audio,filePath,getBaseContext());
+        downloads.put(audio.getAid(),holder);
 
         d.resume();
 
@@ -118,9 +176,8 @@ public class DownloadingService extends Service implements Observer
         if(intent.getAction().equals(PlayingService.actionClose))
         {
             long aid = intent.getLongExtra("aid", 666);
-            Download d = downloads.get(aid);
-            if(d != null)
-                d.cancel();
+            Download d = downloads.get(aid).download;
+            d.cancel();
 
         }
         else if(intent.getAction().equals(PlayingService.actionPlay))
@@ -138,42 +195,5 @@ public class DownloadingService extends Service implements Observer
     public IBinder onBind(Intent intent)
     {
         return null;
-    }
-
-
-    @Override
-    public void update(Observable observable, Object data)
-    {
-        long aid = (Long)data ;
-        DownloadNotifFactory factory = factories.get(aid);
-
-        Notification notification = null;
-
-         switch (((Download)observable).getStatus())
-         {
-             case DOWNLOADING:
-                 notification = factory.createStarting();
-                 break;
-             case CANCELLED:
-                 notification = factory.createCanceled();
-                 dispose(aid);
-                 break;
-             case COMPLETED:
-                 notification = factory.createCompleted();
-                 dispose(aid);
-                 break;
-             case ERROR:
-                 notification = factory.createError();
-                 dispose(aid);
-                 break;
-             case PAUSED:
-                 //
-                 break;
-
-         }
-
-        // bad convert , need solve this!!!!
-        manager.notify((int)aid,notification);
-
     }
 }

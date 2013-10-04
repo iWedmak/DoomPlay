@@ -54,7 +54,7 @@ abstract class AbstractReceiver extends ActionBarActivity
     }
     protected void onClickActionBar()
     {
-        if(PlayingService.audios != null)
+        if(PlayingService.getAudios() != null)
         {
             startActivity(FullPlaybackActivity.returnSmall(this));
         }
@@ -122,10 +122,10 @@ abstract class AbstractReceiver extends ActionBarActivity
 
     protected void updateActionBar()
     {
-        if(PlayingService.serviceAlive && PlayingService.audios != null)
+        if(PlayingService.serviceAlive && PlayingService.getAudios() != null)
         {
-            textTitle.setText(PlayingService.audios.get(PlayingService.indexCurrentTrack).getTitle());
-            textArtist.setText(PlayingService.audios.get(PlayingService.indexCurrentTrack).getArtist());
+            textTitle.setText(PlayingService.getAudios().get(PlayingService.getIndexCurrentTrack()).getTitle());
+            textArtist.setText(PlayingService.getAudios().get(PlayingService.getIndexCurrentTrack()).getArtist());
             textArtist.setVisibility(View.VISIBLE);
             textTitle.setTextColor(getResources().getColor(R.color.blue_text));
         }

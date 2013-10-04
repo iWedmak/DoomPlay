@@ -226,7 +226,7 @@ public class SearchVkActivity extends AbstractList
             audios.clear();
             audios.addAll(aVoid);
             adapter.changeData(audios);
-            markItem(PlayingService.indexCurrentTrack,false);
+            markItem(PlayingService.getIndexCurrentTrack(),false);
         }
     }
 }

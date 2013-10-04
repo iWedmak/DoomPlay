@@ -43,10 +43,10 @@ public class BigWidget extends AppWidgetProvider
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_big);
 
-        Audio audio = PlayingService.audios.get(PlayingService.indexCurrentTrack);
+        Audio audio = PlayingService.getAudios().get(PlayingService.getIndexCurrentTrack());
         views.setTextViewText(R.id.widgetlTitle, audio.getTitle());
         views.setTextViewText(R.id.widgetArtist, audio.getArtist());
-        views.setTextViewText(R.id.widgetCount,String.valueOf(PlayingService.indexCurrentTrack + 1)+ "/" +String.valueOf(PlayingService.audios.size()));
+        views.setTextViewText(R.id.widgetCount,String.valueOf(PlayingService.getIndexCurrentTrack() + 1)+ "/" +String.valueOf(PlayingService.getAudios().size()));
 
         Bitmap cover = ArtCacheUtils.get(audio.getAid());
         if (cover != null)

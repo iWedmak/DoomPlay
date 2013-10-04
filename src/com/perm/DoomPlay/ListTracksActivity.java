@@ -156,15 +156,10 @@ public class ListTracksActivity extends AbstractList
                             AbstractList.waitMessage(getBaseContext());
                         }
 
-
                         break;
                     }
                     case R.id.itemGetLiricks:
-                        LyricsDialog dialog = new LyricsDialog();
-                        Bundle bundle = new Bundle();
-                        bundle.putString(LyricsDialog.keyLyricsTitle, audios.get(PlayingService.indexCurrentTrack).getTitle());
-                        dialog.setArguments(bundle);
-                        dialog.show(getSupportFragmentManager(),"tag");
+                        startLiryctDialog(getSupportFragmentManager(),audios.get(position).getArtist(),audios.get(position).getTitle());
                         mode.finish();
                         break;
                 }
@@ -182,7 +177,7 @@ public class ListTracksActivity extends AbstractList
                         Utils.setRingtone(getBaseContext(), audios.get(position));
                         break;
                     case R.id.itemGetLiricks:
-                        Audio audio = audios.get(PlayingService.indexCurrentTrack);
+                        Audio audio = audios.get(PlayingService.getIndexCurrentTrack());
                         startLiryctDialog(getSupportFragmentManager(), audio.getArtist(), audio.getTitle());
                         break;
                 }
@@ -204,17 +199,15 @@ public class ListTracksActivity extends AbstractList
         dialog.show(fragmentManager,"tag");
     }
 
-    static boolean isEquals = false;
-
     void updateList()
     {
-        isEquals = AbstractList.equalsCollections(audios,PlayingService.audios);
+        boolean isEquals = AbstractList.equalsCollections(audios, PlayingService.getAudios());
         audios = playlistDB.getTracks(PlaylistActivity.selectedPlaylist);
 
         if(isEquals)
         {
             PlayingService.audios = audios;
-            markItem(PlayingService.indexCurrentTrack, false);
+            markItem(PlayingService.getIndexCurrentTrack(), false);
         }
 
         adapter.changeData(audios);
@@ -232,7 +225,14 @@ public class ListTracksActivity extends AbstractList
     {
 
             playlistDB.deleteTrack(position, PlaylistActivity.selectedPlaylist);
-            updateList();
+
+             if(AbstractList.equalsCollections(audios, PlayingService.getAudios()))
+                 PlayingService.audios.remove(position);
+
+            audios.remove(position);
+
+
+
             AsyncTask<Integer,Void,Void> asyncAdder  = new AsyncTask<Integer, Void, Void>()
             {
                 @Override
@@ -244,9 +244,9 @@ public class ListTracksActivity extends AbstractList
             };
             asyncAdder.execute(position);
 
-            if(position == PlayingService.indexCurrentTrack && AbstractList.equalsCollections(audios,PlayingService.audios))
+            if(position == PlayingService.getIndexCurrentTrack() && AbstractList.equalsCollections(audios, PlayingService.getAudios()))
             {
-                playingService.playTrackFromList(PlayingService.indexCurrentTrack);
+                playingService.playTrackFromList(PlayingService.getIndexCurrentTrack());
             }
 
     }
@@ -277,14 +277,16 @@ public class ListTracksActivity extends AbstractList
                 to = position + 1 ;
             }
         }
-        if(AbstractList.equalsCollections(audios,PlayingService.audios))
+        if(AbstractList.equalsCollections(audios, PlayingService.getAudios()))
         {
-            if(PlayingService.indexCurrentTrack == to)
+            if(PlayingService.getIndexCurrentTrack() == to)
                 PlayingService.indexCurrentTrack = position;
 
-            else if(PlayingService.indexCurrentTrack == position)
+            else if(PlayingService.getIndexCurrentTrack() == position)
                 PlayingService.indexCurrentTrack = to;
         }
+
+
 
 
 

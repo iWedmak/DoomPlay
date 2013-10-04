@@ -53,7 +53,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     public final static String actionIconPause = "DoomedPlaPause";
     private volatile static MediaPlayer mediaPlayer;
     private static boolean isPrepared ;
-    public static int indexCurrentTrack = 0;
+    static int indexCurrentTrack = 0;
     public static boolean isShuffle;
     public static boolean isPlaying;
     public static boolean isLoop;
@@ -75,11 +75,26 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     public static boolean isOnline = false ;
     public static final String actionOnline = "vkOnline";
     private AudioManager audioManager ;
-    public static ArrayList<Audio> audios ;
-    public static boolean isLoadingTrack;
+    static ArrayList<Audio> audios ;
+    private static boolean isLoadingTrack;
     private AFListener afListener ;
     private final CallListener callListener = new CallListener();
     private OnLoadingTrackListener loadingListener;
+
+    public static ArrayList<Audio> getAudios()
+    {
+        return audios;
+    }
+
+    public static boolean isLoadingTrack()
+    {
+        return isLoadingTrack;
+    }
+
+    public static int getIndexCurrentTrack()
+    {
+        return indexCurrentTrack;
+    }
 
 
     @Override
@@ -91,7 +106,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         }
         else
         {
-            Toast.makeText(this, "sorry, error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "error", Toast.LENGTH_SHORT).show();
         }
         Log.e("TAG AUDIO","ERROR IN MEDIA PLAYER ,what = "+ what +" ,extra = " + extra);
 
@@ -122,6 +137,17 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     {
         this.loadingListener = loadingListener;
     }
+
+    private OnAlbumArtSave onAlbumArtSaveListener;
+    interface  OnAlbumArtSave
+    {
+        void onAlbumArtSave(long id);
+    }
+    void setOnAlbumArtSaveListener(OnAlbumArtSave onAlbumArtSaveListener)
+    {
+        this.onAlbumArtSaveListener = onAlbumArtSaveListener;
+    }
+
 
 
 
@@ -166,6 +192,9 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
                     @Override
                     protected void onBitmapSaved(long albumId)
                     {
+                        if(onAlbumArtSaveListener != null)
+                            onAlbumArtSaveListener.onAlbumArtSave(albumId);
+
                         ArtCacheUtils.add(albumId);
 
                         sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));

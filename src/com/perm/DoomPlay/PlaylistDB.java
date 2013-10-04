@@ -37,9 +37,6 @@ public class PlaylistDB extends SQLiteOpenHelper
     private static final String KEY_POSITION_TRACK = "postiontak";
     private static final String TABLE_DEFAULT = "defaultTable";
     private static final String KEY_NAME_PLAYLIST = "playlistName";
-    static final String TABLE_VK = "vk_table";
-    private static final String KEY_OID = "owner_id";
-    private static final String KEY_LID = "lyrics_id";
     static boolean isLoading  = false;
 
 
@@ -71,13 +68,7 @@ public class PlaylistDB extends SQLiteOpenHelper
                   + Media._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + Media.DATA + " TEXT,"+
                   Media.ARTIST + " TEXT,"+ Media.TITLE + " TEXT," + Media.ALBUM_ID +" LONG," + KEY_POSITION_TRACK + " INTEGER"+ ")");
     }
-    private static void createVkTable(SQLiteDatabase db)
-    {
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_VK + "("
-                + Media._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + Media.DATA + " TEXT,"+
-                Media.ARTIST + " TEXT,"+ Media.TITLE + " TEXT," + Media.ALBUM_ID +" LONG,"+
-                KEY_OID + " LONG,"+ KEY_LID + " LONG,"+ KEY_POSITION_TRACK + " INTEGER"+ ")");
-    }
+
 
     @Override
     public void onCreate(SQLiteDatabase db)
@@ -87,7 +78,6 @@ public class PlaylistDB extends SQLiteOpenHelper
 
         db.execSQL(createListPlaylistTable);
         createTable(TABLE_DEFAULT,db);
-        createVkTable(db);
 
 
 
@@ -121,58 +111,7 @@ public class PlaylistDB extends SQLiteOpenHelper
             db.execSQL("DROP TABLE IF EXISTS " + table);
         }
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_LISTPLAYLIST);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_VK);
         onCreate(db);
-    }
-
-    ArrayList<Audio> getVkAudios()
-    {
-        SQLiteDatabase db = getWritableDatabase();
-
-        Cursor c = db.query(TABLE_VK,new String[]{Media.ARTIST,Media.TITLE,
-                Media.ALBUM_ID,Media.DATA,KEY_OID,KEY_LID} ,null, null, null, null, null);
-
-        ArrayList<Audio> result  = new ArrayList<Audio>();
-
-        if(c.moveToFirst())
-        {
-            do
-            {
-                result.add(Audio.createAudioCursorExtend(c));
-
-            }while (c.moveToNext());
-        }
-
-        c.close();
-        db.close();
-        return result;
-    }
-
-    void addVkTracks(ArrayList<Audio> audios)
-    {
-        isLoading = true;
-
-        SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DROP TABLE " + TABLE_VK );
-        createVkTable(db);
-        ContentValues cv;
-        int position = 0;
-
-        for(Audio audio : audios)
-        {
-            cv = new ContentValues();
-            cv.put(Media.DATA, audio.getUrl());
-            cv.put(Media.ARTIST, audio.getArtist());
-            cv.put(Media.ALBUM_ID, audio.getAid());
-            cv.put(Media.TITLE, audio.getTitle());
-            cv.put(KEY_OID, audio.getOwner_id());
-            cv.put(KEY_LID, audio.getLyrics_id());
-            cv.put(KEY_POSITION_TRACK,position);
-            position++;
-            db.insert(TABLE_VK, null, cv);
-        }
-        db.close();
-        isLoading = false;
     }
 
 

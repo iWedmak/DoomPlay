@@ -18,6 +18,11 @@ import java.util.ArrayList;
 
 public class VkGrActivity extends AbstractVkItems
 {
+    public static void setGroups(ArrayList<Group> groups)
+    {
+        VkGrActivity.groups = groups;
+    }
+
     private static ArrayList<Group> groups;
 
 
@@ -74,6 +79,9 @@ public class VkGrActivity extends AbstractVkItems
                 try
                 {
                     groups = MainScreenActivity.api.getGroups(Account.account.user_id,100);
+
+                    Serializator<Group> factory = new Serializator<Group>(getBaseContext(), Serializator.FileNames.Group);
+                    factory.inSerialize(groups);
 
                 } catch (IOException e) {
                     e.printStackTrace();

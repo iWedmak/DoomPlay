@@ -137,7 +137,9 @@ public class ListVkActivity extends AbstractList
                     {
                         audios = TracksHolder.audiosVk = MainScreenActivity.api.getAudio(Account.account.user_id,
                             null,null,SettingActivity.getPreference("countvkall"));
-                        PlaylistDB.getInstance(getBaseContext()).addVkTracks(audios);
+
+                        Serializator<Audio> factory = new Serializator<Audio>(getBaseContext(), Serializator.FileNames.Audio);
+                        factory.inSerialize(audios);
                     }
 
                     else if(currentAction.equals(actionMyAlbums))
@@ -169,7 +171,7 @@ public class ListVkActivity extends AbstractList
                 isLoading = false;
                 linearLoading.setVisibility(View.GONE);
                 adapter.changeData(audios);
-                markItem(PlayingService.indexCurrentTrack,false);
+                markItem(PlayingService.getIndexCurrentTrack(),false);
             }
         };
         asyncTask.execute();

@@ -18,6 +18,11 @@ import java.util.ArrayList;
 
 public class VkFrActivity extends AbstractVkItems
 {
+    public static void setUsers(ArrayList<User> users)
+    {
+        VkFrActivity.users = users;
+    }
+
     private static ArrayList<User> users;
 
 
@@ -73,6 +78,9 @@ public class VkFrActivity extends AbstractVkItems
                 isLoading= true;
                 try {
                     users = MainScreenActivity.api.getFriends(Account.account.user_id);
+                    Serializator<User> factory = new Serializator<User>(getBaseContext(), Serializator.FileNames.User);
+                    factory.inSerialize(users);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {

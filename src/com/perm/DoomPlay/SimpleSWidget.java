@@ -48,7 +48,7 @@ public class SimpleSWidget extends AppWidgetProvider
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_small);
 
-        Audio audio = PlayingService.audios.get(PlayingService.indexCurrentTrack);
+        Audio audio = PlayingService.getAudios().get(PlayingService.getIndexCurrentTrack());
         views.setTextViewText(R.id.widgetTitle, audio.getTitle());
         views.setTextViewText(R.id.widgetArtist, audio.getArtist());
 

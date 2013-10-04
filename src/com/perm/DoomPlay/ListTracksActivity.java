@@ -342,7 +342,6 @@ public class ListTracksActivity extends AbstractList
         return true;
     }
 
-    @Override
-    protected void onClickActionBar() {}
+
 
 }

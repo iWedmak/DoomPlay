@@ -56,6 +56,8 @@ public class DownloadNotifFactory
 
     public Notification createCompleted()
     {
+        notification = new Notification();
+
         views.setProgressBar(R.id.progressDownload,100,100,false);
         views.setTextViewText(R.id.notifTitle,"Finish");
         notification.flags = Notification.FLAG_AUTO_CANCEL;
@@ -73,6 +75,8 @@ public class DownloadNotifFactory
 
     public Notification createCanceled()
     {
+        notification = new Notification();
+
         views.setProgressBar(R.id.progressDownload,100,100,false);
         views.setTextViewText(R.id.notifTitle,"Canceled");
         views.setTextViewText(R.id.notifArtist, track.getArtist() + "-" + track.getTitle());
@@ -84,6 +88,8 @@ public class DownloadNotifFactory
     }
     public Notification createError()
     {
+        notification = new Notification();
+
         views.setProgressBar(R.id.progressDownload,100,100,false);
         views.setTextViewText(R.id.notifTitle,"Sory,Error");
         views.setTextViewText(R.id.notifArtist, track.getArtist() + "-" + track.getTitle());

@@ -252,8 +252,6 @@ public class ListVkActivity extends AbstractList
         currentAction  = intent.getAction();
     }
 
-    @Override
-    protected void onClickActionBar() {}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)

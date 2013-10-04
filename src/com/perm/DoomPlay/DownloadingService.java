@@ -25,11 +25,13 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Environment;
 import android.os.IBinder;
+import android.util.Log;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -38,8 +40,8 @@ public class DownloadingService extends Service implements Observer
     public static final String keyDownload = "downloadTrack";
     private NotificationManager manager;
 
-    private final static HashMap<Long,Download> downloads = new HashMap<Long,Download>();
-    private final static HashMap<Long,DownloadNotifFactory> factories = new HashMap<Long, DownloadNotifFactory>();
+    private final static Map<Long,Download> downloads = new HashMap<Long,Download>();
+    private final static Map<Long,DownloadNotifFactory> factories = new HashMap<Long, DownloadNotifFactory>();
 
 
     public static boolean isDownloading(long aid)
@@ -81,6 +83,23 @@ public class DownloadingService extends Service implements Observer
     }
 
 
+    static String generateFilePath(Audio track)
+    {
+        String defaultFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/download/";
+        File defaultFile = new File(defaultFolder);
+        if(!defaultFile.exists() && !defaultFile.mkdirs())
+            Log.e("tag","can't create directory");
+
+        String title = track.getTitle() ;
+        if(title.length() > 25)
+            title.substring(0,25);
+
+
+        String trackName = (track.getArtist() + "-" + title + ".mp3").replaceAll("[%#@+^:,&]","");
+
+
+        return defaultFolder + trackName;
+    }
 
 
 
@@ -96,25 +115,19 @@ public class DownloadingService extends Service implements Observer
     {
 
 
-        if(intent.getAction()!= null && intent.getAction().equals(PlayingService.actionClose))
+        if(intent.getAction().equals(PlayingService.actionClose))
         {
             long aid = intent.getLongExtra("aid", 666);
-            downloads.get(aid).cancel();
+            Download d = downloads.get(aid);
+            if(d != null)
+                d.cancel();
 
         }
-        else
+        else if(intent.getAction().equals(PlayingService.actionPlay))
         {
             Audio track = intent.getParcelableExtra(keyDownload);
 
-
-            String defaultFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/download/";
-            File defaultFile = new File(defaultFolder);
-            if(!defaultFile.exists())
-                defaultFile.mkdirs();
-            String filePath = defaultFolder + track.getArtist() + "-" + track.getTitle() + ".mp3";
-
-
-            addDownload(track, filePath);
+            addDownload(track, generateFilePath(track));
         }
 
         return START_NOT_STICKY;
@@ -126,6 +139,7 @@ public class DownloadingService extends Service implements Observer
     {
         return null;
     }
+
 
     @Override
     public void update(Observable observable, Object data)

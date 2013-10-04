@@ -29,7 +29,7 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-class LyricsDialog extends DialogFragment
+public class LyricsDialog extends DialogFragment
 {
     private LinearLayout linearLoading;
     private TextView textView ;

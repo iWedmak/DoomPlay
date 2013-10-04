@@ -102,7 +102,7 @@
                      android:dependency="downloadart"
                      android:key="qualityart"
                      android:summary="choose quality of album art"
-                     android:defaultValue="1"
+                     android:defaultValue="2"
                      android:title="Quality">
              </ListPreference>
              <CheckBoxPreference

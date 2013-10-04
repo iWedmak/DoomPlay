@@ -175,7 +175,8 @@ abstract class AbstractList extends AbstractControls
                     else
                     {
                         Intent downloadIntent = new Intent(this,DownloadingService.class);
-                        downloadIntent.putExtra(DownloadingService.keyDownload,(Parcelable)audios.get(position));
+                        downloadIntent.putExtra(DownloadingService.keyDownload,(Parcelable)audios.get(position))
+                                .setAction(PlayingService.actionPlay);
                         startService(downloadIntent);
                     }
                     break;
@@ -318,5 +319,11 @@ abstract class AbstractList extends AbstractControls
 
             playingService.playTrackFromList(position);
         }
+    }
+    @Override
+    protected void onClickActionBar()
+    {
+        if(equalsCollections(audios,PlayingService.audios) && Build.VERSION.SDK_INT >= 8)
+            listView.smoothScrollToPosition(PlayingService.indexCurrentTrack);
     }
 }

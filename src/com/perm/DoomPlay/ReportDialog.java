@@ -26,7 +26,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.perm.ExceptionHandler.GMailSender;
 
-class ReportDialog extends DialogFragment
+public class ReportDialog extends DialogFragment
 {
     private EditText editSubject;
     private EditText editMessage;

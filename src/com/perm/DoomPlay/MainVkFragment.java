@@ -28,16 +28,16 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-class MainVkFragment extends Fragment
+public class MainVkFragment extends Fragment
 {
     private MainScreenActivity activity;
-    private LinearLayout linearLoading;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         activity =(MainScreenActivity)getActivity();
         View view = inflater.inflate(R.layout.main_vk_fragment,container,false);
-        linearLoading = (LinearLayout)view.findViewById(R.id.linearLoading);
+        LinearLayout linearLoading = (LinearLayout) view.findViewById(R.id.linearLoading);
         view.findViewById(R.id.linearVkAll).setOnClickListener(onClickVkListener);
         view.findViewById(R.id.linearVkTop).setOnClickListener(onClickVkListener);
         view.findViewById(R.id.linearVkGroup).setOnClickListener(onClickVkListener);

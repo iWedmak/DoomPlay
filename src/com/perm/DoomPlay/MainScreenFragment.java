@@ -27,7 +27,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-class MainScreenFragment extends Fragment
+public class MainScreenFragment extends Fragment
 {
     private MainScreenActivity activity;
     private LinearLayout linearLoading;

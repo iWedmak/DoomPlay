@@ -198,7 +198,15 @@ public class FullPlaybackActivity  extends AbstractControls
         else
         {
             MediaMetadataRetriever metadata = new MediaMetadataRetriever();
-            metadata.setDataSource(intent.getDataString());
+            if(intent.getScheme().equals("file"))
+            {
+                metadata.setDataSource(new File(URI.create(intent.getData().toString())).getAbsolutePath());
+            }
+            else
+            {
+                metadata.setDataSource(intent.getDataString());
+            }
+
             audio = new Audio(metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST),
                     metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE),intent.getDataString(),0);
         }

@@ -35,7 +35,6 @@ import java.util.ArrayList;
 public class AddTrackFromPlaybackDialog extends DialogFragment
 {
 
-    private ListView listView;
     private PlaylistDB playlistDB;
     private String[] listPlaylist;
     private ArrayList<Audio> audios ;
@@ -49,7 +48,7 @@ public class AddTrackFromPlaybackDialog extends DialogFragment
         playlistDB = PlaylistDB.getInstance(getActivity());
         listPlaylist =  playlistDB.getListPlaylist();
         View view = inflater.inflate(R.layout.dialog_from_playback,container,false);
-        listView = (ListView)view.findViewById(R.id.listDialogFromPlay);
+        ListView listView = (ListView) view.findViewById(R.id.listDialogFromPlay);
 
         DialogAddAdapter adapter = new DialogAddAdapter();
         listView.setAdapter(adapter);
@@ -68,22 +67,17 @@ public class AddTrackFromPlaybackDialog extends DialogFragment
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
 
-            if(!PlaylistDB.isLoading)
+            new AsyncTask<String, Void, Void>()
             {
-                new AsyncTask<String, Void, Void>()
+                @Override
+                protected Void doInBackground(String... params)
                 {
-                    @Override
-                    protected Void doInBackground(String... params)
-                    {
-                        playlistDB.addTracks(audios, params[0]);
-                        return null;
-                    }
-                }.execute(listPlaylist[position]);
-                dismiss();
-                Toast.makeText(getActivity(),"tracks added",Toast.LENGTH_SHORT).show();
-            }
-            else
-               AbstractList.waitMessage(getActivity());
+                    playlistDB.addTracks(audios, params[0]);
+                    return null;
+                }
+            }.execute(listPlaylist[position]);
+            dismiss();
+            Toast.makeText(getActivity(),"tracks added",Toast.LENGTH_SHORT).show();
         }
     };
 

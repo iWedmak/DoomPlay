@@ -32,6 +32,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 abstract class AbstractReceiver extends ActionBarActivity
 {
     protected BroadcastReceiver broadcastReceiver;
@@ -41,6 +43,22 @@ abstract class AbstractReceiver extends ActionBarActivity
     protected boolean isRegister;
     private BroadcastReceiver broadcastReceiverKiller;
     public static final String actionKill = "killAllActivities";
+
+    public void showPlaybackDialog(ArrayList<Audio> audios)
+    {
+        if(!PlaylistDB.isLoading)
+        {
+            AddTrackFromPlaybackDialog dialog = new AddTrackFromPlaybackDialog();
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList(AddTrackFromPlaybackDialog.keyBundleDialog, audios);
+            dialog.setArguments(bundle);
+            dialog.show(getSupportFragmentManager(),"tag");
+        }
+        else
+            AbstractList.waitMessage(this);
+
+
+    }
 
     @Override
     protected void onPause()

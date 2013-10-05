@@ -71,8 +71,7 @@ public class DownloadingService extends Service implements DoomObserver
 
         }
 
-        // bad convert , need solve this!!!!
-        manager.notify(holder.notificationId,notification);
+        manager.notify(holder.downloadBuilder.notificationId,notification);
 
     }
 
@@ -82,18 +81,6 @@ public class DownloadingService extends Service implements DoomObserver
         Download download;
         DownloadNotifBuilder downloadBuilder;
 
-        int notificationId = 0;
-
-        static int counter  = 0;
-
-        public DownloadHolder()
-        {
-            counter++;
-            if(counter == Integer.MAX_VALUE)
-                counter = 0;
-
-            notificationId = counter;
-        }
     }
 
 
@@ -126,16 +113,16 @@ public class DownloadingService extends Service implements DoomObserver
             e.printStackTrace();
             return;
         }
-        Download d = new Download(url,filePath,audio.getAid());
-        d.addObserver(this);
-
-
         DownloadHolder holder = new DownloadHolder();
-        holder.download = d;
+
+        holder.download = new Download(url,filePath,audio.getAid());
+        holder.download.addObserver(this);
+
+
         holder.downloadBuilder = new DownloadNotifBuilder(audio,filePath,getBaseContext());
         downloads.put(audio.getAid(),holder);
 
-        d.resume();
+        holder.download.resume();
 
 
     }
@@ -153,7 +140,7 @@ public class DownloadingService extends Service implements DoomObserver
             title.substring(0,25);
 
 
-        String trackName = (track.getArtist() + "-" + title + ".mp3").replaceAll("[%#@+^:,&]","");
+        String trackName = (track.getArtist() + "-" + title + ".mp3").replaceAll("[%#@^&]","");
 
 
         return defaultFolder + trackName;
@@ -176,6 +163,9 @@ public class DownloadingService extends Service implements DoomObserver
         if(intent.getAction().equals(PlayingService.actionClose))
         {
             long aid = intent.getLongExtra("aid", 666);
+
+            Log.i("TAG AUDIO"," aid = " + aid);
+
             Download d = downloads.get(aid).download;
             d.cancel();
 

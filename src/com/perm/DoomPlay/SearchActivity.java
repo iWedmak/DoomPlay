@@ -155,7 +155,7 @@ public class SearchActivity extends AbstractList
                 case R.id.itemToPlaylist:
                     ArrayList<Audio> temp = new ArrayList<Audio>();
                     temp.add(audios.get(position));
-                    FileSystemActivity.showPlaybackDialog(temp ,getSupportFragmentManager());
+                    showPlaybackDialog(temp);
                     break;
                 case R.id.itemSetAsRingtone:
                     Utils.setRingtone(getBaseContext(), audios.get(position));

@@ -33,6 +33,10 @@ public class DownloadNotifBuilder
     private final String filePath;
     private final Context context;
 
+    public int notificationId = 0;
+
+    private static int counter  = 0;
+
 
     public DownloadNotifBuilder(Audio track, String filePath, Context context)
     {
@@ -40,7 +44,13 @@ public class DownloadNotifBuilder
         this.filePath = filePath;
         this.context = context;
 
+        counter++;
+        if(counter == Integer.MAX_VALUE)
+            counter = 0;
+
+        notificationId = counter;
     }
+
 
     public Notification createStarting()
     {
@@ -57,7 +67,7 @@ public class DownloadNotifBuilder
         intentClose.setComponent(new ComponentName(context,DownloadingService.class));
 
         views.setOnClickPendingIntent(R.id.notifClose,
-                PendingIntent.getService(context, 0, intentClose, PendingIntent.FLAG_UPDATE_CURRENT));
+                PendingIntent.getService(context, notificationId, intentClose,0));
 
 
         notification.contentView = views;

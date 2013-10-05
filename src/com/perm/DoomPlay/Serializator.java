@@ -68,6 +68,7 @@ class Serializator<T extends Serializable>
 
     public void inSerialize(ArrayList<T> objects)
     {
+
         File file = getPathByType();
 
         OutputStream fileStream = null;

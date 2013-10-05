@@ -303,6 +303,7 @@ abstract class AbstractList extends AbstractControls
         intentService.putExtra(FullPlaybackActivity.keyService,audios);
 
         connectService();
+        PlayingService.isPlaying = true;
         startService(intentService);
 
     }

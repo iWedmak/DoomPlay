@@ -24,12 +24,14 @@ import android.database.Cursor;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.view.ActionMode;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -99,29 +101,56 @@ public class FileSystemActivity extends AbstractReceiver
     //it's fucking crooked nail , fix it!!!
     public static ArrayList<Audio> getAudiosFromFolder(File file,Context context)
     {
+        String selectionArgs;
+        try
+        {
+            selectionArgs = file.getCanonicalPath();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            selectionArgs = file.getAbsolutePath().substring(12);
+        }
 
-        Cursor cursor;
-        if(file.getAbsolutePath().length() < 13)
-            cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                    TracksHolder.projection,MediaStore.Audio.Media.IS_MUSIC + " != 0",null,null);
-        else
-            cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+
+        Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 TracksHolder.projection,MediaStore.Audio.Media.IS_MUSIC + " != 0 AND "+
-                MediaStore.Audio.Media.DATA + " LIKE ? ",new String[]{"%"+file.getAbsolutePath().substring(12) +"%"},null);
+                MediaStore.Audio.Media.DATA + " LIKE ? ",new String[]{"%"+selectionArgs +"%"},null);
 
-        cursor.moveToFirst();
+        ArrayList<Audio> audios;
 
-        ArrayList<Audio> audios = Audio.parseAudio(cursor);
+        if(cursor.moveToFirst())
+            audios = Audio.parseAudio(cursor);
+        else
+            audios = new ArrayList<Audio>(0);
+
         cursor.close();
         return audios;
     }
     //it's fucking crooked nail , fix it too!!!
     public static Audio getAudioFromFile(File file,Context context)
     {
-        Log.i("TAG AUDIO",file.getAbsolutePath().substring(12) + " ****** "+ TracksHolder.allAudios.get(420).getUrl());
+        try {
+            Log.i("TAG AUDIO",file.getAbsolutePath().substring(12) + " *************** " + file.getCanonicalPath()+
+                    " *************** "+ file.getPath() +"*********************"+ TracksHolder.allAudios.get(420).getUrl());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String selectionArgs;
+
+        try
+        {
+            selectionArgs = file.getCanonicalPath();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            selectionArgs = file.getAbsolutePath().substring(12);
+        }
 
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                TracksHolder.projection,MediaStore.Audio.Media.DATA + " LIKE ? ",new String[]{"%"+file.getAbsolutePath().substring(12)}, null);
+                TracksHolder.projection,MediaStore.Audio.Media.DATA + " LIKE ? ",new String[]{"%"+ selectionArgs}, null);
 
         Audio audio;
 
@@ -137,16 +166,19 @@ public class FileSystemActivity extends AbstractReceiver
         cursor.close();
         return audio;
     }
-    private final ActionMode.Callback callback = new ActionMode.Callback()
+    private final android.support.v7.view.ActionMode.Callback callback = new android.support.v7.view.ActionMode.Callback()
     {
+
         @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu)
+        public boolean onCreateActionMode(ActionMode actionMode, Menu menu)
         {
             getMenuInflater().inflate(R.menu.action_filesystem,menu);
             return true;
         }
+
         @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu){return false;}
+        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {return false;  }
+
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item)
         {
@@ -179,7 +211,7 @@ public class FileSystemActivity extends AbstractReceiver
                         mode.finish();
                         return false ;
                     }
-                    showPlaybackDialog(audios,getSupportFragmentManager());
+                    showPlaybackDialog(audios);
                     break;
                 }
                 case R.id.itemDeleteFile:
@@ -194,19 +226,8 @@ public class FileSystemActivity extends AbstractReceiver
         }
 
         @Override
-        public void onDestroyActionMode(ActionMode mode)
-        {
-
-        }
+        public void onDestroyActionMode(ActionMode actionMode) {}
     };
-    public static void showPlaybackDialog(ArrayList<Audio> audios, android.support.v4.app.FragmentManager fragmentManager)
-    {
-        AddTrackFromPlaybackDialog dialog = new AddTrackFromPlaybackDialog();
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(AddTrackFromPlaybackDialog.keyBundleDialog, audios);
-        dialog.setArguments(bundle);
-        dialog.show(fragmentManager,"tag");
-    }
 
 
     private void fill(File file)
@@ -247,7 +268,7 @@ public class FileSystemActivity extends AbstractReceiver
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
         {
-            startActionMode(callback).setTag(position);
+            startSupportActionMode(callback).setTag(position);
             return true;
         }
     };

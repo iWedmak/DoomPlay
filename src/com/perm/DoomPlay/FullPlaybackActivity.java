@@ -106,10 +106,9 @@ public class FullPlaybackActivity  extends AbstractControls
         }
         else
         {
+            PlayingService.isPlaying = true;
             initializeService();
         }
-
-
     }
 
     @Override
@@ -233,7 +232,7 @@ public class FullPlaybackActivity  extends AbstractControls
             case R.id.itemAddtoPlaylist:
                 ArrayList<Audio> temp = new ArrayList<Audio>();
                 temp.add(audios.get(PlayingService.getIndexCurrentTrack()));
-                FileSystemActivity.showPlaybackDialog(temp,getSupportFragmentManager());
+                showPlaybackDialog(temp);
                 return true;
             case R.id.itemEqualizer:
                 startEqualizer();

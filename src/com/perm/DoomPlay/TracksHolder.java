@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 class TracksHolder
 {
-    public static volatile boolean isScanned = false;
+    private static volatile boolean isScanned = false;
     public static String[] allArtist;
     public static String[] allAlbums;
     public static String[] allAcordingArtists;
@@ -81,7 +81,7 @@ class TracksHolder
             } while (cursorArtist.moveToNext());
         }
 
-        isScanned = true;
+
 
         cursor.close();
         cursorAlbum.close();
@@ -97,11 +97,18 @@ class TracksHolder
         Serializator<Audio> factory3 = new Serializator<Audio>(context, Serializator.FileNames.Audio);
         audiosVk = factory3.getSerialization();
 
+
+        isScanned = true;
     }
 
 
     public static String getArtistFromAlbum(int positionAlbum)
     {
         return allAcordingArtists[positionAlbum];
+    }
+
+    public static boolean isScanned()
+    {
+        return isScanned;
     }
 }

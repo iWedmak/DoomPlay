@@ -83,7 +83,7 @@ public class MainScreenFragment extends Fragment
         view.findViewById(R.id.linearSearch).setOnClickListener(onClickMainLinear);
 
 
-        if(!TracksHolder.isScanned)
+        if(!TracksHolder.isScanned())
             scan();
 
         return view;

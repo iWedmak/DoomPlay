@@ -39,7 +39,7 @@ public class SimpleSWidget extends AppWidgetProvider
     {
         super.onReceive(context,intent);
 
-        if(intent.getAction().equals(actionUpdateWidget))
+        if(intent.getAction().equals(actionUpdateWidget) && PlayingService.audios != null)
             updateWidget(context);
 
     }
@@ -48,11 +48,11 @@ public class SimpleSWidget extends AppWidgetProvider
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_small);
 
-        Audio audio = PlayingService.getAudios().get(PlayingService.getIndexCurrentTrack());
+        Audio audio = PlayingService.audios.get(PlayingService.indexCurrentTrack);
         views.setTextViewText(R.id.widgetTitle, audio.getTitle());
         views.setTextViewText(R.id.widgetArtist, audio.getArtist());
 
-        Bitmap cover = ArtCacheUtils.get(audio.getAid());
+        Bitmap cover = AlbumArtGetter.getBitmapById(audio.getAid(),context);
         if (cover != null)
         {
             views.setImageViewBitmap(R.id.widgetAlbum, cover);

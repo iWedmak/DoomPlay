@@ -99,13 +99,14 @@ public class LyricsDialog extends DialogFragment
                     }
 
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    e.printStackTrace();return e.getMessage();
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    e.printStackTrace();return e.getMessage();
                 } catch (KException e) {
-                    e.printStackTrace();  return " *** ERROR **** --> please sign in for get lyrics";
+                    e.printStackTrace();
+                    ((AbstractReceiver)getActivity()).handleKException(e);
+                    return e.getMessage();
                 }
-                return " ***ERROR*** (check acces to internet or something else) ";
             }
 
             @Override

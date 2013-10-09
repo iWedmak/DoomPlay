@@ -25,33 +25,36 @@ import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Download implements Runnable
 {
-    private final static byte buffer[]= new byte[1024];
 
-    private final String filePath;
-    private final long aid;
+    static interface DoomObserver
+    {
+        //my own observer with blackjacks and hookers
+        // don't ask ,why have i done this;
+        void doomUpdate(long aid);
+    }
     enum States
     {
         DOWNLOADING,PAUSED,CANCELLED,COMPLETED,ERROR
     }
 
-    private URL url;
-
-
-    private int size;
-    private int downloadedS;
+    private final URL url;
+    private long size;
+    private long downloadedS;
     private States status;
+    private final static byte buffer[] = new byte[1024];
+    final String filePath;
+    final long aid;
+    private final DoomObserver observer ;
 
-
-    public Download(URL url,String filePath,long aid)
+    public Download(URL url,String filePath,long aid,DoomObserver observer)
     {
         this.filePath = filePath;
         this.url = url;
         this.aid = aid;
+        this.observer = observer;
         size = -1;
         downloadedS = 0;
     }
@@ -64,6 +67,8 @@ public class Download implements Runnable
     }
     public float getProgress()
     {
+        Log.i("TAG AUDIO",String.valueOf(((float)downloadedS/size)*100));
+
         return ((float)downloadedS/size)*100;
     }
 
@@ -117,17 +122,24 @@ public class Download implements Runnable
             connection.setDoOutput(true);
             connection.connect();
 
-            int connectLength = connection.getContentLength();
+            String connectLength = connection.getHeaderField("Content-Length");
 
-            if(connectLength < 1)
+            Log.i("TAG AUDIO","content length first is " + connectLength);
+
+
+            if(connectLength == null || Integer.parseInt(connectLength) < 1 || connectLength.equals(""))
                 error();
 
-            size = connectLength;
+            size = Long.parseLong(connectLength);
 
             file = new RandomAccessFile(filePath,"rw");
             file.seek(downloadedS);
 
             inputStream = new BufferedInputStream(url.openStream());
+
+            size = inputStream.available();
+
+            Log.i("TAG AUDIO","content length first is " + size);
 
             int read ;
 
@@ -149,7 +161,6 @@ public class Download implements Runnable
         {
             error();
             e.printStackTrace();
-            Log.e("TAG AUDIO",e.toString());
         }
         finally
         {
@@ -179,18 +190,8 @@ public class Download implements Runnable
         return size;
     }
 
-    private List<DoomObserver> observers = new ArrayList<DoomObserver>();
-
-    public void addObserver(DoomObserver observer)
-    {
-        observers.add(observer);
-    }
-
     protected void notifyObservers()
     {
-        for(DoomObserver observer : observers)
-        {
-            observer.doomUpdate(this,aid);
-        }
+        observer.doomUpdate(aid);
     }
 }

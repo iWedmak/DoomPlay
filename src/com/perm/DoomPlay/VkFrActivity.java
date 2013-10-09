@@ -75,34 +75,34 @@ public class VkFrActivity extends AbstractVkItems
             public void run()
             {
                 handler.sendEmptyMessage(1);
-                isLoading= true;
-                try {
+                try
+                {
                     users = MainScreenActivity.api.getFriends(Account.account.user_id);
                     Serializator<User> factory = new Serializator<User>(getBaseContext(), Serializator.FileNames.User);
                     factory.inSerialize(users);
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (KException e)
+                } catch (IOException e)
                 {
-                    isLoading = false;
-                    if(handleKException(e,getBaseContext()))
-                    {
-                        finish();
-                    }
-                    else
-                    {
-                        handler.sendEmptyMessage(2);
-                        Toast.makeText(getBaseContext(),"can't get tracks",Toast.LENGTH_SHORT).show();
-                    }
+                    handler.sendEmptyMessage(2);
+                    showException(e);
+                    return;
 
+                }
+                catch (JSONException e)
+                {
+                    handler.sendEmptyMessage(2);
+                    showException(e);
+                    return;
+                }
+                catch (KException e)
+                {
+
+                    handler.sendEmptyMessage(2);
+                    handleKException(e);
                     return;
                 }
                 handler.sendEmptyMessage(2);
                 handler.sendEmptyMessage(3);
-                isLoading = false;
 
 
             }
@@ -116,9 +116,11 @@ public class VkFrActivity extends AbstractVkItems
             if(msg.what == 1)
             {
                 linearLoading.setVisibility(View.VISIBLE);
+                isLoading = true;
             }
             else if(msg.what == 2)
             {
+                isLoading = false;
                 linearLoading.setVisibility(View.GONE);
 
             }

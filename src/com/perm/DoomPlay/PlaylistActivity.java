@@ -37,8 +37,8 @@ public class PlaylistActivity extends AbstractReceiver
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.playlists);
-        ListView listPlaylist = (ListView) findViewById(R.id.listPlaylist);
+        setContentView(R.layout.list_album_artist);
+        ListView listView = (ListView) findViewById(R.id.listAlbumArtist);
         playlistDB = PlaylistDB.getInstance(this);
         playlists = playlistDB.getListPlaylist();
 
@@ -47,9 +47,9 @@ public class PlaylistActivity extends AbstractReceiver
             playlists = new String[]{};
         }
         adapter = new PlaylistAdapter();
-        listPlaylist.setAdapter(adapter);
-        listPlaylist.setOnItemClickListener(onItemTrackClick);
-        listPlaylist.setOnItemLongClickListener(onItemLongTrackClick);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(onItemTrackClick);
+        listView.setOnItemLongClickListener(onItemLongTrackClick);
 
         updateList();
     }

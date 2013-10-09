@@ -18,14 +18,12 @@ package com.perm.DoomPlay;
  *    You can contact me <DoomPlaye@gmail.com>
  */
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class MainVkFragment extends Fragment
@@ -37,7 +35,7 @@ public class MainVkFragment extends Fragment
     {
         activity =(MainScreenActivity)getActivity();
         View view = inflater.inflate(R.layout.main_vk_fragment,container,false);
-        LinearLayout linearLoading = (LinearLayout) view.findViewById(R.id.linearLoading);
+        //LinearLayout linearLoading = (LinearLayout) view.findViewById(R.id.linearLoading);
         view.findViewById(R.id.linearVkAll).setOnClickListener(onClickVkListener);
         view.findViewById(R.id.linearVkTop).setOnClickListener(onClickVkListener);
         view.findViewById(R.id.linearVkGroup).setOnClickListener(onClickVkListener);
@@ -47,19 +45,11 @@ public class MainVkFragment extends Fragment
         return view;
     }
 
-    public static boolean trippleCheckToast(Context context,boolean isLoading)
+    public boolean trippleCheckToast()
     {
-        if(!MainScreenActivity.isRegister)
+        if(MainScreenActivity.isLoading)
         {
-            Toast.makeText(context, "please sign in", Toast.LENGTH_SHORT).show();  return false;
-        }
-        else if(!Utils.isOnline(context))
-        {
-            Toast.makeText(context,"check your internet connection",Toast.LENGTH_SHORT).show();  return false;
-        }
-        else if(isLoading)
-        {
-            Toast.makeText(context,"please wait",Toast.LENGTH_SHORT).show();   return false;
+            Toast.makeText(activity,"please wait",Toast.LENGTH_SHORT).show();   return false;
         }
         else
         {
@@ -73,7 +63,7 @@ public class MainVkFragment extends Fragment
         @Override
         public void onClick(View v)
         {
-            if(trippleCheckToast(activity,MainScreenActivity.isLoading))
+            if(trippleCheckToast())
             {
                 switch (v.getId())
                 {

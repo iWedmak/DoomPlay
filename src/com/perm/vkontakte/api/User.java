@@ -85,7 +85,7 @@ public class User implements Serializable {
         return users;
     }
     
-    //TODO why it duplicates parseAudio() method
+    //TODO why it duplicates parseAudiosCursor() method
     public static User parseFromFave(JSONObject jprofile) throws JSONException {
         User m = new User();
         m.uid = Long.parseLong(jprofile.getString("uid"));

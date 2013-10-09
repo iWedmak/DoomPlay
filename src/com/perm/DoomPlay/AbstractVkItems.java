@@ -19,7 +19,6 @@ package com.perm.DoomPlay;
  *    You can contact me <DoomPlaye@gmail.com>
  */
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.MenuItem;
@@ -28,7 +27,6 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
-import com.perm.vkontakte.api.Account;
 import com.perm.vkontakte.api.KException;
 import org.json.JSONException;
 
@@ -41,20 +39,6 @@ abstract class AbstractVkItems extends AbstractReceiver
     LinearLayout linearLoading;
     ListView listView;
 
-    public static boolean handleKException(KException e, Context context)
-    {
-        e.printStackTrace();
-        if(e.getMessage().contains("autorization failded"))
-        {
-            Account.account.access_token = null;
-            Account.account.save(context);
-            MainScreenActivity.isRegister = false;
-            context.startActivity(new Intent(context, MainScreenActivity.class));
-            Toast.makeText(context,"autorization error",Toast.LENGTH_SHORT).show();
-            return true;
-        }
-        return false;
-    }
 
     protected abstract void onClickRefresh();
     protected abstract ArrayList<Audio> getAudios(int position) throws KException,JSONException,IOException;
@@ -155,18 +139,23 @@ abstract class AbstractVkItems extends AbstractReceiver
         @Override
         protected ArrayList<Audio> doInBackground(Integer... params)
         {
-            try {
+            try
+            {
                 return getAudios(params[0]);
-            } catch (KException e)
+            }
+            catch (KException e)
             {
                 isLoading = false;
-                if(handleKException(e,getBaseContext()))
-                    finish();
+                handleKException(e);
                 cancel(true);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (JSONException e)
+            {
+                showException(e);
+                cancel(true);
+            } catch (IOException e)
+            {
+                showException(e);
+                cancel(true);
             }
             return null;
         }

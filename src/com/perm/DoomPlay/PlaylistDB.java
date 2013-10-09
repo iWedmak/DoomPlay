@@ -136,23 +136,6 @@ public class PlaylistDB extends SQLiteOpenHelper
         db.close();
         isLoading = false;
     }
-    void addTrack(Audio audio,String playlist)
-    {
-        isLoading = true;
-        SQLiteDatabase db = getWritableDatabase();
-        int position = getLastPosition(playlist,db);
-
-        ContentValues cv = new ContentValues();
-        cv.put(Media.DATA, audio.getUrl());
-        cv.put(Media.ARTIST, audio.getArtist());
-        cv.put(Media.ALBUM_ID, audio.getAid());
-        cv.put(Media.TITLE, audio.getTitle());
-        cv.put(KEY_POSITION_TRACK,position);
-        db.insert(playlist, null, cv);
-        db.close();
-        isLoading = false;
-    }
-
     void deleteTrack(int positionTrack,String playlist)
     {
         SQLiteDatabase db = getWritableDatabase();
@@ -185,12 +168,7 @@ public class PlaylistDB extends SQLiteOpenHelper
 
         Cursor c = db.query(playlist,TracksHolder.projection,null, null, null, null, null);
 
-        ArrayList<Audio> result ;
-
-        if(c.moveToFirst())
-            result = Audio.parseAudio(c);
-        else
-            result = new ArrayList<Audio>();
+        ArrayList<Audio> result = Audio.parseAudiosCursor(c);
 
         c.close();
         db.close();

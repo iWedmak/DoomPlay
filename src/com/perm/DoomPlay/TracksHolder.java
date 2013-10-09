@@ -20,6 +20,7 @@ package com.perm.DoomPlay;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
+import com.perm.vkontakte.api.AudioAlbum;
 import com.perm.vkontakte.api.Group;
 import com.perm.vkontakte.api.User;
 
@@ -46,10 +47,7 @@ class TracksHolder
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 projection,MediaStore.Audio.Media.IS_MUSIC + " != 0", null, null);
 
-        if(cursor.moveToFirst())
-            allAudios = Audio.parseAudio(cursor);
-        else
-            allAudios = new ArrayList<Audio>();
+        allAudios = Audio.parseAudiosCursor(cursor);
 
         Cursor cursorAlbum = context.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
                 new String[]{MediaStore.Audio.Albums.ALBUM,MediaStore.Audio.Albums.ARTIST },null, null,null );
@@ -96,6 +94,9 @@ class TracksHolder
 
         Serializator<Audio> factory3 = new Serializator<Audio>(context, Serializator.FileNames.Audio);
         audiosVk = factory3.getSerialization();
+
+        Serializator<AudioAlbum> factory4 = new Serializator<AudioAlbum>(context, Serializator.FileNames.Album);
+        VkAlbumsActivity.albums = factory4.getSerialization();
 
 
         isScanned = true;

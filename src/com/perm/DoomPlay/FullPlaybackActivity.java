@@ -30,6 +30,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -37,6 +38,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 
@@ -58,7 +60,7 @@ public class FullPlaybackActivity  extends AbstractControls
     @Override
     protected void trackChanged()
     {
-        viewPager.setCurrentItem(PlayingService.getIndexCurrentTrack(), false);
+        viewPager.setCurrentItem(PlayingService.indexCurrentTrack, false);
     }
 
     @Override
@@ -66,7 +68,7 @@ public class FullPlaybackActivity  extends AbstractControls
     {
         super.onResume();
         isShown = true;
-        viewPager.setCurrentItem(PlayingService.getIndexCurrentTrack(), false);
+        viewPager.setCurrentItem(PlayingService.indexCurrentTrack, false);
 
     }
 
@@ -77,7 +79,7 @@ public class FullPlaybackActivity  extends AbstractControls
         {
             adapterPager = new PagePlaybackAdapter(getSupportFragmentManager());
             viewPager.setAdapter(adapterPager);
-            viewPager.setCurrentItem(PlayingService.getIndexCurrentTrack());
+            viewPager.setCurrentItem(PlayingService.indexCurrentTrack);
         }
     };
     @Override
@@ -117,7 +119,9 @@ public class FullPlaybackActivity  extends AbstractControls
         super.onNewIntent(intent);
         intentWas = intent;
         getTracks(intent);
-        adapterPager.notifyDataSetChanged();
+        adapterPager = new PagePlaybackAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(adapterPager);
+        viewPager.setCurrentItem(PlayingService.indexCurrentTrack);
     }
 
     void getTracks(Intent intent)
@@ -133,12 +137,27 @@ public class FullPlaybackActivity  extends AbstractControls
         }
         else
         {
-            audios = PlayingService.getAudios();
+            audios = PlayingService.audios;
         }
 
         if(intent.getIntExtra(keyIndex,11116) != 11116)
             intentService.putExtra(keyIndex,intent.getIntExtra(keyIndex,0));
 
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        finish();
+    }
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_HOME))
+        {
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -151,9 +170,25 @@ public class FullPlaybackActivity  extends AbstractControls
     public Audio getRealPathFromIntent(Intent intent)
     {
         Cursor cursor;
+
+
+        String filePath = null;
+
         if(intent.getScheme().equals("file"))
         {
-            String[] selectionArgs = new String[]{new File(URI.create(intent.getData().toString())).getAbsolutePath()};
+            File file = new File(URI.create(intent.getData().toString())) ;
+
+            try
+            {
+                filePath  = file.getCanonicalPath();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+                filePath = file.getAbsolutePath();
+            }
+
+            String[] selectionArgs = new String[]{filePath};
             cursor = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,TracksHolder.projection,
                     MediaStore.Audio.Media.DATA + " = ? ",selectionArgs,null);
         }
@@ -165,13 +200,13 @@ public class FullPlaybackActivity  extends AbstractControls
         Audio audio;
 
         if(cursor.moveToFirst())
-            audio = Audio.createAudioCursor(cursor);
+            audio = Audio.parseAudioCursor(cursor);
         else
         {
             MediaMetadataRetriever metadata = new MediaMetadataRetriever();
             if(intent.getScheme().equals("file"))
             {
-                metadata.setDataSource(new File(URI.create(intent.getData().toString())).getAbsolutePath());
+                metadata.setDataSource(filePath);
             }
             else
             {
@@ -204,7 +239,7 @@ public class FullPlaybackActivity  extends AbstractControls
         {
             Intent intent = new Intent(context,ListVkActivity.class);
             intent.setAction(ListVkActivity.currentAction);
-            intent.putExtra(MainScreenActivity.keyOpenInListTrack, PlayingService.getAudios());
+            intent.putExtra(MainScreenActivity.keyOpenInListTrack, PlayingService.audios);
 
             return intent;
         }
@@ -217,7 +252,7 @@ public class FullPlaybackActivity  extends AbstractControls
             else
                 intent.setAction(ListTracksActivity.actionJust);
 
-            intent.putExtra(MainScreenActivity.keyOpenInListTrack, PlayingService.getAudios());
+            intent.putExtra(MainScreenActivity.keyOpenInListTrack, PlayingService.audios);
             return intent;
         }
 
@@ -231,7 +266,7 @@ public class FullPlaybackActivity  extends AbstractControls
         {
             case R.id.itemAddtoPlaylist:
                 ArrayList<Audio> temp = new ArrayList<Audio>();
-                temp.add(audios.get(PlayingService.getIndexCurrentTrack()));
+                temp.add(audios.get(PlayingService.indexCurrentTrack));
                 showPlaybackDialog(temp);
                 return true;
             case R.id.itemEqualizer:
@@ -246,7 +281,7 @@ public class FullPlaybackActivity  extends AbstractControls
                 finish();
                 return true;
             case R.id.itemSetAsRingtone:
-                Utils.setRingtone(getBaseContext(), audios.get(PlayingService.getIndexCurrentTrack()));
+                Utils.setRingtone(getBaseContext(), audios.get(PlayingService.indexCurrentTrack));
                 return true;
             case R.id.itemExit:
                 sendBroadcast(new Intent(actionKill));
@@ -256,15 +291,22 @@ public class FullPlaybackActivity  extends AbstractControls
                 return true;
             case R.id.itemGetLiricks:
                 if(PlayingService.isOnline)
-                   AbstractList.startLyricsDialog(getSupportFragmentManager(), audios.get(PlayingService.getIndexCurrentTrack()).getLyrics_id());
+                   AbstractList.startLyricsDialog(getSupportFragmentManager(), audios.get(PlayingService.indexCurrentTrack).getLyrics_id());
                 else
                 {
-                    Audio audio = audios.get(PlayingService.getIndexCurrentTrack());
+                    Audio audio = audios.get(PlayingService.indexCurrentTrack);
                     ListTracksActivity.startLiryctDialog(getSupportFragmentManager(), audio.getArtist(), audio.getTitle());
                 }
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onClickActionBar()
+    {
+        super.onClickActionBar();
+        finish();
     }
 
     private void initializeService()
@@ -309,17 +351,17 @@ public class FullPlaybackActivity  extends AbstractControls
         {
             if(playingService != null)
             {
-                if(position > PlayingService.getIndexCurrentTrack())
-                    playingService.playTrackFromList(PlayingService.getIndexCurrentTrack() +1);
+                if(position > PlayingService.indexCurrentTrack)
+                    playingService.playTrackFromList(PlayingService.indexCurrentTrack +1);
 
-                else if(position < PlayingService.getIndexCurrentTrack())
-                    playingService.playTrackFromList(PlayingService.getIndexCurrentTrack() -1);
+                else if(position < PlayingService.indexCurrentTrack)
+                    playingService.playTrackFromList(PlayingService.indexCurrentTrack -1);
             }
             else
             {
-                if(position > PlayingService.getIndexCurrentTrack())
+                if(position > PlayingService.indexCurrentTrack)
                     PlayingService.changeTrack(PlayingService.nextTrack);
-                else if(position < PlayingService.getIndexCurrentTrack())
+                else if(position < PlayingService.indexCurrentTrack)
                     PlayingService.changeTrack(PlayingService.previousTrack);
             }
 

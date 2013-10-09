@@ -33,29 +33,32 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DownloadingService extends Service implements DoomObserver
+public class DownloadingService extends Service implements Download.DoomObserver
 {
     public static final String keyDownload = "downloadTrack";
     private NotificationManager manager;
 
     private final static Map<Long,DownloadHolder> downloads = new HashMap<Long,DownloadHolder>();
 
+    private static boolean isUpdate = false;
+
 
     @Override
-    public void doomUpdate(Download observable, long aid)
+    public void doomUpdate(long aid)
     {
         DownloadHolder holder = downloads.get(aid);
-
         Notification notification = null;
 
-        switch (observable.getStatus())
+        switch (holder.download.getStatus())
         {
             case DOWNLOADING:
-                notification = holder.downloadBuilder.createStarting();
+                notification = holder.downloadBuilder.createStarting((int)holder.download.getProgress());
+                startUpdatingThread();
                 break;
             case CANCELLED:
                 notification = holder.downloadBuilder.createCanceled();
                 dispose(aid);
+                new File(holder.download.filePath).delete();
                 break;
             case COMPLETED:
                 notification = holder.downloadBuilder.createCompleted();
@@ -64,11 +67,11 @@ public class DownloadingService extends Service implements DoomObserver
             case ERROR:
                 notification = holder.downloadBuilder.createError();
                 dispose(aid);
+                new File(holder.download.filePath).delete();
                 break;
             case PAUSED:
-                //
+                notification = holder.downloadBuilder.createPaused();
                 break;
-
         }
 
         manager.notify(holder.downloadBuilder.notificationId,notification);
@@ -80,7 +83,6 @@ public class DownloadingService extends Service implements DoomObserver
     {
         Download download;
         DownloadNotifBuilder downloadBuilder;
-
     }
 
 
@@ -93,7 +95,10 @@ public class DownloadingService extends Service implements DoomObserver
         downloads.remove(aid);
 
         if(downloads.size() == 0)
+        {
             stopSelf();
+            isUpdate = false;
+        }
 
     }
 
@@ -115,16 +120,50 @@ public class DownloadingService extends Service implements DoomObserver
         }
         DownloadHolder holder = new DownloadHolder();
 
-        holder.download = new Download(url,filePath,audio.getAid());
-        holder.download.addObserver(this);
-
-
+        holder.download = new Download(url,filePath,audio.getAid(),this);
         holder.downloadBuilder = new DownloadNotifBuilder(audio,filePath,getBaseContext());
         downloads.put(audio.getAid(),holder);
 
         holder.download.resume();
+    }
 
 
+    private final Thread updatingThread = new Thread(new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            while (isUpdate)
+            {
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                for(DownloadHolder holder : downloads.values())
+                {
+                    if(holder.download.getStatus() == Download.States.DOWNLOADING)
+                    {
+                        Notification notification = holder.downloadBuilder.createStarting((int)holder.download.getProgress());
+                        manager.notify(holder.downloadBuilder.notificationId,notification);
+                    }
+                }
+
+            }
+
+        }
+    });
+
+
+    private void startUpdatingThread()
+    {
+         if(!isUpdate)
+         {
+             isUpdate = true;
+             updatingThread.start();
+         }
     }
 
 
@@ -159,8 +198,9 @@ public class DownloadingService extends Service implements DoomObserver
     public int onStartCommand(Intent intent, int flags, int startId)
     {
 
+        String action = intent.getAction();
 
-        if(intent.getAction().equals(PlayingService.actionClose))
+        if(action.equals(PlayingService.actionClose))
         {
             long aid = intent.getLongExtra("aid", 666);
 
@@ -170,13 +210,30 @@ public class DownloadingService extends Service implements DoomObserver
             d.cancel();
 
         }
-        else if(intent.getAction().equals(PlayingService.actionPlay))
+        else if(action.equals(PlayingService.actionPlay))
         {
             Audio track = intent.getParcelableExtra(keyDownload);
 
             addDownload(track, generateFilePath(track));
         }
+        else if(action.equals(PlayingService.actionIconPlay))
+        {
+            long aid = intent.getLongExtra("aid", 666);
 
+            Download d = downloads.get(aid).download;
+            d.resume();
+        }
+        else if(action.equals(PlayingService.actionIconPause))
+        {
+            long aid = intent.getLongExtra("aid", 666);
+
+            Download d = downloads.get(aid).download;
+            d.pause();
+        }
+        else
+        {
+            throw new IllegalArgumentException("wrong action in DownloadingService");
+        }
         return START_NOT_STICKY;
 
     }

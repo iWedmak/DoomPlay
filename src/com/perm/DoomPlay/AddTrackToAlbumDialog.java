@@ -24,7 +24,6 @@ package com.perm.DoomPlay;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,14 +84,18 @@ public class AddTrackToAlbumDialog extends DialogFragment
                                 SettingActivity.getPreference("countvkall"));
 
                     } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (KException e) {
                         isLoading = false;
-                        AbstractVkItems.handleKException(e, getActivity());
-                        dismiss();
-                        getActivity().finish();
+                        ((AbstractReceiver)getActivity()).showException(e);
+                        cancel(true);
+                    }
+                    catch (JSONException e) {
+                        isLoading = false;
+                        ((AbstractReceiver)getActivity()).showException(e);
+                        cancel(true);
+                    }
+                    catch (KException e) {
+                        isLoading = false;
+                        ((AbstractReceiver)getActivity()).handleKException(e);
                         cancel(true);
                     }
                     return null;
@@ -127,16 +130,24 @@ public class AddTrackToAlbumDialog extends DialogFragment
                 {
                     try
                     {
-                       Log.e("taGVK!!!!",String.valueOf(MainScreenActivity.api.moveToAudioAlbum(params[0],trackId)));
+                       MainScreenActivity.api.moveToAudioAlbum(params[0], trackId);
 
 
 
                     } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (KException e) {
-                        e.printStackTrace();
+                        isLoading = false;
+                        ((AbstractReceiver)getActivity()).showException(e);
+                        cancel(true);
+                    }
+                    catch (JSONException e) {
+                        isLoading = false;
+                        ((AbstractReceiver)getActivity()).showException(e);
+                        cancel(true);
+                    }
+                    catch (KException e) {
+                        isLoading = false;
+                        ((AbstractReceiver)getActivity()).handleKException(e);
+                        cancel(true);
                     }
                     return null;
                 }

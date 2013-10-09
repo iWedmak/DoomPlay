@@ -17,12 +17,14 @@ package com.perm.DoomPlay;
  *
  *    You can contact me <DoomPlaye@gmail.com>
  */
+
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 
 import java.io.File;
@@ -52,23 +54,63 @@ public class DownloadNotifBuilder
     }
 
 
-    public Notification createStarting()
+    public Notification createStarting(int progress)
     {
-
         Notification notification = new Notification();
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.notif_download);
 
-        views.setProgressBar(R.id.progressDownload, 100, 0, true);
-        views.setTextViewText(R.id.notifTitle, "Downloading");
+        views.setProgressBar(R.id.progressDownload, 100,progress, false);
+        views.setTextViewText(R.id.notifTitle, "downloading");
         views.setTextViewText(R.id.notifArtist, track.getArtist() + "-" + track.getTitle());
+        views.setImageViewResource(R.id.notifPause,R.drawable.widget_pause);
+
+        ComponentName componentName = new ComponentName(context,DownloadingService.class);
+
+        Intent intentClose = new Intent(PlayingService.actionClose);
+        intentClose.putExtra("aid",track.getAid());
+        intentClose.setComponent(componentName);
+
+        Intent intentPause = new Intent(PlayingService.actionIconPause);
+        intentPause.putExtra("aid",track.getAid());
+        intentPause.setComponent(componentName);
+
+        views.setOnClickPendingIntent(R.id.notifClose,
+                PendingIntent.getService(context, notificationId, intentClose,PendingIntent.FLAG_UPDATE_CURRENT));
+
+        views.setOnClickPendingIntent(R.id.notifPause,
+                PendingIntent.getService(context, notificationId, intentPause,PendingIntent.FLAG_UPDATE_CURRENT));
+
+        notification.contentView = views;
+        notification.flags = Notification.FLAG_ONGOING_EVENT;
+        notification.icon = R.drawable.download_icon;
+
+        return notification;
+
+    }
+
+    public Notification createPaused()
+    {
+        Notification notification = new Notification();
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.notif_download);
+
+        views.setProgressBar(R.id.progressDownload, 100,0, true);
+        views.setTextViewText(R.id.notifTitle, "paused");
+        views.setTextViewText(R.id.notifArtist, track.getArtist() + "-" + track.getTitle());
+        views.setImageViewResource(R.id.notifPause,R.drawable.widget_play);
 
         Intent intentClose = new Intent(PlayingService.actionClose);
         intentClose.putExtra("aid",track.getAid());
         intentClose.setComponent(new ComponentName(context,DownloadingService.class));
 
-        views.setOnClickPendingIntent(R.id.notifClose,
-                PendingIntent.getService(context, notificationId, intentClose,0));
+        Intent intentPause = new Intent(PlayingService.actionIconPlay);
+        intentPause.putExtra("aid",track.getAid());
+        intentPause.setComponent(new ComponentName(context,DownloadingService.class));
 
+        views.setOnClickPendingIntent(R.id.notifClose,
+                PendingIntent.getService(context, notificationId, intentClose,PendingIntent.FLAG_UPDATE_CURRENT));
+
+        views.setOnClickPendingIntent(R.id.notifPause,
+                PendingIntent.getService(context, notificationId, intentPause,PendingIntent.FLAG_UPDATE_CURRENT));
 
         notification.contentView = views;
         notification.flags = Notification.FLAG_ONGOING_EVENT;
@@ -77,14 +119,9 @@ public class DownloadNotifBuilder
         return notification;
     }
 
-    public Notification createProcessing()
-    {
-         return null;
-    }
-
     public Notification createCompleted()
     {
-        Notification.Builder builder = new Notification.Builder(context);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
 
         builder.setOngoing(false);
         builder.setContentTitle("completed");
@@ -96,6 +133,7 @@ public class DownloadNotifBuilder
         intent.setDataAndType(Uri.fromFile(new File(filePath)), "audio/*");
 
         builder.setContentIntent(PendingIntent.getActivity(context,0,intent,0));
+        builder.setAutoCancel(true);
 
         context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + filePath)));
 
@@ -104,7 +142,7 @@ public class DownloadNotifBuilder
 
     public Notification createCanceled()
     {
-        Notification.Builder builder = new Notification.Builder(context);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
 
         builder.setOngoing(false);
         builder.setContentTitle("canceled");
@@ -115,7 +153,7 @@ public class DownloadNotifBuilder
     }
     public Notification createError()
     {
-        Notification.Builder builder = new Notification.Builder(context);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
 
         builder.setOngoing(false);
         builder.setContentTitle("error");

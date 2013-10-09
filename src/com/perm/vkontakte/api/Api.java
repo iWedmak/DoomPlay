@@ -510,12 +510,11 @@ public class Api {
     }
 
     //http://vk.com/dev/audio.setBroadcast
-    public boolean audioSetBroadcast(boolean enabled) throws IOException, JSONException, KException {
+    public void audioSetBroadcast(long aid) throws IOException, JSONException, KException
+    {
         Params params = new Params("audio.setBroadcast");
-        params.put("enabled",enabled?"1":"0");
-        JSONObject root = sendRequest(params);
-        JSONObject response = root.optJSONObject("response");
-        return response.optInt("enabled")==1;
+        params.put("audio",aid);
+        sendRequest(params);
     }
     
     //http://vk.com/dev/audio.addAlbum

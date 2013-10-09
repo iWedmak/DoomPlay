@@ -41,7 +41,7 @@ abstract class AbstractList extends AbstractControls
     }
     protected void markItem(int position , boolean withScroll)
     {
-        if(PlayingService.serviceAlive && equalsCollections(PlayingService.getAudios(), audios))
+        if(PlayingService.serviceAlive && equalsCollections(PlayingService.audios, audios))
         {
 
             adapter.setMarkedItem(position);
@@ -66,13 +66,13 @@ abstract class AbstractList extends AbstractControls
     @Override
     protected void trackChanged()
     {
-        markItem(PlayingService.getIndexCurrentTrack(),true);
+        markItem(PlayingService.indexCurrentTrack,true);
     }
     @Override
     protected void onResume()
     {
         super.onResume();
-        markItem(PlayingService.getIndexCurrentTrack(),false);
+        markItem(PlayingService.indexCurrentTrack,false);
     }
 
     protected void goFullScreen()
@@ -185,6 +185,10 @@ abstract class AbstractList extends AbstractControls
                     break;
             }
         }
+        else
+        {
+            Toast.makeText(getBaseContext(),"check your internet connection",Toast.LENGTH_SHORT).show();
+        }
     }
     public static void waitMessage(Context context)
     {
@@ -215,15 +219,20 @@ abstract class AbstractList extends AbstractControls
                     {
                         MainScreenActivity.api.deleteAudio(audios.get(params[0]).getAid(), Account.account.user_id);
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (KException e)
+                    } catch (IOException e)
                     {
-
-                        if(AbstractVkItems.handleKException(e, getBaseContext()))
-                            finish();
+                        showException(e);
+                        cancel(true);
+                    }
+                    catch (JSONException e)
+                    {
+                        showException(e);
+                        cancel(true);
+                    }
+                    catch (KException e)
+                    {
+                        handleKException(e);
+                        cancel(true);
                     }
                     return params[0];
                 }
@@ -236,8 +245,8 @@ abstract class AbstractList extends AbstractControls
                     TracksHolder.audiosVk = audios;
                     adapter.changeData(audios);
 
-                    if(position == PlayingService.getIndexCurrentTrack() && equalsCollections(PlayingService.getAudios(),audios))
-                        playingService.playTrackFromList(PlayingService.getIndexCurrentTrack());
+                    if(position == PlayingService.indexCurrentTrack && equalsCollections(PlayingService.audios,audios))
+                        playingService.playTrackFromList(PlayingService.indexCurrentTrack);
                 }
             }.execute(position);
         }
@@ -266,14 +275,20 @@ abstract class AbstractList extends AbstractControls
                        MainScreenActivity.api.addAudio(audios.get(params[0]).getAid(), audios.get(params[0]).getOwner_id());
                        TracksHolder.audiosVk.add(0,audios.get(params[0]));
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (KException e) {
+                    } catch (IOException e)
+                    {
+                        showException(e);
+                        cancel(true);
+                    }
+                    catch (JSONException e)
+                    {
+                        showException(e);
+                        cancel(true);
+                    } catch (KException e)
+                    {
 
-                        if(AbstractVkItems.handleKException(e, getBaseContext()))
-                            finish();
+                        handleKException(e);
+                        cancel(true);
                     }
                     return null;
 
@@ -310,7 +325,7 @@ abstract class AbstractList extends AbstractControls
     @Override
     protected void onClickActionBar()
     {
-        if(equalsCollections(audios, PlayingService.getAudios()) && Build.VERSION.SDK_INT >= 8)
-            listView.smoothScrollToPosition(PlayingService.getIndexCurrentTrack());
+        if(equalsCollections(audios, PlayingService.audios) && Build.VERSION.SDK_INT >= 8)
+            listView.smoothScrollToPosition(PlayingService.indexCurrentTrack);
     }
 }

@@ -131,7 +131,7 @@ public class SearchActivity extends AbstractList
                 textNoResults.setVisibility(View.GONE);
 
             adapter.changeData(audios);
-            adapter.setMarkedItem(PlayingService.valueIncredible);
+            markItem(PlayingService.indexCurrentTrack,false);
         }
     };
     private final ActionMode.Callback callback = new ActionMode.Callback()

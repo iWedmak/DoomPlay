@@ -84,6 +84,12 @@
                 android:title="Max size of popular"
                 android:defaultValue="200">
         </ListPreference>
+        <CheckBoxPreference
+                android:key="broadcast"
+                android:summary="set current playing track as status"
+                android:title="Broadcast"
+                android:defaultValue="false">
+        </CheckBoxPreference>
 
     </PreferenceScreen>
 

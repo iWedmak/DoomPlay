@@ -148,20 +148,27 @@ public class ListVkActivity extends AbstractList
                                 SettingActivity.getPreference("countvkall"));
 
                 } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    showException(e);
+                    cancel(true);
+                } catch (JSONException e)
+                {
+                    showException(e);
+                    cancel(true);
                 } catch (KException e) {
 
-                    if(AbstractVkItems.handleKException(e, getBaseContext()))
-                    {
-                        finish();
-                        isLoading = false;
-                        cancel(true);
-                    }
+                    handleKException(e);
+                    cancel(true);
 
                 }
                 return null;
+            }
+
+            @Override
+            protected void onCancelled()
+            {
+                super.onCancelled();
+                isLoading = false;
+                linearLoading.setVisibility(View.GONE);
             }
 
             @Override
@@ -171,7 +178,7 @@ public class ListVkActivity extends AbstractList
                 isLoading = false;
                 linearLoading.setVisibility(View.GONE);
                 adapter.changeData(audios);
-                markItem(PlayingService.getIndexCurrentTrack(),false);
+                markItem(PlayingService.indexCurrentTrack,false);
             }
         };
         asyncTask.execute();

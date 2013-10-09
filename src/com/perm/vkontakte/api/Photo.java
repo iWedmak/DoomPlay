@@ -1,10 +1,10 @@
 package com.perm.vkontakte.api;
 
-import java.io.Serializable;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.Serializable;
 
 public class Photo implements Serializable {
     private static final long serialVersionUID = 1L;

@@ -25,9 +25,9 @@ import java.util.ArrayList;
 
 class Serializator<T extends Serializable>
 {
-    enum FileNames
+    static enum FileNames
     {
-        Audio,Group,User
+        Audio,Group,User,Album
     }
 
     private Context context;

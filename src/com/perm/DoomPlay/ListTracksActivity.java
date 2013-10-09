@@ -177,7 +177,7 @@ public class ListTracksActivity extends AbstractList
                         Utils.setRingtone(getBaseContext(), audios.get(position));
                         break;
                     case R.id.itemGetLiricks:
-                        Audio audio = audios.get(PlayingService.getIndexCurrentTrack());
+                        Audio audio = audios.get(PlayingService.indexCurrentTrack);
                         startLiryctDialog(getSupportFragmentManager(), audio.getArtist(), audio.getTitle());
                         break;
                 }
@@ -201,13 +201,13 @@ public class ListTracksActivity extends AbstractList
 
     void updateList()
     {
-        boolean isEquals = AbstractList.equalsCollections(audios, PlayingService.getAudios());
+        boolean isEquals = AbstractList.equalsCollections(audios, PlayingService.audios);
         audios = playlistDB.getTracks(PlaylistActivity.selectedPlaylist);
 
         if(isEquals)
         {
             PlayingService.audios = audios;
-            markItem(PlayingService.getIndexCurrentTrack(), false);
+            markItem(PlayingService.indexCurrentTrack, false);
         }
 
         adapter.changeData(audios);
@@ -226,13 +226,11 @@ public class ListTracksActivity extends AbstractList
 
             playlistDB.deleteTrack(position, PlaylistActivity.selectedPlaylist);
 
-             if(AbstractList.equalsCollections(audios, PlayingService.getAudios()))
+             if(AbstractList.equalsCollections(audios, PlayingService.audios))
                  PlayingService.audios.remove(position);
 
             audios.remove(position);
-
             adapter.changeData(audios);
-
 
 
             AsyncTask<Integer,Void,Void> asyncAdder  = new AsyncTask<Integer, Void, Void>()
@@ -246,9 +244,9 @@ public class ListTracksActivity extends AbstractList
             };
             asyncAdder.execute(position);
 
-            if(position == PlayingService.getIndexCurrentTrack() && AbstractList.equalsCollections(audios, PlayingService.getAudios()))
+            if(position == PlayingService.indexCurrentTrack && AbstractList.equalsCollections(audios, PlayingService.audios))
             {
-                playingService.playTrackFromList(PlayingService.getIndexCurrentTrack());
+                playingService.playTrackFromList(PlayingService.indexCurrentTrack);
             }
 
     }
@@ -279,17 +277,14 @@ public class ListTracksActivity extends AbstractList
                 to = position + 1 ;
             }
         }
-        if(AbstractList.equalsCollections(audios, PlayingService.getAudios()))
+        if(AbstractList.equalsCollections(audios, PlayingService.audios))
         {
-            if(PlayingService.getIndexCurrentTrack() == to)
+            if(PlayingService.indexCurrentTrack == to)
                 PlayingService.indexCurrentTrack = position;
 
-            else if(PlayingService.getIndexCurrentTrack() == position)
+            else if(PlayingService.indexCurrentTrack == position)
                 PlayingService.indexCurrentTrack = to;
         }
-
-
-
 
 
         playlistDB.changeColumns(PlaylistActivity.selectedPlaylist, position, to);
@@ -308,9 +303,6 @@ public class ListTracksActivity extends AbstractList
         adapter.changeData(audios);
         currentAction  = intent.getAction();
     }
-
-
-
 
     private void initialize()
     {

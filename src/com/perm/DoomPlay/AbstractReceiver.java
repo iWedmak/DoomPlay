@@ -26,11 +26,15 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.perm.vkontakte.api.Account;
+import com.perm.vkontakte.api.KException;
 
 import java.util.ArrayList;
 
@@ -43,6 +47,37 @@ abstract class AbstractReceiver extends ActionBarActivity
     protected boolean isRegister;
     private BroadcastReceiver broadcastReceiverKiller;
     public static final String actionKill = "killAllActivities";
+
+    public void handleKException(KException e)
+    {
+
+        if(e.getMessage().contains("autorization failded"))
+        {
+            Account.account.access_token = null;
+            Account.account.save(this);
+            MainScreenActivity.isRegister = false;
+        }
+        showException(e);
+    }
+
+
+    String message = null;
+    public void showException(Exception e)
+    {
+        e.printStackTrace();
+        message = e.getMessage();
+        runOnUiThread(runnable);
+    }
+
+    private final Runnable runnable = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            Toast.makeText(getBaseContext(),message, Toast.LENGTH_SHORT).show();
+        }
+    };
+
 
     public void showPlaybackDialog(ArrayList<Audio> audios)
     {
@@ -72,7 +107,7 @@ abstract class AbstractReceiver extends ActionBarActivity
     }
     protected void onClickActionBar()
     {
-        if(PlayingService.getAudios() != null)
+        if(PlayingService.audios != null)
         {
             startActivity(FullPlaybackActivity.returnSmall(this));
         }
@@ -140,10 +175,10 @@ abstract class AbstractReceiver extends ActionBarActivity
 
     protected void updateActionBar()
     {
-        if(PlayingService.serviceAlive && PlayingService.getAudios() != null)
+        if(PlayingService.serviceAlive && PlayingService.audios != null)
         {
-            textTitle.setText(PlayingService.getAudios().get(PlayingService.getIndexCurrentTrack()).getTitle());
-            textArtist.setText(PlayingService.getAudios().get(PlayingService.getIndexCurrentTrack()).getArtist());
+            textTitle.setText(PlayingService.audios.get(PlayingService.indexCurrentTrack).getTitle());
+            textArtist.setText(PlayingService.audios.get(PlayingService.indexCurrentTrack).getArtist());
             textArtist.setVisibility(View.VISIBLE);
             textTitle.setTextColor(getResources().getColor(R.color.blue_text));
         }
@@ -153,7 +188,7 @@ abstract class AbstractReceiver extends ActionBarActivity
             textTitle.setTextColor(getResources().getColor(R.color.almost_white));
             textArtist.setVisibility(View.GONE);
         }
-        invalidateOptionsMenu();
+        ActivityCompat.invalidateOptionsMenu(this);
 
     }
     protected void createBroadcastRec()

@@ -25,7 +25,6 @@ import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.view.ActionMode;
-import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
@@ -117,12 +116,7 @@ public class FileSystemActivity extends AbstractReceiver
                 TracksHolder.projection,MediaStore.Audio.Media.IS_MUSIC + " != 0 AND "+
                 MediaStore.Audio.Media.DATA + " LIKE ? ",new String[]{"%"+selectionArgs +"%"},null);
 
-        ArrayList<Audio> audios;
-
-        if(cursor.moveToFirst())
-            audios = Audio.parseAudio(cursor);
-        else
-            audios = new ArrayList<Audio>(0);
+        ArrayList<Audio> audios = Audio.parseAudiosCursor(cursor);
 
         cursor.close();
         return audios;
@@ -130,13 +124,6 @@ public class FileSystemActivity extends AbstractReceiver
     //it's fucking crooked nail , fix it too!!!
     public static Audio getAudioFromFile(File file,Context context)
     {
-        try {
-            Log.i("TAG AUDIO",file.getAbsolutePath().substring(12) + " *************** " + file.getCanonicalPath()+
-                    " *************** "+ file.getPath() +"*********************"+ TracksHolder.allAudios.get(420).getUrl());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         String selectionArgs;
 
         try
@@ -146,20 +133,20 @@ public class FileSystemActivity extends AbstractReceiver
         catch (IOException e)
         {
             e.printStackTrace();
-            selectionArgs = file.getAbsolutePath().substring(12);
+            selectionArgs = file.getAbsolutePath();
         }
 
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                TracksHolder.projection,MediaStore.Audio.Media.DATA + " LIKE ? ",new String[]{"%"+ selectionArgs}, null);
+                TracksHolder.projection,MediaStore.Audio.Media.DATA + " = ? ",new String[]{selectionArgs}, null);
 
         Audio audio;
 
         if(cursor.moveToFirst())
-            audio = Audio.createAudioCursor(cursor);
+            audio = Audio.parseAudioCursor(cursor);
         else
         {
             MediaMetadataRetriever metadata = new MediaMetadataRetriever();
-            metadata.setDataSource(file.getAbsolutePath());
+            metadata.setDataSource(selectionArgs);
             audio = new Audio(metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST),
                     metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE),file.getAbsolutePath(),0);
         }
@@ -239,7 +226,20 @@ public class FileSystemActivity extends AbstractReceiver
             return ;
         }
         currentDirectory = file;
-        textCurrentDir.setText(file.getAbsolutePath());
+
+        String fileName;
+
+        try
+        {
+            fileName = file.getCanonicalPath();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            fileName = file.getAbsolutePath();
+        }
+
+        textCurrentDir.setText(fileName);
 
         Arrays.sort(entriesFiles, fileComparator);
         adapter = new FileSystemAdapter();

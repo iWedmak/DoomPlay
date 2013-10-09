@@ -1,10 +1,6 @@
 package com.perm.vkontakte.api;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

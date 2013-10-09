@@ -188,14 +188,18 @@ public class SearchVkActivity extends AbstractList
                         SettingActivity.getPreference("countvksearch"));
 
             } catch (IOException e) {
-                e.printStackTrace();
+                showException(e);
+                isLoading = false;
+                cancel(true);
             } catch (JSONException e) {
-                e.printStackTrace();
+                showException(e);
+                isLoading = false;
+                cancel(true);
             } catch (KException e) {
 
+                handleKException(e);
                 isLoading = false;
-                AbstractVkItems.handleKException(e, getBaseContext());
-                finish();
+                cancel(true);
             }
 
             return null;
@@ -226,7 +230,7 @@ public class SearchVkActivity extends AbstractList
             audios.clear();
             audios.addAll(aVoid);
             adapter.changeData(audios);
-            markItem(PlayingService.getIndexCurrentTrack(),false);
+            markItem(PlayingService.indexCurrentTrack,false);
         }
     }
 }

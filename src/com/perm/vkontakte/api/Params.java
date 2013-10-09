@@ -2,8 +2,8 @@ package com.perm.vkontakte.api;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.TreeMap;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 public class Params {
     //TreeMap нужен был чтобы сортировать параметры по имени, сейчас это уже не важно, главно подписывать и передавать параметры в одном и тотм же порядке

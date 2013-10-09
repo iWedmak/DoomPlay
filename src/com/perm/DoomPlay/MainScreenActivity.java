@@ -22,6 +22,7 @@ package com.perm.DoomPlay;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -68,7 +69,7 @@ public class MainScreenActivity extends AbstractReceiver
             @Override
             public void onPageScrolled(int i, float v, int i2)
             {
-                 invalidateOptionsMenu();
+                 ActivityCompat.invalidateOptionsMenu(MainScreenActivity.this);
             }
             @Override
             public void onPageSelected(int i){}

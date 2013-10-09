@@ -59,7 +59,7 @@ public class VkAlbumsActivity extends AbstractVkItems
         });
 
 
-        if(albums == null && Utils.isOnline(getBaseContext()))
+        if(albums == null)
         {
              getAlbums();
         }
@@ -124,18 +124,19 @@ public class VkAlbumsActivity extends AbstractVkItems
 
                                      catch (IOException e)
                                      {
-                                         e.printStackTrace();
+                                         showException(e);
+                                         handler.sendEmptyMessage(2);
+                                         cancel(true);
                                      } catch (JSONException e)
                                      {
-                                         e.printStackTrace();
+                                         showException(e);
+                                         handler.sendEmptyMessage(2);
+                                         cancel(true);
                                      } catch (KException e)
                                      {
-                                         e.printStackTrace();
-                                         isLoading = false;
-                                         if(handleKException(e,getBaseContext()))
-                                         {
-                                             finish();
-                                         }
+                                         handleKException(e);
+                                         handler.sendEmptyMessage(2);
+                                         cancel(true);
                                      }
                                      return null;
                                  }
@@ -171,18 +172,19 @@ public class VkAlbumsActivity extends AbstractVkItems
 
                             catch (IOException e)
                             {
-                                e.printStackTrace();
+                                showException(e);
+                                handler.sendEmptyMessage(2);
+                                cancel(true);
                             } catch (JSONException e)
                             {
-                                e.printStackTrace();
+                                showException(e);
+                                handler.sendEmptyMessage(2);
+                                cancel(true);
                             } catch (KException e)
                             {
-                                e.printStackTrace();
-                                isLoading = false;
-                                if(handleKException(e,getBaseContext()))
-                                {
-                                    finish();
-                                }
+                                handleKException(e);
+                                handler.sendEmptyMessage(2);
+                                cancel(true);
                             }
                             return null;
                         }
@@ -253,18 +255,19 @@ public class VkAlbumsActivity extends AbstractVkItems
 
                             catch (IOException e)
                             {
-                                e.printStackTrace();
+                                showException(e);
+                                handler.sendEmptyMessage(2);
+                                cancel(true);
                             } catch (JSONException e)
                             {
-                                e.printStackTrace();
+                                showException(e);
+                                handler.sendEmptyMessage(2);
+                                cancel(true);
                             } catch (KException e)
                             {
-                                e.printStackTrace();
-                                isLoading = false;
-                                if(handleKException(e,getBaseContext()))
-                                {
-                                    finish();
-                                }
+                                handleKException(e);
+                                handler.sendEmptyMessage(2);
+                                cancel(true);
                             }
                             return null;
                         }
@@ -300,18 +303,25 @@ public class VkAlbumsActivity extends AbstractVkItems
                 {
                     albums = MainScreenActivity.api.getAudioAlbums(Account.account.user_id,null,
                             SettingActivity.getPreference("countvkall"));
+                    Serializator<AudioAlbum> factory = new Serializator<AudioAlbum>(getBaseContext(), Serializator.FileNames.Album);
+                    factory.inSerialize(albums);
 
-                } catch (IOException e) {
-                    e.printStackTrace();  return;
-                } catch (JSONException e) {
-                    e.printStackTrace(); return;
-                } catch (KException e)
+                } catch (IOException e)
                 {
-                    isLoading = false;
-                    if(handleKException(e,getBaseContext()))
-                    {
-                        finish();
-                    }
+                    showException(e);
+                    handler.sendEmptyMessage(2);
+                    return;
+                }
+                catch (JSONException e)
+                {
+                    showException(e);
+                    handler.sendEmptyMessage(2);
+                    return;
+                }
+                catch (KException e)
+                {
+                    handler.sendEmptyMessage(2);
+                    handleKException(e);
                     return;
                 }
                 handler.sendEmptyMessage(2);

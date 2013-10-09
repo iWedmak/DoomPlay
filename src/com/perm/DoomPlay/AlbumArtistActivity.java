@@ -109,9 +109,9 @@ public class AlbumArtistActivity extends AbstractReceiver
                     MediaStore.Audio.Media.IS_MUSIC + " != 0 AND " + MediaStore.Audio.Media.ARTIST+ " = ?",
                     new String[]{albumArtist[position]}, null);
 
-        cursor.moveToFirst();
 
-        ArrayList<Audio> result = Audio.parseAudio(cursor);
+
+        ArrayList<Audio> result = Audio.parseAudiosCursor(cursor);
 
         cursor.close();
 

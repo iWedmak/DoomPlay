@@ -1,8 +1,9 @@
 package com.perm.vkontakte.api;
 
-import java.io.Serializable;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.Serializable;
 
 public class Link implements Serializable {
     private static final long serialVersionUID = 1L;

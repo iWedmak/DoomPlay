@@ -4,9 +4,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class AudioAlbum
+public class AudioAlbum implements Serializable
 {
     public final long album_id;
     public final String title;

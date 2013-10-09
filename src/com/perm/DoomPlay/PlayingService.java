@@ -41,6 +41,8 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
+import com.perm.vkontakte.api.KException;
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,22 +83,10 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     private final CallListener callListener = new CallListener();
     private OnLoadingTrackListener loadingListener;
 
-    public static ArrayList<Audio> getAudios()
-    {
-        return audios;
-    }
-
     public static boolean isLoadingTrack()
     {
         return isLoadingTrack;
     }
-
-    public static int getIndexCurrentTrack()
-    {
-        return indexCurrentTrack;
-    }
-
-
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra)
     {
@@ -195,7 +185,6 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
                         if(onAlbumArtSaveListener != null)
                             onAlbumArtSaveListener.onAlbumArtSave(albumId);
 
-                        ArtCacheUtils.add(albumId);
 
                         sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
                         startNotif();
@@ -217,7 +206,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         views.setTextViewText(R.id.notifTitle, audio.getTitle());
         views.setTextViewText(R.id.notifArtist, audio.getArtist());
 
-        Bitmap cover = ArtCacheUtils.get(audio.getAid());
+        Bitmap cover = AlbumArtGetter.getBitmapById(audio.getAid(),this);
         if (cover == null)
         {
             downloadAlbumArt(audio);
@@ -362,14 +351,30 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         }
     }
 
+    private void setBroadcast()
+    {
+        if(PlayingService.isOnline && SettingActivity.getPreferences("broadcast"))
+        {
+            new Thread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    try {
+                        MainScreenActivity.api.audioSetBroadcast(audios.get(indexCurrentTrack).getAid());
+                    } catch (IOException e) {} catch (JSONException e) {} catch (KException e) {}
+                }
+            }).start();
+
+        }
+    }
+
 
 
     private void loadMusic()
     {
 
         dispose();
-
-        ArtCacheUtils.add(audios.get(indexCurrentTrack).getAid());
 
         sendBroadcast(new Intent(actionTrackChanged));
         startNotif();
@@ -385,7 +390,10 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         mediaPlayer.setOnErrorListener(this);
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
-        new AsyncTask<Void,Void,Void>()
+        setBroadcast();
+
+
+        new AsyncTask<Void,String,Void>()
         {
             @Override
             protected void onPreExecute()
@@ -406,7 +414,9 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
                     mediaPlayer.setDataSource(audios.get(indexCurrentTrack).getUrl());
                     mediaPlayer.prepare();
 
-                } catch (IOException e) {
+                } catch (IOException e)
+                {
+                    publishProgress(e.getMessage());
                     e.printStackTrace();
                 }
                 return null;
@@ -428,10 +438,18 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
                 if(!MainScreenActivity.isOldSDK)
                     notifyEqualizer();
             }
+
+            @Override
+            protected void onProgressUpdate(String... values)
+            {
+                super.onProgressUpdate(values);
+                Toast.makeText(getBaseContext(),values[0],Toast.LENGTH_SHORT);
+            }
         }.execute();
 
 
     }
+
    private void notifyEqualizer()
     {
         Intent intentEqualizer = new Intent(AudioEffect.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION);

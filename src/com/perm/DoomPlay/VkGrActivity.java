@@ -83,27 +83,28 @@ public class VkGrActivity extends AbstractVkItems
                     Serializator<Group> factory = new Serializator<Group>(getBaseContext(), Serializator.FileNames.Group);
                     factory.inSerialize(groups);
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                } catch (IOException e)
+                {
+                    showException(e);
+                    handler.sendEmptyMessage(2);
+                    return;
+
+                } catch (JSONException e)
+                {
+                    showException(e);
+                    handler.sendEmptyMessage(2);
+                    return;
+
                 } catch (KException e)
                 {
-                    isLoading = false;
-                    if(handleKException(e,getBaseContext()))
-                    {
-                        finish();
-                    }
-                    else
-                    {
-                        handler.sendEmptyMessage(2);
-                        Toast.makeText(getBaseContext(), "can't get tracks", Toast.LENGTH_SHORT).show();
-                    }
+
+                    handleKException(e);
+                    handler.sendEmptyMessage(2);
                     return;
+
                 }
                 handler.sendEmptyMessage(2);
                 handler.sendEmptyMessage(3);
-                isLoading = false;
 
             }
         }).start();
@@ -116,10 +117,12 @@ public class VkGrActivity extends AbstractVkItems
             if(msg.what == 1)
             {
                 linearLoading.setVisibility(View.VISIBLE);
+                isLoading = true;
             }
             else if(msg.what == 2)
             {
                 linearLoading.setVisibility(View.GONE);
+                isLoading = false;
 
             }
             else if(msg.what == 3)

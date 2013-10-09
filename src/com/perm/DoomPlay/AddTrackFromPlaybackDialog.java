@@ -21,6 +21,7 @@ package com.perm.DoomPlay;
  */
 
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -56,7 +57,7 @@ public class AddTrackFromPlaybackDialog extends DialogFragment
         if(getArguments() != null)
             audios = getArguments().getParcelableArrayList(keyBundleDialog);
         else
-            throw new IllegalArgumentException("tracks is null in AddTrackFromPlaybackDiaglog");
+            throw new NullPointerException("tracks is null in AddTrackFromPlaybackDiaglog");
 
         return view;
 
@@ -69,15 +70,33 @@ public class AddTrackFromPlaybackDialog extends DialogFragment
 
             new AsyncTask<String, Void, Void>()
             {
+                ProgressDialog progressDialog;
+                @Override
+                protected void onPreExecute()
+                {
+                    progressDialog = new ProgressDialog(getActivity());
+                    progressDialog.setIndeterminate(true);
+                    progressDialog.setTitle("wait");
+                    progressDialog.setMessage("being added");
+                    progressDialog.show();
+                    dismiss();
+                    super.onPreExecute();
+                }
+
                 @Override
                 protected Void doInBackground(String... params)
                 {
                     playlistDB.addTracks(audios, params[0]);
                     return null;
                 }
+
+                @Override
+                protected void onPostExecute(Void aVoid)
+                {
+                    super.onPostExecute(aVoid);
+                    progressDialog.dismiss();
+                }
             }.execute(listPlaylist[position]);
-            dismiss();
-            Toast.makeText(getActivity(),"tracks added",Toast.LENGTH_SHORT).show();
         }
     };
 

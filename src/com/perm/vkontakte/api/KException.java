@@ -7,8 +7,8 @@ public class KException extends Exception{
         error_code=code;
         this.url=url;
     }
-    public final int error_code;
-    public final String url;
+    private final int error_code;
+    private final String url;
     
     //for captcha
     public String captcha_img;

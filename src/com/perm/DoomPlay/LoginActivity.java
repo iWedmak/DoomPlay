@@ -35,8 +35,6 @@ public class LoginActivity extends Activity
     private static final String TAG = "Kate.LoginActivity";
     public static final String API_ID = "3861634";
 
-    private WebView webview;
-
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -44,7 +42,7 @@ public class LoginActivity extends Activity
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.login);
 
-        webview = (WebView) findViewById(R.id.vkontakteview);
+        WebView webview = (WebView) findViewById(R.id.vkontakteview);
         webview.getSettings().setJavaScriptEnabled(true);
         webview.clearCache(true);
 

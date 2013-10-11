@@ -4,7 +4,7 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:id="@+id/linearPlaying" android:background="#000000" >
+              android:id="@+id/linearPlaying" android:background="@color/black" >
 
     <com.perm.DoomPlay.CustomViewPager
             android:id="@+id/viewPager"

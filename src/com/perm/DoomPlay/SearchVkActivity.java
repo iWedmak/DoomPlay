@@ -53,7 +53,7 @@ public class SearchVkActivity extends AbstractList
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        getMenuInflater().inflate(R.menu.bar_search,menu);
+        getMenuInflater().inflate(R.menu.bar_vk,menu);
         return true;
     }
     private void hideKeyboard()
@@ -163,7 +163,7 @@ public class SearchVkActivity extends AbstractList
                 hideKeyboard();
             }
             else
-                Toast.makeText(getBaseContext(),"please wait",Toast.LENGTH_SHORT);
+                waitMessage(getBaseContext());
 
         }
     };

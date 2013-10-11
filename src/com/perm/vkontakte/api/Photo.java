@@ -8,25 +8,25 @@ import java.io.Serializable;
 
 public class Photo implements Serializable {
     private static final long serialVersionUID = 1L;
-    public long pid;
-    public long aid;
-    public String owner_id;
-    public String src;
-    public String src_small;//not used for now because in newsfeed it's empty
-    public String src_big;
-    public String src_xbig;
-    public String src_xxbig;
-    public String src_xxxbig;
-    public String phototext;
-    public long created;
-    public Integer like_count;
-    public Boolean user_likes;
-    public Integer comments_count;
-    public Integer tags_count;
-    public Boolean can_comment;
-    public int width;//0 means value is unknown
-    public int height;//0 means value is unknown
-    public String access_key;
+    private long pid;
+    private long aid;
+    private String owner_id;
+    private String src;
+    private String src_small;//not used for now because in newsfeed it's empty
+    private String src_big;
+    private String src_xbig;
+    private String src_xxbig;
+    private String src_xxxbig;
+    private String phototext;
+    private long created;
+    private Integer like_count;
+    private Boolean user_likes;
+    private Integer comments_count;
+    private Integer tags_count;
+    private Boolean can_comment;
+    private int width;//0 means value is unknown
+    private int height;//0 means value is unknown
+    private String access_key;
 
     public static Photo parse(JSONObject o) throws NumberFormatException, JSONException{
         Photo p = new Photo();

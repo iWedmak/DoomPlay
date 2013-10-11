@@ -5,19 +5,19 @@ import org.json.JSONObject;
 
 public class PhotoTag {
     
-    public Long owner_id;
-    public long pid;
+    private Long owner_id;
+    private long pid;
     
-    public long uid;
-    public long tag_id;
-    public long placer_id;
-    public String tagged_name;
-    public long date;
-    public double x;
-    public double y;
-    public double x2;
-    public double y2;
-    public int viewed;
+    private long uid;
+    private long tag_id;
+    private long placer_id;
+    private String tagged_name;
+    private long date;
+    private double x;
+    private double y;
+    private double x2;
+    private double y2;
+    private int viewed;
     
     public static PhotoTag parse(JSONObject o) throws NumberFormatException, JSONException {
         PhotoTag t = new PhotoTag();

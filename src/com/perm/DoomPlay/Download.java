@@ -46,7 +46,7 @@ public class Download implements Runnable
     private States status;
     private final static byte buffer[] = new byte[1024];
     final String filePath;
-    final long aid;
+    private final long aid;
     private final DoomObserver observer ;
 
     public Download(URL url,String filePath,long aid,DoomObserver observer)
@@ -190,7 +190,7 @@ public class Download implements Runnable
         return size;
     }
 
-    protected void notifyObservers()
+    void notifyObservers()
     {
         observer.doomUpdate(aid);
     }

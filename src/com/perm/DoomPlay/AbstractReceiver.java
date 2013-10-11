@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -37,14 +38,15 @@ import com.perm.vkontakte.api.Account;
 import com.perm.vkontakte.api.KException;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 abstract class AbstractReceiver extends ActionBarActivity
 {
-    protected BroadcastReceiver broadcastReceiver;
-    protected IntentFilter intentFilter;
-    protected TextView textArtist;
-    protected TextView textTitle;
-    protected boolean isRegister;
+    BroadcastReceiver broadcastReceiver;
+    IntentFilter intentFilter;
+    private TextView textArtist;
+    private TextView textTitle;
+    boolean isRegister;
     private BroadcastReceiver broadcastReceiverKiller;
     public static final String actionKill = "killAllActivities";
 
@@ -61,7 +63,7 @@ abstract class AbstractReceiver extends ActionBarActivity
     }
 
 
-    String message = null;
+    private String message = null;
     public void showException(Exception e)
     {
         e.printStackTrace();
@@ -79,7 +81,7 @@ abstract class AbstractReceiver extends ActionBarActivity
     };
 
 
-    public void showPlaybackDialog(ArrayList<Audio> audios)
+    void showPlaybackDialog(ArrayList<Audio> audios)
     {
         if(!PlaylistDB.isLoading)
         {
@@ -105,7 +107,7 @@ abstract class AbstractReceiver extends ActionBarActivity
             unregisterReceiver(broadcastReceiver);
         }
     }
-    protected void onClickActionBar()
+    void onClickActionBar()
     {
         if(PlayingService.audios != null)
         {
@@ -139,16 +141,30 @@ abstract class AbstractReceiver extends ActionBarActivity
         super.onDestroy();
     }
 
+    private void prepareLang()
+    {
+        String lang = PreferenceManager.getDefaultSharedPreferences(MyApplication.getInstance()).getString("languages",
+                Locale.getDefault().getLanguage());
+
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, null);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        prepareLang();
+
 
         prepareActionBar();
         createBroadcastRec();
         initializeKiller();
     }
-    protected void prepareActionBar()
+    void prepareActionBar()
     {
         ActionBar bar = getSupportActionBar();
         View view;
@@ -173,7 +189,7 @@ abstract class AbstractReceiver extends ActionBarActivity
         bar.setDisplayHomeAsUpEnabled(true);
     }
 
-    protected void updateActionBar()
+    void updateActionBar()
     {
         if(PlayingService.serviceAlive && PlayingService.audios != null)
         {
@@ -191,7 +207,7 @@ abstract class AbstractReceiver extends ActionBarActivity
         ActivityCompat.invalidateOptionsMenu(this);
 
     }
-    protected void createBroadcastRec()
+    void createBroadcastRec()
     {
         broadcastReceiver = new BroadcastReceiver()
         {

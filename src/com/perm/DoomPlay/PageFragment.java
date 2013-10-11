@@ -32,10 +32,10 @@ import android.widget.TextView;
 
 public class PageFragment extends Fragment
 {
-    static final String argumentPageNumber = "arg_page_number";
+    private static final String argumentPageNumber = "arg_page_number";
 
     private int pageNumber;
-    static boolean isPortrait;
+    private static boolean isPortrait;
 
     static PageFragment newInstance(int page)
     {

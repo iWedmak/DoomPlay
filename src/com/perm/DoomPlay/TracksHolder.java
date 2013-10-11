@@ -31,7 +31,7 @@ class TracksHolder
     private static volatile boolean isScanned = false;
     public static String[] allArtist;
     public static String[] allAlbums;
-    public static String[] allAcordingArtists;
+    private static String[] allAcordingArtists;
     public static ArrayList<Audio> audiosVk;
     public static ArrayList<Audio> allAudios;
 

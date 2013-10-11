@@ -24,7 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
-import com.perm.ExceptionHandler.GMailSender;
+import com.bugsense.trace.BugSenseHandler;
 
 public class ReportDialog extends DialogFragment
 {
@@ -57,19 +57,23 @@ public class ReportDialog extends DialogFragment
             final String subject = editSubject.getText().toString();
             final String message = editMessage.getText().toString();
 
+
             if(subject.equals("") || message.equals(""))
             {
-                Toast.makeText(getActivity(), "please fill all fields", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getResources().getString(R.string.fill_fields), Toast.LENGTH_SHORT).show();
 
             }
             else if(!Utils.isOnline(getActivity()))
             {
-                Toast.makeText(getActivity(),"check internet connection",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),getResources().getString(R.string.check_internet),Toast.LENGTH_SHORT).show();
             }
             else
             {
-                GMailSender.sendEmail(subject, message);
-                Toast.makeText(getActivity(),"message has been successfully sent",Toast.LENGTH_SHORT).show();
+
+                Exception e = new Exception("report message = subject : " + subject +"; body : " + message);
+                BugSenseHandler.sendException(e);
+
+                Toast.makeText(getActivity(),getResources().getString(R.string.has_been_sent),Toast.LENGTH_SHORT).show();
                 dismiss();
             }
         }

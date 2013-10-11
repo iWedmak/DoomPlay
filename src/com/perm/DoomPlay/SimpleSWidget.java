@@ -43,7 +43,7 @@ public class SimpleSWidget extends AppWidgetProvider
             updateWidget(context);
 
     }
-    static void updateWidget(Context context)
+    private static void updateWidget(Context context)
     {
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_small);

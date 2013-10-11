@@ -13,11 +13,11 @@ public class User implements Serializable {
     public long uid;
     public String first_name;
     public String last_name;
-    public String nickname;
-    public String photo;//the same as photo_rec
-    public String photo_medium;
-    public String photo_medium_rec;
-    public String status;
+    private String nickname;
+    private String photo;//the same as photo_rec
+    private String photo_medium;
+    private String photo_medium_rec;
+    private String status;
     
     
     public static User parse(JSONObject o) throws JSONException {
@@ -43,7 +43,7 @@ public class User implements Serializable {
     }
 
     
-    public static User parseFromGetByPhones(JSONObject o) throws JSONException {
+    private static User parseFromGetByPhones(JSONObject o) throws JSONException {
         User u = new User();
         u.uid = o.getLong("uid");
         u.first_name = Api.unescape(o.optString("first_name"));
@@ -59,7 +59,7 @@ public class User implements Serializable {
             return users;
         int category_count=array.length();
         for(int i=0; i<category_count; ++i){
-            if(array.get(i)==null || ((array.get(i) instanceof JSONObject)==false))
+            if(array.get(i)==null || (!(array.get(i) instanceof JSONObject)))
                 continue;
             JSONObject o = (JSONObject)array.get(i);
             User u = User.parse(o);
@@ -76,7 +76,7 @@ public class User implements Serializable {
             return users;
         int category_count=array.length();
         for(int i=0; i<category_count; ++i){
-            if(array.get(i)==null || ((array.get(i) instanceof JSONObject)==false))
+            if(array.get(i)==null || (!(array.get(i) instanceof JSONObject)))
                 continue;
             JSONObject o = (JSONObject)array.get(i);
             User u = User.parseFromGetByPhones(o);

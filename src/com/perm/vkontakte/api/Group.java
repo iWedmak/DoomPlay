@@ -12,18 +12,18 @@ public class Group implements Serializable {
     private static final long serialVersionUID = 1L;
     public long gid;
     public String name;
-    public String photo;//50*50
-    public Boolean is_closed;
-    public Boolean is_member;
+    private String photo;//50*50
+    private Boolean is_closed;
+    private Boolean is_member;
     
     //это новые поля, которых у нас пока нет в базе
     //public String screen_name;
     //public Boolean is_admin;
-    public String photo_medium;//100*100
-    public String photo_big;//200*200
-    public Boolean can_see_all_posts;//can_see_all_posts=false означает что стена закрыта
+    private String photo_medium;//100*100
+    private String photo_big;//200*200
+    private Boolean can_see_all_posts;//can_see_all_posts=false означает что стена закрыта
 
-    public static Group parse(JSONObject o) throws JSONException{
+    private static Group parse(JSONObject o) throws JSONException{
         Group g=new Group();
         g.gid = o.getLong("gid");
         g.name = Api.unescape(o.getString("name"));

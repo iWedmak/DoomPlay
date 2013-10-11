@@ -11,8 +11,9 @@ public class AudioAlbum implements Serializable
 {
     public final long album_id;
     public final String title;
+    private static final long serialVersionUID = 1L;
 
-    public static AudioAlbum parse(JSONObject o) throws JSONException
+    private static AudioAlbum parse(JSONObject o) throws JSONException
     {
         return new AudioAlbum(o.getLong("album_id"),Api.unescape(o.optString("title")));
     }

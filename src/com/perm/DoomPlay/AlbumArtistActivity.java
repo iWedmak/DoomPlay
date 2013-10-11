@@ -38,7 +38,7 @@ public class AlbumArtistActivity extends AbstractReceiver
 
     public final static String actionPlayArtist ="action.list.playArtist";
     public final static String actionPlayAlbum = "action.list.playAlbum";
-    static String currentAction = null;
+    private static String currentAction = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -62,7 +62,7 @@ public class AlbumArtistActivity extends AbstractReceiver
         listView.setOnItemLongClickListener(onLongClickAlbumArtist);
     }
 
-    final AdapterView.OnItemClickListener onClickAlbumArtist = new AdapterView.OnItemClickListener()
+    private final AdapterView.OnItemClickListener onClickAlbumArtist = new AdapterView.OnItemClickListener()
     {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -77,7 +77,7 @@ public class AlbumArtistActivity extends AbstractReceiver
             }
         }
     };
-    final AdapterView.OnItemLongClickListener onLongClickAlbumArtist = new AdapterView.OnItemLongClickListener()
+    private final AdapterView.OnItemLongClickListener onLongClickAlbumArtist = new AdapterView.OnItemLongClickListener()
     {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)

@@ -5,101 +5,101 @@
 
 
              <PreferenceScreen
-                     android:title="Audio"
-                     android:summary="audio settings">
+                     android:title="@string/Audio"
+                     android:summary="@string/audio_settings">
                  <PreferenceCategory
-                         android:title="Call">
+                         android:title="@string/Call">
                      <CheckBoxPreference
                              android:key="oncall"
-                             android:summary="set pause while calling"
-                             android:title="On call"
+                             android:summary="@string/set_pause_while"
+                             android:title="@string/On_call"
                              android:defaultValue="true">
                      </CheckBoxPreference>
                      <CheckBoxPreference
                              android:dependency="oncall"
                              android:key="aftercall"
-                             android:summary="playing after call (if was playing before)"
-                             android:title="After call"
+                             android:summary="@string/play_after_call"
+                             android:title="@string/after_call"
                              android:defaultValue="true">
                      </CheckBoxPreference>
                  </PreferenceCategory>
 
                  <PreferenceCategory
-                         android:title="AudioFocus">
+                         android:title="@string/Audio_Focus">
                      <CheckBoxPreference
                              android:key="shortfocus"
-                             android:summary="set pause on short change of audiofocus (sms/navigation/etc.)"
-                             android:title="Short audiofocus"
+                             android:summary="@string/set_pause_on_short"
+                             android:title="@string/Short_audiofocus"
                              android:defaultValue="false">
                      </CheckBoxPreference>
 
                      <CheckBoxPreference
                              android:key="longfocus"
-                             android:summary="set pause on long change of audiofocus (another player/game/etc.)"
-                             android:title="Long audiofocus"
-                             android:defaultValue="false">
+                             android:summary="@string/set_pause_on_long"
+                             android:title="@string/Long_audiofocus"
+                             android:defaultValue="true">
                      </CheckBoxPreference>
 
                      <CheckBoxPreference
                              android:key="gainfocus"
-                             android:summary="playing after gain focus (if was playing before)"
-                             android:title="Gain focus"
-                             android:defaultValue="false">
+                             android:summary="@string/after_gain_focus"
+                             android:title="@string/Gain_focus"
+                             android:defaultValue="true">
                      </CheckBoxPreference>
                  </PreferenceCategory>
              </PreferenceScreen>
 
     <PreferenceScreen
-            android:title="Vk"
-            android:summary="vkontakte settings">
+            android:title="@string/Vk"
+            android:summary="@string/vkontakte_setting">
         <ListPreference
                 android:entryValues="@array/count_values"
                 android:entries="@array/count_values"
                 android:key="countvkall"
-                android:summary="maximum size of my music"
-                android:title="Max size of my music"
+                android:summary="@string/max_my_music"
+                android:title="@string/Max_music"
                 android:defaultValue="200">
         </ListPreference>
         <ListPreference
                 android:entryValues="@array/count_values"
                 android:entries="@array/count_values"
                 android:key="countfrgr"
-                android:summary="maximum size of friends and gropu music"
-                android:title="Max size of friends and group"
+                android:summary="@string/max_friends"
+                android:title="@string/Max_friends"
                 android:defaultValue="200">
         </ListPreference>
         <ListPreference
                 android:entryValues="@array/count_values"
                 android:entries="@array/count_values"
                 android:key="countvksearch"
-                android:summary="maximus size of music got from search"
-                android:title="Max size of search"
+                android:summary="@string/max_search"
+                android:title="@string/Max_search"
                 android:defaultValue="50">
         </ListPreference>
         <ListPreference
                 android:entryValues="@array/count_values"
                 android:entries="@array/count_values"
                 android:key="countvkpopular"
-                android:summary="maximus size of music got from popular"
-                android:title="Max size of popular"
+                android:summary="@string/max_popular"
+                android:title="@string/Max_popular"
                 android:defaultValue="200">
         </ListPreference>
         <CheckBoxPreference
                 android:key="broadcast"
-                android:summary="set current playing track as status"
-                android:title="Broadcast"
+                android:summary="@string/set_as_status"
+                android:title="@string/Broadcast"
                 android:defaultValue="false">
         </CheckBoxPreference>
 
     </PreferenceScreen>
 
          <PreferenceScreen
-                 android:title="Album art"
-                 android:summary="album art settings">
+                 android:title="@string/Album_art"
+                 android:summary="@string/album_art_settings">
              <CheckBoxPreference
                      android:key="downloadart"
-                     android:summary="download album art from internet"
-                     android:title="Download album art"
+                     android:summary="@string/download_album_art"
+                     android:title="@string/Download_album_art"
                      android:defaultValue="true">
              </CheckBoxPreference>
              <ListPreference
@@ -107,16 +107,16 @@
                      android:entries="@array/quality"
                      android:dependency="downloadart"
                      android:key="qualityart"
-                     android:summary="choose quality of album art"
+                     android:summary="@string/quality"
                      android:defaultValue="2"
-                     android:title="Quality">
+                     android:title="@string/Quality">
              </ListPreference>
              <CheckBoxPreference
                      android:dependency="downloadart"
                      android:key="artonline"
-                     android:summary="download albumArt if play track from internet"
+                     android:summary="@string/when_internet"
                      android:defaultValue="false"
-                     android:title="When play from internet">
+                     android:title="@string/When_internet">
              </CheckBoxPreference>
          </PreferenceScreen>
 
@@ -125,43 +125,55 @@
 
 
         <PreferenceScreen
-                android:title="Other"
-                android:summary="Other settings" >
+                android:title="@string/Other"
+                android:summary="@string/Other_settings" >
             <CheckBoxPreference
                     android:key="scroll"
-                    android:summary="scroll to track after it changed (available only in SDK > 7)"
-                    android:title="Smooth scroll"
+                    android:summary="@string/scroll"
+                    android:title="@string/Scroll"
                     android:defaultValue="true">
             </CheckBoxPreference>
 
             <CheckBoxPreference
                     android:key="notifreturn"
-                    android:summary="return on full screen if true ,else on small screen"
-                    android:title="On click notification"
+                    android:summary="@string/onclick_notif"
+                    android:title="@string/Onclick_notif"
                     android:defaultValue="true">
             </CheckBoxPreference>
             <CheckBoxPreference
                     android:key="hideoncreate"
-                    android:summary="show controls on first open"
-                    android:title="Show controls"
+                    android:summary="@string/show_controls"
+                    android:title="@string/Show_controls"
                     android:defaultValue="true">
             </CheckBoxPreference>
         </PreferenceScreen>
 
+    <ListPreference
+            android:entryValues="@array/language"
+            android:entries="@array/language"
+            android:key="languages"
+            android:summary="@string/languages"
+            android:title="@string/Languages">
+    </ListPreference>
 
 
 
         <PreferenceScreen
-                android:title="About"
-                android:summary="about application">
+                android:title="@string/About"
+                android:summary="@string/about_app">
             <PreferenceScreen
-                    android:title="Copyright"
-                    android:summary="© 2013 Vladislav Krot (DoomPlay)">
+                    android:title="@string/Copyright"
+                    android:summary="@string/Vladislav_Krot">
             </PreferenceScreen>
             <PreferenceScreen
-                    android:title="Contact to author"
+                    android:title="@string/Contact"
                     android:summary="DoomPlaye@gmail.com"
                     android:key="contact">
+            </PreferenceScreen>
+            <PreferenceScreen
+                    android:title="@string/Want_to_help"
+                    android:summary="https://github.com/quxey/doomPlaye"
+                    android:key="github">
             </PreferenceScreen>
         </PreferenceScreen>
 

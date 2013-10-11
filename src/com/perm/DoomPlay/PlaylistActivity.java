@@ -31,7 +31,7 @@ public class PlaylistActivity extends AbstractReceiver
 {
     private PlaylistAdapter adapter;
     private PlaylistDB playlistDB;
-    public static String[] playlists;
+    private static String[] playlists;
     public static String selectedPlaylist = null;
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -53,7 +53,7 @@ public class PlaylistActivity extends AbstractReceiver
 
         updateList();
     }
-    final AdapterView.OnItemClickListener onItemTrackClick = new AdapterView.OnItemClickListener()
+    private final AdapterView.OnItemClickListener onItemTrackClick = new AdapterView.OnItemClickListener()
     {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -66,7 +66,7 @@ public class PlaylistActivity extends AbstractReceiver
             startActivity(intent);
         }
     };
-    final AdapterView.OnItemLongClickListener onItemLongTrackClick = new AdapterView.OnItemLongClickListener()
+    private final AdapterView.OnItemLongClickListener onItemLongTrackClick = new AdapterView.OnItemLongClickListener()
     {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
@@ -77,7 +77,7 @@ public class PlaylistActivity extends AbstractReceiver
         }
     };
 
-    final ActionMode.Callback callback = new ActionMode.Callback()
+    private final ActionMode.Callback callback = new ActionMode.Callback()
     {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu)

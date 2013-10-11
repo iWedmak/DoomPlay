@@ -17,12 +17,14 @@ package com.perm.DoomPlay;
  *
  *    You can contact me <DoomPlaye@gmail.com>
  */
+
 import android.app.Application;
-import com.perm.ExceptionHandler.ExceptionHandler;
+import com.bugsense.trace.BugSenseHandler;
 
 public class MyApplication extends Application
 {
     private static MyApplication instance;
+    private final static String BUGSENCE_API_KEY = "12af9463";
 
     static MyApplication getInstance()
     {
@@ -34,7 +36,7 @@ public class MyApplication extends Application
     {
         super.onCreate();
         instance = this;
-        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 
+        BugSenseHandler.initAndStartSession(this,BUGSENCE_API_KEY);
     }
 }

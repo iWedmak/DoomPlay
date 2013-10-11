@@ -52,7 +52,7 @@ public class FullPlaybackActivity  extends AbstractControls
     public final static String tagSleepDialog = "diasTa";
     public final static String actionReturnFull = "android.action.return";
     public final static String actionPlayFull = "android.action.play";
-    public final static String keyReturn = "keyForsaveService";
+    private final static String keyReturn = "keyForsaveService";
     public final static String actionDataChanged = "notifyDataChanged";
     private PagePlaybackAdapter adapterPager;
     private Intent intentWas;
@@ -167,7 +167,7 @@ public class FullPlaybackActivity  extends AbstractControls
         outState.putBoolean(keyReturn,true);
     }
 
-    public Audio getRealPathFromIntent(Intent intent)
+    Audio getRealPathFromIntent(Intent intent)
     {
         Cursor cursor;
 

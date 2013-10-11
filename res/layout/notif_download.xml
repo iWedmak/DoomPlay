@@ -31,7 +31,7 @@
                         android:layout_height="wrap_content"
                         android:singleLine="true"
                         android:ellipsize="marquee" android:textSize="15sp"
-                        android:textColor="@color/almost_white" android:text="Downloading"/>
+                        android:textColor="@color/almost_white" android:text="@string/Downloading"/>
                 <TextView
                         android:id="@+id/notifArtist"
                         android:layout_width="wrap_content"

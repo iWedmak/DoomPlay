@@ -38,7 +38,6 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 import com.perm.vkontakte.api.KException;
@@ -62,7 +61,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     final static int nextTrack = 1;
     final static int previousTrack = -1;
     public final static int valueIncredible = 519815;
-    final MyBinder binder = new MyBinder();
+    private final MyBinder binder = new MyBinder();
     private final static int idForeground = 931;
     public final static String actionPlay = "DoomePlay";
     public final static String actionClose = "DoomClose";
@@ -92,14 +91,12 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     {
         if(isOnline && !Utils.isOnline(this))
         {
-            Toast.makeText(this, "check internet connection", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getResources().getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
         }
         else
         {
-            Toast.makeText(this, "error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.error_refresh), Toast.LENGTH_SHORT).show();
         }
-        Log.e("TAG AUDIO","ERROR IN MEDIA PLAYER ,what = "+ what +" ,extra = " + extra);
-
         handleError();
         return true;
     }
@@ -137,9 +134,6 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     {
         this.onAlbumArtSaveListener = onAlbumArtSaveListener;
     }
-
-
-
 
     @Override
     public void onCreate()
@@ -360,8 +354,9 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
                 @Override
                 public void run()
                 {
-                    try {
-                        MainScreenActivity.api.audioSetBroadcast(audios.get(indexCurrentTrack).getAid());
+                    try
+                    {
+                        MainScreenActivity.api.audioSetBroadcast(audios.get(indexCurrentTrack).getOwner_id()+"_"+audios.get(indexCurrentTrack).getAid());
                     } catch (IOException e) {} catch (JSONException e) {} catch (KException e) {}
                 }
             }).start();
@@ -481,7 +476,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         loadMusic();
     }
 
-    public static void setTrack(int direction)
+    private static void setTrack(int direction)
     {
 
         if(isShuffle)
@@ -640,13 +635,13 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
             if((TelephonyManager.CALL_STATE_RINGING == state && isPlaying) ||
                     (TelephonyManager.CALL_STATE_OFFHOOK == state && isPlaying))
             {
-                if(SettingActivity.getPreferences(SettingActivity.keyOnCall))
+                if(SettingActivity.getPreferences(SettingActivity.keyOnCall)&& mediaPlayer != null)
                     playPause();
                 wasPlaying = true;
             }
             else if(TelephonyManager.CALL_STATE_IDLE == state && wasPlaying && !isPlaying)
             {
-                if(SettingActivity.getPreferences(SettingActivity.keyAfterCall))
+                if(SettingActivity.getPreferences(SettingActivity.keyAfterCall)&& mediaPlayer != null)
                     playPause();
                 wasPlaying = false;
             }
@@ -662,7 +657,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
             switch (focusChange)
             {
                 case AudioManager.AUDIOFOCUS_LOSS:
-                    if(SettingActivity.getPreferences(SettingActivity.keyLongFocus)&& isPlaying)
+                    if(SettingActivity.getPreferences(SettingActivity.keyLongFocus)&& isPlaying && mediaPlayer != null)
                         playPause();
                     wasPlaying = true;
 
@@ -670,14 +665,14 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
 
-                    if(SettingActivity.getPreferences(SettingActivity.keyShortFocus) && isPlaying)
+                    if(SettingActivity.getPreferences(SettingActivity.keyShortFocus) && isPlaying && mediaPlayer != null)
                         playPause();
                     wasPlaying = true;
 
                     break;
                 case AudioManager.AUDIOFOCUS_GAIN:
 
-                    if(SettingActivity.getPreferences(SettingActivity.keyOnGain) && wasPlaying && !isPlaying)
+                    if(SettingActivity.getPreferences(SettingActivity.keyOnGain) && wasPlaying && !isPlaying && mediaPlayer != null)
                         playPause();
                     wasPlaying = false;
 

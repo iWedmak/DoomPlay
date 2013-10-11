@@ -19,12 +19,16 @@ package com.perm.DoomPlay;
  */
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.view.Window;
 import android.widget.Toast;
+
+import java.util.Locale;
 
 public class SettingActivity extends PreferenceActivity
 {
@@ -75,9 +79,49 @@ public class SettingActivity extends PreferenceActivity
                 }
                 catch (android.content.ActivityNotFoundException ex)
                 {
-                    Toast.makeText(getBaseContext(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.doesnt_available), Toast.LENGTH_SHORT).show();
                 }
 
+                return true;
+            }
+        });
+
+        findPreference("github").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
+        {
+            @Override
+            public boolean onPreferenceClick(Preference preference)
+            {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/quxey/doomPlaye"));
+                startActivity(browserIntent);
+                return true;
+            }
+        });
+
+
+        findPreference("languages").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener()
+        {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue)
+            {
+                String languageToLoad ;
+                if(newValue.equals("ru"))
+                {
+                     languageToLoad = "ru";
+                }
+                else
+                {
+                    languageToLoad = "en";
+                }
+
+                Locale locale = new Locale(languageToLoad);
+                Locale.setDefault(locale);
+                Configuration config = new Configuration();
+                config.locale = locale;
+                getBaseContext().getResources().updateConfiguration(config, null);
+
+                Intent intent = new Intent(getBaseContext(),MainScreenActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
                 return true;
             }
         });

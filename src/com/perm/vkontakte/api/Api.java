@@ -16,20 +16,20 @@ import java.util.Collection;
 import java.util.zip.GZIPInputStream;
 
 public class Api {
-    static final String TAG="Kate.Api";
+    private static final String TAG="Kate.Api";
     
-    public static final String BASE_URL="https://api.vk.com/method/";
+    private static final String BASE_URL="https://api.vk.com/method/";
     
     public Api(String access_token, String api_id){
         this.access_token=access_token;
         this.api_id=api_id;
     }
     
-    final String access_token;
-    final String api_id;
+    private final String access_token;
+    private final String api_id;
     
     //TODO: it's not faster, even slower on slow devices. Maybe we should add an option to disable it. It's only good for paid internet connection.
-    static final boolean enable_compression=true;
+    private static final boolean enable_compression=true;
     
     /*** utils methods***/
     private void checkError(JSONObject root, String url) throws JSONException,KException {
@@ -115,8 +115,7 @@ public class Api {
             String enc=connection.getHeaderField("Content-Encoding");
             if(enc!=null && enc.equalsIgnoreCase("gzip"))
                 is = new GZIPInputStream(is);
-            String response=Utils.convertStreamToString(is);
-            return response;
+            return Utils.convertStreamToString(is);
         }
         finally{
             if(connection!=null)
@@ -245,9 +244,8 @@ public class Api {
         JSONObject root = sendRequest(params);
         JSONArray array = root.optJSONArray("response");
         if (array == null)
-            return new ArrayList<Photo>(); 
-        ArrayList<Photo> photos = parsePhotos(array);
-        return photos;
+            return new ArrayList<Photo>();
+        return parsePhotos(array);
     }
     
     //http://vk.com/dev/photos.getUserPhotos
@@ -261,16 +259,15 @@ public class Api {
         JSONObject root = sendRequest(params);
         JSONArray array = root.optJSONArray("response");
         if (array == null)
-            return new ArrayList<Photo>(); 
-        ArrayList<Photo> photos = parsePhotos(array);
-        return photos;
+            return new ArrayList<Photo>();
+        return parsePhotos(array);
     }
     private ArrayList<Photo> parsePhotos(JSONArray array) throws JSONException {
         ArrayList<Photo> photos=new ArrayList<Photo>();
         int category_count=array.length();
         for(int i=0; i<category_count; ++i){
             //in getUserPhotos first element is integer
-            if(array.get(i) instanceof JSONObject == false)
+            if(!(array.get(i) instanceof JSONObject))
                 continue;
             JSONObject o = (JSONObject)array.get(i);
             Photo p = Photo.parse(o);
@@ -510,10 +507,10 @@ public class Api {
     }
 
     //http://vk.com/dev/audio.setBroadcast
-    public void audioSetBroadcast(long aid) throws IOException, JSONException, KException
+    public void audioSetBroadcast(String aidPlusOid) throws IOException, JSONException, KException
     {
         Params params = new Params("audio.setBroadcast");
-        params.put("audio",aid);
+        params.put("audio",aidPlusOid);
         sendRequest(params);
     }
     

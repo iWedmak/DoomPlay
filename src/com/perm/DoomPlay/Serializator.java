@@ -30,8 +30,8 @@ class Serializator<T extends Serializable>
         Audio,Group,User,Album
     }
 
-    private Context context;
-    private FileNames name;
+    private final Context context;
+    private final FileNames name;
 
     public Serializator(Context context,FileNames name)
     {

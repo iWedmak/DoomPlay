@@ -42,11 +42,11 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashSet;
 
-public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
+abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
 {
     private final static String lastFmApiId = "2827ff9b2eb0158b80e7c6d0b511f25d";
-    public static final Uri artworkUri = Uri.parse("content://media/external/audio/albumart");
-    boolean isLoading = false;
+    private static final Uri artworkUri = Uri.parse("content://media/external/audio/albumart");
+    private boolean isLoading = false;
     private final String artist;
     private final String title;
     private final long albumId;
@@ -180,7 +180,7 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
 
     }
 
-    static Bitmap downloadBitmap(String src)
+    private static Bitmap downloadBitmap(String src)
     {
 
         HttpURLConnection connection = null;
@@ -212,7 +212,7 @@ public abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
                 }
         }
     }
-    public static void insertBitmapInMediaStore(Bitmap bitmap,long albumId)
+    private static void insertBitmapInMediaStore(Bitmap bitmap, long albumId)
     {
         OutputStream stream;
         File file  = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/download/albumArts/");

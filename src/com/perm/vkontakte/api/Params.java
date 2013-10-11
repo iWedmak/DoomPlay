@@ -5,9 +5,9 @@ import java.net.URLEncoder;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-public class Params {
+class Params {
     //TreeMap нужен был чтобы сортировать параметры по имени, сейчас это уже не важно, главно подписывать и передавать параметры в одном и тотм же порядке
-    final TreeMap<String, String> args = new TreeMap<String, String>();
+    private final TreeMap<String, String> args = new TreeMap<String, String>();
     final String method_name;
     
     public Params(String method_name){

@@ -25,7 +25,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 public class MainScreenFragment extends Fragment
 {
@@ -120,7 +119,7 @@ public class MainScreenFragment extends Fragment
                         break;
                 }
             else
-                Toast.makeText(activity,"please wait",Toast.LENGTH_SHORT).show();
+                AbstractList.waitMessage(getActivity());
         }
     };
 

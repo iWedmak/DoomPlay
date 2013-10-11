@@ -40,7 +40,7 @@ public class AddTrackToAlbumDialog extends DialogFragment
 
     private ListView listView;
     private LinearLayout linearLoading;
-    static boolean isLoading = false;
+    private static boolean isLoading = false;
     public final static String keyDialogAlbum = "keybndleed";
     private long trackId;
 
@@ -132,8 +132,6 @@ public class AddTrackToAlbumDialog extends DialogFragment
                     {
                        MainScreenActivity.api.moveToAudioAlbum(params[0], trackId);
 
-
-
                     } catch (IOException e) {
                         isLoading = false;
                         ((AbstractReceiver)getActivity()).showException(e);
@@ -153,7 +151,7 @@ public class AddTrackToAlbumDialog extends DialogFragment
                 }
             }.execute(VkAlbumsActivity.albums.get(position).album_id);
             dismiss();
-            Toast.makeText(getActivity(),"tracks added",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),getResources().getString(R.string.tracks_added),Toast.LENGTH_SHORT).show();
 
 
         }

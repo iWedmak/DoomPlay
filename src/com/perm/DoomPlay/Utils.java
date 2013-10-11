@@ -33,7 +33,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.List;
 
-public class Utils
+class Utils
 {
     private Utils(){}
 

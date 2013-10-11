@@ -86,11 +86,11 @@ abstract class AbstractVkItems extends AbstractReceiver
                         }
                         else
                         {
-                            Toast.makeText(getBaseContext(), "check internet connection", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getBaseContext(), getResources().getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
                         }
                     }
             else
-                Toast.makeText(getBaseContext(), "please wait", Toast.LENGTH_SHORT).show();
+               AbstractList.waitMessage(getBaseContext());
         }
 
     };
@@ -104,14 +104,14 @@ abstract class AbstractVkItems extends AbstractReceiver
             taskLoader.cancel(true);
         }
     }
-    protected void startListVkActivity(ArrayList<Audio> audios)
+    void startListVkActivity(ArrayList<Audio> audios)
     {
         Intent intent = new Intent(this,ListVkActivity.class);
         intent.setAction(ListVkActivity.actionJust);
         intent.putExtra(MainScreenActivity.keyOpenInListTrack,audios);
         startActivity(intent);
     }
-    protected void setLoading()
+    void setLoading()
     {
          if(isLoading)
          {
@@ -167,7 +167,7 @@ abstract class AbstractVkItems extends AbstractReceiver
             setLoading();
 
             if(audios == null)
-                Toast.makeText(getBaseContext(),"can't get Audio",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(),getResources().getString(R.string.cant_get_audio),Toast.LENGTH_SHORT).show();
             else
                 startListVkActivity(audios);
         }

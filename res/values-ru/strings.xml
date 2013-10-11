@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DoomPlay</string>
+    <string name="search">Поиск</string>
+    <string name="folders">Папки</string>
+    <string name="all_songs">Вся музыка</string>
+    <string name="artists">Исполнители</string>
+    <string name="Playlists">Плейлисты</string>
+    <string name="albums">Альбомы</string>
+    <string name="add_to_playlist">добавить в плейлист</string>
+    <string name="delete">удалить</string>
+    <string name="sleep_timer">таймер сна</string>
+    <string name="equalizer">эквалайзер</string>
+    <string name="loading_music">загружается музыка</string>
+    <string name="search_hint">поиск трэков</string>
+    <string name="Rescan">Обновить</string>
+    <string name="full_screen">на весь экран</string>
+    <string name="return_small">в списки</string>
+    <string name="hide_controls">спрятать/показать контролы</string>
+    <string name="new_playlist">новый плейлист</string>
+    <string name="set_track_as_ringtone">поставить на звонок</string>
+    <string name="advertisement_setting">настройки рекламы</string>
+    <string name="delete_playlist">удалить плейлист</string>
+    <string name="play_all">играть все</string>
+    <string name="track_up">наверх</string>
+    <string name="track_down">вниз</string>
+    <string name="delete_track">удалить трэк</string>
+    <string name="enter_playlist_name">введите название плейлиста</string>
+    <string name="save">сохранить</string>
+    <string name="cancel">отменить</string>
+    <string name="invalid_name">неподходящее название</string>
+    <string name="to_playlist">в плейлист</string>
+    <string name="zeros">0.00</string>
+    <string name="enter_search_query">введите поисковой запрос</string>
+    <string name="sleep_after_playing">Заснуть после проигрывания х трэков</string>
+    <string name="sleep_after_minit">Заснуть после х минут</string>
+    <string name="disable">выключить</string>
+    <string name="enable">включить</string>
+    <string name="title">Название</string>
+    <string name="artist">Исполнитель</string>
+    <string name="didnt_match">не могу найти трэки</string>
+    <string name="voice_search">голосовой ввод</string>
+    <string name="to_track">к трэку</string>
+    <string name="tracks_dont_match">трэки не найдены</string>
+    <string name="settings">настройки</string>
+    <string name="exit">выход</string>
+    <string name="send_report">обратная связь</string>
+    <string name="lyrics">лирика</string>
+    <string name="like">лайк</string>
+    <string name="sign_in">войти</string>
+    <string name="refresh">обновить</string>
+    <string name="please_wait">пожалуйста подождите</string>
+    <string name="dislike">дизлайк</string>
+    <string name="interrupt">прервать обновление</string>
+    <string name="download">скачать</string>
+    <string name="edit">изменить</string>
+    <string name="add_to_album">добавить в альбом</string>
+    <string name = "check_internet">проверьте соединение с интернетом</string>
+    <string name ="error_refresh">ошибка, попробуйте обновить</string>
+    <string name ="doesnt_available">функция не доступна на этом устройстве</string>
+    <string name = "track_downloading">трэк до сих пор закачивается</string>
+    <string name = "cant_get_audio">не могу получить трэки</string>
+    <string name = "tracks_added">трэки добавлены</string>
+    <string name = "no_valid_files">Нет подходящих файлов в этой папке</string>
+    <string name = "has_been_sent">Сообщение было успешно отправлено</string>
+    <string name = "fill_fields">пожалуйста, заполните все поля</string>
+    <string name="Audio">Аудио</string>
+    <string name="audio_settings">Настройки аудио</string>
+    <string name="Call">Звонок</string>
+    <string name="set_pause_while">Ставить паузу во время звонка</string>
+    <string name="On_call">Перед звонком</string>
+    <string name="after_call">После звонка</string>
+    <string name="play_after_call">продолжить воспроизведение после звонка(если играло ранее)</string>
+    <string name="My_music">Моя музыка</string>
+    <string name="Top_rated">Популярные</string>
+    <string name="Friends">Друзья</string>
+    <string name="Groups">Группы</string>
+    <string name="send">отправить</string>
+    <string name="the_subject">тема</string>
+    <string name="the_message">сообщение</string>
+    <string name="Audio_Focus">АудиоФокус</string>
+    <string name="set_pause_on_short">поставить паузу во время короткого аудиоФокуса (смс/уведомление/т.д.)</string>
+    <string name="Short_audiofocus">Короткий аудиоФокус</string>
+    <string name="set_pause_on_long">поставить паузу во время длинного аудиоФокуса (другой плеер/игра/т.д.)</string>
+    <string name="Long_audiofocus">Долгой аудиоФокус</string>
+    <string name="Gain_focus">Получение аудиоФокуса</string>
+    <string name="after_gain_focus">проигрывать после послучения аудиофокуса</string>
+    <string name="Vk">Вк</string>
+    <string name="vkontakte_setting">настройки вконтакте</string>
+    <string name="max_my_music">максимальное число трэков получаемое из Моя музыка</string>
+    <string name="Max_music">максимальное число из Моя музыка</string>
+    <string name="max_friends">максимальное число трэков получаемое из Друзья и Группы</string>
+    <string name="Max_friends">максимальное число из Друзья и Группы</string>
+    <string name="Max_search">максимальное число из Поиск</string>
+    <string name="max_search">максимальное число трэков получаемое из Поиск</string>
+    <string name="max_popular">максимальное число трэков получаемое из Популярное</string>
+    <string name="Max_popular">максимальное число из Популярные</string>
+    <string name="Broadcast">Трансляция</string>
+    <string name="set_as_status">установить текущий трэк как статус</string>
+    <string name="Album_art">Обложка альбома</string>
+    <string name="album_art_settings">настройки обложек альбома</string>
+    <string name="download_album_art">скачивать обложки из интернета (lastfm)</string>
+    <string name="Download_album_art">Скачивать обложки</string>
+    <string name="quality">Качество обложек</string>
+    <string name="Quality">Качество</string>
+    <string name="when_internet">Скачивать обложку если трэк проигрывается из интернета</string>
+    <string name="When_internet">Если проигрывается из интернета</string>
+    <string name="Other">Другое</string>
+    <string name="Other_settings">другие настройки</string>
+    <string name="Scroll">Прокрутка списка</string>
+    <string name="scroll">Прокручивать список до текущего трэка</string>
+    <string name="Onclick_notif">По нажатию на уведомление</string>
+    <string name="onclick_notif">Возвражает на большой экран если стоит ,иначе в список</string>
+    <string name="Show_controls">Показывать контролы</string>
+    <string name="show_controls">Показывать контролы при открытии списков</string>
+    <string name="languages">изменить язык</string>
+    <string name="Languages">Языки</string>
+    <string name="About">О приложении</string>
+    <string name="about_app">о приложении</string>
+    <string name="Copyright">Копирайт</string>
+    <string name="Vladislav_Krot">© 2013 Владислав Крот (DoomPlay)</string>
+    <string name="Contact">Связаться со мной</string>
+    <string name="Want_to_help">Хочешь помочь как разработчик?</string>
+    <string name="Downloading">Скачивание</string>
+    <string name="downloading">скачивание</string>
+    <string name="paused">пауза</string>
+    <string name="completed">завершено</string>
+    <string name="canceled">отменено</string>
+    <string name="error">ошибка</string>
+    <string-array name ="count_values">
+        <item>10</item>
+        <item>30</item>
+        <item>50</item>
+        <item>100</item>
+        <item>200</item>
+        <item>600</item>
+    </string-array>
+    <string-array name ="quality">
+        <item>плохое</item>
+        <item>среднее</item>
+        <item>высокое</item>
+    </string-array>
+    <string-array name ="quality_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+
+</resources>

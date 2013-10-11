@@ -60,7 +60,7 @@ public class ListTracksActivity extends AbstractList
             audios = TracksHolder.allAudios;
     }
 
-    protected final AdapterView.OnItemLongClickListener onItemLongTrackClick = new AdapterView.OnItemLongClickListener()
+    private final AdapterView.OnItemLongClickListener onItemLongTrackClick = new AdapterView.OnItemLongClickListener()
     {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
@@ -72,7 +72,7 @@ public class ListTracksActivity extends AbstractList
         }
     };
 
-    protected final ActionMode.Callback callback = new ActionMode.Callback()
+    private final ActionMode.Callback callback = new ActionMode.Callback()
     {
         int position;
         boolean isFirstCall;

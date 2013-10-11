@@ -32,22 +32,22 @@ import android.widget.*;
 
 abstract class AbstractControls extends AbstractReceiver
 {
-    protected RelativeLayout linearControls;
-    protected ImageView imgPlay;
-    protected ImageView imgShuffle;
-    protected ImageView imgRepeat;
-    protected ImageView imgNext;
-    protected ImageView imgPrevious;
-    protected TextView textCurrentTime;
-    protected TextView textTotalTime;
-    protected SeekBar seekBar;
-    protected volatile boolean flagT;
+    RelativeLayout linearControls;
+    ImageView imgPlay;
+    ImageView imgShuffle;
+    ImageView imgRepeat;
+    ImageView imgNext;
+    ImageView imgPrevious;
+    TextView textCurrentTime;
+    TextView textTotalTime;
+    SeekBar seekBar;
+    private volatile boolean flagT;
     private final static int messageUpdate = 2957;
-    protected PlayingService playingService;
-    protected ServiceConnection serviceConnection;
+    PlayingService playingService;
+    ServiceConnection serviceConnection;
     private  boolean isBound;
-    protected Intent intentService;
-    protected boolean isShown;
+    Intent intentService;
+    boolean isShown;
     protected abstract void trackChanged();
     private static final String keySaveShown = "keySswn";
 
@@ -82,7 +82,7 @@ abstract class AbstractControls extends AbstractReceiver
 
     }
 
-    protected void showHide()
+    void showHide()
     {
         if(isShown)
         {
@@ -97,7 +97,7 @@ abstract class AbstractControls extends AbstractReceiver
             loadUpdateThread();
         }
     }
-    protected void checkIsShown(Bundle savedInstanceState)
+    void checkIsShown(Bundle savedInstanceState)
     {
         if(savedInstanceState != null)
         {
@@ -131,12 +131,12 @@ abstract class AbstractControls extends AbstractReceiver
             imgShuffle.setImageResource(R.drawable.shuffle_disable);
     }
 
-    protected void connectService()
+    void connectService()
     {
         bindService(intentService,serviceConnection,BIND_IMPORTANT);
         isBound = true;
     }
-    protected void unConnecServer()
+    void unConnecServer()
     {
         if(isBound)
         {
@@ -151,10 +151,10 @@ abstract class AbstractControls extends AbstractReceiver
         super.onSaveInstanceState(outState);
         outState.putBoolean(keySaveShown,isShown);
     }
-    protected void onServiceAbstractConnected()
+    void onServiceAbstractConnected()
     {}
 
-    protected void initializeAbstract()
+    void initializeAbstract()
     {
         isShown = false;
         flagT = false;
@@ -188,7 +188,7 @@ abstract class AbstractControls extends AbstractReceiver
         connectService();
     }
 
-    protected void clickWithoutAction()
+    void clickWithoutAction()
     {}
 
     private final View.OnClickListener onClickControlsListener = new View.OnClickListener()
@@ -281,7 +281,7 @@ abstract class AbstractControls extends AbstractReceiver
         registerReceiver(broadcastReceiver, intentFilter);
         isRegister = true;
     }
-    protected void loadUpdateThread()
+    void loadUpdateThread()
     {
         flagT = false;
         flagT = true;
@@ -324,7 +324,7 @@ abstract class AbstractControls extends AbstractReceiver
             }
         }
     };
-    protected void startEqualizer()
+    void startEqualizer()
     {
          if(isEqualizerAvailable(this))
          {
@@ -334,7 +334,7 @@ abstract class AbstractControls extends AbstractReceiver
                  startActivityForResult(getEqualizerIntent(0),0);
          }
         else
-             Toast.makeText(this,"sorry,this function doesn't available on your device",Toast.LENGTH_SHORT).show();
+             Toast.makeText(this,getResources().getString(R.string.doesnt_available),Toast.LENGTH_SHORT).show();
     }
 
     private static Intent getEqualizerIntent(int audioSessionId)

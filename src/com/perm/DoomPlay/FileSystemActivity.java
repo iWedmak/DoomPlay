@@ -85,7 +85,7 @@ public class FileSystemActivity extends AbstractReceiver
         return intent;
     }
 
-    static final FileFilter fileFilter = new FileFilter()
+    private static final FileFilter fileFilter = new FileFilter()
     {
         @Override
         public boolean accept(File file)
@@ -98,7 +98,7 @@ public class FileSystemActivity extends AbstractReceiver
         }
     };
     //it's fucking crooked nail , fix it!!!
-    public static ArrayList<Audio> getAudiosFromFolder(File file,Context context)
+    private static ArrayList<Audio> getAudiosFromFolder(File file, Context context)
     {
         String selectionArgs;
         try
@@ -122,7 +122,7 @@ public class FileSystemActivity extends AbstractReceiver
         return audios;
     }
     //it's fucking crooked nail , fix it too!!!
-    public static Audio getAudioFromFile(File file,Context context)
+    private static Audio getAudioFromFile(File file, Context context)
     {
         String selectionArgs;
 
@@ -180,7 +180,7 @@ public class FileSystemActivity extends AbstractReceiver
 
                     if(audios.size() == 0 )
                     {
-                        Toast.makeText(getBaseContext(),"There's no valid files in this directory",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(),getResources().getString(R.string.no_valid_files),Toast.LENGTH_SHORT).show();
                         mode.finish();
                         return false ;
                     }
@@ -194,7 +194,7 @@ public class FileSystemActivity extends AbstractReceiver
 
                     if(audios.size() == 0 )
                     {
-                        Toast.makeText(getBaseContext(),"There's no valid files in this directory",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(),getResources().getString(R.string.no_valid_files),Toast.LENGTH_SHORT).show();
                         mode.finish();
                         return false ;
                     }
@@ -222,7 +222,7 @@ public class FileSystemActivity extends AbstractReceiver
         entriesFiles = file.listFiles(fileFilter);
         if(entriesFiles == null )
         {
-            Toast.makeText(this, "There's no files in this directory", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.no_valid_files), Toast.LENGTH_SHORT).show();
             return ;
         }
         currentDirectory = file;
@@ -247,7 +247,7 @@ public class FileSystemActivity extends AbstractReceiver
 
 
     }
-    final AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener()
+    private final AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener()
     {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -263,7 +263,7 @@ public class FileSystemActivity extends AbstractReceiver
 
         }
     };
-    final AdapterView.OnItemLongClickListener onItemLongClickListener = new AdapterView.OnItemLongClickListener()
+    private final AdapterView.OnItemLongClickListener onItemLongClickListener = new AdapterView.OnItemLongClickListener()
     {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
@@ -286,7 +286,7 @@ public class FileSystemActivity extends AbstractReceiver
             fill(currentDirectory.getParentFile());
         }
     }
-    final Comparator<File> fileComparator = new Comparator<File>()
+    private final Comparator<File> fileComparator = new Comparator<File>()
     {
         @Override
         public int compare(File fileFirst, File fileSecond)

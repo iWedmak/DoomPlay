@@ -9,8 +9,7 @@
     <RelativeLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="wrap_content">
 
         <LinearLayout
                 android:orientation="horizontal"
@@ -31,7 +30,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="8dp"
                     android:textSize="20sp"
-                    android:text="My music"
+                    android:text="@string/My_music"
                     android:textColor="@color/almost_white"/>
         </LinearLayout>
         <LinearLayout
@@ -54,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="8dp"
                     android:textSize="20sp"
-                    android:text="Top rated"
+                    android:text="@string/Top_rated"
                     android:textColor="@color/almost_white"/>
         </LinearLayout>
         <LinearLayout
@@ -77,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="8dp"
                     android:textSize="20sp"
-                    android:text="Friends"
+                    android:text="@string/Friends"
                     android:textColor="@color/almost_white"/>
         </LinearLayout>
         <LinearLayout
@@ -100,7 +99,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="8dp"
                     android:textSize="20sp"
-                    android:text="Groups"
+                    android:text="@string/Groups"
                     android:textColor="@color/almost_white"/>
         </LinearLayout>
         <LinearLayout
@@ -123,7 +122,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="8dp"
                     android:textSize="20sp"
-                    android:text="Search"
+                    android:text="@string/search"
                     android:textColor="@color/almost_white"/>
         </LinearLayout>
         <LinearLayout
@@ -146,7 +145,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="8dp"
                     android:textSize="20sp"
-                    android:text="Albums"
+                    android:text="@string/albums"
                     android:textColor="@color/almost_white"/>
         </LinearLayout>
         <LinearLayout

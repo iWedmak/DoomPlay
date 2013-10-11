@@ -9,11 +9,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/editSubject" android:layout_marginLeft="5dp" android:layout_marginRight="5dp"
-            android:hint="the subject"/>
+            android:hint="@string/the_subject"/>
     <EditText
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:id="@+id/editMessage" android:hint="the message" android:gravity="top"
+            android:id="@+id/editMessage" android:hint="@string/the_message" android:gravity="top"
             android:layout_marginLeft="5dp" android:layout_marginRight="5dp" android:layout_marginBottom="5dp"/>
     <LinearLayout
             android:orientation="horizontal"
@@ -22,7 +22,7 @@
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="send"
+                android:text="@string/send"
                 android:id="@+id/buttonSendReport" android:layout_weight="1" android:layout_marginRight="5dp"
                 android:layout_marginLeft="3dp"/>
         <Button

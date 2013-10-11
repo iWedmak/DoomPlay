@@ -36,7 +36,7 @@ public class LyricsDialog extends DialogFragment
     public final static String keyLyricsId = "get_lyrics";
     public final static String keyLyricsTitle = "lyr_Title";
     private String title;
-    boolean isLoading ;
+    private boolean isLoading ;
     private boolean isFirstResume;
 
 

@@ -29,7 +29,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 import com.perm.vkontakte.api.Account;
 import com.perm.vkontakte.api.Api;
 
@@ -106,13 +105,13 @@ public class MainScreenActivity extends AbstractReceiver
                 if(!isLoading)
                     scanCallback.scanI();
                 else
-                    Toast.makeText(this,"wait, tracks doesn't loaded",Toast.LENGTH_SHORT);
+                    AbstractList.waitMessage(this);
                 return true;
             case R.id.itemExit:
                 if(!isLoading)
                     sendBroadcast(new Intent(actionKill));
                 else
-                    Toast.makeText(this, "wait, tracks doesn't loaded", Toast.LENGTH_SHORT);
+                    AbstractList.waitMessage(this);
                 return true;
             case R.id.itemSettings:
                 startActivity(new Intent(this,SettingActivity.class));
@@ -145,8 +144,6 @@ public class MainScreenActivity extends AbstractReceiver
                 api = new Api(Account.account.access_token, LoginActivity.API_ID);
                 isRegister = true;
             }
-            else
-                Toast.makeText(getBaseContext(),"registration's error", Toast.LENGTH_SHORT).show();
         }
     }
 

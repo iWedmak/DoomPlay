@@ -24,7 +24,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 public class MainVkFragment extends Fragment
 {
@@ -45,11 +44,11 @@ public class MainVkFragment extends Fragment
         return view;
     }
 
-    public boolean trippleCheckToast()
+    boolean trippleCheckToast()
     {
         if(MainScreenActivity.isLoading)
         {
-            Toast.makeText(activity,"please wait",Toast.LENGTH_SHORT).show();   return false;
+            AbstractList.waitMessage(activity);   return false;
         }
         else
         {

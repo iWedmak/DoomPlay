@@ -27,10 +27,10 @@ abstract class AbstractList extends AbstractControls
 {
     ListView listView;
     ListsAdapter adapter;
-    static protected ArrayList<Audio> audios;
+    static ArrayList<Audio> audios;
     static boolean isLoading = false;
     LinearLayout linearLoading;
-    protected PlaylistDB playlistDB;
+    PlaylistDB playlistDB;
 
 
     @Override
@@ -39,7 +39,7 @@ abstract class AbstractList extends AbstractControls
         super.onCreate(savedInstanceState);
         playlistDB = PlaylistDB.getInstance(this);
     }
-    protected void markItem(int position , boolean withScroll)
+    void markItem(int position, boolean withScroll)
     {
         if(PlayingService.serviceAlive && equalsCollections(PlayingService.audios, audios))
         {
@@ -51,9 +51,9 @@ abstract class AbstractList extends AbstractControls
         else
             adapter.setMarkedItem(PlayingService.valueIncredible);
     }
-     public static boolean equalsCollections(List<Audio> first,List<Audio> second)
+     static boolean equalsCollections(List<Audio> first, List<Audio> second)
      {
-         if(first == null || first.size() != second.size())
+         if(first == null || second == null || first.size() != second.size())
              return false;
 
          for (int i = 0 ; i < first.size(); i++)
@@ -75,7 +75,7 @@ abstract class AbstractList extends AbstractControls
         markItem(PlayingService.indexCurrentTrack,false);
     }
 
-    protected void goFullScreen()
+    void goFullScreen()
     {
         if(PlayingService.serviceAlive)
         {
@@ -112,7 +112,7 @@ abstract class AbstractList extends AbstractControls
         }
         return super.onOptionsItemSelected(item);
     }
-    protected final AdapterView.OnItemClickListener onItemTrackClick = new AdapterView.OnItemClickListener()
+    final AdapterView.OnItemClickListener onItemTrackClick = new AdapterView.OnItemClickListener()
     {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -120,7 +120,7 @@ abstract class AbstractList extends AbstractControls
             onClickTrack(position);
         }
     };
-    protected final ActionMode.Callback callback = new ActionMode.Callback()
+    private final ActionMode.Callback callback = new ActionMode.Callback()
     {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu)
@@ -171,7 +171,7 @@ abstract class AbstractList extends AbstractControls
                     break;
                 case R.id.itemDownload:
                     if(DownloadingService.isDownloading(audios.get(position).getAid()))
-                        Toast.makeText(getBaseContext(),"track is still downloading",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(),getResources().getString(R.string.track_downloading),Toast.LENGTH_SHORT).show();
                     else
                     {
                         Intent downloadIntent = new Intent(this,DownloadingService.class);
@@ -187,15 +187,15 @@ abstract class AbstractList extends AbstractControls
         }
         else
         {
-            Toast.makeText(getBaseContext(),"check your internet connection",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(),getResources().getString(R.string.check_internet),Toast.LENGTH_SHORT).show();
         }
     }
     public static void waitMessage(Context context)
     {
-        Toast.makeText(context,"please wait",Toast.LENGTH_SHORT).show();
+        Toast.makeText(context,context.getResources().getString(R.string.please_wait),Toast.LENGTH_SHORT).show();
     }
 
-    static void moveToAlbum(FragmentManager manager,long aid)
+    private static void moveToAlbum(FragmentManager manager, long aid)
     {
         AddTrackToAlbumDialog dialog = new AddTrackToAlbumDialog();
         Bundle bundle = new Bundle();
@@ -306,7 +306,7 @@ abstract class AbstractList extends AbstractControls
             return true;
         }
     };
-    protected void onClickTrack(int position)
+    void onClickTrack(int position)
     {
         if(PlayingService.isLoadingTrack())
         {

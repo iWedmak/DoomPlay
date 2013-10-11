@@ -58,107 +58,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e368e502-6d83-4f2f-87a0-4a155d5c006e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/libs/bugsense-3.5.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/bugsense_3_5.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dictionaries/mafkavelly.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/proguard.cfg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/values-ru/strings.xml" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\.idea\libraries\activation.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\libs\activation.jar" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\libs\additionnal.jar" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\libs\mail.jar" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable-hdpi\scrubber_control_disabled_holo.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable-hdpi\scrubber_control_focused_holo.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable-hdpi\scrubber_control_normal_holo.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable-hdpi\scrubber_control_pressed_holo.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable-hdpi\scrubber_primary_holo.9.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable-hdpi\scrubber_track_holo_dark.9.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable-hdpi\scrubber_track_red.9.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable-mdpi\scrubber_control_disabled_holo.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable-mdpi\scrubber_control_focused_holo.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable-mdpi\scrubber_control_normal_holo.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable-mdpi\scrubber_control_pressed_holo.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable-mdpi\scrubber_primary_red.9.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable-mdpi\scrubber_secondary_holo.9.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable-mdpi\scrubber_track_holo_dark.9.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable-mdpi\scrubber_track_red.9.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable-xhdpi\scrubber_control_disabled_holo.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable-xhdpi\scrubber_control_focused_holo.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable-xhdpi\scrubber_control_normal_holo.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable-xhdpi\scrubber_control_pressed_holo.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable-xhdpi\scrubber_primary_holo.9.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable-xhdpi\scrubber_secondary_holo.9.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable-xhdpi\scrubber_track_holo_dark.9.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable-xhdpi\scrubber_track_red.9.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\drawable\my_new_action_bar.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\layout\settings.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\menu\bar_vk_search.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\res\values\dimension.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\src\com\perm\ExceptionHandler\ExceptionHandler.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\src\com\perm\ExceptionHandler\GMailSender.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\src\com\perm\ExceptionHandler\JSSEProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\src\com\perm\vkontakte\api\Link.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\src\com\perm\vkontakte\api\VkPoll.java" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\mafkavelly\Documents\GitHub\doomPlaye\src\com\perm\vkontakte\api\VkPollAnswer.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/AbstractControls.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/AbstractControls.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/AbstractList.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/AbstractList.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/AbstractReceiver.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/AbstractReceiver.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/AbstractVkItems.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/AbstractVkItems.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/AddTrackToAlbumDialog.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/AddTrackToAlbumDialog.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/AlbumArtGetter.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/AlbumArtGetter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/AlbumArtistActivity.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/AlbumArtistActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidManifest.xml" afterPath="$PROJECT_DIR$/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/vkontakte/api/Api.java" afterPath="$PROJECT_DIR$/src/com/perm/vkontakte/api/Api.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/vkontakte/api/AudioAlbum.java" afterPath="$PROJECT_DIR$/src/com/perm/vkontakte/api/AudioAlbum.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/vkontakte/api/Auth.java" afterPath="$PROJECT_DIR$/src/com/perm/vkontakte/api/Auth.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DoomPlay.iml" afterPath="$PROJECT_DIR$/DoomPlay.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/Download.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/Download.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/DownloadNotifBuilder.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/DownloadNotifBuilder.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/DownloadingService.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/DownloadingService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/FileSystemActivity.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/FileSystemActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/FullPlaybackActivity.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/FullPlaybackActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/vkontakte/api/Group.java" afterPath="$PROJECT_DIR$/src/com/perm/vkontakte/api/Group.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/vkontakte/api/KException.java" afterPath="$PROJECT_DIR$/src/com/perm/vkontakte/api/KException.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/ListTracksActivity.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/ListTracksActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/LoginActivity.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/LoginActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/LyricsDialog.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/LyricsDialog.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/MainScreenActivity.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/MainScreenActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/MainScreenFragment.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/MainScreenFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/MainVkFragment.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/MainVkFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/vkontakte/api/Media.java" afterPath="$PROJECT_DIR$/src/com/perm/vkontakte/api/Media.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/MyApplication.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/MyApplication.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/PageFragment.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/PageFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/vkontakte/api/Params.java" afterPath="$PROJECT_DIR$/src/com/perm/vkontakte/api/Params.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/vkontakte/api/Photo.java" afterPath="$PROJECT_DIR$/src/com/perm/vkontakte/api/Photo.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/vkontakte/api/PhotoTag.java" afterPath="$PROJECT_DIR$/src/com/perm/vkontakte/api/PhotoTag.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/PlayingService.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/PlayingService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/PlaylistActivity.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/PlaylistActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/ReportDialog.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/ReportDialog.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/SearchVkActivity.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/SearchVkActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/Serializator.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/Serializator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/SettingActivity.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/SettingActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/SimpleSWidget.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/SimpleSWidget.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/TracksHolder.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/TracksHolder.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/vkontakte/api/User.java" afterPath="$PROJECT_DIR$/src/com/perm/vkontakte/api/User.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/Utils.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/Utils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/vkontakte/api/VkStatus.java" afterPath="$PROJECT_DIR$/src/com/perm/vkontakte/api/VkStatus.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/values/colors.xml" afterPath="$PROJECT_DIR$/res/values/colors.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/dialog_report.xml" afterPath="$PROJECT_DIR$/res/layout/dialog_report.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/file_system.xml" afterPath="$PROJECT_DIR$/res/layout/file_system.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/list_vk.xml" afterPath="$PROJECT_DIR$/res/layout/list_vk.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/main_vk_fragment.xml" afterPath="$PROJECT_DIR$/res/layout/main_vk_fragment.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/mainscreen_fragment.xml" afterPath="$PROJECT_DIR$/res/layout/mainscreen_fragment.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/notif_download.xml" afterPath="$PROJECT_DIR$/res/layout/notif_download.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/page_landscape.xml" afterPath="$PROJECT_DIR$/res/layout/page_landscape.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/playing.xml" afterPath="$PROJECT_DIR$/res/layout/playing.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/xml/pref.xml" afterPath="$PROJECT_DIR$/res/xml/pref.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/project.properties" afterPath="$PROJECT_DIR$/project.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/xml/scrubber_control_selector_holo_dark.xml" afterPath="$PROJECT_DIR$/res/xml/scrubber_control_selector_holo_dark.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/xml/scrubber_progress_horizontal_holo_dark.xml" afterPath="$PROJECT_DIR$/res/xml/scrubber_progress_horizontal_holo_dark.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/drawable/scrubber_progress_red.xml" afterPath="$PROJECT_DIR$/res/drawable/scrubber_progress_red.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/search_vk.xml" afterPath="$PROJECT_DIR$/res/layout/search_vk.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/values/strings.xml" afterPath="$PROJECT_DIR$/res/values/strings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/widget_big.xml" afterPath="$PROJECT_DIR$/res/layout/widget_big.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="DoomPlay.iws" />
@@ -197,7 +96,7 @@
     <file path="/TracksHolder.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1381343572880" ignored="false" />
     <file path="/ListTracksActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380997937344" ignored="false" />
     <file path="/Api.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1381430178716" ignored="false" />
-    <file path="/Dummy.txt" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1381501503013" ignored="false" />
+    <file path="/Dummy.txt" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1381514242647" ignored="false" />
     <file path="/VkPopularActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379421853536" ignored="false" />
     <file path="/list_vk.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379057618266" ignored="false" />
     <file path="/item_genre.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1378641920520" ignored="false" />
@@ -288,8 +187,6 @@
     <file path="D:/workspace/javaChat/src/ChatMessage.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1381174236792" ignored="false" />
     <file path="/ChatMessage.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1381174193275" ignored="false" />
     <file path="/ReportDialog.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1381479584184" ignored="false" />
-    <file path="$PROJECT_DIR$/gen/com/perm/DoomPlay/BuildConfig.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1381511556334" ignored="false" />
-    <file path="$PROJECT_DIR$/gen/com/perm/DoomPlay/Manifest.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1381511556335" ignored="false" />
     <file path="/scrubber_control_selector_holo_dark.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1381512724765" ignored="false" />
     <file path="/scrubber_progress_red.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1381512829531" ignored="false" />
     <file path="/scrubber_progress_horizontal_holo_dark.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1381512924137" ignored="false" />
@@ -871,7 +768,11 @@
       <created>1381347821611</created>
       <updated>1381347821611</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="improve exception handler , fix bugs , add serialize to album">
+      <created>1381514270791</created>
+      <updated>1381514270791</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -968,7 +869,7 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
     <option name="LAST_COMMIT_MESSAGE" value="improve exception handler , fix bugs , add serialize to album" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
-    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="REFORMAT_BEFORE_FILE_COMMIT" value="false" />

@@ -24,6 +24,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 public class MainVkFragment extends Fragment
 {
@@ -48,7 +49,13 @@ public class MainVkFragment extends Fragment
     {
         if(MainScreenActivity.isLoading)
         {
-            AbstractList.waitMessage(activity);   return false;
+            AbstractList.waitMessage(activity);
+            return false;
+        }
+        else if(!MainScreenActivity.isRegister)
+        {
+            Toast.makeText(activity,getResources().getString(R.string.please_sign_in),Toast.LENGTH_SHORT).show();
+            return false;
         }
         else
         {

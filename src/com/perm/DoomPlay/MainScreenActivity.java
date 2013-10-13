@@ -29,6 +29,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 import com.perm.vkontakte.api.Account;
 import com.perm.vkontakte.api.Api;
 
@@ -39,7 +40,7 @@ public class MainScreenActivity extends AbstractReceiver
     public static final boolean isOldSDK =  Build.VERSION.SDK_INT <= 8;
     private static final int REQUEST_LOGIN = 1093;
     public static boolean isLoading;
-    public static boolean isRegister = false;
+    public static boolean isRegister;
     private ViewPager viewPager;
     static Api api;
 
@@ -82,6 +83,10 @@ public class MainScreenActivity extends AbstractReceiver
         {
             isRegister = true;
             api = new Api(Account.account.access_token, LoginActivity.API_ID);
+        }
+        else
+        {
+            isRegister = false;
         }
 
 
@@ -138,11 +143,13 @@ public class MainScreenActivity extends AbstractReceiver
         {
             if (resultCode == RESULT_OK)
             {
-                Account.account.access_token=data.getStringExtra("token");
-                Account.account.user_id=data.getLongExtra("user_id", 0);
+                Account.account.access_token = data.getStringExtra("token");
+                Account.account.user_id = data.getLongExtra("user_id", 0);
                 Account.account.save(this);
                 api = new Api(Account.account.access_token, LoginActivity.API_ID);
                 isRegister = true;
+
+                Toast.makeText(getBaseContext(),getResources().getString(R.string.registr_succes),Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -176,6 +183,7 @@ public class MainScreenActivity extends AbstractReceiver
         {
             return 2;
         }
+
     }
 
 

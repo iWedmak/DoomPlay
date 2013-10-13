@@ -49,7 +49,12 @@ abstract class AbstractVkItems extends AbstractReceiver
         switch (item.getItemId())
         {
             case R.id.itemRefresh:
-                onClickRefresh();
+                if(PlaylistDB.isLoading)
+                    AbstractList.waitMessage(getBaseContext());
+                else if(!MainScreenActivity.isRegister)
+                    Toast.makeText(getBaseContext(),getResources().getString(R.string.please_sign_in),Toast.LENGTH_SHORT).show();
+                else
+                    onClickRefresh();
                 return true;
             case R.id.itemInterrupt:
                 cancelLoading();
@@ -71,26 +76,22 @@ abstract class AbstractVkItems extends AbstractReceiver
         cancelLoading();
         super.onBackPressed();
     }
-            final AdapterView.OnItemClickListener onClickListener = new AdapterView.OnItemClickListener()
-            {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-                {
-
-                    if(!isLoading)
-                    {
-                        if(Utils.isOnline(getBaseContext()))
-                        {
-                            taskLoader = new TaskLoader();
-                            taskLoader.execute(position);
-                        }
-                        else
-                        {
-                            Toast.makeText(getBaseContext(), getResources().getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
-                        }
-                    }
+    final AdapterView.OnItemClickListener onClickListener = new AdapterView.OnItemClickListener()
+    {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+        {
+            if(PlaylistDB.isLoading)
+                AbstractList.waitMessage(getBaseContext());
+            else if(!MainScreenActivity.isRegister)
+                Toast.makeText(getBaseContext(),getResources().getString(R.string.please_sign_in),Toast.LENGTH_SHORT).show();
+            else  if(!Utils.isOnline(getBaseContext()))
+                Toast.makeText(getBaseContext(), getResources().getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
             else
-               AbstractList.waitMessage(getBaseContext());
+            {
+                taskLoader = new TaskLoader();
+                taskLoader.execute(position);
+            }
         }
 
     };
@@ -99,8 +100,6 @@ abstract class AbstractVkItems extends AbstractReceiver
     {
         if(isLoading && taskLoader != null)
         {
-            isLoading = false;
-            linearLoading.setVisibility(View.GONE);
             taskLoader.cancel(true);
         }
     }
@@ -145,7 +144,6 @@ abstract class AbstractVkItems extends AbstractReceiver
             }
             catch (KException e)
             {
-                isLoading = false;
                 handleKException(e);
                 cancel(true);
             } catch (JSONException e)
@@ -158,6 +156,14 @@ abstract class AbstractVkItems extends AbstractReceiver
                 cancel(true);
             }
             return null;
+        }
+
+        @Override
+        protected void onCancelled()
+        {
+            super.onCancelled();
+            isLoading = false;
+            linearLoading.setVisibility(View.GONE);
         }
 
         @Override

@@ -52,7 +52,7 @@ public class DownloadingService extends Service implements Download.DoomObserver
         switch (holder.download.getStatus())
         {
             case DOWNLOADING:
-                notification = holder.downloadBuilder.createStarting((int)holder.download.getProgress());
+                notification = holder.downloadBuilder.createStarting(holder.download.getProgress());
                 startUpdatingThread();
                 break;
             case CANCELLED:

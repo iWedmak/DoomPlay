@@ -27,7 +27,7 @@ public class Api {
     
     private final String access_token;
     private final String api_id;
-    
+
     //TODO: it's not faster, even slower on slow devices. Maybe we should add an option to disable it. It's only good for paid internet connection.
     private static final boolean enable_compression=true;
     
@@ -69,7 +69,7 @@ public class Api {
 
 
         String response="";
-        for(int i=1;i<=MAX_TRIES;++i){
+        for(int i = 1;i <= MAX_TRIES;++i){
             try{
 
                 response = sendRequestInternal(url, body);

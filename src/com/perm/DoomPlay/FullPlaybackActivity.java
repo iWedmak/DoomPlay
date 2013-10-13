@@ -57,6 +57,8 @@ public class FullPlaybackActivity  extends AbstractControls
     private PagePlaybackAdapter adapterPager;
     private Intent intentWas;
 
+    private static boolean isPaused  = false;
+
     @Override
     protected void trackChanged()
     {
@@ -68,18 +70,29 @@ public class FullPlaybackActivity  extends AbstractControls
     {
         super.onResume();
         isShown = true;
+        isPaused = false;
         viewPager.setCurrentItem(PlayingService.indexCurrentTrack, false);
 
     }
 
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        isPaused = true;
+    }
+
     private final PlayingService.OnAlbumArtSave onAlbumArtSave = new PlayingService.OnAlbumArtSave()
     {
+        // TODO: sometimes throw exception
+        //java.lang.IllegalStateException: Fragment PageFragment{4240e278} is not currently in the FragmentManager
+
         @Override
         public void onAlbumArtSave(long id)
         {
-            adapterPager = new PagePlaybackAdapter(getSupportFragmentManager());
-            viewPager.setAdapter(adapterPager);
-            viewPager.setCurrentItem(PlayingService.indexCurrentTrack);
+            if(audios != null && !isPaused)
+                adapterPager.notifyDataSetChanged();
+
         }
     };
     @Override
@@ -388,6 +401,11 @@ public class FullPlaybackActivity  extends AbstractControls
         public int getCount()
         {
             return audios.size();
+        }
+        @Override
+        public int getItemPosition(Object object)
+        {
+            return POSITION_NONE;
         }
     }
 

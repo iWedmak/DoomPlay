@@ -34,6 +34,7 @@ import android.media.MediaPlayer;
 import android.media.audiofx.AudioEffect;
 import android.os.AsyncTask;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.telephony.PhoneStateListener;
@@ -143,10 +144,15 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         isShuffle = false;
         isPlaying = true;
         isLoop = false;
-        afListener = new AFListener();
+
+        if(Build.VERSION.SDK_INT > 7)
+        {
+            afListener = new AFListener();
+            audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+            audioManager.requestAudioFocus(afListener,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN );
+        }
+
         ((TelephonyManager)getSystemService(TELEPHONY_SERVICE)).listen(callListener,CallListener.LISTEN_CALL_STATE);
-        audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-        audioManager.requestAudioFocus(afListener,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN );
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
 
         serviceAlive = true;
@@ -162,14 +168,16 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         isPlaying = false;
         sendBroadcast(new Intent(actionIconPlay));
         sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
-        audioManager.abandonAudioFocus(afListener);
+
+        if(Build.VERSION.SDK_INT > 7)
+            audioManager.abandonAudioFocus(afListener);
     }
     private void downloadAlbumArt(Audio audio)
     {
         if(SettingActivity.getPreferences("downloadart")&& !AlbumArtGetter.isLoadById(audio.getAid())
-                && audio.getTitle() != null && audio.getArtist() != null)
+                && audio.getTitle() != null)
         {
-            if((isOnline && SettingActivity.getPreferences("artonline")) || !isOnline)
+            if(!isOnline || SettingActivity.getPreferences("artonline"))
             {
                 new AlbumArtGetter(audio.getAid(), audio.getArtist(), audio.getTitle())
                 {
@@ -347,7 +355,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
     private void setBroadcast()
     {
-        if(PlayingService.isOnline && SettingActivity.getPreferences("broadcast"))
+        if(PlayingService.isOnline && SettingActivity.getPreferences("broadcast") && MainScreenActivity.api != null)
         {
             new Thread(new Runnable()
             {
@@ -372,12 +380,16 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         dispose();
 
         sendBroadcast(new Intent(actionTrackChanged));
-        startNotif();
+
         sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
         if(isPlaying)
             sendBroadcast(new Intent(actionIconPause));
         else
             sendBroadcast(new Intent(actionIconPlay));
+
+        // that's for skip pause
+        if(isOnline)
+            startNotif();
 
         mediaPlayer = new MediaPlayer();
 
@@ -430,6 +442,10 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
                 {
                     mediaPlayer.start();
                 }
+
+                if(!isOnline)
+                    startNotif();
+
                 if(!MainScreenActivity.isOldSDK)
                     notifyEqualizer();
             }

@@ -136,6 +136,8 @@ public class PlaylistDB extends SQLiteOpenHelper
         db.close();
         isLoading = false;
     }
+
+    //TODO: it's really slow ,need solve this
     void deleteTrack(int positionTrack,String playlist)
     {
         SQLiteDatabase db = getWritableDatabase();
@@ -143,6 +145,7 @@ public class PlaylistDB extends SQLiteOpenHelper
 
         db.close();
     }
+
     void setAcordingPositions(int positionTrack,String playlist)
     {
         isLoading = true;

@@ -128,6 +128,7 @@
     <string name="canceled">отменено</string>
     <string name="error">ошибка</string>
     <string name="please_sign_in">пожалуйста авторизируйтесь</string>
+    <string name="registr_succes">авторизация прошла успешно</string>
     <string-array name ="count_values">
         <item>10</item>
         <item>30</item>

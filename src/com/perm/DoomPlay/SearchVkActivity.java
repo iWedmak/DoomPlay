@@ -53,7 +53,7 @@ public class SearchVkActivity extends AbstractList
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        getMenuInflater().inflate(R.menu.bar_vk,menu);
+        getMenuInflater().inflate(R.menu.bar_search,menu);
         return true;
     }
     private void hideKeyboard()
@@ -156,15 +156,19 @@ public class SearchVkActivity extends AbstractList
         @Override
         public void onClick(View v)
         {
-            if(!isLoading)
+
+            if(PlaylistDB.isLoading)
+                AbstractList.waitMessage(getBaseContext());
+            else if(!MainScreenActivity.isRegister)
+                Toast.makeText(getBaseContext(),getResources().getString(R.string.please_sign_in),Toast.LENGTH_SHORT).show();
+            else  if(!Utils.isOnline(getBaseContext()))
+                Toast.makeText(getBaseContext(), getResources().getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+            else
             {
                 taskLoader = new TaskLoader();
                 taskLoader.execute(editQuery.getText().toString());
                 hideKeyboard();
             }
-            else
-                waitMessage(getBaseContext());
-
         }
     };
 
@@ -189,16 +193,14 @@ public class SearchVkActivity extends AbstractList
 
             } catch (IOException e) {
                 showException(e);
-                isLoading = false;
                 cancel(true);
             } catch (JSONException e) {
                 showException(e);
-                isLoading = false;
                 cancel(true);
             } catch (KException e) {
 
                 handleKException(e);
-                isLoading = false;
+
                 cancel(true);
             }
 
@@ -218,6 +220,7 @@ public class SearchVkActivity extends AbstractList
         {
             super.onCancelled();
             linearLoading.setVisibility(View.GONE);
+            isLoading = false;
         }
 
         @Override

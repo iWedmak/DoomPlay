@@ -158,16 +158,20 @@ abstract class AbstractList extends AbstractControls
                     startLyricsDialog(getSupportFragmentManager(), audios.get(position).getLyrics_id());
                     break;
                 case R.id.itemLike:
-                    if(!PlaylistDB.isLoading)
-                        likeTrack(position);
-                    else
+                    if(PlaylistDB.isLoading)
                         waitMessage(getBaseContext());
+                    else if(!MainScreenActivity.isRegister)
+                        Toast.makeText(getBaseContext(),getResources().getString(R.string.please_sign_in),Toast.LENGTH_SHORT).show();
+                    else
+                        likeTrack(position);
                     break;
                 case R.id.itemDislike:
-                    if(!PlaylistDB.isLoading)
-                        dislikeTrack(position);
-                    else
+                    if(PlaylistDB.isLoading)
                         waitMessage(getBaseContext());
+                    else if(!MainScreenActivity.isRegister)
+                        Toast.makeText(getBaseContext(),getResources().getString(R.string.please_sign_in),Toast.LENGTH_SHORT).show();
+                    else
+                        dislikeTrack(position);
                     break;
                 case R.id.itemDownload:
                     if(DownloadingService.isDownloading(audios.get(position).getAid()))
@@ -181,7 +185,13 @@ abstract class AbstractList extends AbstractControls
                     }
                     break;
                 case R.id.itemMoveToAlbum:
-                    moveToAlbum(getSupportFragmentManager(), audios.get(position).getAid());
+                    if(PlaylistDB.isLoading)
+                        waitMessage(getBaseContext());
+                    else if(!MainScreenActivity.isRegister)
+                        Toast.makeText(getBaseContext(),getResources().getString(R.string.please_sign_in),Toast.LENGTH_SHORT).show();
+                    else
+                        moveToAlbum(getSupportFragmentManager(), audios.get(position).getAid());
+
                     break;
             }
         }
@@ -208,48 +218,46 @@ abstract class AbstractList extends AbstractControls
 
     void dislikeTrack(int position)
     {
-        if(Utils.isOnline(getBaseContext()))
+        new AsyncTask<Integer, Void, Integer>()
         {
-            new AsyncTask<Integer, Void, Integer>()
+            @Override
+            protected Integer doInBackground(Integer... params)
             {
-                @Override
-                protected Integer doInBackground(Integer... params)
+                try
                 {
-                    try
-                    {
-                        MainScreenActivity.api.deleteAudio(audios.get(params[0]).getAid(), Account.account.user_id);
+                    MainScreenActivity.api.deleteAudio(audios.get(params[0]).getAid(), Account.account.user_id);
 
-                    } catch (IOException e)
-                    {
-                        showException(e);
-                        cancel(true);
-                    }
-                    catch (JSONException e)
-                    {
-                        showException(e);
-                        cancel(true);
-                    }
-                    catch (KException e)
-                    {
-                        handleKException(e);
-                        cancel(true);
-                    }
-                    return params[0];
-                }
-
-                @Override
-                protected void onPostExecute(Integer position)
+                } catch (IOException e)
                 {
-                    super.onPostExecute(position);
-                    audios.remove((int) position);
-                    TracksHolder.audiosVk = audios;
-                    adapter.changeData(audios);
-
-                    if(position == PlayingService.indexCurrentTrack && equalsCollections(PlayingService.audios,audios))
-                        playingService.playTrackFromList(PlayingService.indexCurrentTrack);
+                    showException(e);
+                    cancel(true);
                 }
-            }.execute(position);
-        }
+                catch (JSONException e)
+                {
+                    showException(e);
+                    cancel(true);
+                }
+                catch (KException e)
+                {
+                    handleKException(e);
+                    cancel(true);
+                }
+                return params[0];
+            }
+
+            @Override
+            protected void onPostExecute(Integer position)
+            {
+                super.onPostExecute(position);
+                audios.remove((int) position);
+                TracksHolder.audiosVk = audios;
+                adapter.changeData(audios);
+
+                if(position == PlayingService.indexCurrentTrack && equalsCollections(PlayingService.audios,audios))
+                    playingService.playTrackFromList(PlayingService.indexCurrentTrack);
+            }
+        }.execute(position);
+
     }
     public static void startLyricsDialog(FragmentManager manager, long lid)
     {
@@ -263,39 +271,37 @@ abstract class AbstractList extends AbstractControls
 
     void likeTrack(int position)
     {
-        if(Utils.isOnline(getBaseContext()))
+        new AsyncTask<Integer, Void, Void>()
         {
-            new AsyncTask<Integer, Void, Void>()
+            @Override
+            protected Void doInBackground(Integer... params)
             {
-                @Override
-                protected Void doInBackground(Integer... params)
+                try
                 {
-                    try
-                    {
-                       MainScreenActivity.api.addAudio(audios.get(params[0]).getAid(), audios.get(params[0]).getOwner_id());
-                       TracksHolder.audiosVk.add(0,audios.get(params[0]));
+                    MainScreenActivity.api.addAudio(audios.get(params[0]).getAid(), audios.get(params[0]).getOwner_id());
+                    TracksHolder.audiosVk.add(0,audios.get(params[0]));
 
-                    } catch (IOException e)
-                    {
-                        showException(e);
-                        cancel(true);
-                    }
-                    catch (JSONException e)
-                    {
-                        showException(e);
-                        cancel(true);
-                    } catch (KException e)
-                    {
-
-                        handleKException(e);
-                        cancel(true);
-                    }
-                    return null;
-
+                } catch (IOException e)
+                {
+                    showException(e);
+                    cancel(true);
                 }
+                catch (JSONException e)
+                {
+                    showException(e);
+                    cancel(true);
+                } catch (KException e)
+                {
 
-            }.execute(position);
-        }
+                    handleKException(e);
+                    cancel(true);
+                }
+                return null;
+
+            }
+
+        }.execute(position);
+
     }
     final AdapterView.OnItemLongClickListener onItemLongVkListener = new AdapterView.OnItemLongClickListener()
     {

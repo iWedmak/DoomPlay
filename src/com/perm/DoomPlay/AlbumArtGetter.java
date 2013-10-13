@@ -42,11 +42,10 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashSet;
 
-abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
+abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
 {
     private final static String lastFmApiId = "2827ff9b2eb0158b80e7c6d0b511f25d";
     private static final Uri artworkUri = Uri.parse("content://media/external/audio/albumart");
-    private boolean isLoading = false;
     private final String artist;
     private final String title;
     private final long albumId;
@@ -85,56 +84,51 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Bitmap>
     }
 
     @Override
-    protected Bitmap doInBackground(Void... params)
+    protected Void doInBackground(Void... params)
     {
-        isLoading = true;
         String src ;
-        try {
+        try
+        {
             src = findSrc(artist,title);
 
 
 
-
         } catch (ParserConfigurationException e) {
-            e.printStackTrace();   return null;
+            e.printStackTrace(); cancel(true);  return null;
         } catch (SAXException e) {
-            e.printStackTrace();  return null;
+            e.printStackTrace(); cancel(true);  return null;
         } catch (IOException e) {
-            e.printStackTrace();  return null;
+            e.printStackTrace(); cancel(true);  return null;
         }
         if(src == null || src.equals(""))
+        {
+            cancel(true);
             return null;
-        return downloadBitmap(src);
+        }
+
+        Bitmap bitmap = downloadBitmap(src);
+        if(bitmap != null)
+        {
+             insertBitmapInMediaStore(bitmap,albumId);
+        }
+
+        return null;
     }
 
     @Override
-    protected void onPostExecute(Bitmap bitmap)
+    protected void onCancelled()
     {
-        super.onPostExecute(bitmap);
-        isLoading = false;
+        super.onCancelled();
+        set.remove(albumId);
+    }
 
-        if(bitmap != null)
-        {
-            new AsyncTask<Bitmap,Void,Void>()
-            {
-                @Override
-                protected Void doInBackground(Bitmap... params)
-                {
-                    insertBitmapInMediaStore(params[0],albumId);
-                    return null;
-                }
+    @Override
+    protected void onPostExecute(Void aVoid)
+    {
+        super.onPostExecute(aVoid);
 
-                @Override
-                protected void onPostExecute(Void aVoid)
-                {
-                    super.onPostExecute(aVoid);
-                    onBitmapSaved(albumId);
-                    set.remove(albumId);
-                }
-            }.execute(bitmap);
-
-
-        }
+        onBitmapSaved(albumId);
+        set.remove(albumId);
     }
 
 

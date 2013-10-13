@@ -56,6 +56,9 @@ public class AlbumArtistActivity extends AbstractReceiver
         else
             albumArtist = TracksHolder.allAlbums;
 
+        if(albumArtist == null)
+            albumArtist = new String[0];
+
         AlbumArtistAdapter adapter = new AlbumArtistAdapter(albumArtist);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(onClickAlbumArtist);

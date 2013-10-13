@@ -17,11 +17,8 @@ package com.perm.DoomPlay;
  *
  *    You can contact me <DoomPlaye@gmail.com>
  */
-import android.util.Log;
-
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -65,11 +62,11 @@ public class Download implements Runnable
         Thread thread = new Thread(this);
         thread.start();
     }
-    public float getProgress()
-    {
-        Log.i("TAG AUDIO",String.valueOf(((float)downloadedS/size)*100));
 
-        return ((float)downloadedS/size)*100;
+    //TODO: doesn't work , getContentLength always return 172;
+    public int getProgress()
+    {
+        return (int)((downloadedS*100)/size);
     }
 
     public String getUrl()
@@ -102,7 +99,6 @@ public class Download implements Runnable
 
     private void stateChanged()
     {
-
         notifyObservers();
     }
 
@@ -111,7 +107,7 @@ public class Download implements Runnable
     public void run()
     {
         RandomAccessFile file = null;
-        InputStream inputStream = null;
+        BufferedInputStream inputStream = null;
         HttpURLConnection connection = null;
         try
         {
@@ -124,10 +120,9 @@ public class Download implements Runnable
 
             String connectLength = connection.getHeaderField("Content-Length");
 
-            Log.i("TAG AUDIO","content length first is " + connectLength);
 
 
-            if(connectLength == null || Integer.parseInt(connectLength) < 1 || connectLength.equals(""))
+            if(connectLength == null || Long.parseLong(connectLength) < 1 || connectLength.equals(""))
                 error();
 
             size = Long.parseLong(connectLength);
@@ -135,11 +130,10 @@ public class Download implements Runnable
             file = new RandomAccessFile(filePath,"rw");
             file.seek(downloadedS);
 
+
             inputStream = new BufferedInputStream(url.openStream());
+            inputStream.skip(downloadedS);
 
-            size = inputStream.available();
-
-            Log.i("TAG AUDIO","content length first is " + size);
 
             int read ;
 

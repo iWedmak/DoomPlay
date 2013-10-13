@@ -82,7 +82,16 @@ public class ListVkActivity extends AbstractList
         switch (item.getItemId())
         {
             case R.id.itemRefresh:
-                refreshAudios();
+                if(PlaylistDB.isLoading)
+                    AbstractList.waitMessage(getBaseContext());
+                else if(!MainScreenActivity.isRegister)
+                    Toast.makeText(getBaseContext(),getResources().getString(R.string.please_sign_in),Toast.LENGTH_SHORT).show();
+                else  if(!Utils.isOnline(getBaseContext()))
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
+                else
+                {
+                    refreshAudios();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

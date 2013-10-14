@@ -37,6 +37,7 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.widget.RemoteViews;
@@ -82,6 +83,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     private AFListener afListener ;
     private final CallListener callListener = new CallListener();
     private OnLoadingTrackListener loadingListener;
+    private final static Random random = new Random();
 
     public static boolean isLoadingTrack()
     {
@@ -302,10 +304,51 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
     private void startNotif()
     {
-        if(!MainScreenActivity.isJellyBean )
+        if(MainScreenActivity.isJellyBean )
+            startForeground(idForeground,createJellyBeanNotif());
+        else if(Build.VERSION.SDK_INT >= 11)
             startForeground(idForeground, createNotification());
         else
-            startForeground(idForeground,createJellyBeanNotif());
+            startForeground(idForeground, createOldNotif());
+    }
+
+    private Notification createOldNotif()
+    {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+
+        Intent intentActivity;
+
+        if(SettingActivity.getPreferences(SettingActivity.keyOnClickNotif))
+        {
+            intentActivity = new Intent(FullPlaybackActivity.actionReturnFull);
+            intentActivity.setClass(this,FullPlaybackActivity.class);
+            intentActivity.putExtra(FileSystemActivity.keyMusic,audios);
+        }
+        else
+        {
+            intentActivity = FullPlaybackActivity.returnSmall(this);
+        }
+        intentActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        builder.setContentIntent(PendingIntent.getActivity(this,0,intentActivity,PendingIntent.FLAG_UPDATE_CURRENT))
+                .setOngoing(true).setSmallIcon(isPlaying ?  R.drawable.status_icon_pause : R.drawable.status_icon_play);
+
+        Audio audio = audios.get(indexCurrentTrack);
+
+        builder.setContentTitle(audio.getTitle());
+        builder.setContentText(audio.getArtist());
+
+        Bitmap cover = AlbumArtGetter.getBitmapById(audio.getAid(),this);
+        if (cover == null)
+        {
+            downloadAlbumArt(audio);
+            builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.fallback_cover));
+        }
+        else
+        {
+            builder.setLargeIcon(cover);
+        }
+
+        return builder.build();
     }
 
     private void handleNotifControll(String action)
@@ -415,7 +458,6 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
             @Override
             protected Void doInBackground(Void... params)
             {
-
                 try
                 {
                     mediaPlayer.setDataSource(audios.get(indexCurrentTrack).getUrl());
@@ -423,7 +465,6 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
                 } catch (IOException e)
                 {
-                    publishProgress(e.getMessage());
                     e.printStackTrace();
                 }
                 return null;
@@ -448,13 +489,6 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
                 if(!MainScreenActivity.isOldSDK)
                     notifyEqualizer();
-            }
-
-            @Override
-            protected void onProgressUpdate(String... values)
-            {
-                super.onProgressUpdate(values);
-                Toast.makeText(getBaseContext(),values[0],Toast.LENGTH_SHORT);
             }
         }.execute();
 
@@ -497,9 +531,10 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
         if(isShuffle)
         {
-            Random random = new Random();
-            indexCurrentTrack = random.nextInt(audios.size()-1);
-
+            if(audios.size() != 1 && audios.size() != 0)
+            {
+                indexCurrentTrack = random.nextInt(audios.size()-1);
+            }
         }
         else if(!isLoop)
             changeTrack(direction);
@@ -564,14 +599,23 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
             isPlaying = false;
             mediaPlayer.pause();
             sendBroadcast(new Intent(actionIconPlay));
+
+            if(Build.VERSION.SDK_INT < 11)
+                stopForeground(true);
+            else
+                startNotif();
+
         }
         else
         {
             isPlaying = true;
             mediaPlayer.start();
             sendBroadcast(new Intent(actionIconPause));
+
+            startNotif();
+
         }
-        startNotif();
+
         sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
     }
     void setCurrentPosition(int positionMillis)
@@ -651,13 +695,13 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
             if((TelephonyManager.CALL_STATE_RINGING == state && isPlaying) ||
                     (TelephonyManager.CALL_STATE_OFFHOOK == state && isPlaying))
             {
-                if(SettingActivity.getPreferences(SettingActivity.keyOnCall)&& mediaPlayer != null)
+                if(SettingActivity.getPreferences(SettingActivity.keyOnCall)&& isPrepared)
                     playPause();
                 wasPlaying = true;
             }
             else if(TelephonyManager.CALL_STATE_IDLE == state && wasPlaying && !isPlaying)
             {
-                if(SettingActivity.getPreferences(SettingActivity.keyAfterCall)&& mediaPlayer != null)
+                if(SettingActivity.getPreferences(SettingActivity.keyAfterCall)&& isPrepared)
                     playPause();
                 wasPlaying = false;
             }
@@ -673,7 +717,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
             switch (focusChange)
             {
                 case AudioManager.AUDIOFOCUS_LOSS:
-                    if(SettingActivity.getPreferences(SettingActivity.keyLongFocus)&& isPlaying && mediaPlayer != null)
+                    if(SettingActivity.getPreferences(SettingActivity.keyLongFocus)&& isPlaying && isPrepared )
                         playPause();
                     wasPlaying = true;
 
@@ -681,14 +725,14 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
 
-                    if(SettingActivity.getPreferences(SettingActivity.keyShortFocus) && isPlaying && mediaPlayer != null)
+                    if(SettingActivity.getPreferences(SettingActivity.keyShortFocus) && isPlaying && isPrepared)
                         playPause();
                     wasPlaying = true;
 
                     break;
                 case AudioManager.AUDIOFOCUS_GAIN:
 
-                    if(SettingActivity.getPreferences(SettingActivity.keyOnGain) && wasPlaying && !isPlaying && mediaPlayer != null)
+                    if(SettingActivity.getPreferences(SettingActivity.keyOnGain) && wasPlaying && !isPlaying && isPrepared)
                         playPause();
                     wasPlaying = false;
 

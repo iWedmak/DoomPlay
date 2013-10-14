@@ -51,6 +51,8 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
     private final long albumId;
     private static final HashSet<Long> set = new HashSet<Long>();
 
+    //return bitmap reatrived from metadata
+
     public static Bitmap getBitmapMetadata(MediaMetadataRetriever metadata)
     {
         byte[] bitmap = metadata.getEmbeddedPicture();
@@ -68,6 +70,7 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
 
     protected abstract void onBitmapSaved(long albumId);
 
+    // проверяет закачивается ли обложка для трэка с данным id
     static boolean isLoadById(long id)
     {
         return set.contains(id);
@@ -83,6 +86,7 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
         set.add(albumId);
     }
 
+    //ищет , скачивает и вставляет в MediaStore обложку
     @Override
     protected Void doInBackground(Void... params)
     {
@@ -102,7 +106,7 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
         }
         if(src == null || src.equals(""))
         {
-            cancel(true);
+            cancel(false);
             return null;
         }
 
@@ -132,6 +136,7 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
     }
 
 
+    // возвращает адрес обложки найденной на lastfm
     private static String findSrc(String artist,String title) throws ParserConfigurationException, SAXException, IOException
     {
         title ="&track=" + URLEncoder.encode(title,"utf-8");
@@ -174,6 +179,7 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
 
     }
 
+    // возвращает обложку скачанную с заданного адреса
     private static Bitmap downloadBitmap(String src)
     {
 
@@ -191,7 +197,6 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
         }
         catch (IOException e)
         {
-            Log.e("TAG URL",e.toString());
             return null;
         }
         finally
@@ -206,6 +211,8 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
                 }
         }
     }
+
+    //помещает обложку в MediaStore
     private static void insertBitmapInMediaStore(Bitmap bitmap, long albumId)
     {
         OutputStream stream;
@@ -241,6 +248,7 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
         MyApplication.getInstance().getContentResolver().insert(artworkUri, cv);
     }
 
+    //возвращает обложку для трэка с данным id
     public static Bitmap getBitmapById(long id,Context context)
     {
         Uri uri = ContentUris.withAppendedId(artworkUri, id);

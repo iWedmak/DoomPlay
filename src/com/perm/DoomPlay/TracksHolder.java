@@ -47,43 +47,66 @@ class TracksHolder
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 projection,MediaStore.Audio.Media.IS_MUSIC + " != 0", null, null);
 
-        allAudios = Audio.parseAudiosCursor(cursor);
+        if(cursor != null)
+        {
+            allAudios = Audio.parseAudiosCursor(cursor);
+            cursor.close();
+        }
+        else
+        {
+             allAudios = new ArrayList<Audio>(0);
+        }
+
 
         Cursor cursorAlbum = context.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
                 new String[]{MediaStore.Audio.Albums.ALBUM,MediaStore.Audio.Albums.ARTIST },null, null,null );
+
+        if(cursorAlbum != null)
+        {
+            allAlbums = new String[cursorAlbum.getCount()];
+            allAcordingArtists = new String[cursorAlbum.getCount()];
+
+            if(cursorAlbum.moveToFirst())
+            {
+                do
+                {
+                    allAlbums[cursorAlbum.getPosition()]= cursorAlbum.getString(cursorAlbum.getColumnIndex(MediaStore.Audio.Albums.ALBUM));
+                    allAcordingArtists[cursorAlbum.getPosition()] = cursorAlbum.getString(cursorAlbum.getColumnIndex(MediaStore.Audio.Albums.ARTIST));
+
+                } while (cursorAlbum.moveToNext());
+            }
+
+            cursorAlbum.close();
+        }
+        else
+        {
+            allAlbums = new String[0];
+            allArtist = new String[0];
+        }
 
         Cursor cursorArtist = context.getContentResolver().query(MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI,
                 new String[]{MediaStore.Audio.Artists.ARTIST},null, null,null );
 
 
-        allAlbums = new String[cursorAlbum.getCount()];
-        allArtist = new String[cursorArtist.getCount()];
-        allAcordingArtists = new String[cursorAlbum.getCount()];
-
-        if(cursorAlbum.moveToFirst())
+        if(cursorArtist != null)
         {
-            do
+            allArtist = new String[cursorArtist.getCount()];
+
+            if(cursorArtist.moveToFirst())
             {
-                allAlbums[cursorAlbum.getPosition()]= cursorAlbum.getString(cursorAlbum.getColumnIndex(MediaStore.Audio.Albums.ALBUM));
-                allAcordingArtists[cursorAlbum.getPosition()] = cursorAlbum.getString(cursorAlbum.getColumnIndex(MediaStore.Audio.Albums.ARTIST));
+                do
+                {
+                    allArtist[cursorArtist.getPosition()]= cursorArtist.getString(cursorArtist.getColumnIndex(MediaStore.Audio.Artists.ARTIST));
 
-            } while (cursorAlbum.moveToNext());
+                } while (cursorArtist.moveToNext());
+            }
+            cursorArtist.close();
+
         }
-
-        if(cursorArtist.moveToFirst())
+        else
         {
-            do
-            {
-                allArtist[cursorArtist.getPosition()]= cursorArtist.getString(cursorArtist.getColumnIndex(MediaStore.Audio.Artists.ARTIST));
-
-            } while (cursorArtist.moveToNext());
+            allArtist = new String[0];
         }
-
-
-
-        cursor.close();
-        cursorAlbum.close();
-        cursorArtist.close();
 
 
         Serializator<User> factory1 = new Serializator<User>(context, Serializator.FileNames.User);

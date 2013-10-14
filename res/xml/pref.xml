@@ -37,14 +37,14 @@
                              android:key="longfocus"
                              android:summary="@string/set_pause_on_long"
                              android:title="@string/Long_audiofocus"
-                             android:defaultValue="true">
+                             android:defaultValue="false">
                      </CheckBoxPreference>
 
                      <CheckBoxPreference
                              android:key="gainfocus"
                              android:summary="@string/after_gain_focus"
                              android:title="@string/Gain_focus"
-                             android:defaultValue="true">
+                             android:defaultValue="false">
                      </CheckBoxPreference>
                  </PreferenceCategory>
              </PreferenceScreen>

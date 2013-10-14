@@ -54,6 +54,7 @@ public class Download implements Runnable
         this.observer = observer;
         size = -1;
         downloadedS = 0;
+        status = States.PAUSED;
     }
 
 
@@ -99,7 +100,7 @@ public class Download implements Runnable
 
     private void stateChanged()
     {
-        notifyObservers();
+        observer.doomUpdate(aid);
     }
 
 
@@ -178,14 +179,5 @@ public class Download implements Runnable
     public States getStatus()
     {
         return status;
-    }
-    public long getSize()
-    {
-        return size;
-    }
-
-    void notifyObservers()
-    {
-        observer.doomUpdate(aid);
     }
 }

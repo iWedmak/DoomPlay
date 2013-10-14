@@ -147,8 +147,9 @@ public class FileSystemActivity extends AbstractReceiver
         {
             MediaMetadataRetriever metadata = new MediaMetadataRetriever();
             metadata.setDataSource(selectionArgs);
-            audio = new Audio(metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST),
-                    metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE),file.getAbsolutePath(),0);
+
+
+            audio = new Audio("unknown",file.getName(),selectionArgs,0);
         }
         cursor.close();
         return audio;

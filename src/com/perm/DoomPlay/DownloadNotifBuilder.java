@@ -24,6 +24,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 
@@ -53,13 +54,38 @@ class DownloadNotifBuilder
         notificationId = counter;
     }
 
+    private Notification createStartingOld()
+    {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
 
-    public Notification createStarting(int progress)
+        builder.setOngoing(true);
+        builder.setContentTitle( context.getResources().getString(R.string.downloading));
+        builder.setContentText(track.getArtist() + "-" + track.getTitle());
+        builder.setSmallIcon(R.drawable.download_icon);
+
+        Intent intentClose = new Intent(PlayingService.actionClose);
+        intentClose.putExtra("aid", track.getAid());
+        intentClose.setComponent(new ComponentName(context, DownloadingService.class));
+
+        builder.setContentIntent(PendingIntent.getService(context, notificationId, intentClose, PendingIntent.FLAG_UPDATE_CURRENT));
+
+        return builder.build();
+    }
+
+    public Notification createStarting()
+    {
+        if(Build.VERSION.SDK_INT >= 11)
+            return createStartingNew();
+        else
+            return createStartingOld();
+    }
+
+    private Notification createStartingNew()
     {
         Notification notification = new Notification();
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.notif_download);
 
-        views.setProgressBar(R.id.progressDownload, 100,progress, false);
+        views.setProgressBar(R.id.progressDownload, 100,0, true);
         views.setTextViewText(R.id.notifTitle, context.getResources().getString(R.string.downloading));
         views.setTextViewText(R.id.notifArtist, track.getArtist() + "-" + track.getTitle());
         views.setImageViewResource(R.id.notifPause,R.drawable.widget_pause);
@@ -88,12 +114,13 @@ class DownloadNotifBuilder
 
     }
 
+
     public Notification createPaused()
     {
         Notification notification = new Notification();
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.notif_download);
 
-        views.setProgressBar(R.id.progressDownload, 100,0, true);
+        views.setProgressBar(R.id.progressDownload, 100,0, false);
         views.setTextViewText(R.id.notifTitle,  context.getResources().getString(R.string.paused));
         views.setTextViewText(R.id.notifArtist, track.getArtist() + "-" + track.getTitle());
         views.setImageViewResource(R.id.notifPause,R.drawable.widget_play);

@@ -40,25 +40,28 @@ public class DownloadingService extends Service implements Download.DoomObserver
 
     private final static Map<Long,DownloadHolder> downloads = new HashMap<Long,DownloadHolder>();
 
-    private static boolean isUpdate = false;
+    //private static boolean isUpdate = false;
 
 
     @Override
     public void doomUpdate(long aid)
     {
         DownloadHolder holder = downloads.get(aid);
+
+        // i don't no why ,but if i fast click on notif (for 3 seconds) it's throw the exception
+        if(holder == null || holder.download == null)
+            return;
+
         Notification notification = null;
 
         switch (holder.download.getStatus())
         {
             case DOWNLOADING:
-                notification = holder.downloadBuilder.createStarting(holder.download.getProgress());
-                startUpdatingThread();
+                notification = holder.downloadBuilder.createStarting();
                 break;
             case CANCELLED:
                 notification = holder.downloadBuilder.createCanceled();
                 dispose(aid);
-                new File(holder.download.filePath).delete();
                 break;
             case COMPLETED:
                 notification = holder.downloadBuilder.createCompleted();
@@ -67,7 +70,6 @@ public class DownloadingService extends Service implements Download.DoomObserver
             case ERROR:
                 notification = holder.downloadBuilder.createError();
                 dispose(aid);
-                new File(holder.download.filePath).delete();
                 break;
             case PAUSED:
                 notification = holder.downloadBuilder.createPaused();
@@ -93,11 +95,10 @@ public class DownloadingService extends Service implements Download.DoomObserver
     private void dispose(long aid)
     {
         downloads.remove(aid);
-
         if(downloads.size() == 0)
         {
             stopSelf();
-            isUpdate = false;
+            //isUpdate = false;
         }
 
     }
@@ -128,6 +129,7 @@ public class DownloadingService extends Service implements Download.DoomObserver
     }
 
 
+    /*
     private final Thread updatingThread = new Thread(new Runnable()
     {
         @Override
@@ -146,7 +148,7 @@ public class DownloadingService extends Service implements Download.DoomObserver
                 {
                     if(holder.download.getStatus() == Download.States.DOWNLOADING)
                     {
-                        Notification notification = holder.downloadBuilder.createStarting((int)holder.download.getProgress());
+                        Notification notification = holder.downloadBuilder.createStarting(holder.download.getProgress());
                         manager.notify(holder.downloadBuilder.notificationId,notification);
                     }
                 }
@@ -155,8 +157,6 @@ public class DownloadingService extends Service implements Download.DoomObserver
 
         }
     });
-
-
     private void startUpdatingThread()
     {
          if(!isUpdate)
@@ -165,6 +165,7 @@ public class DownloadingService extends Service implements Download.DoomObserver
              updatingThread.start();
          }
     }
+    */
 
 
     private static String generateFilePath(Audio track)
@@ -179,7 +180,7 @@ public class DownloadingService extends Service implements Download.DoomObserver
             title.substring(0,25);
 
 
-        String trackName = (track.getArtist() + "-" + title + ".mp3").replaceAll("[%#@^&]","");
+        String trackName = (track.getArtist() + "-" + title + ".mp3").replaceAll("[%#@^&$]","");
 
 
         return defaultFolder + trackName;
@@ -204,7 +205,6 @@ public class DownloadingService extends Service implements Download.DoomObserver
         {
             long aid = intent.getLongExtra("aid", 666);
 
-            Log.i("TAG AUDIO"," aid = " + aid);
 
             Download d = downloads.get(aid).download;
             d.cancel();

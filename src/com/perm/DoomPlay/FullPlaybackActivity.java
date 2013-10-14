@@ -23,7 +23,6 @@ package com.perm.DoomPlay;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -216,18 +215,16 @@ public class FullPlaybackActivity  extends AbstractControls
             audio = Audio.parseAudioCursor(cursor);
         else
         {
-            MediaMetadataRetriever metadata = new MediaMetadataRetriever();
             if(intent.getScheme().equals("file"))
             {
-                metadata.setDataSource(filePath);
+                audio = new Audio("unknown",new File(filePath).getName(),filePath,0);
             }
             else
             {
-                metadata.setDataSource(intent.getDataString());
-            }
+                File file = new File(intent.getData().getPath());
 
-            audio = new Audio(metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST),
-                    metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE),intent.getDataString(),0);
+                audio = new Audio("unknown",file.getName(),file.getAbsolutePath(),0);
+            }
         }
 
         cursor.close();

@@ -27,6 +27,7 @@ import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
@@ -37,7 +38,23 @@ class Utils
 {
     private Utils(){}
 
-    private static final String[] EXTENSIONS = { ".mp3" , ".flac", ".mp4",".wav",".ogg"};
+    private static String[] EXTENSIONS ;
+
+    static
+    {
+        if(Build.VERSION.SDK_INT > 11)
+        {
+             EXTENSIONS = new String[]{ ".mp3",".flac",".m4a",".aac", ".mp4",".wav",".ogg",".midi",".3gp",".ota",".imy",".rtx",".xmf",".mxmf"};
+        }
+        else
+        {
+            EXTENSIONS = new String[]{".mp3",".mp4",".wav",".m4a",".ogg",".midi",".3gp",".ota",".imy",".rtx",".xmf",".mxmf"};
+        }
+
+    }
+
+
+
 
     public static boolean trackChecker(String trackToTest)
     {

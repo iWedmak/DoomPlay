@@ -104,10 +104,6 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         return true;
     }
 
-
-
-
-
     private void handleError()
     {
         dispose();
@@ -192,7 +188,6 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
                         sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
                         startNotif();
-
                         sendBroadcast(new Intent(FullPlaybackActivity.actionDataChanged));
                     }
                 }.execute();

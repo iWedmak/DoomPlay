@@ -32,6 +32,15 @@ abstract class AbstractList extends AbstractControls
     LinearLayout linearLoading;
     PlaylistDB playlistDB;
 
+    static void startLiryctDialog(FragmentManager fragmentManager,String artist,String title)
+    {
+        LyricsDialog dialog = new LyricsDialog();
+        Bundle bundle = new Bundle();
+        bundle.putString(LyricsDialog.keyLyricsTitle,artist+" "+title);
+        dialog.setArguments(bundle);
+        dialog.show(fragmentManager,"tag");
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -41,15 +50,19 @@ abstract class AbstractList extends AbstractControls
     }
     void markItem(int position, boolean withScroll)
     {
-        if(PlayingService.serviceAlive && equalsCollections(PlayingService.audios, audios))
+        if(adapter != null)
         {
+            if(PlayingService.serviceAlive && equalsCollections(PlayingService.audios, audios))
+            {
 
-            adapter.setMarkedItem(position);
-            if(withScroll && SettingActivity.getPreferences(SettingActivity.keyScroll) && Build.VERSION.SDK_INT >= 8)
-                listView.smoothScrollToPosition(position);
+                adapter.setMarkedItem(position);
+                if(withScroll && SettingActivity.getPreferences(SettingActivity.keyScroll) && Build.VERSION.SDK_INT >= 8)
+                    listView.smoothScrollToPosition(position);
+            }
+            else
+                adapter.setMarkedItem(PlayingService.valueIncredible);
         }
-        else
-            adapter.setMarkedItem(PlayingService.valueIncredible);
+
     }
      static boolean equalsCollections(List<Audio> first, List<Audio> second)
      {
@@ -102,12 +115,6 @@ abstract class AbstractList extends AbstractControls
                 return true;
             case R.id.itemFullScreen:
                 goFullScreen();
-                return true;
-            case R.id.itemSettings:
-                startActivity(new Intent(this,SettingActivity.class));
-                return true;
-            case R.id.itemExit:
-                sendBroadcast(new Intent(actionKill));
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -230,17 +237,17 @@ abstract class AbstractList extends AbstractControls
                 } catch (IOException e)
                 {
                     showException(e);
-                    cancel(true);
+                    cancel(false);
                 }
                 catch (JSONException e)
                 {
                     showException(e);
-                    cancel(true);
+                    cancel(false);
                 }
                 catch (KException e)
                 {
                     handleKException(e);
-                    cancel(true);
+                    cancel(false);
                 }
                 return params[0];
             }
@@ -250,7 +257,7 @@ abstract class AbstractList extends AbstractControls
             {
                 super.onPostExecute(position);
                 audios.remove((int) position);
-                TracksHolder.audiosVk = audios;
+                ListVkActivity.audiosVk = audios;
                 adapter.changeData(audios);
 
                 if(position == PlayingService.indexCurrentTrack && equalsCollections(PlayingService.audios,audios))
@@ -279,22 +286,22 @@ abstract class AbstractList extends AbstractControls
                 try
                 {
                     MainScreenActivity.api.addAudio(audios.get(params[0]).getAid(), audios.get(params[0]).getOwner_id());
-                    TracksHolder.audiosVk.add(0,audios.get(params[0]));
+                    ListVkActivity.audiosVk.add(0,audios.get(params[0]));
 
                 } catch (IOException e)
                 {
                     showException(e);
-                    cancel(true);
+                    cancel(false);
                 }
                 catch (JSONException e)
                 {
                     showException(e);
-                    cancel(true);
+                    cancel(false);
                 } catch (KException e)
                 {
 
                     handleKException(e);
-                    cancel(true);
+                    cancel(false);
                 }
                 return null;
 

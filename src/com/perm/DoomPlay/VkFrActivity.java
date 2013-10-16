@@ -7,7 +7,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 import com.perm.vkontakte.api.Account;
 import com.perm.vkontakte.api.KException;
 import com.perm.vkontakte.api.User;
@@ -24,7 +27,6 @@ public class VkFrActivity extends AbstractVkItems
     }
 
     private static ArrayList<User> users;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

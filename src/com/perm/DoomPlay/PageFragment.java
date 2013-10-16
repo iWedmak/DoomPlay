@@ -20,7 +20,6 @@ package com.perm.DoomPlay;
  */
 
 
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -35,7 +34,6 @@ public class PageFragment extends Fragment
     private static final String argumentPageNumber = "arg_page_number";
 
     private int pageNumber;
-    private static boolean isPortrait;
 
     static PageFragment newInstance(int page)
     {
@@ -55,10 +53,7 @@ public class PageFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState)
     {
-        isPortrait = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-
-
-        View page = isPortrait ? inflater.inflate(R.layout.page,container,false) : inflater.inflate(R.layout.page_landscape,container,false);
+        View page = inflater.inflate(R.layout.page,container,false);
         ImageView imgAlbum = (ImageView)page.findViewById(R.id.imageAlbum);
         TextView textNumberSong = (TextView)page.findViewById(R.id.textNumberSong);
 

@@ -59,12 +59,6 @@ abstract class AbstractVkItems extends AbstractReceiver
             case R.id.itemInterrupt:
                 cancelLoading();
                 return true;
-            case R.id.itemExit:
-                sendBroadcast(new Intent(actionKill));
-                return true;
-            case R.id.itemSettings:
-                startActivity(new Intent(this,SettingActivity.class));
-                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -145,15 +139,15 @@ abstract class AbstractVkItems extends AbstractReceiver
             catch (KException e)
             {
                 handleKException(e);
-                cancel(true);
+                cancel(false);
             } catch (JSONException e)
             {
                 showException(e);
-                cancel(true);
+                cancel(false);
             } catch (IOException e)
             {
                 showException(e);
-                cancel(true);
+                cancel(false);
             }
             return null;
         }

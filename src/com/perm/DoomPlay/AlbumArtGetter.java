@@ -162,10 +162,11 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
             connection.disconnect();
 
             doc.getDocumentElement().normalize();
+
             NodeList nodeList = doc.getElementsByTagName("image");
 
             if(nodeList != null && nodeList.getLength() != 0)
-                return nodeList.item(SettingActivity.getPreference("qualityart")).getTextContent();
+                return nodeList.item(SettingActivity.getPreference("qualityart")+1).getTextContent();
             else
                 return null;
 

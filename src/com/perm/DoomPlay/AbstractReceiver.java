@@ -34,7 +34,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.perm.vkontakte.api.Account;
 import com.perm.vkontakte.api.KException;
 
 import java.util.ArrayList;
@@ -52,11 +51,8 @@ abstract class AbstractReceiver extends ActionBarActivity
 
     public void handleKException(KException e)
     {
-
         if(e.getMessage().contains("autorization failded"))
         {
-            Account.account.access_token = null;
-            Account.account.save(this);
             MainScreenActivity.isRegister = false;
         }
         showException(e);
@@ -244,10 +240,17 @@ abstract class AbstractReceiver extends ActionBarActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        if(item.getItemId() == android.R.id.home)
+        switch(item.getItemId())
         {
-            startActivity(new Intent(this, MainScreenActivity.class));
-            return true;
+            case android.R.id.home:
+                startActivity(new Intent(this, MainScreenActivity.class));
+                return true;
+            case R.id.itemSettings:
+                startActivity(new Intent(this,SettingActivity.class));
+                return true;
+            case R.id.itemExit:
+                sendBroadcast(new Intent(actionKill));
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

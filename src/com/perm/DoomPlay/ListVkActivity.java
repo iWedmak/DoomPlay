@@ -35,15 +35,11 @@ import java.util.ArrayList;
 
 public class ListVkActivity extends AbstractList
 {
+    public static ArrayList<Audio> audiosVk;
     static String currentAction ;
     public static final String actionMyMusic ="actionMyMusic";
     public static final String actionMyAlbums = "actionMyAlbums";
     public static final String actionJust = "actionJust";
-    private static boolean isFirst;
-    static
-    {
-        isFirst = true;
-    }
 
 
     @Override
@@ -59,11 +55,15 @@ public class ListVkActivity extends AbstractList
         initializeAbstract();
         checkIsShown(savedInstanceState);
 
-        if(audios.size() == 0 && currentAction.equals(actionMyMusic) && isFirst)
+        if(currentAction.equals(actionMyMusic) && audiosVk == null)
         {
             refreshAudios();
-            isFirst = false;
         }
+        else if(currentAction.equals(actionMyMusic))
+        {
+            audios = audiosVk;
+        }
+
 
     }
 
@@ -144,11 +144,19 @@ public class ListVkActivity extends AbstractList
                 {
                     if(currentAction.equals(actionMyMusic))
                     {
-                        audios = TracksHolder.audiosVk = MainScreenActivity.api.getAudio(Account.account.user_id,
+                        audios = audiosVk = MainScreenActivity.api.getAudio(Account.account.user_id,
                             null,null,SettingActivity.getPreference("countvkall"));
 
-                        Serializator<Audio> factory = new Serializator<Audio>(getBaseContext(), Serializator.FileNames.Audio);
-                        factory.inSerialize(audios);
+                        if(adapter == null)
+                        {
+                            adapter = new ListsAdapter(audios,getBaseContext());
+                            listView.setAdapter(adapter);
+                        }
+                        else
+                        {
+                            adapter.changeData(audios);
+                        }
+
                     }
 
                     else if(currentAction.equals(actionMyAlbums))
@@ -158,15 +166,15 @@ public class ListVkActivity extends AbstractList
 
                 } catch (IOException e) {
                     showException(e);
-                    cancel(true);
+                    cancel(false);
                 } catch (JSONException e)
                 {
                     showException(e);
-                    cancel(true);
+                    cancel(false);
                 } catch (KException e) {
 
                     handleKException(e);
-                    cancel(true);
+                    cancel(false);
 
                 }
                 return null;
@@ -225,10 +233,8 @@ public class ListVkActivity extends AbstractList
 
     private void initializeUi()
     {
-        adapter = new ListsAdapter(audios,this);
         listView = (ListView)findViewById(R.id.listAllSongs);
         listView.setOnItemClickListener(onItemTrackClick);
-        listView.setAdapter(adapter);
         if(currentAction.equals(actionMyMusic) || currentAction.equals(actionMyAlbums))
         {
             listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()

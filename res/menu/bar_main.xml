@@ -10,6 +10,12 @@
             android:title="@string/Rescan">
     </item>
     <item
+            android:id="@+id/itemSignIn"
+            android:icon="@drawable/sign_in"
+            yourapp:showAsAction="always"
+            android:title="@string/sign_in">
+    </item>
+    <item
             android:id="@+id/itemSettings"
             yourapp:showAsAction="never"
             android:title ="@string/settings">

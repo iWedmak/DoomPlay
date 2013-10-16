@@ -32,7 +32,6 @@ class TracksHolder
     public static String[] allArtist;
     public static String[] allAlbums;
     private static String[] allAcordingArtists;
-    public static ArrayList<Audio> audiosVk;
     public static ArrayList<Audio> allAudios;
 
 
@@ -45,7 +44,7 @@ class TracksHolder
     public static void scanCard(Context context)
     {
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                projection,MediaStore.Audio.Media.IS_MUSIC + " != 0", null, null);
+                projection,null, null, null);
 
         if(cursor != null)
         {
@@ -109,17 +108,14 @@ class TracksHolder
         }
 
 
-        Serializator<User> factory1 = new Serializator<User>(context, Serializator.FileNames.User);
-        VkFrActivity.setUsers(factory1.getSerialization());
+        Serializator<User> serializatorUser = new Serializator<User>(context, Serializator.FileNames.User);
+        VkFrActivity.setUsers(serializatorUser.getSerialization());
 
-        Serializator<Group> factory2 = new Serializator<Group>(context, Serializator.FileNames.Group);
-        VkGrActivity.setGroups(factory2.getSerialization());
+        Serializator<Group> serializatorGroup = new Serializator<Group>(context, Serializator.FileNames.Group);
+        VkGrActivity.setGroups(serializatorGroup.getSerialization());
 
-        Serializator<Audio> factory3 = new Serializator<Audio>(context, Serializator.FileNames.Audio);
-        audiosVk = factory3.getSerialization();
-
-        Serializator<AudioAlbum> factory4 = new Serializator<AudioAlbum>(context, Serializator.FileNames.Album);
-        VkAlbumsActivity.albums = factory4.getSerialization();
+        Serializator<AudioAlbum> serializatorAlbum = new Serializator<AudioAlbum>(context, Serializator.FileNames.Album);
+        VkAlbumsActivity.albums = serializatorAlbum.getSerialization();
 
 
         isScanned = true;

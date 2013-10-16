@@ -193,15 +193,14 @@ public class SearchVkActivity extends AbstractList
 
             } catch (IOException e) {
                 showException(e);
-                cancel(true);
+                cancel(false);
             } catch (JSONException e) {
                 showException(e);
-                cancel(true);
+                cancel(false);
             } catch (KException e) {
 
                 handleKException(e);
-
-                cancel(true);
+                cancel(false);
             }
 
             return null;

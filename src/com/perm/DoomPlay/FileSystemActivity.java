@@ -21,7 +21,6 @@ package com.perm.DoomPlay;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.view.ActionMode;
@@ -113,8 +112,7 @@ public class FileSystemActivity extends AbstractReceiver
 
 
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                TracksHolder.projection,MediaStore.Audio.Media.IS_MUSIC + " != 0 AND "+
-                MediaStore.Audio.Media.DATA + " LIKE ? ",new String[]{"%"+selectionArgs +"%"},null);
+                TracksHolder.projection,MediaStore.Audio.Media.DATA + " LIKE ? ",new String[]{"%"+selectionArgs +"%"},null);
 
         ArrayList<Audio> audios = Audio.parseAudiosCursor(cursor);
 
@@ -145,10 +143,6 @@ public class FileSystemActivity extends AbstractReceiver
             audio = Audio.parseAudioCursor(cursor);
         else
         {
-            MediaMetadataRetriever metadata = new MediaMetadataRetriever();
-            metadata.setDataSource(selectionArgs);
-
-
             audio = new Audio("unknown",file.getName(),selectionArgs,0);
         }
         cursor.close();
@@ -243,7 +237,12 @@ public class FileSystemActivity extends AbstractReceiver
         textCurrentDir.setText(fileName);
 
         Arrays.sort(entriesFiles, fileComparator);
-        adapter = new FileSystemAdapter();
+
+        if(adapter == null)
+            adapter = new FileSystemAdapter();
+        else
+            adapter.notifyDataSetChanged();
+
         listView.setAdapter(adapter);
 
 

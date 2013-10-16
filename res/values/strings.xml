@@ -28,7 +28,7 @@
     <string name="enter_playlist_name">enter the playlist\'s name</string>
     <string name="save">save</string>
     <string name="cancel">cancel</string>
-    <string name="invalid_name">invalid name</string>
+    <string name="invalid_name">Invalid name</string>
     <string name="to_playlist">to playlist</string>
     <string name="zeros">0.00</string>
     <string name="enter_search_query">enter search query</string>
@@ -49,20 +49,20 @@
     <string name="like">like</string>
     <string name="sign_in">sign in</string>
     <string name="refresh">refresh</string>
-    <string name="please_wait">please wait</string>
+    <string name="please_wait">Please wait</string>
     <string name="dislike">dislike</string>
     <string name="interrupt">interrupt refreshing</string>
     <string name="download">download</string>
     <string name="edit">edit</string>
     <string name="add_to_album">add to album</string>
-    <string name = "check_internet">check your internet connection</string>
-    <string name ="error_refresh">error, try to refresh</string>
+    <string name = "check_internet">Check your internet connection</string>
+    <string name ="error_refresh">Error, try to refresh</string>
     <string name ="doesnt_available">sorry,this function doesn\'t available on your device</string>
-    <string name = "track_downloading">track is still downloading</string>
-    <string name = "cant_get_audio">can\'t get audio</string>
-    <string name = "tracks_added">tracks added</string>
-    <string name = "fill_fields">please fill all fields</string>
-    <string name = "has_been_sent">message has been successfully sent</string>
+    <string name = "track_downloading">Track is still downloading</string>
+    <string name = "cant_get_audio">Can\'t get audio</string>
+    <string name = "tracks_added">Tracks added</string>
+    <string name = "fill_fields">Please fill all fields</string>
+    <string name = "has_been_sent">Message has been successfully sent</string>
     <string name = "no_valid_files">There\'s no valid files in this directory</string>
     <string name="Audio">Audio</string>
     <string name="audio_settings">audio settings</string>
@@ -76,8 +76,8 @@
     <string name="Friends">Friends</string>
     <string name="Groups">Groups</string>
     <string name="send">send</string>
-    <string name="the_subject">the subject</string>
-    <string name="the_message">the message</string>
+    <string name="the_subject">The subject</string>
+    <string name="the_message">The message</string>
     <string name="Audio_Focus">AudioFocus</string>
     <string name="set_pause_on_short">set pause on change of short audiofocus (sms/navigation/etc.)</string>
     <string name="Short_audiofocus">Short audiofocus</string>
@@ -108,7 +108,7 @@
     <string name="Other">Other</string>
     <string name="Other_settings">Other settings</string>
     <string name="Scroll">Smooth scroll</string>
-    <string name="scroll"><![CDATA[scroll to track after it changed (available only in SDK > 7)]]></string>
+    <string name="scroll">scroll to track after it changed (available only in SDK > 7)</string>
     <string name="Onclick_notif">On click notification</string>
     <string name="onclick_notif">return on full screen if true ,else on small screen</string>
     <string name="Show_controls">Show controls</string>
@@ -127,8 +127,8 @@
     <string name="completed">completed</string>
     <string name="canceled">canceled</string>
     <string name="error">error</string>
-    <string name="please_sign_in">please log in</string>
-    <string name="registr_succes">authorization is successful</string>
+    <string name="please_sign_in">Please log in</string>
+    <string name="registr_succes">Authorization is successful</string>
     <string-array name ="count_values">
         <item>10</item>
         <item>30</item>

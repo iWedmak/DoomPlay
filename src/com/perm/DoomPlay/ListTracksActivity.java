@@ -23,7 +23,6 @@ package com.perm.DoomPlay;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -189,15 +188,6 @@ public class ListTracksActivity extends AbstractList
         @Override
         public void onDestroyActionMode(ActionMode mode){}
     };
-
-    static void startLiryctDialog(FragmentManager fragmentManager,String artist,String title)
-    {
-        LyricsDialog dialog = new LyricsDialog();
-        Bundle bundle = new Bundle();
-        bundle.putString(LyricsDialog.keyLyricsTitle,artist+" "+title);
-        dialog.setArguments(bundle);
-        dialog.show(fragmentManager,"tag");
-    }
 
     void updateList()
     {

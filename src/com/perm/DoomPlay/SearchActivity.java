@@ -115,14 +115,15 @@ public class SearchActivity extends AbstractList
 
             if(query.equals(""))
             {
-                textNoResults.setVisibility(View.GONE);
+                textNoResults.setVisibility(View.VISIBLE);
                 adapter.changeData(audios);
                 return;
             }
 
             for(Audio audio : TracksHolder.allAudios)
             {
-                if(audio.getUrl().toLowerCase().contains(query.toLowerCase()))
+                if(audio.getTitle().toLowerCase().contains(query.toLowerCase()) ||
+                        audio.getArtist().toLowerCase().contains(query.toLowerCase()))
                     audios.add(audio);
             }
             if(audios.size() == 0)
@@ -162,7 +163,7 @@ public class SearchActivity extends AbstractList
                     break;
                 case R.id.itemGetLiricks:
                     Audio audio = audios.get(position);
-                    ListTracksActivity.startLiryctDialog(getSupportFragmentManager(), audio.getArtist(), audio.getTitle());
+                    startLiryctDialog(getSupportFragmentManager(), audio.getArtist(), audio.getTitle());
                     break;
             }
 

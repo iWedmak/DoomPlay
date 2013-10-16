@@ -24,18 +24,20 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class MainVkFragment extends Fragment
 {
     private MainScreenActivity activity;
+    LinearLayout linearLoading;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         activity =(MainScreenActivity)getActivity();
         View view = inflater.inflate(R.layout.main_vk_fragment,container,false);
-        //LinearLayout linearLoading = (LinearLayout) view.findViewById(R.id.linearLoading);
+        linearLoading = (LinearLayout) view.findViewById(R.id.linearLoading);
         view.findViewById(R.id.linearVkAll).setOnClickListener(onClickVkListener);
         view.findViewById(R.id.linearVkTop).setOnClickListener(onClickVkListener);
         view.findViewById(R.id.linearVkGroup).setOnClickListener(onClickVkListener);
@@ -43,6 +45,15 @@ public class MainVkFragment extends Fragment
         view.findViewById(R.id.linearVkAlbum).setOnClickListener(onClickVkListener);
         view.findViewById(R.id.linearVkFriends).setOnClickListener(onClickVkListener);
         return view;
+    }
+
+    void setLoading()
+    {
+        linearLoading.setVisibility(View.VISIBLE);
+    }
+    void unsetLoading()
+    {
+        linearLoading.setVisibility(View.GONE);
     }
 
     boolean trippleCheckToast()
@@ -74,8 +85,7 @@ public class MainVkFragment extends Fragment
                 switch (v.getId())
                 {
                     case R.id.linearVkAll:
-                        startActivity(new Intent(activity,ListVkActivity.class).setAction(ListVkActivity.actionMyMusic)
-                                .putExtra(MainScreenActivity.keyOpenInListTrack,TracksHolder.audiosVk));
+                        startActivity(new Intent(activity,ListVkActivity.class).setAction(ListVkActivity.actionMyMusic));
                         break;
                     case R.id.linearVkAlbum:
                         startActivity(new Intent(activity,VkAlbumsActivity.class));

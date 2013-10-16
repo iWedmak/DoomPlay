@@ -27,7 +27,7 @@ class Serializator<T extends Serializable>
 {
     static enum FileNames
     {
-        Audio,Group,User,Album
+        Group,User,Album
     }
 
     private final Context context;

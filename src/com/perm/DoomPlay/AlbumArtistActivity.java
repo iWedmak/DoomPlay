@@ -105,13 +105,10 @@ public class AlbumArtistActivity extends AbstractReceiver
 
         if(fromAlbum)
             cursor = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, TracksHolder.projection,
-                MediaStore.Audio.Media.IS_MUSIC + " != 0 AND " + MediaStore.Audio.Media.ALBUM + " = ?",
-                new String[]{albumArtist[position]}, null);
+                MediaStore.Audio.Media.ALBUM + " = ?",new String[]{albumArtist[position]}, null);
         else
             cursor = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,  TracksHolder.projection,
-                    MediaStore.Audio.Media.IS_MUSIC + " != 0 AND " + MediaStore.Audio.Media.ARTIST+ " = ?",
-                    new String[]{albumArtist[position]}, null);
-
+                    MediaStore.Audio.Media.ARTIST+ " = ?", new String[]{albumArtist[position]}, null);
 
 
         ArrayList<Audio> result = Audio.parseAudiosCursor(cursor);

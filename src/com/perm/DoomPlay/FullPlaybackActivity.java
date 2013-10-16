@@ -38,7 +38,6 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 
 
@@ -83,7 +82,7 @@ public class FullPlaybackActivity  extends AbstractControls
 
     private final PlayingService.OnAlbumArtSave onAlbumArtSave = new PlayingService.OnAlbumArtSave()
     {
-        // TODO: sometimes throw exception
+        // TODO: sometimes throw the exception
         //java.lang.IllegalStateException: Fragment PageFragment{4240e278} is not currently in the FragmentManager
 
         @Override
@@ -179,9 +178,10 @@ public class FullPlaybackActivity  extends AbstractControls
         outState.putBoolean(keyReturn,true);
     }
 
-    Audio getRealPathFromIntent(Intent intent)
-    {
-        Cursor cursor;
+
+
+    /*
+    Cursor cursor;
 
 
         String filePath = null;
@@ -225,6 +225,40 @@ public class FullPlaybackActivity  extends AbstractControls
 
                 audio = new Audio("unknown",file.getName(),file.getAbsolutePath(),0);
             }
+        }
+
+        cursor.close();
+        return audio;
+     */
+
+    Audio getRealPathFromIntent(Intent intent)
+    {
+        String filePath = null;
+
+        File file = new File(intent.getData().getPath());
+
+            try
+            {
+                filePath  = file.getCanonicalPath();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+                filePath = file.getAbsolutePath();
+            }
+
+        String[] selectionArgs = new String[]{filePath};
+
+        Cursor  cursor = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,TracksHolder.projection,
+                    MediaStore.Audio.Media.DATA + " = ? ",selectionArgs,null);
+
+        Audio audio;
+
+        if(cursor.moveToFirst())
+            audio = Audio.parseAudioCursor(cursor);
+        else
+        {
+            audio = new Audio("unknown",file.getName(),filePath,0);
         }
 
         cursor.close();
@@ -293,19 +327,13 @@ public class FullPlaybackActivity  extends AbstractControls
             case R.id.itemSetAsRingtone:
                 Utils.setRingtone(getBaseContext(), audios.get(PlayingService.indexCurrentTrack));
                 return true;
-            case R.id.itemExit:
-                sendBroadcast(new Intent(actionKill));
-                return true;
-            case R.id.itemSettings:
-                startActivity(new Intent(this,SettingActivity.class));
-                return true;
             case R.id.itemGetLiricks:
                 if(PlayingService.isOnline)
                    AbstractList.startLyricsDialog(getSupportFragmentManager(), audios.get(PlayingService.indexCurrentTrack).getLyrics_id());
                 else
                 {
                     Audio audio = audios.get(PlayingService.indexCurrentTrack);
-                    ListTracksActivity.startLiryctDialog(getSupportFragmentManager(), audio.getArtist(), audio.getTitle());
+                    AbstractList.startLiryctDialog(getSupportFragmentManager(), audio.getArtist(), audio.getTitle());
                 }
                 return true;
         }

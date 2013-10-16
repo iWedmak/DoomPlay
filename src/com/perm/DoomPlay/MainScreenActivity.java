@@ -20,9 +20,9 @@ package com.perm.DoomPlay;
 
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -41,19 +41,9 @@ public class MainScreenActivity extends AbstractReceiver
     private static final int REQUEST_LOGIN = 1093;
     public static boolean isLoading;
     public static boolean isRegister;
-    private ViewPager viewPager;
     static Api api;
-
-    interface IScanCallback
-    {
-        void scanI();
-    }
-    private IScanCallback scanCallback;
-
-    void setScanCallback(IScanCallback scanCallback)
-    {
-         this.scanCallback = scanCallback;
-    }
+    private MainLocalFragment localFragment;
+    private MainVkFragment vkFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -62,20 +52,12 @@ public class MainScreenActivity extends AbstractReceiver
         setContentView(R.layout.mail_screen);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-        viewPager = (ViewPager)findViewById(R.id.viewPagerMain);
+
+        if(!TracksHolder.isScanned())
+            scan();
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPagerMain);
         viewPager.setAdapter(new MainPageAdapter(getSupportFragmentManager()));
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener()
-        {
-            @Override
-            public void onPageScrolled(int i, float v, int i2)
-            {
-                 ActivityCompat.invalidateOptionsMenu(MainScreenActivity.this);
-            }
-            @Override
-            public void onPageSelected(int i){}
-            @Override
-            public void onPageScrollStateChanged(int i){}
-        });
         isLoading = false;
         Account.account.restore(this);
 
@@ -94,11 +76,47 @@ public class MainScreenActivity extends AbstractReceiver
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        if(viewPager.getCurrentItem() == 0)
-            getMenuInflater().inflate(R.menu.bar_main,menu);
-        else
-            getMenuInflater().inflate(R.menu.bar_vk,menu);
+        getMenuInflater().inflate(R.menu.bar_main,menu);
         return true;
+    }
+
+    private void scan()
+    {
+        new AsyncTask<Void, Void, Void>()
+        {
+            @Override
+            protected void onPreExecute()
+            {
+                MainScreenActivity.isLoading = true;
+
+                if(vkFragment != null)
+                    vkFragment.setLoading();
+                if(localFragment != null)
+                    localFragment.setLoading();
+
+                super.onPreExecute();
+            }
+
+            @Override
+            protected Void doInBackground(Void... params)
+            {
+                TracksHolder.scanCard(getBaseContext());
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid)
+            {
+                super.onPostExecute(aVoid);
+                MainScreenActivity.isLoading = false;
+
+                if(vkFragment != null)
+                    vkFragment.unsetLoading();
+                if(localFragment != null)
+                    localFragment.unsetLoading();
+
+            }
+        }.execute();
     }
 
     @Override
@@ -107,19 +125,12 @@ public class MainScreenActivity extends AbstractReceiver
         switch (item.getItemId())
         {
             case R.id.itemRescan:
-                if(!isLoading)
-                    scanCallback.scanI();
-                else
+                if(isLoading)
                     AbstractList.waitMessage(this);
-                return true;
-            case R.id.itemExit:
-                if(!isLoading)
-                    sendBroadcast(new Intent(actionKill));
                 else
-                    AbstractList.waitMessage(this);
-                return true;
-            case R.id.itemSettings:
-                startActivity(new Intent(this,SettingActivity.class));
+                {
+                   scan();
+                }
                 return true;
             case R.id.itemSendReport:
                 new ReportDialog().show(getSupportFragmentManager(),"tag");
@@ -132,8 +143,7 @@ public class MainScreenActivity extends AbstractReceiver
     }
     private void startLoginActivity()
     {
-        Intent intent = new Intent();
-        intent.setClass(this, LoginActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivityForResult(intent, REQUEST_LOGIN);
     }
     @Override
@@ -153,7 +163,6 @@ public class MainScreenActivity extends AbstractReceiver
             }
         }
     }
-
     class MainPageAdapter extends FragmentPagerAdapter
     {
         public MainPageAdapter(FragmentManager fm)
@@ -164,9 +173,16 @@ public class MainScreenActivity extends AbstractReceiver
         public Fragment getItem(int position)
         {
             if(position == 0)
-                return new MainScreenFragment();
+            {
+                localFragment = new MainLocalFragment();
+                return localFragment;
+            }
             else
-                return new MainVkFragment();
+            {
+                vkFragment = new MainVkFragment();
+                return vkFragment;
+            }
+
         }
 
         @Override

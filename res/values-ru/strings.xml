@@ -11,7 +11,7 @@
     <string name="delete">удалить</string>
     <string name="sleep_timer">таймер сна</string>
     <string name="equalizer">эквалайзер</string>
-    <string name="loading_music">загружается музыка</string>
+    <string name="loading_music">Загружается музыка</string>
     <string name="search_hint">поиск трэков</string>
     <string name="Rescan">Обновить</string>
     <string name="full_screen">на весь экран</string>
@@ -49,21 +49,21 @@
     <string name="like">лайк</string>
     <string name="sign_in">войти</string>
     <string name="refresh">обновить</string>
-    <string name="please_wait">пожалуйста подождите</string>
+    <string name="please_wait">Пожалуйста подождите</string>
     <string name="dislike">дизлайк</string>
     <string name="interrupt">прервать обновление</string>
     <string name="download">скачать</string>
     <string name="edit">изменить</string>
     <string name="add_to_album">добавить в альбом</string>
-    <string name = "check_internet">проверьте соединение с интернетом</string>
-    <string name ="error_refresh">ошибка, попробуйте обновить</string>
-    <string name ="doesnt_available">функция не доступна на этом устройстве</string>
-    <string name = "track_downloading">трэк до сих пор закачивается</string>
-    <string name = "cant_get_audio">не могу получить трэки</string>
-    <string name = "tracks_added">трэки добавлены</string>
+    <string name = "check_internet">Проверьте соединение с интернетом</string>
+    <string name ="error_refresh">Ошибка, попробуйте обновить</string>
+    <string name ="doesnt_available">Функция не доступна на этом устройстве</string>
+    <string name = "track_downloading">Трэк до сих пор закачивается</string>
+    <string name = "cant_get_audio">Трэки не получены</string>
+    <string name = "tracks_added">Трэки добавлены</string>
     <string name = "no_valid_files">Нет подходящих файлов в этой папке</string>
     <string name = "has_been_sent">Сообщение было успешно отправлено</string>
-    <string name = "fill_fields">пожалуйста, заполните все поля</string>
+    <string name = "fill_fields">Пожалуйста, заполните все поля</string>
     <string name="Audio">Аудио</string>
     <string name="audio_settings">Настройки аудио</string>
     <string name="Call">Звонок</string>
@@ -127,8 +127,8 @@
     <string name="completed">завершено</string>
     <string name="canceled">отменено</string>
     <string name="error">ошибка</string>
-    <string name="please_sign_in">пожалуйста авторизируйтесь</string>
-    <string name="registr_succes">авторизация прошла успешно</string>
+    <string name="please_sign_in">Пожалуйста авторизируйтесь</string>
+    <string name="registr_succes">Авторизация прошла успешно</string>
     <string-array name ="count_values">
         <item>10</item>
         <item>30</item>

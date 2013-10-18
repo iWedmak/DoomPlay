@@ -52,12 +52,18 @@ public class MainScreenActivity extends AbstractReceiver
         setContentView(R.layout.mail_screen);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-
         if(!TracksHolder.isScanned())
             scan();
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewPagerMain);
         viewPager.setAdapter(new MainPageAdapter(getSupportFragmentManager()));
+
+        if(savedInstanceState != null)
+        {
+            vkFragment =(MainVkFragment)getSupportFragmentManager().findFragmentByTag(savedInstanceState.getString("vkFr"));
+            localFragment =(MainLocalFragment)getSupportFragmentManager().findFragmentByTag(savedInstanceState.getString("locFr"));
+        }
+
         isLoading = false;
         Account.account.restore(this);
 
@@ -72,12 +78,25 @@ public class MainScreenActivity extends AbstractReceiver
         }
 
 
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
         getMenuInflater().inflate(R.menu.bar_main,menu);
         return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+
+        if(vkFragment != null)
+            outState.putString("vkFr",vkFragment.getTag());
+        if(localFragment != null)
+            outState.putString("locFr",localFragment.getTag());
+
     }
 
     private void scan()
@@ -109,11 +128,8 @@ public class MainScreenActivity extends AbstractReceiver
             {
                 super.onPostExecute(aVoid);
                 MainScreenActivity.isLoading = false;
-
-                if(vkFragment != null)
-                    vkFragment.unsetLoading();
-                if(localFragment != null)
-                    localFragment.unsetLoading();
+                vkFragment.unsetLoading();
+                localFragment.unsetLoading();
 
             }
         }.execute();

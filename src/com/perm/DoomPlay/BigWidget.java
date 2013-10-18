@@ -34,7 +34,7 @@ public class BigWidget extends AppWidgetProvider
     {
         super.onReceive(context,intent);
 
-        if(intent.getAction().equals(SimpleSWidget.actionUpdateWidget) && PlayingService.audios != null)
+        if(intent.getAction().equals(SmallWidget.actionUpdateWidget) && PlayingService.audios != null)
             updateWidget(context);
 
     }
@@ -48,7 +48,7 @@ public class BigWidget extends AppWidgetProvider
         views.setTextViewText(R.id.widgetArtist, audio.getArtist());
         views.setTextViewText(R.id.widgetCount,String.valueOf(PlayingService.indexCurrentTrack + 1)+ "/" +String.valueOf(PlayingService.audios.size()));
 
-        Bitmap cover = AlbumArtGetter.getBitmapById(audio.getAid(),context);
+        Bitmap cover = AlbumArtGetter.getCoverArt(audio.getAid());
         if (cover != null)
         {
             views.setImageViewBitmap(R.id.widgetAlbum, cover);

@@ -39,6 +39,10 @@ import com.perm.vkontakte.api.KException;
 import java.util.ArrayList;
 import java.util.Locale;
 
+/*
+ base class for all activities
+ */
+
 abstract class AbstractReceiver extends ActionBarActivity
 {
     BroadcastReceiver broadcastReceiver;
@@ -163,11 +167,7 @@ abstract class AbstractReceiver extends ActionBarActivity
     void prepareActionBar()
     {
         ActionBar bar = getSupportActionBar();
-        View view;
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-            view = getLayoutInflater().inflate(R.layout.action_bar_cust,null);
-        else
-            view = getLayoutInflater().inflate(R.layout.action_bar_landscape,null);
+        View view = getLayoutInflater().inflate(R.layout.action_bar_cust,null);
         view.setOnClickListener(new View.OnClickListener()
         {
             @Override

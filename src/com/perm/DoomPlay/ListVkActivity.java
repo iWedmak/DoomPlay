@@ -51,6 +51,9 @@ public class ListVkActivity extends AbstractList
         audios  = getIntent().getParcelableArrayListExtra(MainScreenActivity.keyOpenInListTrack);
         currentAction = getIntent().getAction();
 
+
+
+
         initializeUi();
         initializeAbstract();
         checkIsShown(savedInstanceState);
@@ -62,6 +65,11 @@ public class ListVkActivity extends AbstractList
         else if(currentAction.equals(actionMyMusic))
         {
             audios = audiosVk;
+        }
+        else
+        {
+            adapter = new ListsAdapter(audios,getBaseContext());
+            listView.setAdapter(adapter);
         }
 
 
@@ -147,16 +155,6 @@ public class ListVkActivity extends AbstractList
                         audios = audiosVk = MainScreenActivity.api.getAudio(Account.account.user_id,
                             null,null,SettingActivity.getPreference("countvkall"));
 
-                        if(adapter == null)
-                        {
-                            adapter = new ListsAdapter(audios,getBaseContext());
-                            listView.setAdapter(adapter);
-                        }
-                        else
-                        {
-                            adapter.changeData(audios);
-                        }
-
                     }
 
                     else if(currentAction.equals(actionMyAlbums))
@@ -194,7 +192,17 @@ public class ListVkActivity extends AbstractList
                 super.onPostExecute(aVoid);
                 isLoading = false;
                 linearLoading.setVisibility(View.GONE);
-                adapter.changeData(audios);
+
+                if(adapter == null)
+                {
+                    adapter = new ListsAdapter(audios,getBaseContext());
+                    listView.setAdapter(adapter);
+                }
+                else
+                {
+                    adapter.changeData(audios);
+                }
+
                 markItem(PlayingService.indexCurrentTrack,false);
             }
         };

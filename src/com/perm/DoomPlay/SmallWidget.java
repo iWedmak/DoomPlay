@@ -30,7 +30,7 @@ import android.graphics.BitmapFactory;
 import android.widget.RemoteViews;
 
 
-public class SimpleSWidget extends AppWidgetProvider
+public class SmallWidget extends AppWidgetProvider
 {
     public final static String actionUpdateWidget ="doom.update.widget";
 
@@ -52,7 +52,7 @@ public class SimpleSWidget extends AppWidgetProvider
         views.setTextViewText(R.id.widgetTitle, audio.getTitle());
         views.setTextViewText(R.id.widgetArtist, audio.getArtist());
 
-        Bitmap cover = AlbumArtGetter.getBitmapById(audio.getAid(),context);
+        Bitmap cover = AlbumArtGetter.getCoverArt(audio.getAid());
         if (cover != null)
         {
             views.setImageViewBitmap(R.id.widgetAlbum, cover);
@@ -84,7 +84,7 @@ public class SimpleSWidget extends AppWidgetProvider
 
         AppWidgetManager manager = AppWidgetManager.getInstance(context);
 
-        ComponentName componentWidget = new ComponentName(context,SimpleSWidget.class);
+        ComponentName componentWidget = new ComponentName(context,SmallWidget.class);
 
         int ids[] = manager.getAppWidgetIds(componentWidget);
 

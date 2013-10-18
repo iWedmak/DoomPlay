@@ -23,6 +23,10 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+/*
+Prevent illegalStateException (doesn't response if track didn't load)
+ */
+
 public class CustomViewPager extends ViewPager
 {
 

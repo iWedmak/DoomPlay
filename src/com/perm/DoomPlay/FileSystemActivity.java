@@ -198,8 +198,10 @@ public class FileSystemActivity extends AbstractReceiver
                 }
                 case R.id.itemDeleteFile:
                 {
-                    entriesFiles[position].delete();
-                    fill(currentDirectory);
+                    if(entriesFiles[position].delete())
+                        fill(currentDirectory);
+                    else
+                        Toast.makeText(getBaseContext(),getString(R.string.cant_delete_file),Toast.LENGTH_SHORT).show();
                     break;
                 }
             }
@@ -208,7 +210,9 @@ public class FileSystemActivity extends AbstractReceiver
         }
 
         @Override
-        public void onDestroyActionMode(ActionMode actionMode) {}
+        public void onDestroyActionMode(ActionMode actionMode) {
+            mActionMode = null;
+        }
     };
 
 
@@ -247,13 +251,23 @@ public class FileSystemActivity extends AbstractReceiver
 
 
     }
+
+    private android.support.v7.view.ActionMode mActionMode;
+
     private final AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener()
     {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
+
+
             if(entriesFiles[position].isDirectory())
+            {
                 fill(entriesFiles[position]);
+
+                if(mActionMode != null)
+                    mActionMode.finish();
+            }
             else
             {
                 ArrayList <Audio> audios = new ArrayList<Audio>();
@@ -268,7 +282,8 @@ public class FileSystemActivity extends AbstractReceiver
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
         {
-            startSupportActionMode(callback).setTag(position);
+            mActionMode = startSupportActionMode(callback);
+            mActionMode.setTag(position);
             return true;
         }
     };

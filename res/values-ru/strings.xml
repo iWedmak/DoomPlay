@@ -50,11 +50,11 @@
     <string name="sign_in">войти</string>
     <string name="refresh">обновить</string>
     <string name="please_wait">Пожалуйста подождите</string>
-    <string name="dislike">дизлайк</string>
+    <string name="dislike">Дизлайк</string>
     <string name="interrupt">прервать обновление</string>
-    <string name="download">скачать</string>
-    <string name="edit">изменить</string>
-    <string name="add_to_album">добавить в альбом</string>
+    <string name="download">Скачать</string>
+    <string name="edit">Изменить</string>
+    <string name="add_to_album">Добавить в альбом</string>
     <string name = "check_internet">Проверьте соединение с интернетом</string>
     <string name ="error_refresh">Ошибка, попробуйте обновить</string>
     <string name ="doesnt_available">Функция не доступна на этом устройстве</string>
@@ -76,8 +76,8 @@
     <string name="Friends">Друзья</string>
     <string name="Groups">Группы</string>
     <string name="send">отправить</string>
-    <string name="the_subject">тема</string>
-    <string name="the_message">сообщение</string>
+    <string name="the_subject">Тема</string>
+    <string name="the_message">Сообщение</string>
     <string name="Audio_Focus">АудиоФокус</string>
     <string name="set_pause_on_short">поставить паузу во время короткого аудиоФокуса (смс/уведомление/т.д.)</string>
     <string name="Short_audiofocus">Короткий аудиоФокус</string>
@@ -122,13 +122,13 @@
     <string name="Contact">Связаться со мной</string>
     <string name="Want_to_help">Хочешь помочь как разработчик?</string>
     <string name="Downloading">Скачивание</string>
-    <string name="downloading">скачивание</string>
-    <string name="paused">пауза</string>
-    <string name="completed">завершено</string>
-    <string name="canceled">отменено</string>
-    <string name="error">ошибка</string>
+    <string name="paused">Пауза</string>
+    <string name="completed">Завершено</string>
+    <string name="canceled">Отменено</string>
+    <string name="error">Ошибка</string>
     <string name="please_sign_in">Пожалуйста авторизируйтесь</string>
     <string name="registr_succes">Авторизация прошла успешно</string>
+    <string name="cant_delete_file">Нельзя удалить этот файл</string>
     <string-array name ="count_values">
         <item>10</item>
         <item>30</item>

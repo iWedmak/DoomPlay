@@ -59,7 +59,7 @@ class DownloadNotifBuilder
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
 
         builder.setOngoing(true);
-        builder.setContentTitle( context.getResources().getString(R.string.downloading));
+        builder.setContentTitle(context.getResources().getString(R.string.Downloading));
         builder.setContentText(track.getArtist() + "-" + track.getTitle());
         builder.setSmallIcon(R.drawable.download_icon);
 
@@ -86,7 +86,7 @@ class DownloadNotifBuilder
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.notif_download);
 
         views.setProgressBar(R.id.progressDownload, 100,0, true);
-        views.setTextViewText(R.id.notifTitle, context.getResources().getString(R.string.downloading));
+        views.setTextViewText(R.id.notifTitle, context.getResources().getString(R.string.Downloading));
         views.setTextViewText(R.id.notifArtist, track.getArtist() + "-" + track.getTitle());
         views.setImageViewResource(R.id.notifPause,R.drawable.widget_pause);
 

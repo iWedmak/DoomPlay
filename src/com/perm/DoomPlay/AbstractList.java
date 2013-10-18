@@ -23,6 +23,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ Base class for all classes which use ListView with Audio
+ */
 abstract class AbstractList extends AbstractControls
 {
     ListView listView;

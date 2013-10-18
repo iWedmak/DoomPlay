@@ -85,6 +85,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     private OnLoadingTrackListener loadingListener;
     private final static Random random = new Random();
 
+
     public static boolean isLoadingTrack()
     {
         return isLoadingTrack;
@@ -109,7 +110,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         dispose();
         isPlaying = false;
         startNotif();
-        sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
+        sendBroadcast(new Intent(SmallWidget.actionUpdateWidget));
         sendBroadcast(new Intent(actionIconPlay));
     }
 
@@ -165,7 +166,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         serviceAlive = false;
         isPlaying = false;
         sendBroadcast(new Intent(actionIconPlay));
-        sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
+        sendBroadcast(new Intent(SmallWidget.actionUpdateWidget));
 
         if(Build.VERSION.SDK_INT > 7)
             audioManager.abandonAudioFocus(afListener);
@@ -186,7 +187,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
                             onAlbumArtSaveListener.onAlbumArtSave(albumId);
 
 
-                        sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
+                        sendBroadcast(new Intent(SmallWidget.actionUpdateWidget));
                         startNotif();
                         sendBroadcast(new Intent(FullPlaybackActivity.actionDataChanged));
                     }
@@ -205,10 +206,10 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         views.setTextViewText(R.id.notifTitle, audio.getTitle());
         views.setTextViewText(R.id.notifArtist, audio.getArtist());
 
-        Bitmap cover = AlbumArtGetter.getBitmapById(audio.getAid(),this);
+        Bitmap cover = AlbumArtGetter.getCoverArt(audio.getAid());
+
         if (cover == null)
         {
-            downloadAlbumArt(audio);
             views.setImageViewBitmap(R.id.notifAlbum, BitmapFactory.decodeResource(getResources(), R.drawable.fallback_cover));
         }
         else
@@ -280,6 +281,8 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     {
         String action = intent.getAction();
 
+        assert action != null;
+
         if(action.equals(actionOffline) || action.equals(actionOnline))
         {
             isOnline = action.equals(actionOnline);
@@ -332,10 +335,9 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         builder.setContentTitle(audio.getTitle());
         builder.setContentText(audio.getArtist());
 
-        Bitmap cover = AlbumArtGetter.getBitmapById(audio.getAid(),this);
+        Bitmap cover = AlbumArtGetter.getCoverArt(audio.getAid());
         if (cover == null)
         {
-            downloadAlbumArt(audio);
             builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.fallback_cover));
         }
         else
@@ -348,25 +350,11 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
     private void handleNotifControll(String action)
     {
-        if(!PlayingService.isLoadingTrack)
+        if(!PlayingService.isLoadingTrack && isPrepared)
         {
-            if(mediaPlayer == null)
-            {
-                if(audios != null)
-                {
-                    Intent intent = new Intent(this,PlayingService.class);
-                    intent.putExtra(FullPlaybackActivity.keyIndex,indexCurrentTrack);
-                    intent.setAction(isOnline ? actionOnline : actionOffline);
-                    intent.putExtra(FullPlaybackActivity.keyService,audios);
-
-                    startService(intent);
-                }
-
-            }
-            else if (action.equals(actionPlay))
+            if (action.equals(actionPlay))
             {
                 playPause();
-
             }
             else if (action.equals(actionClose))
             {
@@ -418,16 +406,13 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         dispose();
 
         sendBroadcast(new Intent(actionTrackChanged));
-
-        sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
+        sendBroadcast(new Intent(SmallWidget.actionUpdateWidget));
         if(isPlaying)
             sendBroadcast(new Intent(actionIconPause));
         else
             sendBroadcast(new Intent(actionIconPlay));
 
-        // that's for skip pause
-        if(isOnline)
-            startNotif();
+        startNotif();
 
         mediaPlayer = new MediaPlayer();
 
@@ -469,18 +454,20 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
             protected void onPostExecute(Void aVoid)
             {
                 super.onPostExecute(aVoid);
+                isPrepared = true;
+
                 isLoadingTrack = false;
                 if(loadingListener != null)
                     loadingListener.onLoadingTrackEnded();
 
-                isPrepared = true;
+
                 if(isPlaying)
                 {
                     mediaPlayer.start();
                 }
 
-                if(!isOnline)
-                    startNotif();
+                if(AlbumArtGetter.getCoverArt(audios.get(indexCurrentTrack).getAid()) == null)
+                    downloadAlbumArt(audios.get(indexCurrentTrack));
 
                 if(!MainScreenActivity.isOldSDK)
                     notifyEqualizer();
@@ -501,7 +488,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     public void setLoop()
     {
         isLoop = !isLoop;
-        sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
+        sendBroadcast(new Intent(SmallWidget.actionUpdateWidget));
     }
 
     void nextSong()
@@ -562,7 +549,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     public void setShuffle()
     {
         isShuffle = !isShuffle;
-        sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
+        sendBroadcast(new Intent(SmallWidget.actionUpdateWidget));
     }
     int getDuration()
     {
@@ -611,7 +598,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
         }
 
-        sendBroadcast(new Intent(SimpleSWidget.actionUpdateWidget));
+        sendBroadcast(new Intent(SmallWidget.actionUpdateWidget));
     }
     void setCurrentPosition(int positionMillis)
     {
@@ -625,10 +612,10 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     }
     private void dispose()
     {
-        if(mediaPlayer!= null)
+        if(mediaPlayer != null)
         {
-            mediaPlayer.stop();
             isPrepared = false;
+            mediaPlayer.stop();
             mediaPlayer.release();
             mediaPlayer = null;
         }
@@ -732,6 +719,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
                     wasPlaying = false;
 
                     break;
+
             }
         }
     }

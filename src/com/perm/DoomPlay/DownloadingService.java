@@ -26,12 +26,19 @@ import android.content.Intent;
 import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
+import com.bugsense.trace.BugSenseHandler;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
+/*
+    DownloadingService - Controller
+    Download - Model
+    DownloadNotifBuilder - View
+*/
 
 public class DownloadingService extends Service implements Download.DoomObserver
 {
@@ -48,7 +55,6 @@ public class DownloadingService extends Service implements Download.DoomObserver
     {
         DownloadHolder holder = downloads.get(aid);
 
-        // i don't no why ,but if i fast click on notif (for 3 seconds) it's throw the exception
         if(holder == null || holder.download == null)
             return;
 
@@ -122,7 +128,7 @@ public class DownloadingService extends Service implements Download.DoomObserver
         DownloadHolder holder = new DownloadHolder();
 
         holder.download = new Download(url,filePath,audio.getAid(),this);
-        holder.downloadBuilder = new DownloadNotifBuilder(audio,filePath,getBaseContext());
+        holder.downloadBuilder = new DownloadNotifBuilder(audio,filePath,this);
         downloads.put(audio.getAid(),holder);
 
         holder.download.resume();
@@ -172,6 +178,7 @@ public class DownloadingService extends Service implements Download.DoomObserver
     {
         String defaultFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/download/";
         File defaultFile = new File(defaultFolder);
+
         if(!defaultFile.exists() && !defaultFile.mkdirs())
             Log.e("tag","can't create directory");
 
@@ -195,45 +202,51 @@ public class DownloadingService extends Service implements Download.DoomObserver
         manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
 
+    // TODO: i don't know why ,but if i fast click on notif (for 3 seconds) it's throw the nullPointerException
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
 
         String action = intent.getAction();
 
-        if(action.equals(PlayingService.actionClose))
-        {
-            long aid = intent.getLongExtra("aid", 666);
-
-
-            Download d = downloads.get(aid).download;
-            d.cancel();
-
-        }
-        else if(action.equals(PlayingService.actionPlay))
+        if(action.equals(PlayingService.actionPlay))
         {
             Audio track = intent.getParcelableExtra(keyDownload);
-
             addDownload(track, generateFilePath(track));
-        }
-        else if(action.equals(PlayingService.actionIconPlay))
-        {
-            long aid = intent.getLongExtra("aid", 666);
-
-            Download d = downloads.get(aid).download;
-            d.resume();
-        }
-        else if(action.equals(PlayingService.actionIconPause))
-        {
-            long aid = intent.getLongExtra("aid", 666);
-
-            Download d = downloads.get(aid).download;
-            d.pause();
         }
         else
         {
-            throw new IllegalArgumentException("wrong action in DownloadingService");
+
+            long aid = intent.getLongExtra("aid", 666);
+            DownloadHolder holder = downloads.get(aid);
+
+            if(holder == null || holder.download == null)
+            {
+                BugSenseHandler.sendException(new NullPointerException("NullPointer in DownloadingService"));
+                return 0;
+            }
+
+
+            if(action.equals(PlayingService.actionClose))
+            {
+                holder.download.cancel();
+            }
+            else if(action.equals(PlayingService.actionIconPlay))
+            {
+                holder.download.resume();
+            }
+            else if(action.equals(PlayingService.actionIconPause))
+            {
+                holder.download.pause();
+            }
+            else
+            {
+                throw new IllegalArgumentException("wrong action in DownloadingService");
+            }
         }
+
+
         return START_NOT_STICKY;
 
     }

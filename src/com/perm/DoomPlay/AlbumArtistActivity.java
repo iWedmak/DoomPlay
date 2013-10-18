@@ -123,7 +123,7 @@ public class AlbumArtistActivity extends AbstractReceiver
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu)
         {
-            getMenuInflater().inflate(R.menu.action_filesystem,menu);
+            getMenuInflater().inflate(R.menu.action_album_artist,menu);
             return true;
         }
 

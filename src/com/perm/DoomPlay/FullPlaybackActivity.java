@@ -233,7 +233,7 @@ public class FullPlaybackActivity  extends AbstractControls
 
     Audio getRealPathFromIntent(Intent intent)
     {
-        String filePath = null;
+        String filePath ;
 
         File file = new File(intent.getData().getPath());
 
@@ -282,7 +282,7 @@ public class FullPlaybackActivity  extends AbstractControls
         if(PlayingService.isOnline)
         {
             Intent intent = new Intent(context,ListVkActivity.class);
-            intent.setAction(ListVkActivity.currentAction);
+            intent.setAction(ListVkActivity.actionJust);
             intent.putExtra(MainScreenActivity.keyOpenInListTrack, PlayingService.audios);
 
             return intent;
@@ -290,12 +290,7 @@ public class FullPlaybackActivity  extends AbstractControls
         else
         {
             Intent intent = new Intent(context,ListTracksActivity.class);
-
-            if(ListTracksActivity.currentAction != null )
-                intent.setAction(ListTracksActivity.currentAction);
-            else
-                intent.setAction(ListTracksActivity.actionJust);
-
+            intent.setAction(ListTracksActivity.actionJust);
             intent.putExtra(MainScreenActivity.keyOpenInListTrack, PlayingService.audios);
             return intent;
         }

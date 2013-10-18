@@ -122,13 +122,13 @@
     <string name="Contact">Contact to author</string>
     <string name="Want_to_help">Want to help as developer?</string>
     <string name="Downloading">Downloading</string>
-    <string name="downloading">downloading</string>
-    <string name="paused">paused</string>
-    <string name="completed">completed</string>
-    <string name="canceled">canceled</string>
-    <string name="error">error</string>
+    <string name="paused">Paused</string>
+    <string name="completed">Completed</string>
+    <string name="canceled">Canceled</string>
+    <string name="error">Error</string>
     <string name="please_sign_in">Please log in</string>
     <string name="registr_succes">Authorization is successful</string>
+    <string name="cant_delete_file">Can\'t delete file</string>
     <string-array name ="count_values">
         <item>10</item>
         <item>30</item>

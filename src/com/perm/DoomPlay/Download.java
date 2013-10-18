@@ -117,6 +117,8 @@ public class Download implements Runnable
 
             connection.setRequestMethod("GET");
             connection.setDoOutput(true);
+            if(downloadedS > 0)
+                connection.setRequestProperty("Range", "bytes=" + String.valueOf(downloadedS) + "-");
             connection.connect();
 
             String connectLength = connection.getHeaderField("Content-Length");
@@ -133,9 +135,6 @@ public class Download implements Runnable
 
 
             inputStream = new BufferedInputStream(url.openStream());
-            inputStream.skip(downloadedS);
-
-
             int read ;
 
             while((read = inputStream.read(buffer)) > 0 && status == States.DOWNLOADING)

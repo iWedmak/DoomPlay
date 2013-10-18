@@ -29,6 +29,9 @@ import android.os.Message;
 import android.view.View;
 import android.widget.*;
 
+/*
+    Base class for all classes which content layout with controls
+ */
 
 abstract class AbstractControls extends AbstractReceiver
 {
@@ -151,6 +154,8 @@ abstract class AbstractControls extends AbstractReceiver
         super.onSaveInstanceState(outState);
         outState.putBoolean(keySaveShown,isShown);
     }
+
+    //it's for override
     void onServiceAbstractConnected()
     {}
 
@@ -188,6 +193,7 @@ abstract class AbstractControls extends AbstractReceiver
         connectService();
     }
 
+    // for override
     void clickWithoutAction()
     {}
 

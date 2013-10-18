@@ -23,6 +23,10 @@ import android.os.Environment;
 import java.io.*;
 import java.util.ArrayList;
 
+/*
+    for saving and getting groups , users , albums ;
+ */
+
 class Serializator<T extends Serializable>
 {
     static enum FileNames

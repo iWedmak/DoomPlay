@@ -23,12 +23,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
+import android.support.v4.util.LruCache;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -42,6 +41,10 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashSet;
 
+/*
+      class for find and save cover art
+ */
+
 abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
 {
     private final static String lastFmApiId = "2827ff9b2eb0158b80e7c6d0b511f25d";
@@ -51,26 +54,9 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
     private final long albumId;
     private static final HashSet<Long> set = new HashSet<Long>();
 
-    //return bitmap reatrived from metadata
-
-    public static Bitmap getBitmapMetadata(MediaMetadataRetriever metadata)
-    {
-        byte[] bitmap = metadata.getEmbeddedPicture();
-        metadata.release();
-
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.outWidth = 500;
-        options.outHeight = 500;
-
-        if(bitmap != null)
-            return BitmapFactory.decodeByteArray(bitmap,0,bitmap.length,options);
-        else
-            return null;
-    }
-
     protected abstract void onBitmapSaved(long albumId);
 
-    // проверяет закачивается ли обложка для трэка с данным id
+    // checks whether the cover is downloading
     static boolean isLoadById(long id)
     {
         return set.contains(id);
@@ -86,7 +72,7 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
         set.add(albumId);
     }
 
-    //ищет , скачивает и вставляет в MediaStore обложку
+    //find , download and save
     @Override
     protected Void doInBackground(Void... params)
     {
@@ -136,7 +122,7 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
     }
 
 
-    // возвращает адрес обложки найденной на lastfm
+    // return cover art's url was found from lastFm or return null if wasn't
     private static String findSrc(String artist,String title) throws ParserConfigurationException, SAXException, IOException
     {
         title ="&track=" + URLEncoder.encode(title,"utf-8");
@@ -180,8 +166,8 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
 
     }
 
-    // возвращает обложку скачанную с заданного адреса
-    private static Bitmap downloadBitmap(String src)
+    // return the cover art downloaded from source
+    private static Bitmap downloadBitmap(String source)
     {
 
         HttpURLConnection connection = null;
@@ -189,7 +175,7 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
         try
         {
 
-            URL url = new URL(src);
+            URL url = new URL(source);
             connection =(HttpURLConnection)url.openConnection();
             connection.setDoInput(true);
             connection.connect();
@@ -213,7 +199,7 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
         }
     }
 
-    //помещает обложку в MediaStore
+    //insert the cover art into mediaStore
     private static void insertBitmapInMediaStore(Bitmap bitmap, long albumId)
     {
         OutputStream stream;
@@ -221,7 +207,7 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
         if(!file.exists())
             file.mkdir();
         String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/download/albumArts/" + String.valueOf(albumId) + ".jpeg";
-        Log.e("TAG URL",path);
+
         try
         {
             stream = new FileOutputStream(path);
@@ -229,7 +215,6 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
         catch (FileNotFoundException e)
         {
             e.printStackTrace();
-            Log.e("TAG URL",e.toString());
             return;
         }
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
@@ -237,9 +222,7 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
         {
             stream.flush();
             stream.close();
-        } catch (IOException e) {
-            e.printStackTrace(); Log.e("TAG URL",e.toString());
-        }
+        } catch (IOException e) {}
 
 
 
@@ -249,8 +232,31 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
         MyApplication.getInstance().getContentResolver().insert(artworkUri, cv);
     }
 
-    //возвращает обложку для трэка с данным id
-    public static Bitmap getBitmapById(long id,Context context)
+    //return the cover art by id
+
+    private static LruCache<Long,Bitmap> bitmapCache = new LruCache<Long,Bitmap>(2 * 1024 * 1024)
+    {
+        @Override
+        protected int sizeOf(Long key, Bitmap value)
+        {
+            return value.getByteCount();
+        }
+
+        @Override
+        protected Bitmap create(Long key)
+        {
+            if(key < 1)
+                return null;
+
+            Bitmap bitmap = AlbumArtGetter.getBitmapFromStore(key, MyApplication.getInstance());
+
+            if(bitmap != null)
+                put(key,bitmap);
+
+            return bitmap;
+        }
+    };
+    private static Bitmap getBitmapFromStore(long id, Context context)
     {
         Uri uri = ContentUris.withAppendedId(artworkUri, id);
         try
@@ -261,5 +267,9 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
         {
             return null;
         }
+    }
+    public static Bitmap getCoverArt(long id)
+    {
+        return bitmapCache.get(id);
     }
 }

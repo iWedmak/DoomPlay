@@ -27,7 +27,6 @@ import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
@@ -37,26 +36,14 @@ class Utils
 {
     private Utils(){}
 
-    private static String[] EXTENSIONS ;
-
-    static
-    {
-        if(Build.VERSION.SDK_INT > 11)
-        {
-             EXTENSIONS = new String[]{ ".mp3",".flac",".m4a",".aac", ".mp4",".wav",".ogg",".midi",".3gp",".ota",".imy"};
-        }
-        else
-        {
-            EXTENSIONS = new String[]{".mp3",".mp4",".wav",".m4a",".ogg",".midi",".3gp",".ota",".imy"};
-        }
-
-    }
+    private static String[] EXTENSIONS  = { "mp3","mp1","mp2","flac","mp4","opus","aac","wv","xm","mod",
+            "s3m","aiff","umx","wav","ogg","midi","alac","ape","mpc"};
 
     public static boolean trackChecker(String trackToTest)
     {
         for(String ext : EXTENSIONS)
         {
-            if(trackToTest.contains(ext))
+            if(trackToTest.substring(trackToTest.lastIndexOf(".")+1).equals(ext))
                 return true;
         }
         return false;
@@ -86,15 +73,6 @@ class Utils
         finalTimerString = finalTimerString + minutes + ":" + secondsString;
 
         return finalTimerString;
-    }
-    public static int getProgressPercentage(long currentDuration, long totalDuration)
-    {
-        Double percentage ;
-        long currentSeconds = (int) (currentDuration / 1000);
-        long totalSeconds = (int) (totalDuration / 1000);
-        percentage =(((double)currentSeconds)/totalSeconds)*100;
-
-        return percentage.intValue();
     }
     public static boolean checkSpecialCharacters(String fileToCheck)
     {
@@ -126,7 +104,7 @@ class Utils
         RingtoneManager.setActualDefaultRingtoneUri(context,RingtoneManager.TYPE_RINGTONE,newUri);
 
 
-        Toast.makeText(context,"track was set as ringtone",Toast.LENGTH_SHORT).show();
+        Toast.makeText(context,context.getString(R.string.was_set_as_ringtone),Toast.LENGTH_SHORT).show();
     }
     public static boolean isOnline(Context context)
     {

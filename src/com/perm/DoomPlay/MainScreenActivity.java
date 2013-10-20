@@ -37,7 +37,6 @@ public class MainScreenActivity extends AbstractReceiver
 {
     public final static String keyOpenInListTrack = "gtsity";
     public static final boolean isJellyBean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
-    public static final boolean isOldSDK =  Build.VERSION.SDK_INT <= 8;
     private static final int REQUEST_LOGIN = 1093;
     public static boolean isLoading;
     public static boolean isRegister;

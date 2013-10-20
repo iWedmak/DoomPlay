@@ -5,7 +5,7 @@
 	See the BASS.CHM file for more detailed documentation
 */
 
-package com.perm.bassWrappers;
+package com.un4seen.bass;
 
 import android.content.res.AssetManager;
 

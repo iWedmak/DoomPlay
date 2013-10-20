@@ -30,8 +30,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.audiofx.AudioEffect;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
@@ -41,7 +39,7 @@ import android.support.v4.app.NotificationCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.widget.RemoteViews;
-import android.widget.Toast;
+import com.un4seen.bass.BassPlayer;
 import com.perm.vkontakte.api.KException;
 import org.json.JSONException;
 
@@ -49,12 +47,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class PlayingService extends Service implements MediaPlayer.OnCompletionListener , SharedPreferences.OnSharedPreferenceChangeListener ,MediaPlayer.OnErrorListener
+public class PlayingService extends Service implements BassPlayer.OnCompletionListener,BassPlayer.OnErrorListener , SharedPreferences.OnSharedPreferenceChangeListener
 {
     public final static String actionTrackChanged = "DoomedTrackChanged";
     public final static String actionIconPlay = "DoomedPlayPlay";
     public final static String actionIconPause = "DoomedPlaPause";
-    private volatile static MediaPlayer mediaPlayer;
+    private static BassPlayer bassPlayer;
     private static boolean isPrepared ;
     static int indexCurrentTrack = 0;
     public static boolean isShuffle;
@@ -90,28 +88,27 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     {
         return isLoadingTrack;
     }
-    @Override
-    public boolean onError(MediaPlayer mp, int what, int extra)
-    {
-        if(isOnline && !Utils.isOnline(this))
-        {
-            Toast.makeText(this,getResources().getString(R.string.check_internet), Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            Toast.makeText(this, getResources().getString(R.string.error_refresh), Toast.LENGTH_SHORT).show();
-        }
-        handleError();
-        return true;
-    }
-
     private void handleError()
     {
         dispose();
         isPlaying = false;
+        isPrepared = false;
         startNotif();
         sendBroadcast(new Intent(SmallWidget.actionUpdateWidget));
         sendBroadcast(new Intent(actionIconPlay));
+    }
+
+    @Override
+    public void onCompletion()
+    {
+        countTimer();
+        nextSong();
+    }
+
+    @Override
+    public void onError()
+    {
+         handleError();
     }
 
 
@@ -144,17 +141,18 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         isPlaying = true;
         isLoop = false;
 
-        if(Build.VERSION.SDK_INT > 7)
-        {
-            afListener = new AFListener();
-            audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-            audioManager.requestAudioFocus(afListener,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN );
-        }
+        afListener = new AFListener();
+        audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        audioManager.requestAudioFocus(afListener,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN );
 
         ((TelephonyManager)getSystemService(TELEPHONY_SERVICE)).listen(callListener,CallListener.LISTEN_CALL_STATE);
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
 
         serviceAlive = true;
+        bassPlayer = new BassPlayer();
+        bassPlayer.setOnCompletetion(this);
+        bassPlayer.setOnErrorListener(this);
+
     }
 
     @Override
@@ -162,14 +160,13 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     {
         super.onDestroy();
         dispose();
+        bassPlayer.releaseTotal();
         stopForeground(true);
         serviceAlive = false;
         isPlaying = false;
         sendBroadcast(new Intent(actionIconPlay));
         sendBroadcast(new Intent(SmallWidget.actionUpdateWidget));
-
-        if(Build.VERSION.SDK_INT > 7)
-            audioManager.abandonAudioFocus(afListener);
+        audioManager.abandonAudioFocus(afListener);
     }
     private void downloadAlbumArt(Audio audio)
     {
@@ -414,11 +411,6 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
         startNotif();
 
-        mediaPlayer = new MediaPlayer();
-
-        mediaPlayer.setOnCompletionListener(this);
-        mediaPlayer.setOnErrorListener(this);
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
         setBroadcast();
 
@@ -438,15 +430,10 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
             @Override
             protected Void doInBackground(Void... params)
             {
-                try
-                {
-                    mediaPlayer.setDataSource(audios.get(indexCurrentTrack).getUrl());
-                    mediaPlayer.prepare();
-
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
+                if(isOnline)
+                    bassPlayer.prepareNet(audios.get(indexCurrentTrack).getUrl());
+                else
+                    bassPlayer.prepareFile(audios.get(indexCurrentTrack).getUrl());
                 return null;
             }
 
@@ -463,26 +450,15 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
                 if(isPlaying)
                 {
-                    mediaPlayer.start();
+                    bassPlayer.start();
                 }
 
                 if(AlbumArtGetter.getCoverArt(audios.get(indexCurrentTrack).getAid()) == null)
                     downloadAlbumArt(audios.get(indexCurrentTrack));
-
-                if(!MainScreenActivity.isOldSDK)
-                    notifyEqualizer();
             }
         }.execute();
 
 
-    }
-
-   private void notifyEqualizer()
-    {
-        Intent intentEqualizer = new Intent(AudioEffect.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION);
-        intentEqualizer.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, getAudioSessionId());
-        intentEqualizer.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
-        sendBroadcast(intentEqualizer);
     }
 
     public void setLoop()
@@ -553,33 +529,43 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     }
     int getDuration()
     {
-        if(isPrepared && mediaPlayer != null)
+        if(isPrepared)
         {
-            return mediaPlayer.getDuration();
+            return bassPlayer.getTotalTime();
         }
         else
             return 0;
     }
     boolean isNull()
     {
-        return mediaPlayer == null;
+        return bassPlayer == null;
     }
 
     int getCurrentPosition()
     {
-        if(isPrepared && mediaPlayer != null)
+        if(isPrepared)
         {
-             return mediaPlayer.getCurrentPosition();
+             return bassPlayer.getCurrentPosition();
         }
         else
             return 0;
     }
+    int getProgressPercentage()
+    {
+        if(isPrepared)
+        {
+            return bassPlayer.getPercentage();
+        }
+        else
+            return 0;
+    }
+
     void playPause()
     {
         if(isPlaying)
         {
             isPlaying = false;
-            mediaPlayer.pause();
+            bassPlayer.pause();
             sendBroadcast(new Intent(actionIconPlay));
 
             if(Build.VERSION.SDK_INT < 11)
@@ -591,7 +577,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
         else
         {
             isPlaying = true;
-            mediaPlayer.start();
+            bassPlayer.start();
             sendBroadcast(new Intent(actionIconPause));
 
             startNotif();
@@ -602,22 +588,15 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     }
     void setCurrentPosition(int positionMillis)
     {
-        mediaPlayer.seekTo(positionMillis);
-    }
-    @Override
-    public void onCompletion(MediaPlayer mp)
-    {
-        countTimer();
-        nextSong();
+        if(isPrepared)
+            bassPlayer.seekTo(positionMillis);
     }
     private void dispose()
     {
-        if(mediaPlayer != null)
+        if(isPrepared)
         {
             isPrepared = false;
-            mediaPlayer.stop();
-            mediaPlayer.release();
-            mediaPlayer = null;
+            bassPlayer.release();
         }
     }
     private void countTimer()
@@ -643,15 +622,6 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     {
         return binder;
     }
-
-    public int getAudioSessionId()
-    {
-        if(isPrepared && mediaPlayer != null)
-            return mediaPlayer.getAudioSessionId();
-        else
-            return 0;
-    }
-
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
     {

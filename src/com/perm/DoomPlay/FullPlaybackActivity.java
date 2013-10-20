@@ -309,7 +309,7 @@ public class FullPlaybackActivity  extends AbstractControls
                 showPlaybackDialog(temp);
                 return true;
             case R.id.itemEqualizer:
-                startEqualizer();
+
                 return true;
             case R.id.itemSleep:
                 SleepDialog sleepDialog = new SleepDialog();

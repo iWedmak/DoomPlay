@@ -5,7 +5,7 @@
 	See the BASSWV.CHM file for more detailed documentation
 */
 
-package com.perm.bassWrappers;
+package com.un4seen.bass;
 
 import java.nio.ByteBuffer;
 

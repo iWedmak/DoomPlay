@@ -59,7 +59,7 @@ abstract class AbstractList extends AbstractControls
             {
 
                 adapter.setMarkedItem(position);
-                if(withScroll && SettingActivity.getPreferences(SettingActivity.keyScroll) && Build.VERSION.SDK_INT >= 8)
+                if(withScroll && SettingActivity.getPreferences(SettingActivity.keyScroll))
                     listView.smoothScrollToPosition(position);
             }
             else
@@ -110,7 +110,7 @@ abstract class AbstractList extends AbstractControls
                 showHide();
                 return true;
             case R.id.itemEqualizer:
-                startEqualizer();
+
                 return true;
             case R.id.itemSleep:
                 SleepDialog sleepDialog = new SleepDialog();

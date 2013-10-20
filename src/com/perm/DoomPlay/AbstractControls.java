@@ -21,13 +21,15 @@ package com.perm.DoomPlay;
 
 
 import android.content.*;
-import android.media.audiofx.AudioEffect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.view.View;
-import android.widget.*;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 /*
     Base class for all classes which content layout with controls
@@ -246,7 +248,7 @@ abstract class AbstractControls extends AbstractReceiver
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
         {
-            if(fromUser && playingService != null && !playingService.isNull() && !PlayingService.isLoadingTrack())
+            if(fromUser && playingService != null && !PlayingService.isLoadingTrack())
                 playingService.setCurrentPosition(playingService.getDuration()*progress / 100);
         }
         @Override
@@ -323,36 +325,10 @@ abstract class AbstractControls extends AbstractReceiver
                 return;
             if(playingService != null && PlayingService.serviceAlive && textCurrentTime != null)
             {
-                textCurrentTime.setText(Utils.milliSecondsToTimer(playingService.getCurrentPosition()));
-                textTotalTime.setText(Utils.milliSecondsToTimer(playingService.getDuration()));
-                seekBar.setProgress(Utils.getProgressPercentage(playingService.getCurrentPosition(),
-                        playingService.getDuration()));
+                textCurrentTime.setText(Utils.milliSecondsToTimer(playingService.getCurrentPosition()*1000));
+                textTotalTime.setText(Utils.milliSecondsToTimer(playingService.getDuration()*1000));
+                seekBar.setProgress(playingService.getProgressPercentage());
             }
         }
     };
-    void startEqualizer()
-    {
-         if(isEqualizerAvailable(this))
-         {
-             if(playingService != null)
-                startActivityForResult(getEqualizerIntent(playingService.getAudioSessionId()),0);
-             else
-                 startActivityForResult(getEqualizerIntent(0),0);
-         }
-        else
-             Toast.makeText(this,getResources().getString(R.string.doesnt_available),Toast.LENGTH_SHORT).show();
-    }
-
-    private static Intent getEqualizerIntent(int audioSessionId)
-    {
-        Intent intentEqualizer = new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL);
-        intentEqualizer.putExtra(AudioEffect.EXTRA_AUDIO_SESSION,audioSessionId);
-        return intentEqualizer;
-    }
-
-    private static boolean isEqualizerAvailable(Context context)
-    {
-        return Utils.isIntentAvailable(context, new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL));
-    }
-
 }

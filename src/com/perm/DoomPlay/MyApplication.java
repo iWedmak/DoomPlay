@@ -19,7 +19,6 @@ package com.perm.DoomPlay;
  */
 
 import android.app.Application;
-import com.bugsense.trace.BugSenseHandler;
 
 public class MyApplication extends Application
 {
@@ -37,7 +36,7 @@ public class MyApplication extends Application
         super.onCreate();
         instance = this;
 
-        //ExceptionLog.init(this);
-        BugSenseHandler.initAndStartSession(this, BUGSENCE_API_KEY);
+        ExceptionLog.init(this);
+        //BugSenseHandler.initAndStartSession(this, BUGSENCE_API_KEY);
     }
 }

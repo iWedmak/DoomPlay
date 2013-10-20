@@ -168,17 +168,13 @@ abstract class AbstractList extends AbstractControls
                     startLyricsDialog(getSupportFragmentManager(), audios.get(position).getLyrics_id());
                     break;
                 case R.id.itemLike:
-                    if(PlaylistDB.isLoading)
-                        waitMessage(getBaseContext());
-                    else if(!MainScreenActivity.isRegister)
+                    if(!MainScreenActivity.isRegister)
                         Toast.makeText(getBaseContext(),getResources().getString(R.string.please_sign_in),Toast.LENGTH_SHORT).show();
                     else
                         likeTrack(position);
                     break;
                 case R.id.itemDislike:
-                    if(PlaylistDB.isLoading)
-                        waitMessage(getBaseContext());
-                    else if(!MainScreenActivity.isRegister)
+                    if(!MainScreenActivity.isRegister)
                         Toast.makeText(getBaseContext(),getResources().getString(R.string.please_sign_in),Toast.LENGTH_SHORT).show();
                     else
                         dislikeTrack(position);
@@ -195,9 +191,7 @@ abstract class AbstractList extends AbstractControls
                     }
                     break;
                 case R.id.itemMoveToAlbum:
-                    if(PlaylistDB.isLoading)
-                        waitMessage(getBaseContext());
-                    else if(!MainScreenActivity.isRegister)
+                    if(!MainScreenActivity.isRegister)
                         Toast.makeText(getBaseContext(),getResources().getString(R.string.please_sign_in),Toast.LENGTH_SHORT).show();
                     else
                         moveToAlbum(getSupportFragmentManager(), audios.get(position).getAid());

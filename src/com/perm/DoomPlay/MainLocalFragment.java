@@ -70,10 +70,7 @@ public class MainLocalFragment extends Fragment
                         goArtist();
                         break;
                     case R.id.linearPlaylists:
-                        if(!PlaylistDB.isLoading)
-                            startActivity(new Intent(getActivity(),PlaylistActivity.class));
-                        else
-                            AbstractList.waitMessage(getActivity());
+                        startActivity(new Intent(getActivity(),PlaylistActivity.class));
                         break;
                     case R.id.linearFolders:
                         startActivity(new Intent(getActivity(),FileSystemActivity.class));

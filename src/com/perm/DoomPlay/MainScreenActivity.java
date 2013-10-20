@@ -128,8 +128,11 @@ public class MainScreenActivity extends AbstractReceiver
             {
                 super.onPostExecute(aVoid);
                 MainScreenActivity.isLoading = false;
-                vkFragment.unsetLoading();
-                localFragment.unsetLoading();
+
+                if(vkFragment != null)
+                    vkFragment.unsetLoading();
+                if(localFragment != null)
+                    localFragment.unsetLoading();
 
             }
         }.execute();

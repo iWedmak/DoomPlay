@@ -21,7 +21,6 @@ package com.perm.DoomPlay;
 
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.view.ActionMode;
 import android.view.Menu;
@@ -107,54 +106,33 @@ public class ListTracksActivity extends AbstractList
 
                     case R.id.itemDeleteTrack:
                     {
-                        if(!PlaylistDB.isLoading)
-                        {
-                            trackDelete(position);
-                        }
-                        else
-                            AbstractList.waitMessage(getBaseContext());
-
+                        trackDelete(position);
                         mode.finish();
                         break;
                     }
                     case R.id.itemTrackDown:
                     {
-                        if(!PlaylistDB.isLoading)
-                        {
-                            trackChange(false, position);
+                        trackChange(false, position);
 
-                            if(position == audios.size() - 1)
-                                position = 0;
-                            else
-                                position++;
-
-                            updateList();
-                        }
+                        if(position == audios.size() - 1)
+                            position = 0;
                         else
-                        {
-                            mode.finish();
-                            AbstractList.waitMessage(getBaseContext());
-                        }
+                            position++;
+
+                        updateList();
+
                         break;
                     }
                     case R.id.itemTrackUp:
                     {
-                        if(!PlaylistDB.isLoading)
-                        {
-                            trackChange(true, position);
-                            if(position == 0)
-                                position = audios.size() - 1;
-                            else
-                                position--;
 
-                            updateList();
-                        }
+                        trackChange(true, position);
+                        if(position == 0)
+                            position = audios.size() - 1;
                         else
-                        {
-                            mode.finish();
-                            AbstractList.waitMessage(getBaseContext());
-                        }
+                            position--;
 
+                        updateList();
                         break;
                     }
                     case R.id.itemGetLiricks:
@@ -214,25 +192,13 @@ public class ListTracksActivity extends AbstractList
     private void trackDelete(int position)
     {
 
-            playlistDB.deleteTrack(position, PlaylistActivity.selectedPlaylist);
+            playlistDB.deleteTrack(audios.get(position).getUrl(), PlaylistActivity.selectedPlaylist);
 
              if(AbstractList.equalsCollections(audios, PlayingService.audios))
                  PlayingService.audios.remove(position);
 
             audios.remove(position);
             adapter.changeData(audios);
-
-
-            AsyncTask<Integer,Void,Void> asyncAdder  = new AsyncTask<Integer, Void, Void>()
-            {
-                @Override
-                protected Void doInBackground(Integer... params)
-                {
-                    playlistDB.setAcordingPositions(params[0],PlaylistActivity.selectedPlaylist);
-                    return null;
-                }
-            };
-            asyncAdder.execute(position);
 
             if(position == PlayingService.indexCurrentTrack && AbstractList.equalsCollections(audios, PlayingService.audios))
             {
@@ -277,7 +243,7 @@ public class ListTracksActivity extends AbstractList
         }
 
 
-        playlistDB.changeColumns(PlaylistActivity.selectedPlaylist, position, to);
+        playlistDB.changeColumns(PlaylistActivity.selectedPlaylist,audios.get(position).getUrl(),audios.get(to).getUrl());
     }
 
     @Override

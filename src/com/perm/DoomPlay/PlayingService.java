@@ -553,7 +553,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
     }
     int getDuration()
     {
-        if(isPrepared)
+        if(isPrepared && mediaPlayer != null)
         {
             return mediaPlayer.getDuration();
         }
@@ -567,7 +567,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
     int getCurrentPosition()
     {
-        if(isPrepared)
+        if(isPrepared && mediaPlayer != null)
         {
              return mediaPlayer.getCurrentPosition();
         }
@@ -646,7 +646,7 @@ public class PlayingService extends Service implements MediaPlayer.OnCompletionL
 
     public int getAudioSessionId()
     {
-        if(mediaPlayer != null)
+        if(isPrepared && mediaPlayer != null)
             return mediaPlayer.getAudioSessionId();
         else
             return 0;

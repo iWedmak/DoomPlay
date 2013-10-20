@@ -31,13 +31,11 @@ import static android.provider.MediaStore.Audio.Media;
 public class PlaylistDB extends SQLiteOpenHelper
 {
 
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 12;
     private static final String DATABASE_NAME = "playlistsData";
     private static final String TABLE_LISTPLAYLIST = "listplaylist";
-    private static final String KEY_POSITION_TRACK = "postiontak";
     private static final String TABLE_DEFAULT = "defaultTable";
     private static final String KEY_NAME_PLAYLIST = "playlistName";
-    static boolean isLoading  = false;
 
 
     private PlaylistDB(Context context)
@@ -66,7 +64,7 @@ public class PlaylistDB extends SQLiteOpenHelper
     {
           db.execSQL("CREATE TABLE IF NOT EXISTS " + table + "("
                   + Media._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + Media.DATA + " TEXT,"+
-                  Media.ARTIST + " TEXT,"+ Media.TITLE + " TEXT," + Media.ALBUM_ID +" LONG," + KEY_POSITION_TRACK + " INTEGER"+ ")");
+                  Media.ARTIST + " TEXT,"+ Media.TITLE + " TEXT," + Media.ALBUM_ID +" INTEGER)");
     }
 
 
@@ -94,12 +92,20 @@ public class PlaylistDB extends SQLiteOpenHelper
             }
         }
     }
-    private int getLastPosition(String playlist, SQLiteDatabase db)
+    private boolean isContentTrack(String table,String track,SQLiteDatabase db)
     {
-        Cursor c = db.query(playlist,new String[]{Media._ID},null, null, null, null, null);
-        int count = c.getCount();
-        c.close();
-        return  count;
+        Cursor cursor = db.query(table,new String[]{Media.ALBUM_ID},Media.DATA + "= ?",new String[]{track},null,null,null);
+
+        if(cursor.moveToFirst())
+        {
+            cursor.close();
+            return true;
+        }
+        else
+        {
+            cursor.close();
+            return false;
+        }
     }
 
     @Override
@@ -117,56 +123,32 @@ public class PlaylistDB extends SQLiteOpenHelper
 
     void addTracks(ArrayList<Audio> audios, String playlist)
     {
-        isLoading = true;
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv;
-        int position = getLastPosition(playlist,db);
 
         for(Audio audio : audios)
         {
-            cv = new ContentValues();
-            cv.put(Media.DATA, audio.getUrl());
-            cv.put(Media.ARTIST, audio.getArtist());
-            cv.put(Media.ALBUM_ID, audio.getAid());
-            cv.put(Media.TITLE, audio.getTitle());
-            cv.put(KEY_POSITION_TRACK,position);
-            position++;
-            db.insert(playlist, null, cv);
+            if(!isContentTrack(playlist,audio.getUrl(),db))
+            {
+                cv = new ContentValues();
+                cv.put(Media.DATA, audio.getUrl());
+                cv.put(Media.ARTIST, audio.getArtist());
+                cv.put(Media.ALBUM_ID, audio.getAid());
+                cv.put(Media.TITLE, audio.getTitle());
+                db.insert(playlist, null, cv);
+            }
         }
         db.close();
-        isLoading = false;
     }
-
-    //TODO: it's really slow ,need solve this
-    void deleteTrack(int positionTrack,String playlist)
+    void deleteTrack(String trackPath,String playlist)
     {
         SQLiteDatabase db = getWritableDatabase();
-        db.delete(playlist, KEY_POSITION_TRACK + " = ?", new String[]{String.valueOf(positionTrack)});
+        db.delete(playlist, Media.DATA + " = ?", new String[]{trackPath});
 
         db.close();
     }
-
-    void setAcordingPositions(int positionTrack,String playlist)
-    {
-        isLoading = true;
-        SQLiteDatabase db = getWritableDatabase();
-        int lastPos = getLastPosition(playlist,db);
-        int pos = positionTrack;
-
-        for(int i = pos ; i < lastPos  ; i++)
-        {
-            ContentValues cv = new ContentValues();
-            cv.put(KEY_POSITION_TRACK,pos);
-            db.update(playlist,cv,KEY_POSITION_TRACK + " = ?",new String[]{String.valueOf(pos+1)});
-            pos ++ ;
-        }
-        db.close();
-        isLoading = false;
-    }
-
     ArrayList<Audio> getTracks(String playlist)
     {
-        isLoading = true;
         SQLiteDatabase db = getWritableDatabase();
 
         Cursor c = db.query(playlist,TracksHolder.projection,null, null, null, null, null);
@@ -175,10 +157,8 @@ public class PlaylistDB extends SQLiteOpenHelper
 
         c.close();
         db.close();
-        isLoading = false;
+
         return result;
-
-
     }
     private String[] getListPlaylistForDatabase(SQLiteDatabase db)
     {
@@ -225,24 +205,22 @@ public class PlaylistDB extends SQLiteOpenHelper
         db.execSQL("DROP TABLE IF EXISTS " + playlist);
         db.close();
     }
-    void changeColumns(String playlist , int first,int second)
+    void changeColumns(String playlist,String first,String second)
     {
 
         SQLiteDatabase db = getWritableDatabase();
 
-        Cursor cFirst = db.query(playlist,TracksHolder.projectionPlusId,KEY_POSITION_TRACK + " = ?",new String[]{String.valueOf(first)},null,null,null);
+        Cursor cFirst = db.query(playlist,TracksHolder.projectionPlusId,Media.DATA + " = ?",new String[]{first},null,null,null);
         cFirst.moveToFirst();
         String idFirst = cFirst.getString(cFirst.getColumnIndex(Media._ID));
-        String trackFirst = cFirst.getString(cFirst.getColumnIndex(Media.DATA));
         String artistFirst  = cFirst.getString(cFirst.getColumnIndex(Media.ARTIST));
         String titleFirst  = cFirst.getString(cFirst.getColumnIndex(Media.TITLE));
         long albumIdFirst  = cFirst.getLong(cFirst.getColumnIndex(Media.ALBUM_ID));
         cFirst.close();
 
-        Cursor cSecond = db.query(playlist,TracksHolder.projectionPlusId,KEY_POSITION_TRACK + " = ?",new String[]{String.valueOf(second)},null,null,null);
+        Cursor cSecond = db.query(playlist,TracksHolder.projectionPlusId,Media.DATA + " = ?",new String[]{second},null,null,null);
         cSecond.moveToFirst();
         String idSecond = cSecond.getString(cSecond.getColumnIndex(Media._ID));
-        String trackSecond = cSecond.getString(cSecond.getColumnIndex(Media.DATA));
         String artistSecond  = cSecond.getString(cSecond.getColumnIndex(Media.ARTIST));
         String titleSecond  = cSecond.getString(cSecond.getColumnIndex(Media.TITLE));
         long albumIdSecond  = cSecond.getLong(cSecond.getColumnIndex(Media.ALBUM_ID));
@@ -251,15 +229,13 @@ public class PlaylistDB extends SQLiteOpenHelper
 
 
         ContentValues cv = new ContentValues();
-        cv.put (KEY_POSITION_TRACK, first);
-        cv.put(Media.DATA,trackSecond);
+        cv.put(Media.DATA,second);
         cv.put(Media.TITLE,titleSecond);
         cv.put(Media.ARTIST,artistSecond);
         cv.put(Media.ALBUM_ID,albumIdSecond);
 
         ContentValues cv2 = new ContentValues();
-        cv2.put (KEY_POSITION_TRACK, second);
-        cv2.put(Media.DATA,trackFirst);
+        cv2.put(Media.DATA,first);
         cv2.put(Media.TITLE,titleFirst);
         cv2.put(Media.ARTIST,artistFirst);
         cv2.put(Media.ALBUM_ID,albumIdFirst);

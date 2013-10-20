@@ -83,18 +83,11 @@ abstract class AbstractReceiver extends ActionBarActivity
 
     void showPlaybackDialog(ArrayList<Audio> audios)
     {
-        if(!PlaylistDB.isLoading)
-        {
-            AddTrackFromPlaybackDialog dialog = new AddTrackFromPlaybackDialog();
-            Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList(AddTrackFromPlaybackDialog.keyBundleDialog, audios);
-            dialog.setArguments(bundle);
-            dialog.show(getSupportFragmentManager(),"tag");
-        }
-        else
-            AbstractList.waitMessage(this);
-
-
+        AddTrackFromPlaybackDialog dialog = new AddTrackFromPlaybackDialog();
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(AddTrackFromPlaybackDialog.keyBundleDialog, audios);
+        dialog.setArguments(bundle);
+        dialog.show(getSupportFragmentManager(),"tag");
     }
 
     @Override

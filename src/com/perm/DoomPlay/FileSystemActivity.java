@@ -44,6 +44,7 @@ public class FileSystemActivity extends AbstractReceiver
     public final static String keyMusic = "3kpoid";
     private final static String keyCurrentDir = "currentDij";
 
+    private final static File rootFile = new File("/storage");
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -60,13 +61,26 @@ public class FileSystemActivity extends AbstractReceiver
         listView.setOnItemLongClickListener(onItemLongClickListener);
 
         if(savedInstanceState != null)
-            fill(new File(savedInstanceState.getString(keyCurrentDir, "/mnt")));
+        {
+            fill(new File(savedInstanceState.getString(keyCurrentDir,"/storage")));
+        }
+
         else
-            fill(new File("/mnt"));
+            fill(rootFile);
     }
 
 
-
+    private static String getCanonPath(File file)
+    {
+        try
+        {
+            return file.getCanonicalPath();
+        }
+        catch (IOException e)
+        {
+            return file.getAbsolutePath();
+        }
+    }
 
 
     @Override
@@ -96,20 +110,9 @@ public class FileSystemActivity extends AbstractReceiver
                 return true;
         }
     };
-    //it's fucking crooked nail , fix it!!!
     private static ArrayList<Audio> getAudiosFromFolder(File file, Context context)
     {
-        String selectionArgs;
-        try
-        {
-            selectionArgs = file.getCanonicalPath();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-            selectionArgs = file.getAbsolutePath().substring(12);
-        }
-
+        String selectionArgs = getCanonPath(file);
 
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 TracksHolder.projection,MediaStore.Audio.Media.DATA + " LIKE ? ",new String[]{"%"+selectionArgs +"%"},null);
@@ -119,20 +122,10 @@ public class FileSystemActivity extends AbstractReceiver
         cursor.close();
         return audios;
     }
-    //it's fucking crooked nail , fix it too!!!
+
     private static Audio getAudioFromFile(File file, Context context)
     {
-        String selectionArgs;
-
-        try
-        {
-            selectionArgs = file.getCanonicalPath();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-            selectionArgs = file.getAbsolutePath();
-        }
+        String selectionArgs = getCanonPath(file);
 
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 TracksHolder.projection,MediaStore.Audio.Media.DATA + " = ? ",new String[]{selectionArgs}, null);
@@ -226,19 +219,7 @@ public class FileSystemActivity extends AbstractReceiver
         }
         currentDirectory = file;
 
-        String fileName;
-
-        try
-        {
-            fileName = file.getCanonicalPath();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-            fileName = file.getAbsolutePath();
-        }
-
-        textCurrentDir.setText(fileName);
+        textCurrentDir.setText(getCanonPath(file));
 
         Arrays.sort(entriesFiles, fileComparator);
 
@@ -292,7 +273,7 @@ public class FileSystemActivity extends AbstractReceiver
     @Override
     public void onBackPressed()
     {
-        if(currentDirectory.equals(new File("/mnt")))
+        if(currentDirectory.equals(rootFile))
         {
             super.onBackPressed();
         }

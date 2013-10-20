@@ -157,7 +157,7 @@ public class SearchVkActivity extends AbstractList
         public void onClick(View v)
         {
 
-            if(PlaylistDB.isLoading)
+            if(isLoading)
                 AbstractList.waitMessage(getBaseContext());
             else if(!MainScreenActivity.isRegister)
                 Toast.makeText(getBaseContext(),getResources().getString(R.string.please_sign_in),Toast.LENGTH_SHORT).show();

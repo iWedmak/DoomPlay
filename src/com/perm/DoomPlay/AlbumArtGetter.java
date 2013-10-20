@@ -239,7 +239,7 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
         @Override
         protected int sizeOf(Long key, Bitmap value)
         {
-            return value.getByteCount();
+            return value.getRowBytes() * value.getHeight();
         }
 
         @Override

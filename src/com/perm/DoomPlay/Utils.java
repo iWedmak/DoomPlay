@@ -31,7 +31,6 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
-import java.io.File;
 import java.util.List;
 
 class Utils
@@ -44,17 +43,14 @@ class Utils
     {
         if(Build.VERSION.SDK_INT > 11)
         {
-             EXTENSIONS = new String[]{ ".mp3",".flac",".m4a",".aac", ".mp4",".wav",".ogg",".midi",".3gp",".ota",".imy",".rtx",".xmf",".mxmf"};
+             EXTENSIONS = new String[]{ ".mp3",".flac",".m4a",".aac", ".mp4",".wav",".ogg",".midi",".3gp",".ota",".imy"};
         }
         else
         {
-            EXTENSIONS = new String[]{".mp3",".mp4",".wav",".m4a",".ogg",".midi",".3gp",".ota",".imy",".rtx",".xmf",".mxmf"};
+            EXTENSIONS = new String[]{".mp3",".mp4",".wav",".m4a",".ogg",".midi",".3gp",".ota",".imy"};
         }
 
     }
-
-
-
 
     public static boolean trackChecker(String trackToTest)
     {
@@ -116,7 +112,7 @@ class Utils
         ContentValues values = new ContentValues();
         values.put(MediaStore.MediaColumns.DATA, audio.getUrl());
         values.put(MediaStore.MediaColumns.TITLE, audio.getTitle());
-        values.put(MediaStore.MediaColumns.SIZE, new File(audio.getUrl()).getTotalSpace());
+        values.put(MediaStore.MediaColumns.SIZE, 1024*1024);
         values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/*");
         values.put(MediaStore.Audio.Media.ARTIST, audio.getArtist());
         values.put(MediaStore.Audio.Media.DURATION, 5000);

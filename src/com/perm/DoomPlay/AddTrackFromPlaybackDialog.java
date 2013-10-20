@@ -29,7 +29,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -79,6 +82,8 @@ public class AddTrackFromPlaybackDialog extends DialogFragment
                     progressDialog.setTitle("wait");
                     progressDialog.setMessage("being added");
                     progressDialog.show();
+                    progressDialog.setCanceledOnTouchOutside(false);
+                    progressDialog.setCancelable(false);
                     dismiss();
                     super.onPreExecute();
                 }

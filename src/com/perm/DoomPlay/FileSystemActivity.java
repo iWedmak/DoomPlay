@@ -62,9 +62,12 @@ public class FileSystemActivity extends AbstractReceiver
 
         if(savedInstanceState != null)
         {
-            fill(new File(savedInstanceState.getString(keyCurrentDir,"/storage")));
+            String savedPath = savedInstanceState.getString(keyCurrentDir);
+            if(savedPath != null)
+                fill(new File(savedInstanceState.getString(keyCurrentDir)));
+            else
+                fill(rootFile);
         }
-
         else
             fill(rootFile);
     }

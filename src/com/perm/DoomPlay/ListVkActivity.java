@@ -35,7 +35,6 @@ import java.util.ArrayList;
 
 public class ListVkActivity extends AbstractList
 {
-    public static ArrayList<Audio> audiosVk;
     static String currentAction ;
     public static final String actionMyMusic ="actionMyMusic";
     public static final String actionMyAlbums = "actionMyAlbums";
@@ -58,13 +57,23 @@ public class ListVkActivity extends AbstractList
         initializeAbstract();
         checkIsShown(savedInstanceState);
 
-        if(currentAction.equals(actionMyMusic) && audiosVk == null)
+        if(currentAction.equals(actionMyMusic) && TracksHolder.audiosVk == null)
         {
             refreshAudios();
         }
         else if(currentAction.equals(actionMyMusic))
         {
-            audios = audiosVk;
+            audios = TracksHolder.audiosVk;
+            if(adapter == null)
+            {
+                adapter = new ListsAdapter(audios,getBaseContext());
+                listView.setAdapter(adapter);
+            }
+            else
+            {
+                adapter.changeData(audios);
+            }
+
         }
         else
         {
@@ -152,7 +161,7 @@ public class ListVkActivity extends AbstractList
                 {
                     if(currentAction.equals(actionMyMusic))
                     {
-                        audios = audiosVk = MainScreenActivity.api.getAudio(Account.account.user_id,
+                        audios = TracksHolder.audiosVk = MainScreenActivity.api.getAudio(Account.account.user_id,
                             null,null,SettingActivity.getPreference("countvkall"));
 
                     }

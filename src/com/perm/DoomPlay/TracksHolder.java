@@ -28,6 +28,7 @@ import java.util.ArrayList;
 
 class TracksHolder
 {
+    public static ArrayList<Audio> audiosVk;
     private static volatile boolean isScanned = false;
     public static String[] allArtist;
     public static String[] allAlbums;

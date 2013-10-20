@@ -254,7 +254,7 @@ abstract class AbstractList extends AbstractControls
             {
                 super.onPostExecute(position);
                 audios.remove((int) position);
-                ListVkActivity.audiosVk = audios;
+                TracksHolder.audiosVk = audios;
                 adapter.changeData(audios);
 
                 if(position == PlayingService.indexCurrentTrack && equalsCollections(PlayingService.audios,audios))
@@ -283,7 +283,7 @@ abstract class AbstractList extends AbstractControls
                 try
                 {
                     MainScreenActivity.api.addAudio(audios.get(params[0]).getAid(), audios.get(params[0]).getOwner_id());
-                    ListVkActivity.audiosVk.add(0,audios.get(params[0]));
+                    TracksHolder.audiosVk.add(0,audios.get(params[0]));
 
                 } catch (IOException e)
                 {

@@ -283,7 +283,8 @@ abstract class AbstractList extends AbstractControls
                 try
                 {
                     MainScreenActivity.api.addAudio(audios.get(params[0]).getAid(), audios.get(params[0]).getOwner_id());
-                    TracksHolder.audiosVk.add(0,audios.get(params[0]));
+                    if(TracksHolder.audiosVk != null)
+                        TracksHolder.audiosVk.add(0,audios.get(params[0]));
 
                 } catch (IOException e)
                 {

@@ -39,8 +39,9 @@ import android.support.v4.app.NotificationCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.widget.RemoteViews;
-import com.un4seen.bass.BassPlayer;
+import android.widget.Toast;
 import com.perm.vkontakte.api.KException;
+import com.un4seen.bass.BassPlayer;
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -399,8 +400,15 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
 
     private void loadMusic()
     {
-
         dispose();
+
+        //TODO: sometimes it throws  java.lang.IndexOutOfBoundsException: Invalid index 0, size is 0 , it's need to be fixed
+        if(audios.size() == 0)
+            return;
+
+
+
+
 
         sendBroadcast(new Intent(actionTrackChanged));
         sendBroadcast(new Intent(SmallWidget.actionUpdateWidget));
@@ -430,11 +438,34 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
             @Override
             protected Void doInBackground(Void... params)
             {
-                if(isOnline)
-                    bassPlayer.prepareNet(audios.get(indexCurrentTrack).getUrl());
-                else
-                    bassPlayer.prepareFile(audios.get(indexCurrentTrack).getUrl());
+
+                try
+                {
+                    if(isOnline)
+                        bassPlayer.prepareNet(audios.get(indexCurrentTrack).getUrl());
+
+                    else
+                        bassPlayer.prepareFile(audios.get(indexCurrentTrack).getUrl());
+                }
+                catch (IOException e)
+                {
+                    cancel(false);
+                }
+
+
                 return null;
+            }
+
+            @Override
+            protected void onCancelled()
+            {
+                super.onCancelled();
+
+                isLoadingTrack = false;
+                if(loadingListener != null)
+                    loadingListener.onLoadingTrackEnded();
+
+                Toast.makeText(getBaseContext(),getResources().getString(R.string.error),Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -536,11 +567,6 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
         else
             return 0;
     }
-    boolean isNull()
-    {
-        return bassPlayer == null;
-    }
-
     int getCurrentPosition()
     {
         if(isPrepared)
@@ -562,6 +588,9 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
 
     void playPause()
     {
+        if(!isPrepared)
+            return;
+
         if(isPlaying)
         {
             isPlaying = false;

@@ -129,7 +129,9 @@
     <string name="please_sign_in">Please log in</string>
     <string name="registr_succes">Authorization is successful</string>
     <string name="cant_delete_file">Can\'t delete file</string>
-    <string name="was_set_as_ringtone">track was set as ringtone</string>
+    <string name="was_set_as_ringtone">Track was set as ringtone</string>
+    <string name="save_after_buffer">save the file if it fully buffered</string>
+    <string name="Save_after_buffer">Save track after buffering</string>
     <string-array name ="count_values">
         <item>10</item>
         <item>30</item>

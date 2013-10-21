@@ -227,7 +227,6 @@ abstract class AbstractControls extends AbstractReceiver
                     playingService.previousSong();
                     break;
                 case (R.id.imagePlay):
-                    if(!playingService.isNull())
                         playingService.playPause();
                     break;
                 case (R.id.imageNext):

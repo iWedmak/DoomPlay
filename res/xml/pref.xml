@@ -90,6 +90,12 @@
                 android:title="@string/Broadcast"
                 android:defaultValue="false">
         </CheckBoxPreference>
+        <CheckBoxPreference
+                android:key="savevkfile"
+                android:summary="@string/save_after_buffer"
+                android:title="@string/Save_after_buffer"
+                android:defaultValue="true">
+        </CheckBoxPreference>
 
     </PreferenceScreen>
 

@@ -174,9 +174,12 @@ public class DownloadingService extends Service implements Download.DoomObserver
     */
 
 
+
+   public final static String defaultFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/download/";
+
     private static String generateFilePath(Audio track)
     {
-        String defaultFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/download/";
+
         File defaultFile = new File(defaultFolder);
 
         if(!defaultFile.exists() && !defaultFile.mkdirs())

@@ -1,12 +1,15 @@
 package com.un4seen.bass;
 
+import com.perm.DoomPlay.DownloadingService;
+import com.perm.DoomPlay.SettingActivity;
+
+import java.io.*;
 import java.nio.ByteBuffer;
 
 public class BassPlayer
 {
     public interface OnCompletionListener
     {
-        // if(false) error();
         void onCompletion();
     }
     public interface OnErrorListener
@@ -15,9 +18,9 @@ public class BassPlayer
     }
     public boolean isPlaying;
 
-
     private int chan;
     private int totalTime;
+    private final int[] fx = new int[10];
     private OnCompletionListener completionListener;
     private OnErrorListener errorListener;
 
@@ -41,23 +44,14 @@ public class BassPlayer
                 completionListener.onCompletion();
         }
     };
-    private final BASS.DOWNLOADPROC StatusProc=new BASS.DOWNLOADPROC()
-    {
-        @Override
-        public void DOWNLOADPROC(ByteBuffer buffer, int length, Object user)
-        {
 
-        }
-    };
 
     public BassPlayer()
     {
         BASS.BASS_Init(-1, 44100, 0);
+        chan = 0;
     }
-
-
-
-    public void prepareFile(String url)
+    public void prepareFile(String url) throws IOException
     {
         String extension = (url.substring(url.lastIndexOf(".")+1)).toLowerCase();
 
@@ -83,9 +77,7 @@ public class BassPlayer
 
         if(chan == 0)
         {
-            if(errorListener != null)
-                errorListener.onError();
-            return;
+            throw new IOException("prepare exception");
         }
 
 
@@ -100,10 +92,10 @@ public class BassPlayer
     private final Object lock = new Object();
     int req;
 
-    public void prepareNet(String url)
+    public void prepareNet(String url) throws IOException
     {
         int r;
-        synchronized(lock) { // make sure only 1 thread at a time can do the following
+        synchronized(lock) {
             r=++req; // increment the request counter for this request
         }
 
@@ -134,28 +126,80 @@ public class BassPlayer
             if (r!=req)
             { // there is a newer request, discard this stream
                 if (c!=0)
+                {
                     BASS.BASS_StreamFree(c);
-                return;
+                }
+                throw new IOException("prepare exception");
             }
             chan=c; // this is now the current stream
         }
 
         if(chan == 0)
         {
-            if(errorListener != null)
-                errorListener.onError();
-            return;
+            throw new IOException("prepare exception");
         }
-
-
-
-
 
         long bytes = BASS.BASS_ChannelGetLength(chan, BASS.BASS_POS_BYTE);
         totalTime = (int)BASS.BASS_ChannelBytes2Seconds(chan, bytes);
         BASS.BASS_CHANNELINFO info=new BASS.BASS_CHANNELINFO();
         BASS.BASS_ChannelGetInfo(chan, info);
         BASS.BASS_ChannelSetSync(chan, BASS.BASS_SYNC_END, 0, EndSync, 0);
+
+        if(SettingActivity.getPreferences("savevkfile"))
+            filePath = DownloadingService.defaultFolder + url.substring( url.lastIndexOf('/')+1, url.length());
+    }
+
+
+    OutputStream outputStream;
+    String filePath;
+    private final BASS.DOWNLOADPROC StatusProc=new BASS.DOWNLOADPROC()
+    {
+        @Override
+        public void DOWNLOADPROC(ByteBuffer buffer, int length, Object user)
+        {
+            if(filePath != null)
+            {
+                if(outputStream == null)
+                {
+                    try {
+                        outputStream = new FileOutputStream(filePath);
+                    } catch (FileNotFoundException e) {
+                        return;
+                    }
+                }
+                else if(buffer != null)
+                {
+                    try {
+                        outputStream.write(buffer.array(), 0, length);
+                    } catch (IOException e) { }
+                }
+                else
+                {
+                    try {
+                        outputStream.close();
+                    } catch (IOException e) {}
+                }
+            }
+
+        }
+    };
+    private void setUpEffects()
+    {
+        fx[0]=BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fx[1]=BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fx[2]=BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fx[3]=BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_REVERB, 0);
+
+        BASS.BASS_DX8_PARAMEQ p = new BASS.BASS_DX8_PARAMEQ();
+
+        p.fGain=0;
+        p.fBandwidth=18;
+        p.fCenter=125;
+        BASS.BASS_FXSetParameters(fx[0], p);
+        p.fCenter=1000;
+        BASS.BASS_FXSetParameters(fx[1], p);
+        p.fCenter=8000;
+        BASS.BASS_FXSetParameters(fx[2], p);
     }
 
 
@@ -192,7 +236,18 @@ public class BassPlayer
     }
     public void release()
     {
+        BASS.BASS_MusicFree(chan);
         BASS.BASS_StreamFree(chan);
+
+        if(outputStream != null)
+        {
+            new File(filePath).delete();
+            try {
+                outputStream.close();
+            } catch (IOException e) {}
+
+        }
+        filePath = null;
     }
     public int getPercentage()
     {

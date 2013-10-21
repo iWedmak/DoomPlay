@@ -32,7 +32,7 @@ import android.widget.TextView;
     dialog is used for add playlist , add album , edit album.
  */
 
-abstract class AddListDialog extends DialogFragment
+public abstract class AddListDialog extends DialogFragment
 {
 
 

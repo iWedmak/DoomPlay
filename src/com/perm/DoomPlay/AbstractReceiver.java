@@ -150,9 +150,8 @@ abstract class AbstractReceiver extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
         prepareLang();
-
-
         prepareActionBar();
         createBroadcastRec();
         initializeKiller();

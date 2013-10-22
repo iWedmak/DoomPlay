@@ -1,6 +1,8 @@
 package com.un4seen.bass;
 
+import android.util.Log;
 import com.perm.DoomPlay.DownloadingService;
+import com.perm.DoomPlay.EqualizerActivity;
 import com.perm.DoomPlay.SettingActivity;
 
 import java.io.*;
@@ -18,11 +20,18 @@ public class BassPlayer
     }
     public boolean isPlaying;
 
-    private int chan;
+    public static int getChannnel()
+    {
+        return chan;
+    }
+
+    private static int chan;
     private int totalTime;
-    private final int[] fx = new int[10];
     private OnCompletionListener completionListener;
     private OnErrorListener errorListener;
+    private static int[] fx = new int[10];
+
+
 
 
    public void setOnCompletetion(OnCompletionListener listener)
@@ -87,6 +96,85 @@ public class BassPlayer
         BASS.BASS_ChannelGetInfo(chan, info);
         BASS.BASS_ChannelSetSync(chan, BASS.BASS_SYNC_END, 0, EndSync, 0);
 
+        setUpEffects();
+
+    }
+    private void setUpEffects()
+    {
+        fx[0] = BASS.BASS_ChannelSetFX(BassPlayer.getChannnel(), BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fx[1] = BASS.BASS_ChannelSetFX(BassPlayer.getChannnel(), BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fx[2] = BASS.BASS_ChannelSetFX(BassPlayer.getChannnel(), BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fx[3] = BASS.BASS_ChannelSetFX(BassPlayer.getChannnel(), BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fx[4] = BASS.BASS_ChannelSetFX(BassPlayer.getChannnel(), BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fx[5] = BASS.BASS_ChannelSetFX(BassPlayer.getChannnel(), BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fx[6] = BASS.BASS_ChannelSetFX(BassPlayer.getChannnel(), BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fx[7] = BASS.BASS_ChannelSetFX(BassPlayer.getChannnel(), BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fx[8] = BASS.BASS_ChannelSetFX(BassPlayer.getChannnel(), BASS.BASS_FX_DX8_REVERB, 0);
+
+        BASS.BASS_DX8_PARAMEQ p = new BASS.BASS_DX8_PARAMEQ();
+
+        p.fGain=0;
+        p.fBandwidth=18;
+        p.fCenter=31;
+        BASS.BASS_FXSetParameters(fx[0], p);
+        p.fCenter=87;
+        BASS.BASS_FXSetParameters(fx[1], p);
+        p.fCenter=234;
+        BASS.BASS_FXSetParameters(fx[2], p);
+        p.fCenter=421;
+        BASS.BASS_FXSetParameters(fx[3], p);
+        p.fCenter=933;
+        BASS.BASS_FXSetParameters(fx[4], p);
+        p.fCenter=2321;
+        BASS.BASS_FXSetParameters(fx[5], p);
+        p.fCenter=6358;
+        BASS.BASS_FXSetParameters(fx[6], p);
+        p.fCenter=16000;
+        BASS.BASS_FXSetParameters(fx[7], p);
+
+
+        int[] bounds  = EqualizerActivity.getSavedBounds();
+        for(int i = 0 ; i < 10 ; i++ )
+            updateFX(bounds[i], i);
+
+
+
+    }
+    public static void updateFX(int progress, int n)
+    {
+        if (n == 9)
+        {
+            BASS.BASS_DX8_REVERB p=new BASS.BASS_DX8_REVERB();
+            BASS.BASS_FXGetParameters(fx[n], p);
+            p.fReverbMix=(float)(progress!=0?Math.log(progress/20.0)*20:-96);
+            BASS.BASS_FXSetParameters(fx[n], p);
+        }
+        else if(n == 8)
+        {
+            int param;
+            if(progress < 20)
+                param = 1;
+            else
+                param = progress/10;
+
+
+            BASS.BASS_Set3DFactors(1, -1, param);
+            BASS.BASS_Apply3D();
+        }
+        else
+        {
+            BASS.BASS_DX8_PARAMEQ p = new BASS.BASS_DX8_PARAMEQ();
+            BASS.BASS_FXGetParameters(fx[n], p);
+            p.fGain = convertProgressToGain(progress);
+            BASS.BASS_FXSetParameters(fx[n], p);
+        }
+    }
+
+    public static int convertProgressToGain(int progress)
+    {
+        int x = (progress * 3 / 10) - 15;
+        Log.i("TAG AUDIO","gain " + x);
+        return x;
     }
 
     private final Object lock = new Object();
@@ -145,6 +233,8 @@ public class BassPlayer
         BASS.BASS_ChannelGetInfo(chan, info);
         BASS.BASS_ChannelSetSync(chan, BASS.BASS_SYNC_END, 0, EndSync, 0);
 
+        setUpEffects();
+
         if(SettingActivity.getPreferences("savevkfile"))
             filePath = DownloadingService.defaultFolder + url.substring( url.lastIndexOf('/')+1, url.length());
     }
@@ -183,25 +273,6 @@ public class BassPlayer
 
         }
     };
-    private void setUpEffects()
-    {
-        fx[0]=BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
-        fx[1]=BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
-        fx[2]=BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
-        fx[3]=BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_REVERB, 0);
-
-        BASS.BASS_DX8_PARAMEQ p = new BASS.BASS_DX8_PARAMEQ();
-
-        p.fGain=0;
-        p.fBandwidth=18;
-        p.fCenter=125;
-        BASS.BASS_FXSetParameters(fx[0], p);
-        p.fCenter=1000;
-        BASS.BASS_FXSetParameters(fx[1], p);
-        p.fCenter=8000;
-        BASS.BASS_FXSetParameters(fx[2], p);
-    }
-
 
     public void start()
     {

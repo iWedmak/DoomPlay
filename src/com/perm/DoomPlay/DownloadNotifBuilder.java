@@ -175,6 +175,10 @@ class DownloadNotifBuilder
         builder.setContentTitle( context.getResources().getString(R.string.canceled));
         builder.setContentText(track.getArtist() + "-" + track.getTitle());
         builder.setSmallIcon(R.drawable.downloaded);
+        builder.setAutoCancel(true);
+
+        //throws an exception on old devices without it ;
+        builder.setContentIntent(PendingIntent.getActivity(context, 0, new Intent(), 0));
 
         return builder.build();
     }
@@ -186,6 +190,10 @@ class DownloadNotifBuilder
         builder.setContentTitle( context.getResources().getString(R.string.error));
         builder.setContentText(track.getArtist() + "-" + track.getTitle());
         builder.setSmallIcon(R.drawable.downloaded);
+        builder.setAutoCancel(true);
+
+        //throws an exception on old devices without it ;
+        builder.setContentIntent(PendingIntent.getActivity(context, 0, new Intent(), 0));
 
         return builder.build();
     }

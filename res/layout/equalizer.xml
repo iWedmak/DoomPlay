@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:layout_weight="1" android:paddingTop="3dp">
+        <com.perm.DoomPlay.VerticalSeekBar
+                      android:layout_width="wrap_content"
+                      android:layout_height="match_parent" android:id="@+id/seekEqual1"
+                      android:tag="0" android:layout_marginLeft="5dp" android:layout_marginRight="5dp">
+
+        </com.perm.DoomPlay.VerticalSeekBar>
+        <com.perm.DoomPlay.VerticalSeekBar
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" android:id="@+id/seekEqual2"
+                android:tag="1">
+
+        </com.perm.DoomPlay.VerticalSeekBar>
+        <com.perm.DoomPlay.VerticalSeekBar
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" android:id="@+id/seekEqual3"
+                android:tag="2" android:layout_marginRight="5dp" android:layout_marginLeft="5dp">
+
+        </com.perm.DoomPlay.VerticalSeekBar>
+        <com.perm.DoomPlay.VerticalSeekBar
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/seekEqual4"
+                android:tag="3">
+
+        </com.perm.DoomPlay.VerticalSeekBar>
+        <com.perm.DoomPlay.VerticalSeekBar
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" android:id="@+id/seekEqual5"
+                android:tag="4" android:layout_marginLeft="5dp" android:layout_marginRight="5dp">
+
+        </com.perm.DoomPlay.VerticalSeekBar>
+        <com.perm.DoomPlay.VerticalSeekBar
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" android:id="@+id/seekEqual6"
+                android:tag="5">
+
+        </com.perm.DoomPlay.VerticalSeekBar>
+        <com.perm.DoomPlay.VerticalSeekBar
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" android:id="@+id/seekEqual7"
+                android:tag="6" android:layout_marginRight="5dp" android:layout_marginLeft="5dp">
+
+        </com.perm.DoomPlay.VerticalSeekBar>
+        <com.perm.DoomPlay.VerticalSeekBar
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" android:id="@+id/seekEqual8"
+                android:tag="7">
+
+        </com.perm.DoomPlay.VerticalSeekBar>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:paddingTop="10dp" android:paddingBottom="5dp"
+            android:gravity="center_vertical">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3D effect"
+                android:id="@+id/textView1" android:textSize="12sp" android:paddingLeft="5dp"
+               />
+        <SeekBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/seekEqual9" android:focusableInTouchMode="false" android:layout_weight="1" android:tag="8"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:paddingBottom="10dp" android:gravity="center_vertical">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reverb"
+                android:id="@+id/textView" android:textSize="12sp" android:paddingLeft="5dp"
+                android:paddingRight="10dp"/>
+        <SeekBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/seekEqual10" android:layout_weight="1"
+                android:tag="9"/>
+    </LinearLayout>
+</LinearLayout>

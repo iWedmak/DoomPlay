@@ -62,24 +62,30 @@ abstract class AbstractReceiver extends ActionBarActivity
         showException(e);
     }
 
-
-    private String message = null;
     public void showException(Exception e)
     {
         e.printStackTrace();
-        message = e.getMessage();
-        runOnUiThread(runnable);
+        e.getMessage();
+        runOnUiThread(new  RunnabeParam<String>(e.getMessage())
+        {
+            @Override
+            public void run()
+            {
+                Toast.makeText(getBaseContext(),param, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    private final Runnable runnable = new Runnable()
+    class RunnabeParam<T> implements Runnable
     {
-        @Override
-        public void run()
+        T param;
+        public RunnabeParam(T param)
         {
-            Toast.makeText(getBaseContext(),message, Toast.LENGTH_SHORT).show();
+            this.param = param;
         }
-    };
-
+        @Override
+        public void run() {}
+    }
 
     void showPlaybackDialog(ArrayList<Audio> audios)
     {

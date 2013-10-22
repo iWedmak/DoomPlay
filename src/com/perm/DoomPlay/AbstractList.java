@@ -110,7 +110,7 @@ abstract class AbstractList extends AbstractControls
                 showHide();
                 return true;
             case R.id.itemEqualizer:
-
+                startActivity(new Intent(this,EqualizerActivity.class));
                 return true;
             case R.id.itemSleep:
                 SleepDialog sleepDialog = new SleepDialog();

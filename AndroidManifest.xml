@@ -89,6 +89,8 @@
                   android:launchMode="singleTop"/>
         <activity android:name="com.perm.DoomPlay.VkGrActivity"
                   android:launchMode="singleTop"/>
+        <activity android:name="com.perm.DoomPlay.EqualizerActivity"
+                  android:launchMode="singleTop"/>
 
         <activity android:name="com.perm.DoomPlay.LoginActivity"/>
 

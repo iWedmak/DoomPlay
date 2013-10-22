@@ -227,7 +227,7 @@ abstract class AbstractControls extends AbstractReceiver
                     playingService.previousSong();
                     break;
                 case (R.id.imagePlay):
-                        playingService.playPause();
+                    playingService.playPause();
                     break;
                 case (R.id.imageNext):
                     playingService.nextSong();
@@ -308,9 +308,7 @@ abstract class AbstractControls extends AbstractReceiver
                     Thread.sleep(450);
                 }
                 catch (InterruptedException e)
-                {
-                    e.printStackTrace();
-                }
+                {}
                 handler.sendEmptyMessage(messageUpdate);
             }
         }

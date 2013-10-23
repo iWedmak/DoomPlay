@@ -19,9 +19,11 @@ package com.perm.DoomPlay;
  */
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
@@ -40,6 +42,8 @@ public class SettingActivity extends PreferenceActivity
     public static final String keyOnGain = "gainfocus";
     public static final String keyOnClickNotif = "notifreturn";
     public static final String keyShowControls = "hideoncreate";
+    private static final int REQUEST_DOWNLOAD_FOLDER = 23516;
+    private static final int REQUEST_ALBUMART_FOLDER = 83542;
 
 
     public static boolean getPreferences(String key)
@@ -50,6 +54,10 @@ public class SettingActivity extends PreferenceActivity
     {
         return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(MyApplication.getInstance()).getString(key,"666"));
     }
+
+
+    Preference downloadFolderPref;
+    Preference albumartsFolderPref;
 
 
     @SuppressWarnings("deprecation")
@@ -97,7 +105,6 @@ public class SettingActivity extends PreferenceActivity
             }
         });
 
-
         findPreference("languages").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener()
         {
             @Override
@@ -126,7 +133,66 @@ public class SettingActivity extends PreferenceActivity
             }
         });
 
+        downloadFolderPref = findPreference("foldertracks");
+        downloadFolderPref.setSummary(PreferenceManager.getDefaultSharedPreferences(
+                getBaseContext()).getString("foldertracks","/storage"));
+        downloadFolderPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference)
+            {
+                Intent chooserIntent = new Intent(getBaseContext(), DirectoryChooserActivity.class);
+                chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_NEW_DIR_NAME, "doomPlaySaveFolder");
+                chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_INITIAL_DIRECTORY, FileSystemActivity.getRealPath(Environment.getRootDirectory()));
+                startActivityForResult(chooserIntent, REQUEST_DOWNLOAD_FOLDER);
+                return  true;
+            }
+        });
 
+        albumartsFolderPref = findPreference("folderalbumart");
+        albumartsFolderPref.setSummary(PreferenceManager.getDefaultSharedPreferences(
+                getBaseContext()).getString("folderalbumart","/storage"));
+        albumartsFolderPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference)
+            {
+                Intent chooserIntent = new Intent(getBaseContext(), DirectoryChooserActivity.class);
+                chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_NEW_DIR_NAME, "doomPlaySaveFolder");
+                chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_INITIAL_DIRECTORY, FileSystemActivity.getRealPath(Environment.getRootDirectory()));
+
+                startActivityForResult(chooserIntent, REQUEST_ALBUMART_FOLDER);
+                return  true;
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == DirectoryChooserActivity.RESULT_CODE_DIR_SELECTED)
+        {
+            String path = data.getStringExtra(DirectoryChooserActivity.RESULT_SELECTED_DIR);
+
+            if (requestCode == REQUEST_DOWNLOAD_FOLDER)
+            {
+                SharedPreferences.Editor editpr = PreferenceManager.getDefaultSharedPreferences(
+                        getBaseContext()).edit().putString("foldertracks",path);
+                editpr.commit();
+                editpr.apply();
+
+                downloadFolderPref.setSummary(path);
+            }
+            else if(requestCode == REQUEST_ALBUMART_FOLDER)
+            {
+                SharedPreferences.Editor editpr = PreferenceManager.getDefaultSharedPreferences(
+                        getBaseContext()).edit().putString("folderalbumart",path);
+                editpr.commit();
+                editpr.apply();
+
+                albumartsFolderPref.setSummary(path);
+            }
+        }
     }
 
 }

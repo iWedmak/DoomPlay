@@ -73,7 +73,7 @@ public class FileSystemActivity extends AbstractReceiver
     }
 
 
-    private static String getCanonPath(File file)
+    public static String getRealPath(File file)
     {
         try
         {
@@ -115,7 +115,7 @@ public class FileSystemActivity extends AbstractReceiver
     };
     private static ArrayList<Audio> getAudiosFromFolder(File file, Context context)
     {
-        String selectionArgs = getCanonPath(file);
+        String selectionArgs = getRealPath(file);
 
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 TracksHolder.projection,MediaStore.Audio.Media.DATA + " LIKE ? ",new String[]{"%"+selectionArgs +"%"},null);
@@ -128,7 +128,7 @@ public class FileSystemActivity extends AbstractReceiver
 
     private static Audio getAudioFromFile(File file, Context context)
     {
-        String selectionArgs = getCanonPath(file);
+        String selectionArgs = getRealPath(file);
 
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 TracksHolder.projection,MediaStore.Audio.Media.DATA + " = ? ",new String[]{selectionArgs}, null);
@@ -222,7 +222,7 @@ public class FileSystemActivity extends AbstractReceiver
         }
         currentDirectory = file;
 
-        textCurrentDir.setText(getCanonPath(file));
+        textCurrentDir.setText(getRealPath(file));
 
         Arrays.sort(entriesFiles, fileComparator);
 

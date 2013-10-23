@@ -102,6 +102,8 @@
         </activity>
 
 
+        <activity android:name=".DirectoryChooserActivity" />
+
 
         <service
                 android:name="com.perm.DoomPlay.PlayingService"

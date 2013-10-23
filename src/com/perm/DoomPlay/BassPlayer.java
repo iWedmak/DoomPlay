@@ -1,9 +1,7 @@
-package com.un4seen.bass;
+package com.perm.DoomPlay;
 
 import android.util.Log;
-import com.perm.DoomPlay.DownloadingService;
-import com.perm.DoomPlay.EqualizerActivity;
-import com.perm.DoomPlay.SettingActivity;
+import com.un4seen.bass.*;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -13,10 +11,6 @@ public class BassPlayer
     public interface OnCompletionListener
     {
         void onCompletion();
-    }
-    public interface OnErrorListener
-    {
-        void onError();
     }
     public boolean isPlaying;
 
@@ -28,7 +22,6 @@ public class BassPlayer
     private static int chan;
     private int totalTime;
     private OnCompletionListener completionListener;
-    private OnErrorListener errorListener;
     private static int[] fx = new int[10];
 
 
@@ -39,11 +32,6 @@ public class BassPlayer
         this.completionListener = listener;
    }
 
-    public void setOnErrorListener(OnErrorListener listener)
-    {
-        this.errorListener = listener;
-    }
-
    private final BASS.SYNCPROC EndSync=new BASS.SYNCPROC()
    {
         public void SYNCPROC(int handle, int channel, int data, Object user)
@@ -53,7 +41,6 @@ public class BassPlayer
                 completionListener.onCompletion();
         }
     };
-
 
     public BassPlayer()
     {
@@ -114,22 +101,22 @@ public class BassPlayer
         BASS.BASS_DX8_PARAMEQ p = new BASS.BASS_DX8_PARAMEQ();
 
         p.fGain=0;
-        p.fBandwidth=18;
+        p.fBandwidth = 20;
         p.fCenter=31;
         BASS.BASS_FXSetParameters(fx[0], p);
-        p.fCenter=87;
+        p.fCenter=63;
         BASS.BASS_FXSetParameters(fx[1], p);
-        p.fCenter=234;
+        p.fCenter=87;
         BASS.BASS_FXSetParameters(fx[2], p);
-        p.fCenter=421;
+        p.fCenter=125;
         BASS.BASS_FXSetParameters(fx[3], p);
-        p.fCenter=933;
+        p.fCenter=250;
         BASS.BASS_FXSetParameters(fx[4], p);
-        p.fCenter=2321;
+        p.fCenter=500;
         BASS.BASS_FXSetParameters(fx[5], p);
-        p.fCenter=6358;
+        p.fCenter=1000;
         BASS.BASS_FXSetParameters(fx[6], p);
-        p.fCenter=16000;
+        p.fCenter=2000;
         BASS.BASS_FXSetParameters(fx[7], p);
 
 
@@ -142,23 +129,17 @@ public class BassPlayer
     }
     public static void updateFX(int progress, int n)
     {
-        if (n == 9)
+        if (n == 8)
         {
             BASS.BASS_DX8_REVERB p=new BASS.BASS_DX8_REVERB();
             BASS.BASS_FXGetParameters(fx[n], p);
-            p.fReverbMix=(float)(progress!=0?Math.log(progress/20.0)*20:-96);
+            p.fReverbMix=(float)(progress > 15 ? Math.log(progress/20.0)*20.0:-96.0);
             BASS.BASS_FXSetParameters(fx[n], p);
         }
-        else if(n == 8)
+        else if(n == 9)
         {
-            int param;
-            if(progress < 20)
-                param = 1;
-            else
-                param = progress/10;
 
-
-            BASS.BASS_Set3DFactors(1, -1, param);
+            BASS.BASS_Set3DFactors(1,  progress < 20 ? -1 : progress / 10, progress < 20 ? 0 : progress / 10);
             BASS.BASS_Apply3D();
         }
         else
@@ -170,9 +151,9 @@ public class BassPlayer
         }
     }
 
-    public static int convertProgressToGain(int progress)
+    public static float convertProgressToGain(int progress)
     {
-        int x = (progress * 3 / 10) - 15;
+        float x = (( progress * 3f )/ 10f) - 15f;
         Log.i("TAG AUDIO","gain " + x);
         return x;
     }

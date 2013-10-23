@@ -1,14 +1,11 @@
 package com.perm.DoomPlay;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Window;
 import android.widget.SeekBar;
-import com.un4seen.bass.BassPlayer;
 
-public class EqualizerActivity extends Activity implements SeekBar.OnSeekBarChangeListener
+public class EqualizerActivity extends AbstractReceiver implements SeekBar.OnSeekBarChangeListener
 {
     SeekBar seek0;
     SeekBar seek1;
@@ -25,7 +22,6 @@ public class EqualizerActivity extends Activity implements SeekBar.OnSeekBarChan
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.equalizer);
 
         seek0 = (SeekBar)findViewById(R.id.seekEqual1);

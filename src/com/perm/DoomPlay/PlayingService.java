@@ -41,14 +41,13 @@ import android.telephony.TelephonyManager;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 import com.perm.vkontakte.api.KException;
-import com.un4seen.bass.BassPlayer;
 import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class PlayingService extends Service implements BassPlayer.OnCompletionListener,BassPlayer.OnErrorListener , SharedPreferences.OnSharedPreferenceChangeListener
+public class PlayingService extends Service implements BassPlayer.OnCompletionListener, SharedPreferences.OnSharedPreferenceChangeListener
 {
     public final static String actionTrackChanged = "DoomedTrackChanged";
     public final static String actionIconPlay = "DoomedPlayPlay";
@@ -106,13 +105,6 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
         nextSong();
     }
 
-    @Override
-    public void onError()
-    {
-         handleError();
-    }
-
-
     interface OnLoadingTrackListener
     {
         void onLoadingTrackStarted();
@@ -152,7 +144,6 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
         serviceAlive = true;
         bassPlayer = new BassPlayer();
         bassPlayer.setOnCompletetion(this);
-        bassPlayer.setOnErrorListener(this);
 
     }
 

@@ -132,6 +132,7 @@
     <string name="was_set_as_ringtone">Трэк был поставлен на звонок</string>
     <string name="save_after_buffer">сохранить трэк если он полность загрузился при воспроизведении</string>
     <string name="Save_after_buffer">Сохранить трэк после буфферизации</string>
+    <string name="chooser_label">выбери директорию</string>
     <string-array name ="count_values">
         <item>10</item>
         <item>30</item>

@@ -96,6 +96,11 @@
                 android:title="@string/Save_after_buffer"
                 android:defaultValue="true">
         </CheckBoxPreference>
+        <PreferenceScreen
+                android:title="Saved track's folder"
+                android:summary=""
+                android:key="foldertracks">
+        </PreferenceScreen>
 
     </PreferenceScreen>
 
@@ -124,6 +129,12 @@
                      android:defaultValue="false"
                      android:title="@string/When_internet">
              </CheckBoxPreference>
+             <PreferenceScreen
+                     android:dependency="downloadart"
+                     android:title="@string/Save_albumarts"
+                     android:summary=""
+                     android:key="folderalbumart">
+             </PreferenceScreen>
          </PreferenceScreen>
 
 

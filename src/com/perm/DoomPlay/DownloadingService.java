@@ -25,6 +25,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Environment;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import com.bugsense.trace.BugSenseHandler;
 
@@ -175,25 +176,32 @@ public class DownloadingService extends Service implements Download.DoomObserver
 
 
 
-   public final static String defaultFolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/download/";
+    private final static String defaultDownloadDir = FileSystemActivity.getRealPath(
+            Environment.getExternalStorageDirectory()) + "/download/";
 
-    private static String generateFilePath(Audio track)
+    public static String getDownloadDir()
     {
+        String path = PreferenceManager.getDefaultSharedPreferences(
+                MyApplication.getInstance()).getString("foldertracks",defaultDownloadDir);
 
-        File defaultFile = new File(defaultFolder);
+        File defaultFile = new File(path);
 
         if(!defaultFile.exists() && !defaultFile.mkdirs())
             Log.e("tag","can't create directory");
 
+        return path;
+
+    }
+
+    private static String generateFilePath(Audio track)
+    {
         String title = track.getTitle() ;
         if(title.length() > 25)
             title.substring(0,25);
 
-
         String trackName = (track.getArtist() + "-" + title + ".mp3").replaceAll("[%#@^&$]","");
 
-
-        return defaultFolder + trackName;
+        return getDownloadDir() + trackName;
     }
 
 

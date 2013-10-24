@@ -26,8 +26,10 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.util.LruCache;
+import android.util.Log;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -120,6 +122,19 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
         onBitmapSaved(albumId);
         set.remove(albumId);
     }
+    private final static String defaultAlbumArtsDir = FileSystemActivity.getRealPath(
+            Environment.getExternalStorageDirectory()) + "/download/AlbumArts";
+    public static String getAlbumArtsDir()
+    {
+        String path = PreferenceManager.getDefaultSharedPreferences(MyApplication.getInstance()).getString("folderalbumart",defaultAlbumArtsDir) ;
+        File defaultFile = new File(path);
+
+        if(!defaultFile.exists() && !defaultFile.mkdirs())
+            Log.e("tag", "can't create directory");
+
+        return path;
+
+    }
 
 
     // return cover art's url was found from lastFm or return null if wasn't
@@ -203,10 +218,7 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
     private static void insertBitmapInMediaStore(Bitmap bitmap, long albumId)
     {
         OutputStream stream;
-        File file  = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/download/albumArts/");
-        if(!file.exists())
-            file.mkdir();
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/download/albumArts/" + String.valueOf(albumId) + ".jpeg";
+        String path = getAlbumArtsDir() + String.valueOf(albumId) + ".jpeg";
 
         try
         {

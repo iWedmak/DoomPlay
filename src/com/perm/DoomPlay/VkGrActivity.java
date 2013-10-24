@@ -8,9 +8,9 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.perm.vkontakte.api.Account;
-import com.perm.vkontakte.api.Group;
-import com.perm.vkontakte.api.KException;
+import com.api.Account;
+import com.api.Group;
+import com.api.KException;
 import org.json.JSONException;
 
 import java.io.IOException;

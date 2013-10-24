@@ -27,7 +27,7 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
-import com.perm.vkontakte.api.KException;
+import com.api.KException;
 import org.json.JSONException;
 
 import java.io.IOException;

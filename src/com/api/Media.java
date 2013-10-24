@@ -1,4 +1,4 @@
-package com.perm.vkontakte.api;
+package com.api;
 
 class Media {
     public String type; //app, graffiti, video, audio, photo, posted_photo

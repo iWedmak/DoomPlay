@@ -30,8 +30,8 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-import com.perm.vkontakte.api.Account;
-import com.perm.vkontakte.api.Api;
+import com.api.Account;
+import com.api.Api;
 
 public class MainScreenActivity extends AbstractReceiver
 {

@@ -20,9 +20,9 @@ package com.perm.DoomPlay;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
-import com.perm.vkontakte.api.AudioAlbum;
-import com.perm.vkontakte.api.Group;
-import com.perm.vkontakte.api.User;
+import com.api.AudioAlbum;
+import com.api.Group;
+import com.api.User;
 
 import java.util.ArrayList;
 

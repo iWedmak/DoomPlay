@@ -1,4 +1,4 @@
-package com.perm.vkontakte.api;
+package com.api;
 
 import android.content.Context;
 import android.content.SharedPreferences;

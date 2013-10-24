@@ -26,8 +26,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
-import com.perm.vkontakte.api.Account;
-import com.perm.vkontakte.api.KException;
+import com.api.Account;
+import com.api.KException;
 import org.json.JSONException;
 
 import java.io.IOException;

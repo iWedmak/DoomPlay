@@ -23,7 +23,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.*;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.perm.vkontakte.api.KException;
+import com.api.KException;
 import org.json.JSONException;
 
 import java.io.IOException;

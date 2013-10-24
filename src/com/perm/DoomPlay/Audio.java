@@ -3,7 +3,7 @@ package com.perm.DoomPlay;
 import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.perm.vkontakte.api.Api;
+import com.api.Api;
 import org.json.JSONException;
 import org.json.JSONObject;
 

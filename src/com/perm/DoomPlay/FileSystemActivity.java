@@ -84,15 +84,12 @@ public class FileSystemActivity extends AbstractReceiver
             return file.getAbsolutePath();
         }
     }
-
-
     @Override
     protected void onSaveInstanceState(Bundle outState)
     {
         super.onSaveInstanceState(outState);
         outState.putString(keyCurrentDir, currentDirectory.getAbsolutePath());
     }
-
     public static Intent getToFullIntent(Context context,ArrayList<Audio> audios)
     {
         Intent intent = new Intent(context,FullPlaybackActivity.class);
@@ -100,7 +97,6 @@ public class FileSystemActivity extends AbstractReceiver
         intent.putExtra(FileSystemActivity.keyMusic,audios);
         return intent;
     }
-
     private static final FileFilter fileFilter = new FileFilter()
     {
         @Override
@@ -125,7 +121,6 @@ public class FileSystemActivity extends AbstractReceiver
         cursor.close();
         return audios;
     }
-
     private static Audio getAudioFromFile(File file, Context context)
     {
         String selectionArgs = getRealPath(file);

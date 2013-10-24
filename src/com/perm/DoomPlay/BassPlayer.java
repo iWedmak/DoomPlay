@@ -1,10 +1,12 @@
 package com.perm.DoomPlay;
 
-import android.util.Log;
 import com.un4seen.bass.*;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 
 public class BassPlayer
 {
@@ -14,17 +16,10 @@ public class BassPlayer
     }
     public boolean isPlaying;
 
-    public static int getChannnel()
-    {
-        return chan;
-    }
-
     private static int chan;
     private int totalTime;
     private OnCompletionListener completionListener;
     private static int[] fx = new int[10];
-
-
 
 
    public void setOnCompletetion(OnCompletionListener listener)
@@ -88,40 +83,45 @@ public class BassPlayer
     }
     private void setUpEffects()
     {
-        fx[0] = BASS.BASS_ChannelSetFX(BassPlayer.getChannnel(), BASS.BASS_FX_DX8_PARAMEQ, 0);
-        fx[1] = BASS.BASS_ChannelSetFX(BassPlayer.getChannnel(), BASS.BASS_FX_DX8_PARAMEQ, 0);
-        fx[2] = BASS.BASS_ChannelSetFX(BassPlayer.getChannnel(), BASS.BASS_FX_DX8_PARAMEQ, 0);
-        fx[3] = BASS.BASS_ChannelSetFX(BassPlayer.getChannnel(), BASS.BASS_FX_DX8_PARAMEQ, 0);
-        fx[4] = BASS.BASS_ChannelSetFX(BassPlayer.getChannnel(), BASS.BASS_FX_DX8_PARAMEQ, 0);
-        fx[5] = BASS.BASS_ChannelSetFX(BassPlayer.getChannnel(), BASS.BASS_FX_DX8_PARAMEQ, 0);
-        fx[6] = BASS.BASS_ChannelSetFX(BassPlayer.getChannnel(), BASS.BASS_FX_DX8_PARAMEQ, 0);
-        fx[7] = BASS.BASS_ChannelSetFX(BassPlayer.getChannnel(), BASS.BASS_FX_DX8_PARAMEQ, 0);
-        fx[8] = BASS.BASS_ChannelSetFX(BassPlayer.getChannnel(), BASS.BASS_FX_DX8_REVERB, 0);
+        fx[0] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fx[1] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fx[2] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fx[3] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fx[4] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fx[5] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fx[6] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fx[7] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fx[8] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fx[9] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
 
         BASS.BASS_DX8_PARAMEQ p = new BASS.BASS_DX8_PARAMEQ();
 
         p.fGain=0;
-        p.fBandwidth = 20;
-        p.fCenter=31;
+        p.fBandwidth = 0.7f;
+        p.fCenter=32;
         BASS.BASS_FXSetParameters(fx[0], p);
-        p.fCenter=63;
+        p.fCenter=64;
         BASS.BASS_FXSetParameters(fx[1], p);
-        p.fCenter=87;
-        BASS.BASS_FXSetParameters(fx[2], p);
         p.fCenter=125;
-        BASS.BASS_FXSetParameters(fx[3], p);
+        BASS.BASS_FXSetParameters(fx[2], p);
         p.fCenter=250;
-        BASS.BASS_FXSetParameters(fx[4], p);
+        BASS.BASS_FXSetParameters(fx[3], p);
         p.fCenter=500;
-        BASS.BASS_FXSetParameters(fx[5], p);
+        BASS.BASS_FXSetParameters(fx[4], p);
         p.fCenter=1000;
-        BASS.BASS_FXSetParameters(fx[6], p);
+        BASS.BASS_FXSetParameters(fx[5], p);
         p.fCenter=2000;
+        BASS.BASS_FXSetParameters(fx[6], p);
+        p.fCenter=4000;
         BASS.BASS_FXSetParameters(fx[7], p);
+        p.fCenter=8000;
+        BASS.BASS_FXSetParameters(fx[8], p);
+        p.fCenter=16000;
+        BASS.BASS_FXSetParameters(fx[9], p);
 
 
         int[] bounds  = EqualizerActivity.getSavedBounds();
-        for(int i = 0 ; i < 10 ; i++ )
+        for(int i = 0 ; i < bounds.length ; i++ )
             updateFX(bounds[i], i);
 
 
@@ -129,33 +129,19 @@ public class BassPlayer
     }
     public static void updateFX(int progress, int n)
     {
-        if (n == 8)
-        {
-            BASS.BASS_DX8_REVERB p=new BASS.BASS_DX8_REVERB();
+        BASS.BASS_DX8_PARAMEQ p = new BASS.BASS_DX8_PARAMEQ();
+        BASS.BASS_FXGetParameters(fx[n], p);
+        p.fGain = EqualizerActivity.convertProgressToGain(progress);
+        BASS.BASS_FXSetParameters(fx[n], p);
+
+         /*
+            ***Reverb***
+             BASS.BASS_DX8_REVERB p=new BASS.BASS_DX8_REVERB();
             BASS.BASS_FXGetParameters(fx[n], p);
             p.fReverbMix=(float)(progress > 15 ? Math.log(progress/20.0)*20.0:-96.0);
             BASS.BASS_FXSetParameters(fx[n], p);
-        }
-        else if(n == 9)
-        {
 
-            BASS.BASS_Set3DFactors(1,  progress < 20 ? -1 : progress / 10, progress < 20 ? 0 : progress / 10);
-            BASS.BASS_Apply3D();
-        }
-        else
-        {
-            BASS.BASS_DX8_PARAMEQ p = new BASS.BASS_DX8_PARAMEQ();
-            BASS.BASS_FXGetParameters(fx[n], p);
-            p.fGain = convertProgressToGain(progress);
-            BASS.BASS_FXSetParameters(fx[n], p);
-        }
-    }
-
-    public static float convertProgressToGain(int progress)
-    {
-        float x = (( progress * 3f )/ 10f) - 15f;
-        Log.i("TAG AUDIO","gain " + x);
-        return x;
+         */
     }
 
     private final Object lock = new Object();
@@ -173,21 +159,21 @@ public class BassPlayer
         int c;
 
         if(extension.equals("aac") || extension.equals("mp4"))
-            c = BASS_AAC.BASS_AAC_StreamCreateURL(url, 0, BASS.BASS_STREAM_BLOCK|BASS.BASS_STREAM_STATUS, StatusProc, r);
+            c = BASS_AAC.BASS_AAC_StreamCreateURL(url, 0, BASS.BASS_STREAM_STATUS, StatusProc, r);
         else if(extension.equals("alac"))
-            c = BASS_ALAC.BASS_ALAC_StreamCreateURL(url, 0, BASS.BASS_STREAM_BLOCK|BASS.BASS_STREAM_STATUS, StatusProc, r);
+            c = BASS_ALAC.BASS_ALAC_StreamCreateURL(url, 0,BASS.BASS_STREAM_STATUS, StatusProc, r);
         else if(extension.equals("mpc"))
-            c = BASS_MPC.BASS_MPC_StreamCreateURL(url, 0, BASS.BASS_STREAM_BLOCK|BASS.BASS_STREAM_STATUS, StatusProc, r);
+            c = BASS_MPC.BASS_MPC_StreamCreateURL(url, 0, BASS.BASS_STREAM_STATUS, StatusProc, r);
         else if(extension.equals("flac"))
-            c = BASSFLAC.BASS_FLAC_StreamCreateURL(url, 0, BASS.BASS_STREAM_BLOCK|BASS.BASS_STREAM_STATUS, StatusProc, r);
+            c = BASSFLAC.BASS_FLAC_StreamCreateURL(url, 0, BASS.BASS_STREAM_STATUS, StatusProc, r);
         else if(extension.equals("midi"))
-            c = BASSMIDI.BASS_MIDI_StreamCreateURL(url, 0, BASS.BASS_STREAM_BLOCK|BASS.BASS_STREAM_STATUS, StatusProc, r,1);
+            c = BASSMIDI.BASS_MIDI_StreamCreateURL(url, 0, BASS.BASS_STREAM_STATUS, StatusProc, r,1);
         else if(extension.equals("opus"))
-            c = BASSOPUS.BASS_OPUS_StreamCreateURL(url, 0, BASS.BASS_STREAM_BLOCK|BASS.BASS_STREAM_STATUS, StatusProc, r);
+            c = BASSOPUS.BASS_OPUS_StreamCreateURL(url, 0, BASS.BASS_STREAM_STATUS, StatusProc, r);
         else if(extension.equals("wv"))
-            c = BASSWV.BASS_WV_StreamCreateURL(url, 0, BASS.BASS_STREAM_BLOCK|BASS.BASS_STREAM_STATUS, StatusProc, r);
+            c = BASSWV.BASS_WV_StreamCreateURL(url, 0, BASS.BASS_STREAM_STATUS, StatusProc, r);
         else
-            c = BASS.BASS_StreamCreateURL(url, 0, BASS.BASS_STREAM_BLOCK|BASS.BASS_STREAM_STATUS, StatusProc, r);
+            c = BASS.BASS_StreamCreateURL(url, 0, BASS.BASS_STREAM_STATUS, StatusProc, r);
 
 
         synchronized(lock)
@@ -217,39 +203,36 @@ public class BassPlayer
         setUpEffects();
 
         if(SettingActivity.getPreferences("savevkfile"))
-            filePath = DownloadingService.defaultFolder + url.substring( url.lastIndexOf('/')+1, url.length());
+            filePath = DownloadingService.getDownloadDir() + url.substring( url.lastIndexOf('/')+1, url.length());
     }
 
 
-    OutputStream outputStream;
-    String filePath;
+    private FileChannel fc;
+    private String filePath;
     private final BASS.DOWNLOADPROC StatusProc=new BASS.DOWNLOADPROC()
     {
         @Override
         public void DOWNLOADPROC(ByteBuffer buffer, int length, Object user)
         {
-            if(filePath != null)
+
+            if(filePath != null && (Integer)user == req )
             {
-                if(outputStream == null)
+
+                try
                 {
-                    try {
-                        outputStream = new FileOutputStream(filePath);
-                    } catch (FileNotFoundException e) {
-                        return;
+                    if (buffer!=null)
+                    {
+                        if (fc==null)
+                            fc=new FileOutputStream(new File(filePath)).getChannel();
+                        fc.write(buffer);
+                    }
+                    else if (fc!=null)
+                    {
+                        fc.close();
+                        fc = null;
                     }
                 }
-                else if(buffer != null)
-                {
-                    try {
-                        outputStream.write(buffer.array(), 0, length);
-                    } catch (IOException e) { }
-                }
-                else
-                {
-                    try {
-                        outputStream.close();
-                    } catch (IOException e) {}
-                }
+                catch (IOException e) {}
             }
 
         }
@@ -291,14 +274,7 @@ public class BassPlayer
         BASS.BASS_MusicFree(chan);
         BASS.BASS_StreamFree(chan);
 
-        if(outputStream != null)
-        {
-            new File(filePath).delete();
-            try {
-                outputStream.close();
-            } catch (IOException e) {}
-
-        }
+        assert fc == null;
         filePath = null;
     }
     public int getPercentage()

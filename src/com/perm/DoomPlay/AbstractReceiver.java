@@ -34,7 +34,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.perm.vkontakte.api.KException;
+import com.api.KException;
 
 import java.util.ArrayList;
 import java.util.Locale;

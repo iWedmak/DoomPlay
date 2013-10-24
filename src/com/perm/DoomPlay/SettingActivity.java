@@ -134,8 +134,7 @@ public class SettingActivity extends PreferenceActivity
         });
 
         downloadFolderPref = findPreference("foldertracks");
-        downloadFolderPref.setSummary(PreferenceManager.getDefaultSharedPreferences(
-                getBaseContext()).getString("foldertracks","/storage"));
+        downloadFolderPref.setSummary(DownloadingService.getDownloadDir());
         downloadFolderPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference)
@@ -149,8 +148,7 @@ public class SettingActivity extends PreferenceActivity
         });
 
         albumartsFolderPref = findPreference("folderalbumart");
-        albumartsFolderPref.setSummary(PreferenceManager.getDefaultSharedPreferences(
-                getBaseContext()).getString("folderalbumart","/storage"));
+        albumartsFolderPref.setSummary(AlbumArtGetter.getAlbumArtsDir());
         albumartsFolderPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference)

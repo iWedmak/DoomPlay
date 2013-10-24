@@ -76,7 +76,7 @@ class Utils
     }
     public static boolean checkSpecialCharacters(String fileToCheck)
     {
-        String[] specialCh = {"!","@","#","$","%","^","&","*","(",")","_","+","-","=","/",">","<"," "};
+        String[] specialCh = {"!","@","#","$","%","^","&","*","(",")","_","+","-","=","/",">","<"," ","'"};
         for(String c : specialCh)
         {
             if(fileToCheck.contains(c))
@@ -119,5 +119,6 @@ class Utils
         List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         return list.size() > 0;
     }
+
 
 }

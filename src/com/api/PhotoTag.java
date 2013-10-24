@@ -1,4 +1,4 @@
-package com.perm.vkontakte.api;
+package com.api;
 
 import org.json.JSONException;
 import org.json.JSONObject;

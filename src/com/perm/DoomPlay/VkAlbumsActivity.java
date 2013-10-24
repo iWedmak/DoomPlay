@@ -25,9 +25,9 @@ import android.os.Message;
 import android.support.v7.view.ActionMode;
 import android.view.*;
 import android.widget.*;
-import com.perm.vkontakte.api.Account;
-import com.perm.vkontakte.api.AudioAlbum;
-import com.perm.vkontakte.api.KException;
+import com.api.Account;
+import com.api.AudioAlbum;
+import com.api.KException;
 import org.json.JSONException;
 
 import java.io.IOException;

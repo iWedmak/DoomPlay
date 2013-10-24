@@ -40,7 +40,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.widget.RemoteViews;
 import android.widget.Toast;
-import com.perm.vkontakte.api.KException;
+import com.api.KException;
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -88,16 +88,6 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
     {
         return isLoadingTrack;
     }
-    private void handleError()
-    {
-        dispose();
-        isPlaying = false;
-        isPrepared = false;
-        startNotif();
-        sendBroadcast(new Intent(SmallWidget.actionUpdateWidget));
-        sendBroadcast(new Intent(actionIconPlay));
-    }
-
     @Override
     public void onCompletion()
     {
@@ -184,8 +174,6 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
             }
         }
     }
-
-
     private RemoteViews getNotifViews(int layoutId)
     {
         RemoteViews views = new RemoteViews(getPackageName(), layoutId);
@@ -205,7 +193,6 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
         {
             views.setImageViewBitmap(R.id.notifAlbum, cover);
         }
-
 
         views.setImageViewResource(R.id.notifPlay, isPlaying ? R.drawable.widget_pause : R.drawable.widget_play);
 

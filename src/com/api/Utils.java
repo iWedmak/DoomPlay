@@ -1,4 +1,4 @@
-package com.perm.vkontakte.api;
+package com.api;
 
 import java.io.*;
 import java.util.regex.Matcher;

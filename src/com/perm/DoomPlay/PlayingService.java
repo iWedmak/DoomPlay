@@ -91,6 +91,7 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
     @Override
     public void onCompletion()
     {
+        isPrepared = false;
         countTimer();
         nextSong();
     }
@@ -153,7 +154,7 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
     private void downloadAlbumArt(Audio audio)
     {
         if(SettingActivity.getPreferences("downloadart")&& !AlbumArtGetter.isLoadById(audio.getAid())
-                && audio.getTitle() != null)
+                && audio.getTitle() != null && Utils.isOnline(this))
         {
             if(!isOnline || SettingActivity.getPreferences("artonline"))
             {
@@ -230,7 +231,7 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
         }
         else
         {
-            intentActivity = FullPlaybackActivity.returnSmall(this);
+            intentActivity = FullPlaybackActivity.getReturnSmallIntent(this,audios);
         }
         intentActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         Notification notification = new Notification();
@@ -300,7 +301,7 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
         }
         else
         {
-            intentActivity = FullPlaybackActivity.returnSmall(this);
+            intentActivity = FullPlaybackActivity.getReturnSmallIntent(this,audios);
         }
         intentActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         builder.setContentIntent(PendingIntent.getActivity(this,0,intentActivity,PendingIntent.FLAG_UPDATE_CURRENT))
@@ -381,12 +382,8 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
         dispose();
 
         //TODO: sometimes it throws  java.lang.IndexOutOfBoundsException: Invalid index 0, size is 0 , it's need to be fixed
-        if(audios.size() == 0)
+        if(audios == null || audios.size() == 0)
             return;
-
-
-
-
 
         sendBroadcast(new Intent(actionTrackChanged));
         sendBroadcast(new Intent(SmallWidget.actionUpdateWidget));
@@ -396,8 +393,6 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
             sendBroadcast(new Intent(actionIconPlay));
 
         startNotif();
-
-
         setBroadcast();
 
 
@@ -416,7 +411,6 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
             @Override
             protected Void doInBackground(Void... params)
             {
-
                 try
                 {
                     if(isOnline)
@@ -444,6 +438,10 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
                     loadingListener.onLoadingTrackEnded();
 
                 Toast.makeText(getBaseContext(),getResources().getString(R.string.error),Toast.LENGTH_SHORT).show();
+                isPlaying = false;
+
+                sendBroadcast(new Intent(actionTrackChanged));
+                sendBroadcast(new Intent(actionIconPlay));
             }
 
             @Override
@@ -495,6 +493,10 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
 
     private static void setTrack(int direction)
     {
+        //TODO: sometimes it throws  java.lang.IndexOutOfBoundsException: Invalid index 0, size is 0 , it's need to be fixed
+        if(audios == null || audios.size() == 0)
+            return;
+
 
         if(isShuffle)
         {

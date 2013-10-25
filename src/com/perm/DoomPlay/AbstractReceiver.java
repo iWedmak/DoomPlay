@@ -110,7 +110,7 @@ abstract class AbstractReceiver extends ActionBarActivity
     {
         if(PlayingService.audios != null)
         {
-            startActivity(FullPlaybackActivity.returnSmall(this));
+            startActivity(FullPlaybackActivity.getReturnSmallIntent(this,PlayingService.audios));
         }
     }
 

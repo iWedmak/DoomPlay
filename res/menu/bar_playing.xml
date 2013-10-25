@@ -2,18 +2,17 @@
 <menu
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:yourapp="http://schemas.android.com/apk/res-auto">
-
-    <item
-            android:id="@+id/itemReturnSmall"
-            android:icon="@drawable/smallscreen"
-            yourapp:showAsAction="always"
-            android:title="@string/return_small">
-    </item>
     <item
             android:id="@+id/itemGetLiricks"
             android:icon="@drawable/lyrics"
             yourapp:showAsAction="always"
             android:title="@string/lyrics">
+    </item>
+    <item
+            android:id="@+id/itemReturnSmall"
+            android:icon="@drawable/smallscreen"
+            yourapp:showAsAction="always"
+            android:title="@string/return_small">
     </item>
     <item
             android:id="@+id/itemAddtoPlaylist"

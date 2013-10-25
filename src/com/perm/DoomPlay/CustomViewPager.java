@@ -43,7 +43,15 @@ public class CustomViewPager extends ViewPager
     @Override
     public boolean onTouchEvent(MotionEvent ev)
     {
-        return !PlayingService.isLoadingTrack() && super.onTouchEvent(ev);
+        try
+        {
+            return !PlayingService.isLoadingTrack() && super.onTouchEvent(ev);
+        }
+        catch (IllegalArgumentException e)
+        {
+            return false;
+        }
+
     }
 
     @Override

@@ -19,13 +19,14 @@ package com.perm.DoomPlay;
  */
 
 import android.app.Application;
+import android.content.Context;
 
 public class MyApplication extends Application
 {
-    private static MyApplication instance;
+    private static Context instance;
     private final static String BUGSENCE_API_KEY = "12af9463";
 
-    static MyApplication getInstance()
+    static Context getInstance()
     {
         return instance;
     }
@@ -34,7 +35,7 @@ public class MyApplication extends Application
     public void onCreate()
     {
         super.onCreate();
-        instance = this;
+        instance = getApplicationContext();
 
         ExceptionLog.init(this);
         //BugSenseHandler.initAndStartSession(this, BUGSENCE_API_KEY);

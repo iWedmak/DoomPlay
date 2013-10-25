@@ -29,7 +29,6 @@ import android.widget.*;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -73,17 +72,6 @@ public class FileSystemActivity extends AbstractReceiver
     }
 
 
-    public static String getRealPath(File file)
-    {
-        try
-        {
-            return file.getCanonicalPath();
-        }
-        catch (IOException e)
-        {
-            return file.getAbsolutePath();
-        }
-    }
     @Override
     protected void onSaveInstanceState(Bundle outState)
     {
@@ -102,18 +90,15 @@ public class FileSystemActivity extends AbstractReceiver
         @Override
         public boolean accept(File file)
         {
-            if ((!Utils.trackChecker(file.getName()) && !file.isDirectory())
-                    || (file.isDirectory() && file.list() == null) || (file.isDirectory()) && (file.list().length == 0 ))
-                return false;
-            else
-                return true;
+            return (!file.isDirectory() && Utils.trackChecker(file.getName())) ||
+                    (file.isDirectory() && file.canRead() && file.canWrite());
         }
     };
-    private static ArrayList<Audio> getAudiosFromFolder(File file, Context context)
+    private ArrayList<Audio> getAudiosFromFolder(File file)
     {
-        String selectionArgs = getRealPath(file);
+        String selectionArgs = Utils.getRealPath(file);
 
-        Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+        Cursor cursor = getBaseContext().getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 TracksHolder.projection,MediaStore.Audio.Media.DATA + " LIKE ? ",new String[]{"%"+selectionArgs +"%"},null);
 
         ArrayList<Audio> audios = Audio.parseAudiosCursor(cursor);
@@ -121,11 +106,11 @@ public class FileSystemActivity extends AbstractReceiver
         cursor.close();
         return audios;
     }
-    private static Audio getAudioFromFile(File file, Context context)
+    private Audio getAudioFromFile(File file)
     {
-        String selectionArgs = getRealPath(file);
+        String selectionArgs = Utils.getRealPath(file);
 
-        Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+        Cursor cursor = getBaseContext().getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 TracksHolder.projection,MediaStore.Audio.Media.DATA + " = ? ",new String[]{selectionArgs}, null);
 
         Audio audio;
@@ -162,7 +147,7 @@ public class FileSystemActivity extends AbstractReceiver
             {
                 case R.id.itemPlayAll:
                 {
-                    ArrayList<Audio> audios = getAudiosFromFolder(entriesFiles[position],getBaseContext());
+                    ArrayList<Audio> audios = getAudiosFromFolder(entriesFiles[position]);
 
                     if(audios.size() == 0 )
                     {
@@ -176,7 +161,7 @@ public class FileSystemActivity extends AbstractReceiver
                 }
                 case R.id.itemToPlaylist:
                 {
-                    ArrayList<Audio> audios = getAudiosFromFolder(entriesFiles[position],getBaseContext());
+                    ArrayList<Audio> audios = getAudiosFromFolder(entriesFiles[position]);
 
                     if(audios.size() == 0 )
                     {
@@ -217,7 +202,7 @@ public class FileSystemActivity extends AbstractReceiver
         }
         currentDirectory = file;
 
-        textCurrentDir.setText(getRealPath(file));
+        textCurrentDir.setText(Utils.getRealPath(file));
 
         Arrays.sort(entriesFiles, fileComparator);
 
@@ -250,7 +235,7 @@ public class FileSystemActivity extends AbstractReceiver
             else
             {
                 ArrayList <Audio> audios = new ArrayList<Audio>();
-                audios.add(getAudioFromFile(entriesFiles[position],getBaseContext()));
+                audios.add(getAudioFromFile(entriesFiles[position]));
                 startActivity(getToFullIntent(getBaseContext(),audios));
             }
 

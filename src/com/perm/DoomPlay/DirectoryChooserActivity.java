@@ -163,7 +163,7 @@ public class DirectoryChooserActivity extends AbstractReceiver
         Intent resultData = new Intent();
         if (mSelectedDir != null) {
             resultData.putExtra(RESULT_SELECTED_DIR,
-                    mSelectedDir.getAbsolutePath());
+                    mSelectedDir.getAbsolutePath() + "/");
         }
         setResult(RESULT_CODE_DIR_SELECTED, resultData);
         finish();

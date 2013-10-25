@@ -177,7 +177,12 @@ public class SearchActivity extends AbstractList
 
     void startVoice()
     {
-        startActivityForResult(SearchVkActivity.getVoiceIntent(), REQUEST_CODE);
+        Intent intent = SearchVkActivity.getVoiceIntent();
+
+        if(Utils.isIntentAvailable(getBaseContext(),intent))
+            startActivityForResult(intent, 23);
+        else
+            Toast.makeText(getBaseContext(),getResources().getString(R.string.doesnt_available),Toast.LENGTH_SHORT).show();
     }
 
     @Override

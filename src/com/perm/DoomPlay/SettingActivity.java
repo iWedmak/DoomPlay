@@ -141,7 +141,7 @@ public class SettingActivity extends PreferenceActivity
             {
                 Intent chooserIntent = new Intent(getBaseContext(), DirectoryChooserActivity.class);
                 chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_NEW_DIR_NAME, "doomPlaySaveFolder");
-                chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_INITIAL_DIRECTORY, FileSystemActivity.getRealPath(Environment.getRootDirectory()));
+                chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_INITIAL_DIRECTORY, Utils.getRealPath(Environment.getRootDirectory()));
                 startActivityForResult(chooserIntent, REQUEST_DOWNLOAD_FOLDER);
                 return  true;
             }
@@ -155,7 +155,7 @@ public class SettingActivity extends PreferenceActivity
             {
                 Intent chooserIntent = new Intent(getBaseContext(), DirectoryChooserActivity.class);
                 chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_NEW_DIR_NAME, "doomPlaySaveFolder");
-                chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_INITIAL_DIRECTORY, FileSystemActivity.getRealPath(Environment.getRootDirectory()));
+                chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_INITIAL_DIRECTORY, Utils.getRealPath(Environment.getRootDirectory()));
 
                 startActivityForResult(chooserIntent, REQUEST_ALBUMART_FOLDER);
                 return  true;

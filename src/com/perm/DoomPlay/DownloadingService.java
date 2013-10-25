@@ -56,6 +56,7 @@ public class DownloadingService extends Service implements Download.DoomObserver
     {
         DownloadHolder holder = downloads.get(aid);
 
+        // TODO: i don't know why ,but if i fast click on notif (for 3 seconds) it's throw the nullPointerException
         if(holder == null || holder.download == null)
             return;
 
@@ -74,10 +75,6 @@ public class DownloadingService extends Service implements Download.DoomObserver
                 notification = holder.downloadBuilder.createCompleted();
                 dispose(aid);
                 break;
-            case ERROR:
-                notification = holder.downloadBuilder.createError();
-                dispose(aid);
-                break;
             case PAUSED:
                 notification = holder.downloadBuilder.createPaused();
                 break;
@@ -85,6 +82,21 @@ public class DownloadingService extends Service implements Download.DoomObserver
 
         manager.notify(holder.downloadBuilder.notificationId,notification);
 
+    }
+
+    @Override
+    public void doomError(long aid, String message)
+    {
+        // TODO: i don't know why ,but if i fast click on notif (for 3 seconds) it's throw the nullPointerException
+        DownloadHolder holder = downloads.get(aid);
+
+        if(holder == null || holder.download == null)
+            return;
+
+        Notification notification = holder.downloadBuilder.createError(message);
+        dispose(aid);
+
+        manager.notify(holder.downloadBuilder.notificationId,notification);
     }
 
 
@@ -176,7 +188,7 @@ public class DownloadingService extends Service implements Download.DoomObserver
 
 
 
-    private final static String defaultDownloadDir = FileSystemActivity.getRealPath(
+    private final static String defaultDownloadDir = Utils.getRealPath(
             Environment.getExternalStorageDirectory()) + "/download/";
 
     public static String getDownloadDir()
@@ -212,8 +224,6 @@ public class DownloadingService extends Service implements Download.DoomObserver
         super.onCreate();
         manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
-
-    // TODO: i don't know why ,but if i fast click on notif (for 3 seconds) it's throw the nullPointerException
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)

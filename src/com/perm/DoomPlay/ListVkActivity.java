@@ -287,9 +287,10 @@ public class ListVkActivity extends AbstractList
         ArrayList<Audio> tempTracks = intent.getParcelableArrayListExtra(MainScreenActivity.keyOpenInListTrack);
 
         if(tempTracks != null)
+        {
             audios = tempTracks;
-
-        adapter.changeData(audios);
+            adapter.changeData(audios);
+        }
         currentAction  = intent.getAction();
     }
 

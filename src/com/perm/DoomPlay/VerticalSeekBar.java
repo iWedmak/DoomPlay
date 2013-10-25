@@ -57,9 +57,17 @@ public class VerticalSeekBar extends SeekBar {
                     myListener.onStartTrackingTouch(this);
                 break;
             case MotionEvent.ACTION_MOVE:
-                setProgress(getMax() - (int) (getMax() * event.getY() / getHeight()));
+
+                int progress = getMax() - (int) (getMax() * event.getY() / getHeight());
+
+                if(progress > 100)
+                    progress = 100;
+                else if(progress < 0)
+                    progress = 0;
+
+                setProgress(progress);
                 onSizeChanged(getWidth(), getHeight(), 0, 0);
-                myListener.onProgressChanged(this, getMax() - (int) (getMax() * event.getY() / getHeight()), true);
+                myListener.onProgressChanged(this, progress, true);
                 break;
             case MotionEvent.ACTION_UP:
                 myListener.onStopTrackingTouch(this);

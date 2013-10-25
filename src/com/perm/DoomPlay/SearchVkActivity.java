@@ -93,7 +93,12 @@ public class SearchVkActivity extends AbstractList
 
     void startVoice()
     {
-        startActivityForResult(getVoiceIntent(), 23);
+        Intent intent = getVoiceIntent();
+
+        if(Utils.isIntentAvailable(getBaseContext(),intent))
+            startActivityForResult(intent, 23);
+        else
+            Toast.makeText(getBaseContext(),getResources().getString(R.string.doesnt_available),Toast.LENGTH_SHORT).show();
     }
 
     @Override

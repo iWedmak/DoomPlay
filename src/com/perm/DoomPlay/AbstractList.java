@@ -93,10 +93,10 @@ abstract class AbstractList extends AbstractControls
 
     void goFullScreen()
     {
-        if(PlayingService.serviceAlive)
+        if(PlayingService.audios != null)
         {
             Intent intent = new Intent(getBaseContext(),FullPlaybackActivity.class);
-            intent.putExtra(FileSystemActivity.keyMusic,audios);
+            intent.putExtra(FileSystemActivity.keyMusic,PlayingService.audios);
             intent.setAction(FullPlaybackActivity.actionReturnFull);
             startActivity(intent);
         }

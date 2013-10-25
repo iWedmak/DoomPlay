@@ -83,14 +83,12 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
         {
             src = findSrc(artist,title);
 
-
-
         } catch (ParserConfigurationException e) {
-            e.printStackTrace(); cancel(true);  return null;
+            e.printStackTrace(); cancel(false);  return null;
         } catch (SAXException e) {
-            e.printStackTrace(); cancel(true);  return null;
+            e.printStackTrace(); cancel(false);  return null;
         } catch (IOException e) {
-            e.printStackTrace(); cancel(true);  return null;
+            e.printStackTrace(); cancel(false);  return null;
         }
         if(src == null || src.equals(""))
         {
@@ -122,7 +120,7 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
         onBitmapSaved(albumId);
         set.remove(albumId);
     }
-    private final static String defaultAlbumArtsDir = FileSystemActivity.getRealPath(
+    private final static String defaultAlbumArtsDir = Utils.getRealPath(
             Environment.getExternalStorageDirectory()) + "/download/AlbumArts";
     public static String getAlbumArtsDir()
     {
@@ -260,7 +258,7 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
             if(key < 1)
                 return null;
 
-            Bitmap bitmap = AlbumArtGetter.getBitmapFromStore(key, MyApplication.getInstance());
+            Bitmap bitmap = AlbumArtGetter.getBitmapFromStore(key,MyApplication.getInstance());
 
             if(bitmap != null)
                 put(key,bitmap);
@@ -270,6 +268,13 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
     };
     private static Bitmap getBitmapFromStore(long id, Context context)
     {
+        //TODO: sometimes it throws NullPointerException
+
+        if(context == null || context.getContentResolver() == null)
+            return null;
+
+
+
         Uri uri = ContentUris.withAppendedId(artworkUri, id);
         try
         {

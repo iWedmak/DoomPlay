@@ -23,6 +23,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.bugsense.trace.BugSenseHandler;
 
 import java.util.ArrayList;
 
@@ -211,15 +212,22 @@ public class PlaylistDB extends SQLiteOpenHelper
         SQLiteDatabase db = getWritableDatabase();
 
         Cursor cFirst = db.query(playlist,TracksHolder.projectionPlusId,Media.DATA + " = ?",new String[]{first},null,null,null);
-        cFirst.moveToFirst();
+        Cursor cSecond = db.query(playlist,TracksHolder.projectionPlusId,Media.DATA + " = ?",new String[]{second},null,null,null);
+
+        if(!cFirst.moveToFirst() || !cSecond.moveToFirst())
+        {
+            // it has thrown CursorIndexOfBoundException twice
+            BugSenseHandler.sendException(new IndexOutOfBoundsException("can't changeColumns exception"));
+            return;
+        }
+
+
         String idFirst = cFirst.getString(cFirst.getColumnIndex(Media._ID));
         String artistFirst  = cFirst.getString(cFirst.getColumnIndex(Media.ARTIST));
         String titleFirst  = cFirst.getString(cFirst.getColumnIndex(Media.TITLE));
         long albumIdFirst  = cFirst.getLong(cFirst.getColumnIndex(Media.ALBUM_ID));
         cFirst.close();
 
-        Cursor cSecond = db.query(playlist,TracksHolder.projectionPlusId,Media.DATA + " = ?",new String[]{second},null,null,null);
-        cSecond.moveToFirst();
         String idSecond = cSecond.getString(cSecond.getColumnIndex(Media._ID));
         String artistSecond  = cSecond.getString(cSecond.getColumnIndex(Media.ARTIST));
         String titleSecond  = cSecond.getString(cSecond.getColumnIndex(Media.TITLE));

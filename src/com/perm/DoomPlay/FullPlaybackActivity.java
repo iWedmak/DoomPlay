@@ -37,7 +37,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -129,6 +128,7 @@ public class FullPlaybackActivity  extends AbstractControls
     {
         super.onNewIntent(intent);
         intentWas = intent;
+        setIntent(intent);
         getTracks(intent);
         adapterPager = new PagePlaybackAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapterPager);
@@ -142,7 +142,7 @@ public class FullPlaybackActivity  extends AbstractControls
             audios = new ArrayList<Audio>();
             audios.add(getRealPathFromIntent(intent));
         }
-        else if(intent.getAction().equals(actionPlayFull))
+        else if(intent.getAction().equals(actionPlayFull) || intent.getAction().equals(actionReturnFull))
         {
             audios =  intent.getParcelableArrayListExtra((FileSystemActivity.keyMusic));
         }
@@ -153,7 +153,6 @@ public class FullPlaybackActivity  extends AbstractControls
 
         if(intent.getIntExtra(keyIndex,11116) != 11116)
             intentService.putExtra(keyIndex,intent.getIntExtra(keyIndex,0));
-
     }
 
     @Override
@@ -170,6 +169,7 @@ public class FullPlaybackActivity  extends AbstractControls
         }
         return super.onKeyDown(keyCode, event);
     }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState)
@@ -233,19 +233,11 @@ public class FullPlaybackActivity  extends AbstractControls
 
     Audio getRealPathFromIntent(Intent intent)
     {
-        String filePath ;
+
 
         File file = new File(intent.getData().getPath());
 
-            try
-            {
-                filePath  = file.getCanonicalPath();
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-                filePath = file.getAbsolutePath();
-            }
+        String filePath = Utils.getRealPath(file);
 
         String[] selectionArgs = new String[]{filePath};
 
@@ -277,13 +269,13 @@ public class FullPlaybackActivity  extends AbstractControls
 
         return true;
     }
-    public static Intent returnSmall(Context context)
+    public static Intent getReturnSmallIntent(Context context, ArrayList<Audio> audios)
     {
         if(PlayingService.isOnline)
         {
             Intent intent = new Intent(context,ListVkActivity.class);
             intent.setAction(ListVkActivity.actionJust);
-            intent.putExtra(MainScreenActivity.keyOpenInListTrack, PlayingService.audios);
+            intent.putExtra(MainScreenActivity.keyOpenInListTrack, audios);
 
             return intent;
         }
@@ -291,7 +283,7 @@ public class FullPlaybackActivity  extends AbstractControls
         {
             Intent intent = new Intent(context,ListTracksActivity.class);
             intent.setAction(ListTracksActivity.actionJust);
-            intent.putExtra(MainScreenActivity.keyOpenInListTrack, PlayingService.audios);
+            intent.putExtra(MainScreenActivity.keyOpenInListTrack,audios);
             return intent;
         }
 
@@ -308,6 +300,10 @@ public class FullPlaybackActivity  extends AbstractControls
                 temp.add(audios.get(PlayingService.indexCurrentTrack));
                 showPlaybackDialog(temp);
                 return true;
+            case android.R.id.home:
+                startActivity(new Intent(this, MainScreenActivity.class));
+                finish();
+                return true;
             case R.id.itemEqualizer:
                 startActivity(new Intent(this,EqualizerActivity.class));
                 return true;
@@ -316,7 +312,7 @@ public class FullPlaybackActivity  extends AbstractControls
                 sleepDialog.show(getSupportFragmentManager(),tagSleepDialog);
                 return true;
             case R.id.itemReturnSmall:
-                startActivity(returnSmall(this));
+                startActivity(getReturnSmallIntent(this, audios));
                 finish();
                 return true;
             case R.id.itemSetAsRingtone:

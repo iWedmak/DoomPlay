@@ -7,7 +7,8 @@ public class TAGS
 	public static native String TAGS_ReadEx(int dwHandle, String fmt, int tagtype);
 	public static native int TAGS_GetVersion();
 	
-    static {
+    static
+    {
         System.loadLibrary("tags");
     }
 }

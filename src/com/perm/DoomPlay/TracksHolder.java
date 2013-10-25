@@ -54,7 +54,7 @@ class TracksHolder
         }
         else
         {
-             allAudios = new ArrayList<Audio>(0);
+             allAudios = new ArrayList<Audio>();
         }
 
 

@@ -182,13 +182,14 @@ class DownloadNotifBuilder
 
         return builder.build();
     }
-    public Notification createError()
+    public Notification createError(String message)
     {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
 
         builder.setOngoing(false);
         builder.setContentTitle( context.getResources().getString(R.string.error));
         builder.setContentText(track.getArtist() + "-" + track.getTitle());
+        builder.setSubText(message);
         builder.setSmallIcon(R.drawable.downloaded);
         builder.setAutoCancel(true);
 

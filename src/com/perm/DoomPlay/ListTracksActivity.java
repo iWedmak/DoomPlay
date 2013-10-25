@@ -289,7 +289,6 @@ public class ListTracksActivity extends AbstractList
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-
         getMenuInflater().inflate(R.menu.bar_list,menu);
         return true;
     }

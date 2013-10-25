@@ -30,13 +30,15 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 class Utils
 {
     private Utils(){}
 
-    private static String[] EXTENSIONS  = { "mp3","mp1","mp2","flac","mp4","opus","aac","wv","xm","mod",
+    private static String[] EXTENSIONS  = { "mp3","mp1","mp2","flac","mp4","opus","aac","m4a","wv","xm","mod",
             "s3m","aiff","umx","wav","ogg","midi","alac","ape","mpc"};
 
     public static boolean trackChecker(String trackToTest)
@@ -86,7 +88,6 @@ class Utils
     }
     public static void setRingtone(Context context,Audio audio)
     {
-
         ContentValues values = new ContentValues();
         values.put(MediaStore.MediaColumns.DATA, audio.getUrl());
         values.put(MediaStore.MediaColumns.TITLE, audio.getTitle());
@@ -101,10 +102,16 @@ class Utils
 
         Uri uri = MediaStore.Audio.Media.getContentUriForPath(audio.getUrl());
         Uri newUri = context.getContentResolver().insert(uri, values);
-        RingtoneManager.setActualDefaultRingtoneUri(context,RingtoneManager.TYPE_RINGTONE,newUri);
 
-
-        Toast.makeText(context,context.getString(R.string.was_set_as_ringtone),Toast.LENGTH_SHORT).show();
+        if(newUri == null)
+        {
+            Toast.makeText(context,context.getString(R.string.error),Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            RingtoneManager.setActualDefaultRingtoneUri(context,RingtoneManager.TYPE_RINGTONE,newUri);
+            Toast.makeText(context,context.getString(R.string.was_set_as_ringtone),Toast.LENGTH_SHORT).show();
+        }
     }
     public static boolean isOnline(Context context)
     {
@@ -121,4 +128,15 @@ class Utils
     }
 
 
+    public static String getRealPath(File file)
+    {
+        try
+        {
+            return file.getCanonicalPath();
+        }
+        catch (IOException e)
+        {
+            return file.getAbsolutePath();
+        }
+    }
 }

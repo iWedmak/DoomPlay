@@ -1,5 +1,6 @@
 package com.perm.DoomPlay;
 
+import android.util.Log;
 import com.un4seen.bass.*;
 
 import java.io.File;
@@ -40,34 +41,29 @@ public class BassPlayer
     public BassPlayer()
     {
         BASS.BASS_Init(-1, 44100, 0);
+        BASS.BASS_SetConfig(BASS.BASS_CONFIG_FLOATDSP,32);
         chan = 0;
+
+        String path = MyApplication.getInstance().getApplicationInfo().nativeLibraryDir;
+        String[] list = new File(path).list();
+        for (String s: list)
+        {
+            BASS.BASS_PluginLoad(path+"/"+s, 0);
+        }
     }
     public void prepareFile(String url) throws IOException
     {
-        String extension = (url.substring(url.lastIndexOf(".")+1)).toLowerCase();
+        String extension = (url.substring(url.lastIndexOf(".")+1));
 
-        if(extension.equals("aac") || extension.equals("mp4"))
-            chan = BASS_AAC.BASS_AAC_StreamCreateFile(url, 0L, 0L, BASS.BASS_SAMPLE_LOOP);
-        else if(extension.equals("alac"))
-            chan = BASS_ALAC.BASS_ALAC_StreamCreateFile(url, 0L, 0L, BASS.BASS_SAMPLE_LOOP);
-        else if(extension.equals("ape"))
-            chan = BASS_APE.BASS_APE_StreamCreateFile(url, 0L, 0L, BASS.BASS_SAMPLE_LOOP);
-        else if(extension.equals("mpc"))
-            chan = BASS_MPC.BASS_MPC_StreamCreateFile(url, 0L, 0L, BASS.BASS_SAMPLE_LOOP);
-        else if(extension.equals("flac"))
-            chan = BASSFLAC.BASS_FLAC_StreamCreateFile(url, 0L, 0L, BASS.BASS_SAMPLE_LOOP);
-        else if(extension.equals("midi"))
-            chan = BASSMIDI.BASS_MIDI_StreamCreateFile(url, 0L, 0L, BASS.BASS_SAMPLE_LOOP, 1);
-        else if(extension.equals("opus"))
-            chan = BASSOPUS.BASS_OPUS_StreamCreateFile(url, 0L, 0L, BASS.BASS_SAMPLE_LOOP);
-        else if(extension.equals("wv"))
-            chan = BASSWV.BASS_WV_StreamCreateFile(url, 0L, 0L, BASS.BASS_SAMPLE_LOOP);
-        else
-            chan = BASS.BASS_StreamCreateFile(url, 0L, 0L, BASS.BASS_SAMPLE_LOOP);
+
+        chan = BASS.BASS_StreamCreateFile(url, 0L, 0L, 0);
+
+        Log.i("TAG AUDIO","extension " + extension);
 
 
         if(chan == 0)
         {
+            Log.i("TAG AUDIO","code of exception "+ BASS.BASS_ErrorGetCode());
             throw new IOException("prepare exception");
         }
 
@@ -97,17 +93,19 @@ public class BassPlayer
         BASS.BASS_DX8_PARAMEQ p = new BASS.BASS_DX8_PARAMEQ();
 
         p.fGain=0;
-        p.fBandwidth = 0.7f;
+        p.fBandwidth = 0.5f;
         p.fCenter=32;
         BASS.BASS_FXSetParameters(fx[0], p);
         p.fCenter=64;
         BASS.BASS_FXSetParameters(fx[1], p);
         p.fCenter=125;
         BASS.BASS_FXSetParameters(fx[2], p);
+        p.fBandwidth = 2f;
         p.fCenter=250;
         BASS.BASS_FXSetParameters(fx[3], p);
         p.fCenter=500;
         BASS.BASS_FXSetParameters(fx[4], p);
+        p.fBandwidth = 4f;
         p.fCenter=1000;
         BASS.BASS_FXSetParameters(fx[5], p);
         p.fCenter=2000;
@@ -115,6 +113,7 @@ public class BassPlayer
         p.fCenter=4000;
         BASS.BASS_FXSetParameters(fx[7], p);
         p.fCenter=8000;
+        p.fBandwidth = 8f;
         BASS.BASS_FXSetParameters(fx[8], p);
         p.fCenter=16000;
         BASS.BASS_FXSetParameters(fx[9], p);
@@ -279,6 +278,8 @@ public class BassPlayer
     }
     public int getPercentage()
     {
+        if(getTotalTime() == 0)
+            return 0;
         return (100*getCurrentPosition())/getTotalTime();
     }
 }

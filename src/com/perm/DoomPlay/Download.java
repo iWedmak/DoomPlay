@@ -31,6 +31,7 @@ public class Download implements Runnable
         //my own observer with blackjacks and hookers
         // don't ask ,why have i done this;
         void doomUpdate(long aid);
+        void doomError(long aid,String message);
     }
     enum States
     {
@@ -77,33 +78,26 @@ public class Download implements Runnable
     public void pause()
     {
         status = States.PAUSED;
-        stateChanged();
+        observer.doomUpdate(aid);
     }
 
     public void resume()
     {
         status = States.DOWNLOADING;
-        stateChanged();
+        observer.doomUpdate(aid);
         download();
     }
     public void cancel()
     {
         status = States.CANCELLED;
-        stateChanged();
-    }
-
-    private void error()
-    {
-        status = States.ERROR;
-        stateChanged();
-    }
-
-    private void stateChanged()
-    {
         observer.doomUpdate(aid);
     }
 
-
+    private void error(String message)
+    {
+        status = States.ERROR;
+        observer.doomError(aid,message);
+    }
     @Override
     public void run()
     {
@@ -126,7 +120,7 @@ public class Download implements Runnable
 
 
             if(connectLength == null || Long.parseLong(connectLength) < 1 || connectLength.equals(""))
-                error();
+                error("Can't download file");
 
             size = Long.parseLong(connectLength);
 
@@ -147,13 +141,13 @@ public class Download implements Runnable
             if(status == States.DOWNLOADING)
             {
                 status = States.COMPLETED;
-                stateChanged();
+                observer.doomUpdate(aid);
             }
 
         }
         catch (IOException e)
         {
-            error();
+            error(e.getMessage());
             e.printStackTrace();
         }
         finally

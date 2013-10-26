@@ -1,10 +1,27 @@
 # DoomPlay
-DoomPlay is convenient player for android with minimalistic interface
+DoomPlay is convenient player for android with minimalistic interface .
+DoomPlay based on BASS library .
 
+
+**Supported formats:**
+
+Ordinal formats (.mp3;.mp2;.mp1;.ogg;.oga;.wav;.aif;.aiff;.aifc;)
+MO3 (.mo3;.xm;.mod;.s3m;.it;.mtm;.umx;)
+Free Lossless Audio Codec (.flac;)
+MIDI (.midi;.mid;.mus;.rmi;.kar;)
+Windows Media Audio (.wma;.wmv;.wmp;.asf;)
+AAC (.aac;.mp4;.m4a;.m4b;*.m4p;)
+WavPack Audio Codec (.wv;.wvc;)
+Monkey's Audio (.ape;)
+MusePack (.mpc;.mpp;.mp+;)
+Dolby Digital (*.ac3;)
+Apple Lossless (.mp4;.m4a;.m4b;.m4p;)
+Speex (.spx;*.wav;.oga;.ogg;)
+The True Audio (*.tta;)
+OptimFROG (*.ofr;)
 
 **DoomPlay can:**
 
-- play mp3/mp4/m4a/flac/ogg/wav/wma
 - sort by Folders,Artists,Albums
 - support Playlists
 - music search
@@ -18,7 +35,7 @@ DoomPlay is convenient player for android with minimalistic interface
 - and so on
 
 
-DoomPlay is an open source tool and you're welcome to contribute.
+DoomPlay is an open source player and you're welcome to contribute.
 
 ### Author
 Vladislav Krot <<doomplaye@gmail.com>>

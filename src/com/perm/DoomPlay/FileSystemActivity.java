@@ -31,6 +31,7 @@ import android.widget.*;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -45,7 +46,7 @@ public class FileSystemActivity extends AbstractReceiver
     public final static String keyMusic = "3kpoid";
     private final static String keyCurrentDir = "currentDij";
 
-    private static String defaultRootFilePath;
+    public static String defaultRootFilePath;
 
     static
     {
@@ -119,16 +120,24 @@ public class FileSystemActivity extends AbstractReceiver
                     (file.isDirectory() && file.canRead());
         }
     };
+
+    private final FilenameFilter filenameFilter = new FilenameFilter()
+    {
+        @Override
+        public boolean accept(File dir, String filename)
+        {
+            return Utils.trackChecker(filename);
+        }
+    };
+
     private ArrayList<Audio> getAudiosFromFolder(File file)
     {
-        String selectionArgs = Utils.getRealPath(file);
+        File[] filesToPlay = file.listFiles(filenameFilter);
+        ArrayList<Audio> audios = new ArrayList<Audio>();
 
-        Cursor cursor = getBaseContext().getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                TracksHolder.projection,MediaStore.Audio.Media.DATA + " LIKE ? ",new String[]{"%"+selectionArgs +"%"},null);
+        for(File mFile : filesToPlay)
+            audios.add(getAudioFromFile(mFile));
 
-        ArrayList<Audio> audios = Audio.parseAudiosCursor(cursor);
-
-        cursor.close();
         return audios;
     }
     private Audio getAudioFromFile(File file)

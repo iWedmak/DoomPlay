@@ -291,7 +291,7 @@ public class DirectoryChooserActivity extends AbstractReceiver
                 .setMessage(
                         String.format(getString(R.string.create_folder_msg),
                                 mNewDirectoryName))
-                .setNegativeButton(R.string.cancel_label,
+                .setNegativeButton(R.string.cancel,
                         new DialogInterface.OnClickListener() {
 
                             @Override

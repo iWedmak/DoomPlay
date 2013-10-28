@@ -1187,6 +1187,7 @@ android.support.v7.appcompat.R$layout: int item_group
 android.support.v7.appcompat.R$layout: int item_playlist
 android.support.v7.appcompat.R$layout: int item_song
 android.support.v7.appcompat.R$layout: int item_vk_album
+android.support.v7.appcompat.R$layout: int license
 android.support.v7.appcompat.R$layout: int list_album_artist
 android.support.v7.appcompat.R$layout: int list_tracks
 android.support.v7.appcompat.R$layout: int list_vk
@@ -1239,6 +1240,7 @@ android.support.v7.appcompat.R$string: int Gain_focus
 android.support.v7.appcompat.R$string: int Groups
 android.support.v7.appcompat.R$string: int Initial_folder
 android.support.v7.appcompat.R$string: int Languages
+android.support.v7.appcompat.R$string: int Licenses
 android.support.v7.appcompat.R$string: int Long_audiofocus
 android.support.v7.appcompat.R$string: int Max_friends
 android.support.v7.appcompat.R$string: int Max_music
@@ -1290,7 +1292,6 @@ android.support.v7.appcompat.R$string: int artist
 android.support.v7.appcompat.R$string: int artists
 android.support.v7.appcompat.R$string: int audio_settings
 android.support.v7.appcompat.R$string: int cancel
-android.support.v7.appcompat.R$string: int cancel_label
 android.support.v7.appcompat.R$string: int canceled
 android.support.v7.appcompat.R$string: int cant_delete_file
 android.support.v7.appcompat.R$string: int cant_get_audio
@@ -2557,9 +2558,7 @@ com.perm.DoomPlay.DirectoryChooserActivity: java.lang.String RESULT_SELECTED_DIR
 com.perm.DoomPlay.DirectoryChooserActivity: int RESULT_CODE_DIR_SELECTED
 com.perm.DoomPlay.DirectoryChooserActivity: java.lang.String TAG
 com.perm.DoomPlay.DirectoryChooserActivity: android.widget.Button mBtnConfirm
-com.perm.DoomPlay.DirectoryChooserActivity: android.widget.Button mBtnCancel
 com.perm.DoomPlay.DirectoryChooserActivity: android.widget.TextView mTxtvSelectedFolder
-com.perm.DoomPlay.DirectoryChooserActivity: android.widget.ListView mListDirectories
 com.perm.DoomPlay.DirectoryChooserActivity: android.widget.ArrayAdapter mListDirectoriesAdapter
 com.perm.DoomPlay.DirectoryChooserActivity: java.util.ArrayList mFilenames
 com.perm.DoomPlay.DirectoryChooserActivity: java.io.File mSelectedDir
@@ -2568,7 +2567,6 @@ com.perm.DoomPlay.DirectoryChooserActivity: android.os.FileObserver mFileObserve
 com.perm.DoomPlay.DirectoryChooserActivity: java.lang.String mNewDirectoryName
 com.perm.DoomPlay.DirectoryChooserActivity: DirectoryChooserActivity()
 com.perm.DoomPlay.DirectoryChooserActivity: void onCreate(android.os.Bundle)
-com.perm.DoomPlay.DirectoryChooserActivity: void setupActionBar()
 com.perm.DoomPlay.DirectoryChooserActivity: void debug(java.lang.String,java.lang.Object[])
 com.perm.DoomPlay.DirectoryChooserActivity: void onBackPressed()
 com.perm.DoomPlay.DirectoryChooserActivity: void returnSelectedFolder()
@@ -2739,6 +2737,7 @@ com.perm.DoomPlay.FileSystemActivity: java.lang.String keyMusic
 com.perm.DoomPlay.FileSystemActivity: java.lang.String keyCurrentDir
 com.perm.DoomPlay.FileSystemActivity: java.lang.String defaultRootFilePath
 com.perm.DoomPlay.FileSystemActivity: java.io.FileFilter fileFilter
+com.perm.DoomPlay.FileSystemActivity: java.io.FilenameFilter filenameFilter
 com.perm.DoomPlay.FileSystemActivity: android.support.v7.view.ActionMode$Callback callback
 com.perm.DoomPlay.FileSystemActivity: android.support.v7.view.ActionMode mActionMode
 com.perm.DoomPlay.FileSystemActivity: android.widget.AdapterView$OnItemClickListener onItemClickListener
@@ -2771,23 +2770,27 @@ com.perm.DoomPlay.FileSystemActivity$1: boolean accept(java.io.File)
 com.perm.DoomPlay.FileSystemActivity$2
 com.perm.DoomPlay.FileSystemActivity$2: com.perm.DoomPlay.FileSystemActivity this$0
 com.perm.DoomPlay.FileSystemActivity$2: FileSystemActivity$2(com.perm.DoomPlay.FileSystemActivity)
-com.perm.DoomPlay.FileSystemActivity$2: boolean onCreateActionMode(android.support.v7.view.ActionMode,android.view.Menu)
-com.perm.DoomPlay.FileSystemActivity$2: boolean onPrepareActionMode(android.support.v7.view.ActionMode,android.view.Menu)
-com.perm.DoomPlay.FileSystemActivity$2: boolean onActionItemClicked(android.support.v7.view.ActionMode,android.view.MenuItem)
-com.perm.DoomPlay.FileSystemActivity$2: void onDestroyActionMode(android.support.v7.view.ActionMode)
+com.perm.DoomPlay.FileSystemActivity$2: boolean accept(java.io.File,java.lang.String)
 com.perm.DoomPlay.FileSystemActivity$3
 com.perm.DoomPlay.FileSystemActivity$3: com.perm.DoomPlay.FileSystemActivity this$0
 com.perm.DoomPlay.FileSystemActivity$3: FileSystemActivity$3(com.perm.DoomPlay.FileSystemActivity)
-com.perm.DoomPlay.FileSystemActivity$3: void onItemClick(android.widget.AdapterView,android.view.View,int,long)
+com.perm.DoomPlay.FileSystemActivity$3: boolean onCreateActionMode(android.support.v7.view.ActionMode,android.view.Menu)
+com.perm.DoomPlay.FileSystemActivity$3: boolean onPrepareActionMode(android.support.v7.view.ActionMode,android.view.Menu)
+com.perm.DoomPlay.FileSystemActivity$3: boolean onActionItemClicked(android.support.v7.view.ActionMode,android.view.MenuItem)
+com.perm.DoomPlay.FileSystemActivity$3: void onDestroyActionMode(android.support.v7.view.ActionMode)
 com.perm.DoomPlay.FileSystemActivity$4
 com.perm.DoomPlay.FileSystemActivity$4: com.perm.DoomPlay.FileSystemActivity this$0
 com.perm.DoomPlay.FileSystemActivity$4: FileSystemActivity$4(com.perm.DoomPlay.FileSystemActivity)
-com.perm.DoomPlay.FileSystemActivity$4: boolean onItemLongClick(android.widget.AdapterView,android.view.View,int,long)
+com.perm.DoomPlay.FileSystemActivity$4: void onItemClick(android.widget.AdapterView,android.view.View,int,long)
 com.perm.DoomPlay.FileSystemActivity$5
 com.perm.DoomPlay.FileSystemActivity$5: com.perm.DoomPlay.FileSystemActivity this$0
 com.perm.DoomPlay.FileSystemActivity$5: FileSystemActivity$5(com.perm.DoomPlay.FileSystemActivity)
-com.perm.DoomPlay.FileSystemActivity$5: int compare(java.io.File,java.io.File)
-com.perm.DoomPlay.FileSystemActivity$5: int compare(java.lang.Object,java.lang.Object)
+com.perm.DoomPlay.FileSystemActivity$5: boolean onItemLongClick(android.widget.AdapterView,android.view.View,int,long)
+com.perm.DoomPlay.FileSystemActivity$6
+com.perm.DoomPlay.FileSystemActivity$6: com.perm.DoomPlay.FileSystemActivity this$0
+com.perm.DoomPlay.FileSystemActivity$6: FileSystemActivity$6(com.perm.DoomPlay.FileSystemActivity)
+com.perm.DoomPlay.FileSystemActivity$6: int compare(java.io.File,java.io.File)
+com.perm.DoomPlay.FileSystemActivity$6: int compare(java.lang.Object,java.lang.Object)
 com.perm.DoomPlay.FileSystemActivity$FileSystemAdapter
 com.perm.DoomPlay.FileSystemActivity$FileSystemAdapter: android.view.LayoutInflater inflater
 com.perm.DoomPlay.FileSystemActivity$FileSystemAdapter: com.perm.DoomPlay.FileSystemActivity this$0
@@ -3876,6 +3879,7 @@ com.perm.DoomPlay.R$layout: int item_group
 com.perm.DoomPlay.R$layout: int item_playlist
 com.perm.DoomPlay.R$layout: int item_song
 com.perm.DoomPlay.R$layout: int item_vk_album
+com.perm.DoomPlay.R$layout: int license
 com.perm.DoomPlay.R$layout: int list_album_artist
 com.perm.DoomPlay.R$layout: int list_tracks
 com.perm.DoomPlay.R$layout: int list_vk
@@ -3932,6 +3936,7 @@ com.perm.DoomPlay.R$string: int Gain_focus
 com.perm.DoomPlay.R$string: int Groups
 com.perm.DoomPlay.R$string: int Initial_folder
 com.perm.DoomPlay.R$string: int Languages
+com.perm.DoomPlay.R$string: int Licenses
 com.perm.DoomPlay.R$string: int Long_audiofocus
 com.perm.DoomPlay.R$string: int Max_friends
 com.perm.DoomPlay.R$string: int Max_music
@@ -3983,7 +3988,6 @@ com.perm.DoomPlay.R$string: int artist
 com.perm.DoomPlay.R$string: int artists
 com.perm.DoomPlay.R$string: int audio_settings
 com.perm.DoomPlay.R$string: int cancel
-com.perm.DoomPlay.R$string: int cancel_label
 com.perm.DoomPlay.R$string: int canceled
 com.perm.DoomPlay.R$string: int cant_delete_file
 com.perm.DoomPlay.R$string: int cant_get_audio
@@ -4475,11 +4479,11 @@ com.perm.DoomPlay.SettingActivity$2: boolean onPreferenceClick(android.preferenc
 com.perm.DoomPlay.SettingActivity$3
 com.perm.DoomPlay.SettingActivity$3: com.perm.DoomPlay.SettingActivity this$0
 com.perm.DoomPlay.SettingActivity$3: SettingActivity$3(com.perm.DoomPlay.SettingActivity)
-com.perm.DoomPlay.SettingActivity$3: boolean onPreferenceChange(android.preference.Preference,java.lang.Object)
+com.perm.DoomPlay.SettingActivity$3: boolean onPreferenceClick(android.preference.Preference)
 com.perm.DoomPlay.SettingActivity$4
 com.perm.DoomPlay.SettingActivity$4: com.perm.DoomPlay.SettingActivity this$0
 com.perm.DoomPlay.SettingActivity$4: SettingActivity$4(com.perm.DoomPlay.SettingActivity)
-com.perm.DoomPlay.SettingActivity$4: boolean onPreferenceClick(android.preference.Preference)
+com.perm.DoomPlay.SettingActivity$4: boolean onPreferenceChange(android.preference.Preference,java.lang.Object)
 com.perm.DoomPlay.SettingActivity$5
 com.perm.DoomPlay.SettingActivity$5: com.perm.DoomPlay.SettingActivity this$0
 com.perm.DoomPlay.SettingActivity$5: SettingActivity$5(com.perm.DoomPlay.SettingActivity)
@@ -4488,6 +4492,10 @@ com.perm.DoomPlay.SettingActivity$6
 com.perm.DoomPlay.SettingActivity$6: com.perm.DoomPlay.SettingActivity this$0
 com.perm.DoomPlay.SettingActivity$6: SettingActivity$6(com.perm.DoomPlay.SettingActivity)
 com.perm.DoomPlay.SettingActivity$6: boolean onPreferenceClick(android.preference.Preference)
+com.perm.DoomPlay.SettingActivity$7
+com.perm.DoomPlay.SettingActivity$7: com.perm.DoomPlay.SettingActivity this$0
+com.perm.DoomPlay.SettingActivity$7: SettingActivity$7(com.perm.DoomPlay.SettingActivity)
+com.perm.DoomPlay.SettingActivity$7: boolean onPreferenceClick(android.preference.Preference)
 com.perm.DoomPlay.SleepDialog
 com.perm.DoomPlay.SleepDialog: android.widget.TextView textSeekTrack
 com.perm.DoomPlay.SleepDialog: android.widget.TextView textSeekMin
@@ -5546,10 +5554,3 @@ com.un4seen.bass.BASS_MPC: int BASS_MPC_StreamCreateFile(java.nio.ByteBuffer,lon
 com.un4seen.bass.BASS_MPC: int BASS_MPC_StreamCreateURL(java.lang.String,int,int,com.un4seen.bass.BASS$DOWNLOADPROC,java.lang.Object)
 com.un4seen.bass.BASS_MPC: int BASS_MPC_StreamCreateFileUser(int,int,com.un4seen.bass.BASS$BASS_FILEPROCS,java.lang.Object)
 com.un4seen.bass.BASS_MPC: void <clinit>()
-com.un4seen.bass.TAGS
-com.un4seen.bass.TAGS: TAGS()
-com.un4seen.bass.TAGS: java.lang.String TAGS_GetLastErrorDesc()
-com.un4seen.bass.TAGS: java.lang.String TAGS_Read(int,java.lang.String)
-com.un4seen.bass.TAGS: java.lang.String TAGS_ReadEx(int,java.lang.String,int)
-com.un4seen.bass.TAGS: int TAGS_GetVersion()
-com.un4seen.bass.TAGS: void <clinit>()

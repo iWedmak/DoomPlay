@@ -18,15 +18,17 @@ package com.perm.DoomPlay;
  *    You can contact me <DoomPlaye@gmail.com>
  */
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
@@ -106,6 +108,18 @@ public class SettingActivity extends PreferenceActivity
                 return true;
             }
         });
+        findPreference("licenses").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
+        {
+            @Override
+            public boolean onPreferenceClick(Preference preference)
+            {
+                LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+                View view = inflater.inflate(R.layout.license,null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
+                builder.setView(view).setTitle("licenses").create().show();
+                return true;
+            }
+        });
 
         findPreference("languages").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener()
         {
@@ -143,7 +157,7 @@ public class SettingActivity extends PreferenceActivity
             {
                 Intent chooserIntent = new Intent(getBaseContext(), DirectoryChooserActivity.class);
                 chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_NEW_DIR_NAME, "download");
-                chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_INITIAL_DIRECTORY, Utils.getRealPath(Environment.getRootDirectory()));
+                chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_INITIAL_DIRECTORY, FileSystemActivity.defaultRootFilePath);
                 startActivityForResult(chooserIntent, REQUEST_DOWNLOAD_FOLDER);
                 return  true;
             }
@@ -157,7 +171,7 @@ public class SettingActivity extends PreferenceActivity
             {
                 Intent chooserIntent = new Intent(getBaseContext(), DirectoryChooserActivity.class);
                 chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_NEW_DIR_NAME, "coverArts");
-                chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_INITIAL_DIRECTORY, Utils.getRealPath(Environment.getRootDirectory()));
+                chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_INITIAL_DIRECTORY,FileSystemActivity.defaultRootFilePath);
 
                 startActivityForResult(chooserIntent, REQUEST_ALBUMART_FOLDER);
                 return  true;
@@ -172,7 +186,7 @@ public class SettingActivity extends PreferenceActivity
             {
                 Intent chooserIntent = new Intent(getBaseContext(), DirectoryChooserActivity.class);
                 chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_NEW_DIR_NAME, "music");
-                chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_INITIAL_DIRECTORY, Utils.getRealPath(Environment.getRootDirectory()));
+                chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_INITIAL_DIRECTORY, FileSystemActivity.defaultRootFilePath);
 
                 startActivityForResult(chooserIntent, REQUEST_BEGINNING_FOLDER);
                 return  true;
@@ -219,5 +233,5 @@ public class SettingActivity extends PreferenceActivity
             }
         }
     }
-
 }
+

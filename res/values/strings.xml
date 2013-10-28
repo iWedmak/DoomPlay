@@ -146,6 +146,7 @@
     <string name="up_label">Up</string>
     <string name="Saved_tracks_folder">Saved track\'s folder</string>
     <string name="Initial_folder">The initial folder</string>
+    <string name="Licenses">Licenses</string>
     <string-array name ="count_values">
         <item>10</item>
         <item>30</item>

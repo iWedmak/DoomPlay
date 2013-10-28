@@ -184,8 +184,8 @@
                 android:title="@string/About"
                 android:summary="@string/about_app">
             <PreferenceScreen
-                    android:title="@string/Copyright"
-                    android:summary="@string/Vladislav_Krot">
+                    android:title="@string/Licenses"
+                    android:key="licenses">
             </PreferenceScreen>
             <PreferenceScreen
                     android:title="@string/Contact"

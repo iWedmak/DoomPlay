@@ -108,7 +108,7 @@
     <string name="Other">Other</string>
     <string name="Other_settings">Other settings</string>
     <string name="Scroll">Smooth scroll</string>
-    <string name="scroll">scroll to track after it changed (available only in SDK > 7)</string>
+    <string name="scroll">scroll to track after it changed</string>
     <string name="Onclick_notif">On click notification</string>
     <string name="onclick_notif">return on full screen if true ,else on small screen</string>
     <string name="Show_controls">Show controls</string>
@@ -135,7 +135,6 @@
     <string name="chooser_label">choose folder</string>
     <string name="save_albumarts">save cover arts in this directory</string>
     <string name="Save_albumarts">Saved cover art\'s folder</string>
-    <string name="cancel_label">Cancel</string>
     <string name="confirm_label">Confirm</string>
     <string name="selected_folder_label">Selected folder:</string>
     <string name="create_folder_label">Create folder</string>
@@ -145,6 +144,8 @@
     <string name="create_folder_error_already_exists">Folder already exists</string>
     <string name="create_folder_error">Could not create folder</string>
     <string name="up_label">Up</string>
+    <string name="Saved_tracks_folder">Saved track\'s folder</string>
+    <string name="Initial_folder">The initial folder</string>
     <string-array name ="count_values">
         <item>10</item>
         <item>30</item>

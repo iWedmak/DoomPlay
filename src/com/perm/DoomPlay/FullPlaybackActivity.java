@@ -296,9 +296,12 @@ public class FullPlaybackActivity  extends AbstractControls
         switch (item.getItemId())
         {
             case R.id.itemAddtoPlaylist:
-                ArrayList<Audio> temp = new ArrayList<Audio>();
-                temp.add(audios.get(PlayingService.indexCurrentTrack));
-                showPlaybackDialog(temp);
+                if(audios.size() > 0)
+                {
+                    ArrayList<Audio> temp = new ArrayList<Audio>();
+                    temp.add(audios.get(PlayingService.indexCurrentTrack));
+                    showPlaybackDialog(temp);
+                }
                 return true;
             case android.R.id.home:
                 startActivity(new Intent(this, MainScreenActivity.class));
@@ -316,15 +319,19 @@ public class FullPlaybackActivity  extends AbstractControls
                 finish();
                 return true;
             case R.id.itemSetAsRingtone:
-                Utils.setRingtone(getBaseContext(), audios.get(PlayingService.indexCurrentTrack));
+                if(audios.size() > 0)
+                    Utils.setRingtone(getBaseContext(), audios.get(PlayingService.indexCurrentTrack));
                 return true;
             case R.id.itemGetLiricks:
-                if(PlayingService.isOnline)
-                   AbstractList.startLyricsDialog(getSupportFragmentManager(), audios.get(PlayingService.indexCurrentTrack).getLyrics_id());
-                else
+                if(audios.size() > 0)
                 {
-                    Audio audio = audios.get(PlayingService.indexCurrentTrack);
-                    AbstractList.startLiryctDialog(getSupportFragmentManager(), audio.getArtist(), audio.getTitle());
+                    if(PlayingService.isOnline)
+                        AbstractList.startLyricsDialog(getSupportFragmentManager(), audios.get(PlayingService.indexCurrentTrack).getLyrics_id());
+                    else
+                    {
+                        Audio audio = audios.get(PlayingService.indexCurrentTrack);
+                        AbstractList.startLiryctDialog(getSupportFragmentManager(), audio.getArtist(), audio.getTitle());
+                    }
                 }
                 return true;
         }

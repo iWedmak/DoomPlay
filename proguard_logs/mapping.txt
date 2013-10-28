@@ -2668,7 +2668,6 @@ android.support.v7.appcompat.R$id -> android.support.v7.a.f:
     int beginning -> beginning
     int btnCancel -> btnCancel
     int btnConfirm -> btnConfirm
-    int btnNavUp -> btnNavUp
     int buttonCancelNewDialog -> buttonCancelNewDialog
     int buttonCancelRepport -> buttonCancelRepport
     int buttonDCancel -> buttonDCancel
@@ -2680,10 +2679,8 @@ android.support.v7.appcompat.R$id -> android.support.v7.a.f:
     int collapseActionView -> collapseActionView
     int default_activity_button -> default_activity_button
     int dialog -> dialog
-    int directoryInfo -> directoryInfo
     int directoryList -> directoryList
     int disableHome -> disableHome
-    int divider -> divider
     int dropdown -> dropdown
     int editMessage -> editMessage
     int editNewPlaylist -> editNewPlaylist
@@ -2696,7 +2693,6 @@ android.support.v7.appcompat.R$id -> android.support.v7.a.f:
     int footer -> footer
     int home -> home
     int homeAsUp -> homeAsUp
-    int horizontalDivider -> horizontalDivider
     int icon -> icon
     int ifRoom -> ifRoom
     int image -> image
@@ -2867,7 +2863,6 @@ android.support.v7.appcompat.R$id -> android.support.v7.a.f:
     int title_container -> title_container
     int top_action_bar -> top_action_bar
     int txtvSelectedFolder -> txtvSelectedFolder
-    int txtvSelectedFolderLabel -> txtvSelectedFolderLabel
     int up -> up
     int useLogo -> useLogo
     int viewPager -> viewPager
@@ -2960,6 +2955,7 @@ android.support.v7.appcompat.R$string -> android.support.v7.a.i:
     int Friends -> Friends
     int Gain_focus -> Gain_focus
     int Groups -> Groups
+    int Initial_folder -> Initial_folder
     int Languages -> Languages
     int Long_audiofocus -> Long_audiofocus
     int Max_friends -> Max_friends
@@ -2976,6 +2972,7 @@ android.support.v7.appcompat.R$string -> android.support.v7.a.i:
     int Rescan -> Rescan
     int Save_after_buffer -> Save_after_buffer
     int Save_albumarts -> Save_albumarts
+    int Saved_tracks_folder -> Saved_tracks_folder
     int Scroll -> Scroll
     int Short_audiofocus -> Short_audiofocus
     int Show_controls -> Show_controls
@@ -5775,7 +5772,6 @@ com.perm.DoomPlay.DirectoryChooserActivity -> com.perm.DoomPlay.DirectoryChooser
     java.lang.String TAG -> TAG
     android.widget.Button mBtnConfirm -> mBtnConfirm
     android.widget.Button mBtnCancel -> mBtnCancel
-    android.widget.ImageButton mBtnNavUp -> mBtnNavUp
     android.widget.TextView mTxtvSelectedFolder -> mTxtvSelectedFolder
     android.widget.ListView mListDirectories -> mListDirectories
     android.widget.ArrayAdapter mListDirectoriesAdapter -> mListDirectoriesAdapter
@@ -5787,6 +5783,7 @@ com.perm.DoomPlay.DirectoryChooserActivity -> com.perm.DoomPlay.DirectoryChooser
     void onCreate(android.os.Bundle) -> onCreate
     void setupActionBar() -> setupActionBar
     void debug(java.lang.String,java.lang.Object[]) -> debug
+    void onBackPressed() -> onBackPressed
     void returnSelectedFolder() -> returnSelectedFolder
     void onPause() -> onPause
     void onResume() -> onResume
@@ -5821,17 +5818,14 @@ com.perm.DoomPlay.DirectoryChooserActivity$3 -> com.perm.DoomPlay.DirectoryChoos
     void onItemClick(android.widget.AdapterView,android.view.View,int,long) -> onItemClick
 com.perm.DoomPlay.DirectoryChooserActivity$4 -> com.perm.DoomPlay.DirectoryChooserActivity$4:
     com.perm.DoomPlay.DirectoryChooserActivity this$0 -> this$0
-    void onClick(android.view.View) -> onClick
+    void onEvent(int,java.lang.String) -> onEvent
+com.perm.DoomPlay.DirectoryChooserActivity$4$1 -> com.perm.DoomPlay.DirectoryChooserActivity$4$1:
+    com.perm.DoomPlay.DirectoryChooserActivity$4 this$1 -> this$1
+    void run() -> run
 com.perm.DoomPlay.DirectoryChooserActivity$5 -> com.perm.DoomPlay.DirectoryChooserActivity$5:
     com.perm.DoomPlay.DirectoryChooserActivity this$0 -> this$0
-    void onEvent(int,java.lang.String) -> onEvent
-com.perm.DoomPlay.DirectoryChooserActivity$5$1 -> com.perm.DoomPlay.DirectoryChooserActivity$5$1:
-    com.perm.DoomPlay.DirectoryChooserActivity$5 this$1 -> this$1
-    void run() -> run
-com.perm.DoomPlay.DirectoryChooserActivity$6 -> com.perm.DoomPlay.DirectoryChooserActivity$6:
-    com.perm.DoomPlay.DirectoryChooserActivity this$0 -> this$0
     void onClick(android.content.DialogInterface,int) -> onClick
-com.perm.DoomPlay.DirectoryChooserActivity$7 -> com.perm.DoomPlay.DirectoryChooserActivity$7:
+com.perm.DoomPlay.DirectoryChooserActivity$6 -> com.perm.DoomPlay.DirectoryChooserActivity$6:
     com.perm.DoomPlay.DirectoryChooserActivity this$0 -> this$0
     void onClick(android.content.DialogInterface,int) -> onClick
 com.perm.DoomPlay.Download -> com.perm.DoomPlay.Download:
@@ -5929,12 +5923,6 @@ com.perm.DoomPlay.EqualizerActivity -> com.perm.DoomPlay.EqualizerActivity:
     boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
     void showException(java.lang.Exception) -> showException
     void handleKException(com.api.KException) -> handleKException
-com.perm.DoomPlay.ExceptionLog -> com.perm.DoomPlay.ExceptionLog:
-    android.content.Context context -> context
-    com.perm.DoomPlay.ExceptionLog exceptionLog -> exceptionLog
-    java.lang.Thread$UncaughtExceptionHandler defaultHandler -> defaultHandler
-    void init(android.content.Context) -> init
-    void uncaughtException(java.lang.Thread,java.lang.Throwable) -> uncaughtException
 com.perm.DoomPlay.FileSystemActivity -> com.perm.DoomPlay.FileSystemActivity:
     com.perm.DoomPlay.FileSystemActivity$FileSystemAdapter adapter -> adapter
     android.widget.ListView listView -> listView
@@ -5943,15 +5931,15 @@ com.perm.DoomPlay.FileSystemActivity -> com.perm.DoomPlay.FileSystemActivity:
     java.io.File[] entriesFiles -> entriesFiles
     java.lang.String keyMusic -> keyMusic
     java.lang.String keyCurrentDir -> keyCurrentDir
-    java.io.File rootFile -> rootFile
+    java.lang.String defaultRootFilePath -> defaultRootFilePath
     java.io.FileFilter fileFilter -> fileFilter
     android.support.v7.view.ActionMode$Callback callback -> callback
     android.support.v7.view.ActionMode mActionMode -> mActionMode
     android.widget.AdapterView$OnItemClickListener onItemClickListener -> onItemClickListener
     android.widget.AdapterView$OnItemLongClickListener onItemLongClickListener -> onItemLongClickListener
     java.util.Comparator fileComparator -> fileComparator
+    java.lang.String getFileSystemDir() -> getFileSystemDir
     void onCreate(android.os.Bundle) -> onCreate
-    java.lang.String getRealPath(java.io.File) -> getRealPath
     void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
     android.content.Intent getToFullIntent(android.content.Context,java.util.ArrayList) -> getToFullIntent
     java.util.ArrayList getAudiosFromFolder(java.io.File) -> getAudiosFromFolder
@@ -6021,7 +6009,7 @@ com.perm.DoomPlay.FullPlaybackActivity -> com.perm.DoomPlay.FullPlaybackActivity
     void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
     com.perm.DoomPlay.Audio getRealPathFromIntent(android.content.Intent) -> getRealPathFromIntent
     boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
-    android.content.Intent returnSmall(android.content.Context) -> returnSmall
+    android.content.Intent getReturnSmallIntent(android.content.Context,java.util.ArrayList) -> getReturnSmallIntent
     boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
     void onClickActionBar() -> onClickActionBar
     void initializeService() -> initializeService
@@ -6099,6 +6087,12 @@ com.perm.DoomPlay.ListVkActivity$1 -> com.perm.DoomPlay.ListVkActivity$1:
     com.perm.DoomPlay.ListVkActivity this$0 -> this$0
     void onLoadingTrackStarted() -> onLoadingTrackStarted
     void onLoadingTrackEnded() -> onLoadingTrackEnded
+com.perm.DoomPlay.ListVkActivity$1$1 -> com.perm.DoomPlay.ListVkActivity$1$1:
+    com.perm.DoomPlay.ListVkActivity$1 this$1 -> this$1
+    void run() -> run
+com.perm.DoomPlay.ListVkActivity$1$2 -> com.perm.DoomPlay.ListVkActivity$1$2:
+    com.perm.DoomPlay.ListVkActivity$1 this$1 -> this$1
+    void run() -> run
 com.perm.DoomPlay.ListVkActivity$2 -> com.perm.DoomPlay.ListVkActivity$2:
     com.perm.DoomPlay.ListVkActivity this$0 -> this$0
     void onPreExecute() -> onPreExecute
@@ -6753,7 +6747,6 @@ com.perm.DoomPlay.R$id -> com.perm.DoomPlay.R$id:
     int beginning -> beginning
     int btnCancel -> btnCancel
     int btnConfirm -> btnConfirm
-    int btnNavUp -> btnNavUp
     int buttonCancelNewDialog -> buttonCancelNewDialog
     int buttonCancelRepport -> buttonCancelRepport
     int buttonDCancel -> buttonDCancel
@@ -6765,10 +6758,8 @@ com.perm.DoomPlay.R$id -> com.perm.DoomPlay.R$id:
     int collapseActionView -> collapseActionView
     int default_activity_button -> default_activity_button
     int dialog -> dialog
-    int directoryInfo -> directoryInfo
     int directoryList -> directoryList
     int disableHome -> disableHome
-    int divider -> divider
     int dropdown -> dropdown
     int editMessage -> editMessage
     int editNewPlaylist -> editNewPlaylist
@@ -6781,7 +6772,6 @@ com.perm.DoomPlay.R$id -> com.perm.DoomPlay.R$id:
     int footer -> footer
     int home -> home
     int homeAsUp -> homeAsUp
-    int horizontalDivider -> horizontalDivider
     int icon -> icon
     int ifRoom -> ifRoom
     int image -> image
@@ -6952,7 +6942,6 @@ com.perm.DoomPlay.R$id -> com.perm.DoomPlay.R$id:
     int title_container -> title_container
     int top_action_bar -> top_action_bar
     int txtvSelectedFolder -> txtvSelectedFolder
-    int txtvSelectedFolderLabel -> txtvSelectedFolderLabel
     int up -> up
     int useLogo -> useLogo
     int viewPager -> viewPager
@@ -7065,6 +7054,7 @@ com.perm.DoomPlay.R$string -> com.perm.DoomPlay.R$string:
     int Friends -> Friends
     int Gain_focus -> Gain_focus
     int Groups -> Groups
+    int Initial_folder -> Initial_folder
     int Languages -> Languages
     int Long_audiofocus -> Long_audiofocus
     int Max_friends -> Max_friends
@@ -7081,6 +7071,7 @@ com.perm.DoomPlay.R$string -> com.perm.DoomPlay.R$string:
     int Rescan -> Rescan
     int Save_after_buffer -> Save_after_buffer
     int Save_albumarts -> Save_albumarts
+    int Saved_tracks_folder -> Saved_tracks_folder
     int Scroll -> Scroll
     int Short_audiofocus -> Short_audiofocus
     int Show_controls -> Show_controls
@@ -7525,6 +7516,12 @@ com.perm.DoomPlay.SearchVkActivity$1 -> com.perm.DoomPlay.SearchVkActivity$1:
     com.perm.DoomPlay.SearchVkActivity this$0 -> this$0
     void onLoadingTrackStarted() -> onLoadingTrackStarted
     void onLoadingTrackEnded() -> onLoadingTrackEnded
+com.perm.DoomPlay.SearchVkActivity$1$1 -> com.perm.DoomPlay.SearchVkActivity$1$1:
+    com.perm.DoomPlay.SearchVkActivity$1 this$1 -> this$1
+    void run() -> run
+com.perm.DoomPlay.SearchVkActivity$1$2 -> com.perm.DoomPlay.SearchVkActivity$1$2:
+    com.perm.DoomPlay.SearchVkActivity$1 this$1 -> this$1
+    void run() -> run
 com.perm.DoomPlay.SearchVkActivity$2 -> com.perm.DoomPlay.SearchVkActivity$2:
     com.perm.DoomPlay.SearchVkActivity this$0 -> this$0
     void onClick(android.view.View) -> onClick
@@ -7560,8 +7557,10 @@ com.perm.DoomPlay.SettingActivity -> com.perm.DoomPlay.SettingActivity:
     java.lang.String keyShowControls -> keyShowControls
     int REQUEST_DOWNLOAD_FOLDER -> REQUEST_DOWNLOAD_FOLDER
     int REQUEST_ALBUMART_FOLDER -> REQUEST_ALBUMART_FOLDER
+    int REQUEST_BEGINNING_FOLDER -> REQUEST_BEGINNING_FOLDER
     android.preference.Preference downloadFolderPref -> downloadFolderPref
     android.preference.Preference albumartsFolderPref -> albumartsFolderPref
+    android.preference.Preference beginningFolderPref -> beginningFolderPref
     boolean getPreferences(java.lang.String) -> getPreferences
     int getPreference(java.lang.String) -> getPreference
     void onCreate(android.os.Bundle) -> onCreate
@@ -7579,6 +7578,9 @@ com.perm.DoomPlay.SettingActivity$4 -> com.perm.DoomPlay.SettingActivity$4:
     com.perm.DoomPlay.SettingActivity this$0 -> this$0
     boolean onPreferenceClick(android.preference.Preference) -> onPreferenceClick
 com.perm.DoomPlay.SettingActivity$5 -> com.perm.DoomPlay.SettingActivity$5:
+    com.perm.DoomPlay.SettingActivity this$0 -> this$0
+    boolean onPreferenceClick(android.preference.Preference) -> onPreferenceClick
+com.perm.DoomPlay.SettingActivity$6 -> com.perm.DoomPlay.SettingActivity$6:
     com.perm.DoomPlay.SettingActivity this$0 -> this$0
     boolean onPreferenceClick(android.preference.Preference) -> onPreferenceClick
 com.perm.DoomPlay.SleepDialog -> com.perm.DoomPlay.SleepDialog:
@@ -7646,6 +7648,7 @@ com.perm.DoomPlay.Utils -> com.perm.DoomPlay.Utils:
     void setRingtone(android.content.Context,com.perm.DoomPlay.Audio) -> setRingtone
     boolean isOnline(android.content.Context) -> isOnline
     boolean isIntentAvailable(android.content.Context,android.content.Intent) -> isIntentAvailable
+    java.lang.String getRealPath(java.io.File) -> getRealPath
 com.perm.DoomPlay.VerticalSeekBar -> com.perm.DoomPlay.VerticalSeekBar:
     android.widget.SeekBar$OnSeekBarChangeListener myListener -> myListener
     void setOnSeekBarChangeListener(android.widget.SeekBar$OnSeekBarChangeListener) -> setOnSeekBarChangeListener

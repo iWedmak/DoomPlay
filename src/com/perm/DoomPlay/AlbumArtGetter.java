@@ -274,7 +274,6 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
             return null;
 
 
-
         Uri uri = ContentUris.withAppendedId(artworkUri, id);
         try
         {

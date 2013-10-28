@@ -133,6 +133,19 @@
     <string name="save_after_buffer">сохранить трэк если он полность загрузился при воспроизведении</string>
     <string name="Save_after_buffer">Сохранить трэк после буфферизации</string>
     <string name="chooser_label">выбери директорию</string>
+    <string name="save_albumarts">сохранять обложки альбомов в папку</string>
+    <string name="Save_albumarts">Сохранение обложек</string>
+    <string name="confirm_label">Подтвердить</string>
+    <string name="selected_folder_label">Выбрать папку:</string>
+    <string name="create_folder_label">Создать новую папку</string>
+    <string name="create_folder_msg">Создать новую папку с именем "%1$s"?</string>
+    <string name="create_folder_success">Папка была создана</string>
+    <string name="create_folder_error_no_write_access">Нет доступа</string>
+    <string name="create_folder_error_already_exists">Файл уже существует</string>
+    <string name="create_folder_error">Не могу создать папку</string>
+    <string name="up_label">Вверх</string>
+    <string name="Saved_tracks_folder">Директория для закачек</string>
+    <string name="Initial_folder">Начальная папка</string>
     <string-array name ="count_values">
         <item>10</item>
         <item>30</item>

@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.FileObserver;
@@ -45,10 +44,7 @@ public class DirectoryChooserActivity extends AbstractReceiver
     private static final String TAG = "DirectoryChooser";
 
     private Button mBtnConfirm;
-    private Button mBtnCancel;
-    private ImageButton mBtnNavUp;
     private TextView mTxtvSelectedFolder;
-    private ListView mListDirectories;
 
     private ArrayAdapter<String> mListDirectoriesAdapter;
     private ArrayList<String> mFilenames;
@@ -65,17 +61,15 @@ public class DirectoryChooserActivity extends AbstractReceiver
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupActionBar();
 
         setContentView(R.layout.directory_chooser);
 
         mNewDirectoryName = getIntent().getStringExtra(EXTRA_NEW_DIR_NAME);
 
         mBtnConfirm = (Button) findViewById(R.id.btnConfirm);
-        mBtnCancel = (Button) findViewById(R.id.btnCancel);
-        mBtnNavUp = (ImageButton) findViewById(R.id.btnNavUp);
+        Button mBtnCancel = (Button) findViewById(R.id.btnCancel);
         mTxtvSelectedFolder = (TextView) findViewById(R.id.txtvSelectedFolder);
-        mListDirectories = (ListView) findViewById(R.id.directoryList);
+        ListView mListDirectories = (ListView) findViewById(R.id.directoryList);
 
         mBtnConfirm.setOnClickListener(new OnClickListener() {
 
@@ -100,7 +94,7 @@ public class DirectoryChooserActivity extends AbstractReceiver
 
             @Override
             public void onItemClick(AdapterView<?> adapter, View view,
-                    int position, long id) {
+                                    int position, long id) {
                 debug("Selected index: %d", position);
                 if (mFilesInDir != null && position >= 0
                         && position < mFilesInDir.length) {
@@ -109,29 +103,10 @@ public class DirectoryChooserActivity extends AbstractReceiver
             }
         });
 
-        mBtnNavUp.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                File parent = null;
-                if (mSelectedDir != null
-                        && (parent = mSelectedDir.getParentFile()) != null) {
-                    changeDirectory(parent);
-                }
-            }
-        });
-
         // change up button to light version if using dark theme
         TypedArray backgroundAttributes = getTheme().obtainStyledAttributes(
-                new int[] { android.R.attr.colorBackground });
-        int color = backgroundAttributes.getColor(0, 0xFFFFFF);
+                new int[]{android.R.attr.colorBackground});
         backgroundAttributes.recycle();
-        // convert to greyscale and check if < 128
-        if (color != 0xFFFFFF && 0.21 * Color.red(color) +
-                                 0.72 * Color.green(color) +
-                                 0.07 * Color.blue(color) < 128) {
-            mBtnNavUp.setImageResource(R.drawable.navigation_up_light);
-        }
 
         mFilenames = new ArrayList<String>();
         mListDirectoriesAdapter = new ArrayAdapter<String>(this,
@@ -143,19 +118,28 @@ public class DirectoryChooserActivity extends AbstractReceiver
         
         changeDirectory(initialDir);
     }
-
-    /* package */void setupActionBar() {
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
     private void debug(String message, Object... args) {
         Log.d(TAG, String.format(message, args));
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        File parent;
+        if (mSelectedDir != null && (parent = mSelectedDir.getParentFile()) != null)
+        {
+            changeDirectory(parent);
+        }
+        else
+            super.onBackPressed();
     }
 
     /**
      * Finishes the activity and returns the selected folder as a result. The
      * selected folder can also be null.
      */
+
+
     private void returnSelectedFolder() {
         if (mSelectedDir != null) {
             debug("Returning %s as result", mSelectedDir.getAbsolutePath());
@@ -359,7 +343,6 @@ public class DirectoryChooserActivity extends AbstractReceiver
 
     /** Returns true if the selected file or directory would be valid selection. */
     private boolean isValidFile(File file) {
-        return (file != null && file.isDirectory() && file.canRead() && file
-                .canWrite());
+        return (file != null && file.isDirectory() && file.canRead());
     }
 }

@@ -44,6 +44,7 @@ public class SettingActivity extends PreferenceActivity
     public static final String keyShowControls = "hideoncreate";
     private static final int REQUEST_DOWNLOAD_FOLDER = 23516;
     private static final int REQUEST_ALBUMART_FOLDER = 83542;
+    private static final int REQUEST_BEGINNING_FOLDER = 97482;
 
 
     public static boolean getPreferences(String key)
@@ -58,6 +59,7 @@ public class SettingActivity extends PreferenceActivity
 
     Preference downloadFolderPref;
     Preference albumartsFolderPref;
+    Preference beginningFolderPref;
 
 
     @SuppressWarnings("deprecation")
@@ -140,7 +142,7 @@ public class SettingActivity extends PreferenceActivity
             public boolean onPreferenceClick(Preference preference)
             {
                 Intent chooserIntent = new Intent(getBaseContext(), DirectoryChooserActivity.class);
-                chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_NEW_DIR_NAME, "doomPlaySaveFolder");
+                chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_NEW_DIR_NAME, "download");
                 chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_INITIAL_DIRECTORY, Utils.getRealPath(Environment.getRootDirectory()));
                 startActivityForResult(chooserIntent, REQUEST_DOWNLOAD_FOLDER);
                 return  true;
@@ -154,13 +156,29 @@ public class SettingActivity extends PreferenceActivity
             public boolean onPreferenceClick(Preference preference)
             {
                 Intent chooserIntent = new Intent(getBaseContext(), DirectoryChooserActivity.class);
-                chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_NEW_DIR_NAME, "doomPlaySaveFolder");
+                chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_NEW_DIR_NAME, "coverArts");
                 chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_INITIAL_DIRECTORY, Utils.getRealPath(Environment.getRootDirectory()));
 
                 startActivityForResult(chooserIntent, REQUEST_ALBUMART_FOLDER);
                 return  true;
             }
         });
+
+        beginningFolderPref = findPreference("beginningfolder");
+        beginningFolderPref.setSummary(FileSystemActivity.getFileSystemDir());
+        beginningFolderPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference)
+            {
+                Intent chooserIntent = new Intent(getBaseContext(), DirectoryChooserActivity.class);
+                chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_NEW_DIR_NAME, "music");
+                chooserIntent.putExtra(DirectoryChooserActivity.EXTRA_INITIAL_DIRECTORY, Utils.getRealPath(Environment.getRootDirectory()));
+
+                startActivityForResult(chooserIntent, REQUEST_BEGINNING_FOLDER);
+                return  true;
+            }
+        });
+
     }
 
     @Override
@@ -189,6 +207,15 @@ public class SettingActivity extends PreferenceActivity
                 editpr.apply();
 
                 albumartsFolderPref.setSummary(path);
+            }
+            else if(requestCode == REQUEST_BEGINNING_FOLDER)
+            {
+                SharedPreferences.Editor editpr = PreferenceManager.getDefaultSharedPreferences(
+                        getBaseContext()).edit().putString("beginningfolder",path);
+                editpr.commit();
+                editpr.apply();
+
+                beginningFolderPref.setSummary(path);
             }
         }
     }

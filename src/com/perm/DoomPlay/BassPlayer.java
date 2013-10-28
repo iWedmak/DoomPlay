@@ -1,6 +1,5 @@
 package com.perm.DoomPlay;
 
-import android.util.Log;
 import com.un4seen.bass.*;
 
 import java.io.File;
@@ -53,20 +52,12 @@ public class BassPlayer
     }
     public void prepareFile(String url) throws IOException
     {
-        String extension = (url.substring(url.lastIndexOf(".")+1));
-
-
         chan = BASS.BASS_StreamCreateFile(url, 0L, 0L, 0);
-
-        Log.i("TAG AUDIO","extension " + extension);
-
 
         if(chan == 0)
         {
-            Log.i("TAG AUDIO","code of exception "+ BASS.BASS_ErrorGetCode());
-            throw new IOException("prepare exception");
+            throw new IOException("prepare exception"+ BASS.BASS_ErrorGetCode());
         }
-
 
         long bytes = BASS.BASS_ChannelGetLength(chan, BASS.BASS_POS_BYTE);
         totalTime = (int)BASS.BASS_ChannelBytes2Seconds(chan, bytes);
@@ -149,43 +140,24 @@ public class BassPlayer
     public void prepareNet(String url) throws IOException
     {
         int r;
-        synchronized(lock) {
-            r=++req; // increment the request counter for this request
+        synchronized(lock)
+        {
+            r=++req;
         }
 
-        String extension = (url.substring(url.lastIndexOf(".")+1)).toLowerCase();
-
-        int c;
-
-        if(extension.equals("aac") || extension.equals("mp4"))
-            c = BASS_AAC.BASS_AAC_StreamCreateURL(url, 0, BASS.BASS_STREAM_STATUS, StatusProc, r);
-        else if(extension.equals("alac"))
-            c = BASS_ALAC.BASS_ALAC_StreamCreateURL(url, 0,BASS.BASS_STREAM_STATUS, StatusProc, r);
-        else if(extension.equals("mpc"))
-            c = BASS_MPC.BASS_MPC_StreamCreateURL(url, 0, BASS.BASS_STREAM_STATUS, StatusProc, r);
-        else if(extension.equals("flac"))
-            c = BASSFLAC.BASS_FLAC_StreamCreateURL(url, 0, BASS.BASS_STREAM_STATUS, StatusProc, r);
-        else if(extension.equals("midi"))
-            c = BASSMIDI.BASS_MIDI_StreamCreateURL(url, 0, BASS.BASS_STREAM_STATUS, StatusProc, r,1);
-        else if(extension.equals("opus"))
-            c = BASSOPUS.BASS_OPUS_StreamCreateURL(url, 0, BASS.BASS_STREAM_STATUS, StatusProc, r);
-        else if(extension.equals("wv"))
-            c = BASSWV.BASS_WV_StreamCreateURL(url, 0, BASS.BASS_STREAM_STATUS, StatusProc, r);
-        else
-            c = BASS.BASS_StreamCreateURL(url, 0, BASS.BASS_STREAM_STATUS, StatusProc, r);
-
+        int c = BASS.BASS_StreamCreateURL(url, 0, BASS.BASS_STREAM_STATUS, StatusProc, r);
 
         synchronized(lock)
         {
             if (r!=req)
-            { // there is a newer request, discard this stream
+            {
                 if (c!=0)
                 {
                     BASS.BASS_StreamFree(c);
                 }
                 throw new IOException("prepare exception");
             }
-            chan=c; // this is now the current stream
+            chan=c;
         }
 
         if(chan == 0)

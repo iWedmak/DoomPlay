@@ -94,10 +94,10 @@
                 android:key="savevkfile"
                 android:summary="@string/save_after_buffer"
                 android:title="@string/Save_after_buffer"
-                android:defaultValue="true">
+                android:defaultValue="false">
         </CheckBoxPreference>
         <PreferenceScreen
-                android:title="Saved track's folder"
+                android:title="@string/Saved_tracks_folder"
                 android:summary=""
                 android:key="foldertracks">
         </PreferenceScreen>
@@ -163,6 +163,11 @@
                     android:title="@string/Show_controls"
                     android:defaultValue="true">
             </CheckBoxPreference>
+            <PreferenceScreen
+                    android:title="@string/Initial_folder"
+                    android:summary=""
+                    android:key="beginningfolder">
+            </PreferenceScreen>
         </PreferenceScreen>
 
     <ListPreference

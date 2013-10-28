@@ -38,14 +38,17 @@ class Utils
 {
     private Utils(){}
 
-    private static String[] EXTENSIONS  = { "mp3","mp1","mp2","flac","mp4","opus","aac","m4a","wv","xm","mod",
-            "s3m","aiff","umx","wav","ogg","midi","alac","ape","mpc"};
+    private final static String[] EXTENSIONS  = {"mp1","mp2","mp3","ogg","oga","wav","aif","aiif","aifc",
+        "mo3","xm","mod","s3m","it","mtm","umx","flac","alac","midi","mid","mus","rmi","kar",
+        "aac","mp4","m4a","m4b","m4p","wv","wvc","ape","mpc","mpp","mp+","spx"};
 
     public static boolean trackChecker(String trackToTest)
     {
+        String trackExt = (trackToTest.substring(trackToTest.lastIndexOf(".")+1)).toLowerCase();
+
         for(String ext : EXTENSIONS)
         {
-            if(trackToTest.substring(trackToTest.lastIndexOf(".")+1).equals(ext))
+            if(trackExt.equals(ext))
                 return true;
         }
         return false;

@@ -422,6 +422,7 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
                 catch (IOException e)
                 {
                     cancel(false);
+                    e.printStackTrace();
                 }
 
 
@@ -440,8 +441,9 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
                 Toast.makeText(getBaseContext(),getResources().getString(R.string.error),Toast.LENGTH_SHORT).show();
                 isPlaying = false;
 
-                sendBroadcast(new Intent(actionTrackChanged));
                 sendBroadcast(new Intent(actionIconPlay));
+                sendBroadcast(new Intent(SmallWidget.actionUpdateWidget));
+                startNotif();
             }
 
             @Override

@@ -1632,16 +1632,16 @@ android.support.v7.appcompat.R$drawable
 android.support.v7.appcompat.R$id:
     1074:1074:public R$id()
 android.support.v7.appcompat.R$integer:
-    1308:1308:public R$integer()
+    1303:1303:public R$integer()
 android.support.v7.appcompat.R$layout:
-    1333:1333:public R$layout()
+    1328:1328:public R$layout()
 android.support.v7.appcompat.R$menu
 android.support.v7.appcompat.R$string:
-    1417:1417:public R$string()
+    1412:1412:public R$string()
 android.support.v7.appcompat.R$style:
-    1604:1604:public R$style()
+    1601:1601:public R$style()
 android.support.v7.appcompat.R$styleable:
-    1799:1799:public R$styleable()
+    1796:1796:public R$styleable()
 android.support.v7.appcompat.R$xml
 android.support.v7.internal.view.ActionModeWrapper:
     51:51:public boolean getTitleOptionalHint()

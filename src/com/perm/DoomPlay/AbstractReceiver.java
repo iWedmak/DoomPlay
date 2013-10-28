@@ -185,7 +185,7 @@ abstract class AbstractReceiver extends ActionBarActivity
 
     void updateActionBar()
     {
-        if(PlayingService.serviceAlive && PlayingService.audios != null)
+        if(PlayingService.serviceAlive && PlayingService.audios != null && PlayingService.audios.size() > 0)
         {
             textTitle.setText(PlayingService.audios.get(PlayingService.indexCurrentTrack).getTitle());
             textArtist.setText(PlayingService.audios.get(PlayingService.indexCurrentTrack).getArtist());

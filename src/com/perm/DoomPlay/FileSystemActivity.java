@@ -22,8 +22,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.view.ActionMode;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
@@ -43,7 +45,29 @@ public class FileSystemActivity extends AbstractReceiver
     public final static String keyMusic = "3kpoid";
     private final static String keyCurrentDir = "currentDij";
 
-    private final static File rootFile = new File("/storage");
+    private static String defaultRootFilePath;
+
+    static
+    {
+        File mFile = new File("/storage");
+        if(mFile.exists() && mFile.list() != null)
+            defaultRootFilePath = "/storage";
+        else
+            defaultRootFilePath = "/mnt";
+    }
+
+    public static String getFileSystemDir()
+    {
+        String path = PreferenceManager.getDefaultSharedPreferences(
+                MyApplication.getInstance()).getString("beginningfolder",defaultRootFilePath);
+
+        File defaultFile = new File(path);
+
+        if(!defaultFile.exists() && !defaultFile.mkdirs())
+            Log.e("tag", "can't create directory");
+
+        return path;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -59,16 +83,17 @@ public class FileSystemActivity extends AbstractReceiver
         listView.setOnItemClickListener(onItemClickListener);
         listView.setOnItemLongClickListener(onItemLongClickListener);
 
+
         if(savedInstanceState != null)
         {
             String savedPath = savedInstanceState.getString(keyCurrentDir);
             if(savedPath != null)
                 fill(new File(savedInstanceState.getString(keyCurrentDir)));
             else
-                fill(rootFile);
+                fill(new File(getFileSystemDir()));
         }
         else
-            fill(rootFile);
+            fill(new File(getFileSystemDir()));
     }
 
 
@@ -91,7 +116,7 @@ public class FileSystemActivity extends AbstractReceiver
         public boolean accept(File file)
         {
             return (!file.isDirectory() && Utils.trackChecker(file.getName())) ||
-                    (file.isDirectory() && file.canRead() && file.canWrite());
+                    (file.isDirectory() && file.canRead());
         }
     };
     private ArrayList<Audio> getAudiosFromFolder(File file)
@@ -256,7 +281,7 @@ public class FileSystemActivity extends AbstractReceiver
     @Override
     public void onBackPressed()
     {
-        if(currentDirectory.equals(rootFile))
+        if(currentDirectory.getParentFile() == null)
         {
             super.onBackPressed();
         }

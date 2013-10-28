@@ -122,8 +122,10 @@ public class SearchActivity extends AbstractList
 
             for(Audio audio : TracksHolder.allAudios)
             {
-                if(audio.getTitle().toLowerCase().contains(query.toLowerCase()) ||
-                        audio.getArtist().toLowerCase().contains(query.toLowerCase()))
+                //occasionally audio.getArtist == null
+
+                if((audio.getTitle() != null && audio.getTitle().toLowerCase().contains(query.toLowerCase())) ||
+                        (audio.getArtist() != null && audio.getArtist().toLowerCase().contains(query.toLowerCase())))
                     audios.add(audio);
             }
             if(audios.size() == 0)

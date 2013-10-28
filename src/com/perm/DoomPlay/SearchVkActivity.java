@@ -116,16 +116,33 @@ public class SearchVkActivity extends AbstractList
     {
         playingService.setOnLoadingTrackListener(new PlayingService.OnLoadingTrackListener()
         {
+            //TODO: android.view.ViewRootImpl$CalledFromWrongThreadException: Only the original thread that created a view hierarchy can touch its views.
+            //but i call it only in ui thread , is it a bug?
             @Override
             public void onLoadingTrackStarted()
             {
-                linearLoading.setVisibility(View.VISIBLE);
+                runOnUiThread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        linearLoading.setVisibility(View.VISIBLE);
+                    }
+                });
+
             }
 
             @Override
             public void onLoadingTrackEnded()
             {
-                linearLoading.setVisibility(View.GONE);
+                runOnUiThread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        linearLoading.setVisibility(View.GONE);
+                    }
+                });
             }
         });
     }

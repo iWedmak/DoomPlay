@@ -59,9 +59,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e368e502-6d83-4f2f-87a0-4a155d5c006e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/MediaButtonReceiver.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/CueFile.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidManifest.xml" afterPath="$PROJECT_DIR$/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/DirectoryChooserActivity.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/DirectoryChooserActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/MediaButtonReceiver.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/MediaButtonReceiver.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/perm/DoomPlay/PlayingService.java" afterPath="$PROJECT_DIR$/src/com/perm/DoomPlay/PlayingService.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -91,7 +91,7 @@
     <file path="/AbstractLists.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379700126062" ignored="false" />
     <file path="/ListTracksAdapter.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379923937110" ignored="false" />
     <file path="/AbstractService.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1378569876320" ignored="false" />
-    <file path="/PlayingService.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1383072287167" ignored="false" />
+    <file path="/PlayingService.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1383082017869" ignored="false" />
     <file path="/Audio.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1380992164339" ignored="false" />
     <file path="/AbstractListVk.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1379854659252" ignored="false" />
     <file path="/VkActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1378578475758" ignored="false" />
@@ -224,7 +224,8 @@
     <file path="/DirectoryChooserActivity.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1383071074242" ignored="false" />
     <file path="/LicenseDialog.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1382992329009" ignored="false" />
     <file path="/license.xml" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1382994182509" ignored="false" />
-    <file path="/MediaButtonReceiver.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1383071751092" ignored="false" />
+    <file path="/MediaButtonReceiver.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1383081334191" ignored="false" />
+    <file path="/CueFile.java" changelist="e368e502-6d83-4f2f-87a0-4a155d5c006e" time="1383083508986" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -355,19 +356,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AndroidManifest.xml" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="AndroidManifest.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="69" column="109" selection-start="3675" selection-end="3675" vertical-scroll-proportion="2.140511">
+            <state line="14" column="83" selection-start="819" selection-end="819" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PlayingService.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="PlayingService.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/PlayingService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="608" column="17" selection-start="19256" selection-end="19256" vertical-scroll-proportion="0.0">
+            <state line="396" column="74" selection-start="14055" selection-end="14055" vertical-scroll-proportion="1.2654206">
               <folding />
             </state>
           </provider>
@@ -385,7 +386,7 @@
       <file leaf-file-name="MediaButtonReceiver.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/MediaButtonReceiver.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="61" selection-start="1257" selection-end="1257" vertical-scroll-proportion="0.0">
+            <state line="39" column="17" selection-start="1321" selection-end="1375" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -420,6 +421,15 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="CueFile.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/CueFile.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="5" column="43" selection-start="53" selection-end="53" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
     </leaf>
   </component>
   <component name="FindManager">
@@ -444,7 +454,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/res/layout-v11/directory_chooser.xml" />
         <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/AbstractReceiver.java" />
         <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/Utils.java" />
         <option value="$PROJECT_DIR$/res/values/strings.xml" />
@@ -457,9 +466,10 @@
         <option value="$PROJECT_DIR$/res/layout/license.xml" />
         <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/SettingActivity.java" />
         <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/DirectoryChooserActivity.java" />
-        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/PlayingService.java" />
         <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/MediaButtonReceiver.java" />
+        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/PlayingService.java" />
         <option value="$PROJECT_DIR$/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/src/com/perm/DoomPlay/CueFile.java" />
       </list>
     </option>
   </component>
@@ -950,7 +960,11 @@
       <created>1383004237595</created>
       <updated>1383004237595</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="add MediaButttonReceiver , add types to androidManifest , fix bug in DirectoryChooserActivity.">
+      <created>1383073931568</created>
+      <updated>1383073931568</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1093,13 +1107,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/FullPlaybackActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="432" column="5" selection-start="13385" selection-end="13385" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/AbstractList.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="116" column="33" selection-start="3484" selection-end="3511" vertical-scroll-proportion="0.0">
@@ -1144,13 +1151,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/Utils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="57" column="49" selection-start="1902" selection-end="1902" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/AbstractReceiver.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="200" column="59" selection-start="6116" selection-end="6159" vertical-scroll-proportion="0.0">
@@ -1179,13 +1179,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/PlayingService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="608" column="17" selection-start="19256" selection-end="19256" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://D:/android-sdk/sources/android-17/android/view/KeyEvent.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="285" column="33" selection-start="14846" selection-end="14852" vertical-scroll-proportion="5.445798">
@@ -1195,7 +1188,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/MediaButtonReceiver.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="61" selection-start="1257" selection-end="1257" vertical-scroll-proportion="0.0">
+        <state line="39" column="17" selection-start="1321" selection-end="1375" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1204,7 +1197,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="69" column="109" selection-start="3675" selection-end="3675" vertical-scroll-proportion="2.140511">
+        <state line="14" column="83" selection-start="819" selection-end="819" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/Utils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="57" column="49" selection-start="1902" selection-end="1902" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/CueFile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="43" selection-start="53" selection-end="53" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/perm/DoomPlay/PlayingService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="396" column="74" selection-start="14055" selection-end="14055" vertical-scroll-proportion="1.2654206">
           <folding />
         </state>
       </provider>

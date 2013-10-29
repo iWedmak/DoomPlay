@@ -37,5 +37,9 @@ public class MediaButtonReceiver extends BroadcastReceiver
             this.abortBroadcast();
 
         }
+        else if (android.media.AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intent.getAction()))
+        {
+            context.startService(new Intent(PlayingService.actionClose));
+        }
     }
 }

@@ -129,7 +129,10 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
         audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
         audioManager.requestAudioFocus(afListener,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN );
 
-        ((TelephonyManager)getSystemService(TELEPHONY_SERVICE)).listen(callListener,CallListener.LISTEN_CALL_STATE);
+        ComponentName componentName = new ComponentName(this,MediaButtonReceiver.class);
+        audioManager.registerMediaButtonEventReceiver(componentName);
+
+        ((TelephonyManager)getSystemService(TELEPHONY_SERVICE)).listen(callListener, CallListener.LISTEN_CALL_STATE);
         PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
 
         serviceAlive = true;
@@ -150,6 +153,7 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
         sendBroadcast(new Intent(actionIconPlay));
         sendBroadcast(new Intent(SmallWidget.actionUpdateWidget));
         audioManager.abandonAudioFocus(afListener);
+        audioManager.unregisterMediaButtonEventReceiver(new ComponentName(this,MediaButtonReceiver.class));
     }
     private void downloadAlbumArt(Audio audio)
     {

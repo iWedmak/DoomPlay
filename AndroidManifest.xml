@@ -46,6 +46,18 @@
                 <data android:mimeType="application/ogg"/>
                 <data android:mimeType="application/x-ogg"/>
                 <data android:mimeType="application/itunes"/>
+                <data android:mimeType="audio/flac" android:scheme="file" />
+                <data android:mimeType="audio/ape" android:scheme="file" />
+                <data android:mimeType="audio/wv" android:scheme="file" />
+                <data android:mimeType="audio/mp4" android:scheme="file" />
+                <data android:mimeType="audio/mp3" android:scheme="file" />
+                <data android:mimeType="audio/mpc" android:scheme="file" />
+                <data android:mimeType="audio/ogg" android:scheme="file" />
+                <data android:mimeType="audio/x-wav" android:scheme="file" />
+                <data android:mimeType="audio/wav" android:scheme="file" />
+                <data android:mimeType="audio/mo3" android:scheme="file" />
+                <data android:mimeType="audio/mod" android:scheme="file" />
+                <data android:mimeType="audio/spx" android:scheme="file" />
             </intent-filter>
             <intent-filter
                     android:priority="-1">
@@ -116,6 +128,11 @@
                 android:launchMode ="singleInstance">
         </service>
 
+        <receiver android:name=".MediaButtonReceiver">
+            <intent-filter android:priority="666">
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
 
         <receiver
                 android:name=".SmallWidget"

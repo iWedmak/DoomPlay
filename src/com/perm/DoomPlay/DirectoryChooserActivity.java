@@ -8,6 +8,7 @@ import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.FileObserver;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -222,7 +223,7 @@ public class DirectoryChooserActivity extends AbstractReceiver
     private void refreshButtonState() {
         if (mSelectedDir != null) {
             mBtnConfirm.setEnabled(isValidFile(mSelectedDir));
-            invalidateOptionsMenu();
+            ActivityCompat.invalidateOptionsMenu(this);
         }
     }
 

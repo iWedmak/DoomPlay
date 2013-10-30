@@ -138,7 +138,7 @@ abstract class AbstractControls extends AbstractReceiver
 
     void connectService()
     {
-        bindService(intentService,serviceConnection,BIND_IMPORTANT);
+        bindService(intentService,serviceConnection,0);
         isBound = true;
     }
     void unConnecServer()

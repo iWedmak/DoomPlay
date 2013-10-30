@@ -199,12 +199,6 @@ public class ListTracksActivity extends AbstractList
 
             audios.remove(position);
             adapter.changeData(audios);
-
-            if(position == PlayingService.indexCurrentTrack && AbstractList.equalsCollections(audios, PlayingService.audios))
-            {
-                playingService.playTrackFromList(PlayingService.indexCurrentTrack);
-            }
-
     }
 
     private void trackChange(boolean up, int position)

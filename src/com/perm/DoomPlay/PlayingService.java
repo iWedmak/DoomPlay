@@ -20,6 +20,7 @@ package com.perm.DoomPlay;
  */
 
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -243,11 +244,12 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
 
         return notification;
     }
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private Notification createJellyBeanNotif()
     {
         RemoteViews views = getNotifViews(R.layout.notif_jelly);
         Notification notification = createNotification();
-        views.setTextViewText(R.id.textNotifCount,String.valueOf(indexCurrentTrack + 1)+ "/" +String.valueOf(audios.size()));
+        views.setTextViewText(R.id.textNotifCount, String.valueOf(indexCurrentTrack + 1) + "/" + String.valueOf(audios.size()));
 
         notification.bigContentView = views;
         notification.priority = Notification.PRIORITY_MAX;

@@ -335,7 +335,7 @@ public class DirectoryChooserActivity extends AbstractReceiver
             } else {
                 return R.string.create_folder_error_already_exists;
             }
-        } else if (mSelectedDir.canWrite() == false) {
+        } else if (!mSelectedDir.canWrite()) {
             return R.string.create_folder_error_no_write_access;
         } else {
             return R.string.create_folder_error;

@@ -132,6 +132,7 @@ class Serializator<T extends Serializable>
             outFile = new FileInputStream(distinctPath);
             outObject = new ObjectInputStream(outFile);
 
+
             list  = (ArrayList <T>)outObject.readObject();
 
             return list;

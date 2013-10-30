@@ -105,8 +105,7 @@ public class DirectoryChooserActivity extends AbstractReceiver
         });
 
         // change up button to light version if using dark theme
-        TypedArray backgroundAttributes = getTheme().obtainStyledAttributes(
-                new int[]{android.R.attr.colorBackground});
+        TypedArray backgroundAttributes = getTheme().obtainStyledAttributes(new int[]{android.R.attr.colorBackground});
         backgroundAttributes.recycle();
 
         mFilenames = new ArrayList<String>();
@@ -323,7 +322,8 @@ public class DirectoryChooserActivity extends AbstractReceiver
      */
     private int createFolder() {
         if (mNewDirectoryName != null && mSelectedDir != null
-                && mSelectedDir.canWrite()) {
+                && mSelectedDir.canWrite())
+        {
             File newDir = new File(mSelectedDir, mNewDirectoryName);
             if (!newDir.exists()) {
                 boolean result = newDir.mkdir();
@@ -335,7 +335,7 @@ public class DirectoryChooserActivity extends AbstractReceiver
             } else {
                 return R.string.create_folder_error_already_exists;
             }
-        } else if (!mSelectedDir.canWrite()) {
+        } else if (mSelectedDir != null && !mSelectedDir.canWrite()) {
             return R.string.create_folder_error_no_write_access;
         } else {
             return R.string.create_folder_error;

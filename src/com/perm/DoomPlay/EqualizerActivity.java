@@ -126,7 +126,7 @@ public class EqualizerActivity extends AbstractReceiver implements SeekBar.OnSee
             else
                 throw new IllegalArgumentException("wtf exception");
 
-            TextView textView = null;
+            TextView textView ;
             try {
                 textView = (TextView)this.getClass().getDeclaredField("text"+String.valueOf(n)).get(this);
                 textView.setText(String.format("%.0f db", convertProgressToGain(progress)));

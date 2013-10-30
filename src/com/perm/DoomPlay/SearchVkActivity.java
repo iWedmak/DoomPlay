@@ -48,6 +48,12 @@ public class SearchVkActivity extends AbstractList
         initializeUi();
         initializeAbstract();
         checkIsShown(savedInstanceState);
+
+        if(savedInstanceState != null && savedInstanceState.getBoolean(AbstractVkItems.keyLinerLoadingRestore,false))
+        {
+            linearLoading.setVisibility(View.VISIBLE);
+            isLoading = true;
+        }
     }
 
     @Override
@@ -60,6 +66,13 @@ public class SearchVkActivity extends AbstractList
     {
         InputMethodManager inputManager = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(AbstractVkItems.keyLinerLoadingRestore,isLoading);
     }
 
     @Override

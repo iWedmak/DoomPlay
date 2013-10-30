@@ -1,5 +1,6 @@
 package com.perm.DoomPlay;
 
+import android.content.pm.ApplicationInfo;
 import com.un4seen.bass.*;
 
 import java.io.File;
@@ -40,14 +41,17 @@ public class BassPlayer
     public BassPlayer()
     {
         BASS.BASS_Init(-1, 44100, 0);
-        BASS.BASS_SetConfig(BASS.BASS_CONFIG_FLOATDSP,32);
+        BASS.BASS_SetConfig(BASS.BASS_CONFIG_FLOATDSP, 32);
         chan = 0;
-
-        String path = MyApplication.getInstance().getApplicationInfo().nativeLibraryDir;
-        String[] list = new File(path).list();
-        for (String s: list)
+        ApplicationInfo info = MyApplication.getInstance().getApplicationInfo();
+        if(info != null)
         {
-            BASS.BASS_PluginLoad(path+"/"+s, 0);
+            String path = info.nativeLibraryDir;
+            String[] list = new File(path).list();
+            for (String s: list)
+            {
+                BASS.BASS_PluginLoad(path+"/"+s, 0);
+            }
         }
     }
     public void prepareFile(String url) throws IOException
@@ -188,7 +192,6 @@ public class BassPlayer
 
             if(filePath != null && (Integer)user == req )
             {
-
                 try
                 {
                     if (buffer!=null)

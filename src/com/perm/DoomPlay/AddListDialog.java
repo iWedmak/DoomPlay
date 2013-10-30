@@ -71,17 +71,17 @@ public abstract class AddListDialog extends DialogFragment
                 if(isPlaylistExist(query))
                 {
                     textInvalid.setVisibility(View.VISIBLE);
-                    textInvalid.setText("playlist already exist");
+                    textInvalid.setText(getResources().getString(R.string.playlist_already_exist));
                 }
                 else if(query.length() < 4)
                 {
                     textInvalid.setVisibility(View.VISIBLE);
-                    textInvalid.setText("enter more symbol");
+                    textInvalid.setText(getResources().getString(R.string.enter_more_symbols));
                 }
                 else if(!Utils.checkSpecialCharacters(query))
                 {
                     textInvalid.setVisibility(View.VISIBLE);
-                    textInvalid.setText("delete special symbols and blank");
+                    textInvalid.setText(getResources().getString(R.string.delete_special_symbols));
                 }
                 else
                 {

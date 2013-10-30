@@ -354,7 +354,7 @@ public class FullPlaybackActivity  extends AbstractControls
             intentService.setAction(PlayingService.actionOffline);
 
         intentService.putExtra(keyService, audios);
-        bindService(intentService,serviceConnection,BIND_IMPORTANT);
+        bindService(intentService,serviceConnection,0);
         startService(intentService);
         PlayingService.serviceAlive = true;
     }

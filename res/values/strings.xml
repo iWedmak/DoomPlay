@@ -147,6 +147,9 @@
     <string name="Saved_tracks_folder">Saved track\'s folder</string>
     <string name="Initial_folder">The initial folder</string>
     <string name="Licenses">Licenses</string>
+    <string name="playlist_already_exist">playlist already exists</string>
+    <string name="enter_more_symbols">enter more symbols</string>
+    <string name="delete_special_symbols">delete special symbols and blank</string>
     <string-array name ="count_values">
         <item>10</item>
         <item>30</item>

@@ -21,6 +21,7 @@ package com.perm.DoomPlay;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -38,10 +39,21 @@ abstract class AbstractVkItems extends AbstractReceiver
     static boolean isLoading;
     LinearLayout linearLoading;
     ListView listView;
-
+    public final static String keyLinerLoadingRestore = "keyLinerLoading";
 
     protected abstract void onClickRefresh();
     protected abstract ArrayList<Audio> getAudios(int position) throws KException,JSONException,IOException;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        if(savedInstanceState != null && savedInstanceState.getBoolean(keyLinerLoadingRestore,false))
+        {
+            linearLoading.setVisibility(View.VISIBLE);
+            isLoading = true;
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
@@ -70,6 +82,14 @@ abstract class AbstractVkItems extends AbstractReceiver
         cancelLoading();
         super.onBackPressed();
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(keyLinerLoadingRestore,isLoading);
+    }
+
     final AdapterView.OnItemClickListener onClickListener = new AdapterView.OnItemClickListener()
     {
         @Override

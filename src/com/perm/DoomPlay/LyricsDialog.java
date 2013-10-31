@@ -45,15 +45,7 @@ public class LyricsDialog extends DialogFragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState != null)
-        {
-            lyrics = savedInstanceState.getString("keyLyrics");
-            isFirstResume = lyrics == null;
-        }
-        else
-            isFirstResume = true;
 
-        isLoading = false;
     }
 
     @Override
@@ -64,6 +56,19 @@ public class LyricsDialog extends DialogFragment
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         linearLoading = (LinearLayout)view.findViewById(R.id.linearLoading);
         textView = (TextView)view.findViewById(R.id.textLyrics);
+
+        if(savedInstanceState != null)
+        {
+            lyrics = savedInstanceState.getString("keyLyrics");
+            isFirstResume = lyrics == null;
+            linearLoading.setVisibility(View.GONE);
+        }
+        else
+            isFirstResume = true;
+
+        isLoading = false;
+
+
         return view;
     }
     private AsyncTask<Void,Void,String> task ;

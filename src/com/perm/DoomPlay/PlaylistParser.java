@@ -6,7 +6,7 @@ import android.widget.Toast;
 import java.io.*;
 import java.util.ArrayList;
 
-public class CueFile
+public class PlaylistParser
 {
     public static boolean isFileCue(String fileName)
     {
@@ -14,7 +14,14 @@ public class CueFile
     }
     private static final String[] audioExts = { ".flac", ".FLAC", ".ape", ".APE", ".wv", ".WV", ".mpc", ".MPC", "m4a", "M4A",
             ".wav", ".WAV", ".mp3", ".MP3", ".wma", ".WMA", ".ogg", ".OGG", ".3gpp", ".3GPP", ".aac", ".AAC" };
+    private static final String[] plistExts = { ".playlist", ".m3u", ".M3U", ".pls", ".PLS" };
 
+    public static boolean isFilePlaylist(String s) {
+        for(int i = 0; i < plistExts.length; i++) {
+            if(s.endsWith(plistExts[i])) return true;
+        }
+        return false;
+    }
 
     public static boolean hasAudioExt(String s) {
         for(int i = 0; i < audioExts.length; i++) {
@@ -23,37 +30,89 @@ public class CueFile
         return false;
     }
 
-    private static String replaceSkips(String s)
-    {
-        char c = '"';
-        return s.replaceAll("[c]","");
-    }
-
     public static ArrayList<Audio> displayCue(File fpath,Context context)
     {
         try
         {
             return parseCue(fpath);
         }
-        catch (CueFile.ParseCueException e)
+        catch (ParseException e)
         {
             switch(e.getErrorCode())
             {
-                case CueFile.ParseCueException.ERROR_BAD_CUE:
+                case ParseException.ERROR_CUE_BAD:
                     Toast.makeText(context, R.string.bad_cue, Toast.LENGTH_SHORT).show();
                     break;
-                case CueFile.ParseCueException.ERROR_NO_CUE_SRC:
+                case ParseException.ERROR_CUE_NO_SRC:
                     Toast.makeText(context,R.string.no_cue_src,Toast.LENGTH_SHORT).show();
                     break;
-                case CueFile.ParseCueException.ERROR_SRC_EXT:
+                case ParseException.ERROR_CUE_SRC_EXT:
                     Toast.makeText(context,R.string.cue_src_ext,Toast.LENGTH_SHORT).show();
                     break;
             }
             return new ArrayList<Audio>();
         }
     }
+    public static ArrayList<Audio> displayPlaylist(File fpath,Context context)
+    {
+        try {
+            return parsePlaylist(fpath);
+        } catch (ParseException e) {
+            Toast.makeText(context,R.string.bad_playlist,Toast.LENGTH_SHORT).show();
+            return new ArrayList<Audio>();
+        }
+    }
 
-    public static ArrayList<Audio> parseCue(File fpath) throws ParseCueException
+    public static ArrayList<Audio> parsePlaylist(File fpath) throws ParseException
+    {
+        ArrayList<Audio> audios = new ArrayList<Audio>();
+
+        try {
+            BufferedReader reader;
+            if (checkUTF16(fpath)) {
+                reader = new BufferedReader(new InputStreamReader(
+                        new FileInputStream(fpath), "UTF-16"), 8192);
+            } else {
+                reader = new BufferedReader(new InputStreamReader(
+                        new FileInputStream(fpath)), 8192);
+            }
+
+            String line = null;
+            String path = null;
+            if(fpath.getParent() != null) {
+                path = fpath.getParent();
+                if(!path.endsWith("/")) path += "/";
+            }
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if(line.startsWith("File") && line.indexOf('=') > 4) {	// maybe it's a PLS file
+                    int k, idx = line.indexOf('=');
+                    for(k = 4; k < idx; k++) if(line.charAt(k) < '0' || line.charAt(k) > '9') break;
+                    if(k != idx || idx == line.length()) continue;
+                    line = line.substring(idx+1);
+                }
+                File f = new File(line);
+                if(f.exists() && !f.isDirectory() && hasAudioExt(line)) {
+                    audios.add(new Audio("unknown",f.getName(),line,0));
+                    continue;
+                }
+                if(path != null) {
+                    f = new File(path+line);	// maybe it was a relative path
+                    if(f.exists() && !f.isDirectory() && hasAudioExt(path+line))
+                        audios.add(new Audio("unknown",f.getName(),path+line,0));
+                }
+            }
+            if(audios.size() == 0)
+            {
+                throw new ParseException(ParseException.ERROR_PLAYLIST_BAD);
+            }
+            return audios;
+        } catch (Exception e) {
+            throw new ParseException(ParseException.ERROR_PLAYLIST_BAD);
+        }
+    }
+
+    public static ArrayList<Audio> parseCue(File fpath) throws ParseException
     {
         try {
             BufferedReader reader;
@@ -76,12 +135,10 @@ public class CueFile
             int plen = path.lastIndexOf('/');
             path = (plen < 0) ? "/" : path.substring(0, plen+1);
 
-            // Simple CUE parser
 
             while ((line = reader.readLine()) != null) {
                 String s = line.trim();
-                // 	log_msg("first trying: " + s);
-                if(s.startsWith("FILE ") /* && s.endsWith(" WAVE") */) {
+                if(s.startsWith("FILE ")) {
                     if(s.charAt(5) == '\"') {
                         int i = s.lastIndexOf('\"');
                         if(i < 7) continue;
@@ -92,7 +149,6 @@ public class CueFile
                         cur_file = s.substring(5, i);
                     }
                     File ff = new File(path + cur_file);
-                    //		log_msg("trying: " + ff.toString());
                     if(!ff.exists()) {
                         // sometimes cues reference source with wrong extension
                         int kk = (path + cur_file).lastIndexOf('.');
@@ -108,9 +164,9 @@ public class CueFile
                                 continue;
                             }
                         }
-                        throw new ParseCueException(ParseCueException.ERROR_NO_CUE_SRC);
+                        throw new ParseException(ParseException.ERROR_CUE_NO_SRC);
                     } else if(!hasAudioExt(ff.getName())) {
-                        throw new ParseCueException(ParseCueException.ERROR_SRC_EXT);
+                        throw new ParseException(ParseException.ERROR_CUE_SRC_EXT);
                     }
 
                 }
@@ -152,7 +208,7 @@ public class CueFile
                 }
             }
             if(audios.size() < 1) {
-                throw new ParseCueException(ParseCueException.ERROR_BAD_CUE);
+                throw new ParseException(ParseException.ERROR_CUE_BAD);
             }
             return audios;
 
@@ -160,7 +216,7 @@ public class CueFile
         {
             e.printStackTrace();
         }
-        throw new ParseCueException(ParseCueException.ERROR_BAD_CUE);
+        throw new ParseException(ParseException.ERROR_CUE_BAD);
     }
     private static boolean checkUTF16(File fpath) throws IOException
     {
@@ -178,7 +234,7 @@ public class CueFile
                 || (bytes[0] == -2 && bytes[1] == -1);
     }
 
-    static class ParseCueException extends Exception
+    static class ParseException extends Exception
     {
         public int getErrorCode()
         {
@@ -187,12 +243,13 @@ public class CueFile
 
         private int errorCode;
 
-        public static final int ERROR_NO_CUE_SRC = 1;
-        public static final int ERROR_BAD_CUE = 2;
-        public static final int ERROR_SRC_EXT = 3;
+        public static final int ERROR_CUE_NO_SRC = 1;
+        public static final int ERROR_CUE_BAD = 2;
+        public static final int ERROR_CUE_SRC_EXT = 3;
+        public static final int ERROR_PLAYLIST_BAD = 4;
 
 
-        public ParseCueException(int errorCode)
+        public ParseException(int errorCode)
         {
             super("Error code"+errorCode);
             this.errorCode = errorCode;

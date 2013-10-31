@@ -42,11 +42,26 @@ class Utils
         "mo3","xm","mod","s3m","it","mtm","umx","flac","alac","midi","mid","mus","rmi","kar",
         "aac","mp4","m4a","m4b","m4p","wv","wvc","ape","mpc","mpp","mp+","spx"};
 
+    public final static String[] ALL_EXTENSIONS =  {"mp1","mp2","mp3","ogg","oga","wav","aif","aiif","aifc",
+            "mo3","xm","mod","s3m","it","mtm","umx","flac","alac","midi","mid","mus","rmi","kar",
+            "aac","mp4","m4a","m4b","m4p","wv","wvc","ape","mpc","mpp","mp+","spx","cue","playlist","m3u","pls"};
+
     public static boolean trackChecker(String trackToTest)
     {
         String trackExt = (trackToTest.substring(trackToTest.lastIndexOf(".")+1)).toLowerCase();
 
         for(String ext : EXTENSIONS)
+        {
+            if(trackExt.equals(ext))
+                return true;
+        }
+        return false;
+    }
+    public static boolean trackAndPlaylistChecker(String trackToTest)
+    {
+        String trackExt = (trackToTest.substring(trackToTest.lastIndexOf(".")+1)).toLowerCase();
+
+        for(String ext : ALL_EXTENSIONS)
         {
             if(trackExt.equals(ext))
                 return true;

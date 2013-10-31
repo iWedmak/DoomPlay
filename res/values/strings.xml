@@ -153,6 +153,7 @@
     <string name="bad_cue">CUE file not recognized or not supported</string>
     <string name="no_cue_src">CUE file references non-existing source</string>
     <string name="cue_src_ext">CUE file references source file with unsupported extension</string>
+    <string name="bad_playlist">Empty or invalid playlist</string>
     <string-array name ="count_values">
         <item>10</item>
         <item>30</item>

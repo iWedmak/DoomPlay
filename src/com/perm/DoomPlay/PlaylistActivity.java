@@ -195,7 +195,7 @@ public class PlaylistActivity extends AbstractReceiver
         public View getView(int position, View convertView, ViewGroup parent)
         {
             View view = inflater.inflate(R.layout.item_playlist,parent,false);
-            TextView name = (TextView)view.findViewById(R.id.textItemPlaylist);
+            TextView name = (TextView)view.findViewById(R.id.textItem);
             name.setText(playlists[position]);
             return view;
         }

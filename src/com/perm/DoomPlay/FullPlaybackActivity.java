@@ -139,8 +139,22 @@ public class FullPlaybackActivity  extends AbstractControls
     {
         if(intent.getAction().equals(Intent.ACTION_VIEW))
         {
-            audios = new ArrayList<Audio>();
-            audios.add(getRealPathFromIntent(intent));
+            String path = intent.getData().getPath();
+            File fpath = new File(path) ;
+
+            if(PlaylistParser.isFileCue(path))
+            {
+                audios = PlaylistParser.displayCue(fpath,this);
+            }
+            else if(PlaylistParser.isFilePlaylist(path))
+            {
+                audios = PlaylistParser.displayPlaylist(fpath,this);
+            }
+            else
+            {
+                audios = new ArrayList<Audio>();
+                audios.add(getAudioFromPath(fpath));
+            }
         }
         else if(intent.getAction().equals(actionPlayFull) || intent.getAction().equals(actionReturnFull))
         {
@@ -231,13 +245,9 @@ public class FullPlaybackActivity  extends AbstractControls
         return audio;
      */
 
-    Audio getRealPathFromIntent(Intent intent)
+    Audio getAudioFromPath(File fpath)
     {
-
-
-        File file = new File(intent.getData().getPath());
-
-        String filePath = Utils.getRealPath(file);
+        String filePath = Utils.getRealPath(fpath);
 
         String[] selectionArgs = new String[]{filePath};
 
@@ -250,7 +260,7 @@ public class FullPlaybackActivity  extends AbstractControls
             audio = Audio.parseAudioCursor(cursor);
         else
         {
-            audio = new Audio("unknown",file.getName(),filePath,0);
+            audio = new Audio("unknown",fpath.getName(),filePath,0);
         }
 
         cursor.close();

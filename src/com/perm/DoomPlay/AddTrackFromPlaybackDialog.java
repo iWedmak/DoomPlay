@@ -134,7 +134,7 @@ public class AddTrackFromPlaybackDialog extends DialogFragment
         public View getView(int position, View convertView, ViewGroup parent)
         {
             View view = inflater.inflate(R.layout.item_playlist,parent,false);
-            TextView textView = (TextView)view.findViewById(R.id.textItemPlaylist);
+            TextView textView = (TextView)view.findViewById(R.id.textItem);
             textView.setText(listPlaylist[position]);
             return view;
         }

@@ -57,13 +57,6 @@ public class ListVkActivity extends AbstractList
         initializeAbstract();
         checkIsShown(savedInstanceState);
 
-        if(savedInstanceState != null && savedInstanceState.getBoolean(AbstractVkItems.keyLinerLoadingRestore,false))
-        {
-            linearLoading.setVisibility(View.VISIBLE);
-            isLoading = true;
-            return;
-        }
-
         if(currentAction.equals(actionMyMusic) && TracksHolder.audiosVk == null)
         {
             refreshAudios();
@@ -129,12 +122,6 @@ public class ListVkActivity extends AbstractList
         super.onBackPressed();
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState)
-    {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(AbstractVkItems.keyLinerLoadingRestore,isLoading);
-    }
 
     @Override
     protected void onServiceAbstractConnected()

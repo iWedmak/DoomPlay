@@ -152,6 +152,7 @@
     <string name="no_cue_src">Ссылка на несуществующий исходный файл в CUE файле</string>
     <string name="cue_src_ext">Ссылка на исходный файл с неподдерживаемым разрешением в CUE файле</string>
     <string name="bad_cue">Формат CUE файла неверный или неподдерживаемый</string>
+    <string name="bad_playlist">Пустой или неподдерживаемый плейлист</string>
     <string-array name ="count_values">
         <item>10</item>
         <item>30</item>

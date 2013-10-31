@@ -46,14 +46,21 @@ public class SearchVkActivity extends AbstractList
         setContentView(R.layout.search_vk);
 
         initializeUi();
+
+        if(savedInstanceState != null)
+        {
+            audios = savedInstanceState.getParcelableArrayList("storeAudioSearch");
+            if(audios == null)
+                audios = new ArrayList<Audio>();
+        }
+        else
+            audios = new ArrayList<Audio>();
+
+        adapter = new ListsAdapter(audios,this);
+
+        listView.setAdapter(adapter);
         initializeAbstract();
         checkIsShown(savedInstanceState);
-
-        if(savedInstanceState != null && savedInstanceState.getBoolean(AbstractVkItems.keyLinerLoadingRestore,false))
-        {
-            linearLoading.setVisibility(View.VISIBLE);
-            isLoading = true;
-        }
     }
 
     @Override
@@ -72,7 +79,8 @@ public class SearchVkActivity extends AbstractList
     protected void onSaveInstanceState(Bundle outState)
     {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(AbstractVkItems.keyLinerLoadingRestore,isLoading);
+        if(audios != null)
+            outState.putParcelableArrayList("storeAudioSearch",audios);
     }
 
     @Override
@@ -168,11 +176,7 @@ public class SearchVkActivity extends AbstractList
         ImageView buttonSearch = (ImageView) findViewById(R.id.imageSearchVk);
         buttonSearch.setOnClickListener(onClickSearch);
         listView.setOnItemClickListener(onItemTrackClick);
-        if(audios == null)
-            audios = new ArrayList<Audio>();
 
-        adapter = new ListsAdapter(audios,this);
-        listView.setAdapter(adapter);
         listView.setOnItemLongClickListener(onItemLongVkListener);
         linearControls = (RelativeLayout)findViewById(R.id.linearControls);
         intentService = new Intent(this,PlayingService.class);

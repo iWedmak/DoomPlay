@@ -116,8 +116,8 @@ public class FileSystemActivity extends AbstractReceiver
         @Override
         public boolean accept(File file)
         {
-            return (!file.isDirectory() && Utils.trackChecker(file.getName())) ||
-                    (!file.isDirectory() && CueFile.isFileCue(file.getName())) || (file.isDirectory() && file.canRead());
+            return (!file.isDirectory() && Utils.trackAndPlaylistChecker(file.getName()))
+                    || (file.isDirectory() && file.canRead());
         }
     };
 
@@ -268,16 +268,25 @@ public class FileSystemActivity extends AbstractReceiver
             }
             else
             {
-                if(CueFile.isFileCue(entriesFiles[position].getName()))
+                ArrayList<Audio> audios;
+
+                if(PlaylistParser.isFileCue(entriesFiles[position].getName()))
                 {
-                    startActivity(FullPlaybackActivity.getReturnSmallIntent(getBaseContext(),
-                            CueFile.displayCue(entriesFiles[position],getBaseContext())));
+                    audios = PlaylistParser.displayCue(entriesFiles[position], getBaseContext());
+                    if(audios.size() > 0)
+                        startActivity(FullPlaybackActivity.getReturnSmallIntent(getBaseContext(),audios));
+                }
+                else if(PlaylistParser.isFilePlaylist(entriesFiles[position].getName()))
+                {
+                    audios = PlaylistParser.displayPlaylist(entriesFiles[position], getBaseContext());
+                    if(audios.size() > 0)
+                        startActivity(FullPlaybackActivity.getReturnSmallIntent(getBaseContext(),audios));
                 }
                 else
                 {
-                    ArrayList <Audio> audios = new ArrayList<Audio>();
+                    audios = new ArrayList<Audio>();
                     audios.add(getAudioFromFile(entriesFiles[position]));
-                    startActivity(getToFullIntent(getBaseContext(),audios));
+                    startActivity(getToFullIntent(getBaseContext(), audios));
                 }
             }
 
@@ -355,6 +364,11 @@ public class FileSystemActivity extends AbstractReceiver
             if(entriesFiles[position].isDirectory())
             {
                 v = inflater.inflate(R.layout.item_file_system ,parent,false );
+            }
+            else if(PlaylistParser.isFilePlaylist(entriesFiles[position].getName()) ||
+                    PlaylistParser.isFileCue(entriesFiles[position].getName()))
+            {
+                v = inflater.inflate(R.layout.item_file_playlist,parent,false);
             }
             else
             {

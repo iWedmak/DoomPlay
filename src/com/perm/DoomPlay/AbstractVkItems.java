@@ -48,11 +48,6 @@ abstract class AbstractVkItems extends AbstractReceiver
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState != null && savedInstanceState.getBoolean(keyLinerLoadingRestore,false))
-        {
-            linearLoading.setVisibility(View.VISIBLE);
-            isLoading = true;
-        }
     }
 
     @Override
@@ -79,15 +74,15 @@ abstract class AbstractVkItems extends AbstractReceiver
     @Override
     public void onBackPressed()
     {
-        cancelLoading();
         super.onBackPressed();
+        cancelLoading();
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState)
+    protected void onDestroy()
     {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(keyLinerLoadingRestore,isLoading);
+        super.onDestroy();
+        cancelLoading();
     }
 
     final AdapterView.OnItemClickListener onClickListener = new AdapterView.OnItemClickListener()

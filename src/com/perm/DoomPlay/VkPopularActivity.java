@@ -50,6 +50,7 @@ public class VkPopularActivity extends AbstractVkItems
         linearLoading = (LinearLayout)findViewById(R.id.linearLoading);
 
         listView.setOnItemClickListener(onClickListener);
+
     }
 
 

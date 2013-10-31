@@ -60,7 +60,7 @@ public class BassPlayer
 
         if(chan == 0)
         {
-            throw new IOException("prepare exception"+ BASS.BASS_ErrorGetCode());
+            throw new IOException("prepare exception "+ BASS.BASS_ErrorGetCode());
         }
 
         long bytes = BASS.BASS_ChannelGetLength(chan, BASS.BASS_POS_BYTE);

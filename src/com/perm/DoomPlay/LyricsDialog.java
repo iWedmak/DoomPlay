@@ -38,20 +38,27 @@ public class LyricsDialog extends DialogFragment
     private String title;
     private boolean isLoading ;
     private boolean isFirstResume;
+    private String lyrics;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        isFirstResume = true;
+        if(savedInstanceState != null)
+        {
+            lyrics = savedInstanceState.getString("keyLyrics");
+            isFirstResume = lyrics == null;
+        }
+        else
+            isFirstResume = true;
+
+        isLoading = false;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        isLoading = false;
-
         title = getArguments().getString(keyLyricsTitle);
         View view = inflater.inflate(R.layout.dialog_lyrics,container,false);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -61,7 +68,13 @@ public class LyricsDialog extends DialogFragment
     }
     private AsyncTask<Void,Void,String> task ;
 
-
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        if(lyrics != null)
+            outState.putString("keyLyrics",lyrics);
+    }
 
     private void getLyrics()
     {
@@ -115,6 +128,7 @@ public class LyricsDialog extends DialogFragment
                 super.onPostExecute(s);
                 isLoading = false;
                 linearLoading.setVisibility(View.GONE);
+                lyrics = s;
                 textView.setText(s);
             }
         };
@@ -146,6 +160,10 @@ public class LyricsDialog extends DialogFragment
         {
             getLyrics();
             isFirstResume = false;
+        }
+        else
+        {
+            textView.setText(lyrics);
         }
 
     }

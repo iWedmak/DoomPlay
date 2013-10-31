@@ -102,7 +102,7 @@ public class FileSystemActivity extends AbstractReceiver
     protected void onSaveInstanceState(Bundle outState)
     {
         super.onSaveInstanceState(outState);
-        outState.putString(keyCurrentDir, currentDirectory.getAbsolutePath());
+        outState.putString(keyCurrentDir, Utils.getRealPath(currentDirectory));
     }
     public static Intent getToFullIntent(Context context,ArrayList<Audio> audios)
     {
@@ -117,11 +117,11 @@ public class FileSystemActivity extends AbstractReceiver
         public boolean accept(File file)
         {
             return (!file.isDirectory() && Utils.trackChecker(file.getName())) ||
-                    (file.isDirectory() && file.canRead());
+                    (!file.isDirectory() && CueFile.isFileCue(file.getName())) || (file.isDirectory() && file.canRead());
         }
     };
 
-    private final FilenameFilter filenameFilter = new FilenameFilter()
+    private static final FilenameFilter filenameFilter = new FilenameFilter()
     {
         @Override
         public boolean accept(File dir, String filename)
@@ -268,9 +268,17 @@ public class FileSystemActivity extends AbstractReceiver
             }
             else
             {
-                ArrayList <Audio> audios = new ArrayList<Audio>();
-                audios.add(getAudioFromFile(entriesFiles[position]));
-                startActivity(getToFullIntent(getBaseContext(),audios));
+                if(CueFile.isFileCue(entriesFiles[position].getName()))
+                {
+                    startActivity(FullPlaybackActivity.getReturnSmallIntent(getBaseContext(),
+                            CueFile.displayCue(entriesFiles[position],getBaseContext())));
+                }
+                else
+                {
+                    ArrayList <Audio> audios = new ArrayList<Audio>();
+                    audios.add(getAudioFromFile(entriesFiles[position]));
+                    startActivity(getToFullIntent(getBaseContext(),audios));
+                }
             }
 
         }

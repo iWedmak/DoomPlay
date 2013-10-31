@@ -136,7 +136,8 @@ public class ListTracksActivity extends AbstractList
                         break;
                     }
                     case R.id.itemGetLiricks:
-                        startLiryctDialog(getSupportFragmentManager(),audios.get(position).getArtist(),audios.get(position).getTitle());
+                        Audio audio = audios.get(PlayingService.indexCurrentTrack);
+                        AbstractList.startLiryctDialog(getSupportFragmentManager(), audio.getArtist(), audio.getTitle());
                         mode.finish();
                         break;
                 }
@@ -154,7 +155,7 @@ public class ListTracksActivity extends AbstractList
                         Utils.setRingtone(getBaseContext(), audios.get(position));
                         break;
                     case R.id.itemGetLiricks:
-                        Audio audio = audios.get(PlayingService.indexCurrentTrack);
+                        Audio audio = audios.get(position);
                         startLiryctDialog(getSupportFragmentManager(), audio.getArtist(), audio.getTitle());
                         break;
                 }

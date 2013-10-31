@@ -38,7 +38,7 @@ class Utils
 {
     private Utils(){}
 
-    private final static String[] EXTENSIONS  = {"mp1","mp2","mp3","ogg","oga","wav","aif","aiif","aifc",
+    public final static String[] EXTENSIONS  = {"mp1","mp2","mp3","ogg","oga","wav","aif","aiif","aifc",
         "mo3","xm","mod","s3m","it","mtm","umx","flac","alac","midi","mid","mus","rmi","kar",
         "aac","mp4","m4a","m4b","m4p","wv","wvc","ape","mpc","mpp","mp+","spx"};
 

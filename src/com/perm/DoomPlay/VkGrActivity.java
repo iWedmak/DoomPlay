@@ -36,8 +36,6 @@ public class VkGrActivity extends AbstractVkItems
         linearLoading = (LinearLayout)findViewById(R.id.linearLoading);
         listView.setOnItemClickListener(onClickListener);
 
-
-
         if(groups == null)
         {
             getGroups();

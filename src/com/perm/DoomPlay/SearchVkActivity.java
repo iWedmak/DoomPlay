@@ -168,8 +168,9 @@ public class SearchVkActivity extends AbstractList
         ImageView buttonSearch = (ImageView) findViewById(R.id.imageSearchVk);
         buttonSearch.setOnClickListener(onClickSearch);
         listView.setOnItemClickListener(onItemTrackClick);
+        if(audios == null)
+            audios = new ArrayList<Audio>();
 
-        audios = new ArrayList<Audio>();
         adapter = new ListsAdapter(audios,this);
         listView.setAdapter(adapter);
         listView.setOnItemLongClickListener(onItemLongVkListener);

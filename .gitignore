@@ -7,6 +7,11 @@
 .metadata
 bin/
 tmp/
+.idea/
+gen/
+out/
+proguard_logs/
+proguard.cfg
 *.tmp
 *.bak
 *.swp

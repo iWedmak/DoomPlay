@@ -2843,7 +2843,6 @@ android.support.v7.appcompat.R$id -> android.support.v7.a.f:
     int textGenre -> textGenre
     int textGroup -> textGroup
     int textItem -> textItem
-    int textItemPlaylist -> textItemPlaylist
     int textLyrics -> textLyrics
     int textNoResult -> textNoResult
     int textNotifCount -> textNotifCount
@@ -2916,6 +2915,7 @@ android.support.v7.appcompat.R$layout -> android.support.v7.a.h:
     int item_album -> item_album
     int item_artist -> item_artist
     int item_file -> item_file
+    int item_file_playlist -> item_file_playlist
     int item_file_system -> item_file_system
     int item_friend -> item_friend
     int item_genre -> item_genre
@@ -3009,6 +3009,8 @@ android.support.v7.appcompat.R$string -> android.support.v7.a.i:
     int artist -> artist
     int artists -> artists
     int audio_settings -> audio_settings
+    int bad_cue -> bad_cue
+    int bad_playlist -> bad_playlist
     int cancel -> cancel
     int canceled -> canceled
     int cant_delete_file -> cant_delete_file
@@ -3023,8 +3025,10 @@ android.support.v7.appcompat.R$string -> android.support.v7.a.i:
     int create_folder_label -> create_folder_label
     int create_folder_msg -> create_folder_msg
     int create_folder_success -> create_folder_success
+    int cue_src_ext -> cue_src_ext
     int delete -> delete
     int delete_playlist -> delete_playlist
+    int delete_special_symbols -> delete_special_symbols
     int delete_track -> delete_track
     int didnt_match -> didnt_match
     int disable -> disable
@@ -3034,6 +3038,7 @@ android.support.v7.appcompat.R$string -> android.support.v7.a.i:
     int download_album_art -> download_album_art
     int edit -> edit
     int enable -> enable
+    int enter_more_symbols -> enter_more_symbols
     int enter_playlist_name -> enter_playlist_name
     int enter_search_query -> enter_search_query
     int equalizer -> equalizer
@@ -3056,11 +3061,13 @@ android.support.v7.appcompat.R$string -> android.support.v7.a.i:
     int max_popular -> max_popular
     int max_search -> max_search
     int new_playlist -> new_playlist
+    int no_cue_src -> no_cue_src
     int no_valid_files -> no_valid_files
     int onclick_notif -> onclick_notif
     int paused -> paused
     int play_after_call -> play_after_call
     int play_all -> play_all
+    int playlist_already_exist -> playlist_already_exist
     int please_sign_in -> please_sign_in
     int please_wait -> please_wait
     int quality -> quality
@@ -5524,7 +5531,7 @@ com.perm.DoomPlay.AbstractReceiver$3 -> com.perm.DoomPlay.AbstractReceiver$3:
 com.perm.DoomPlay.AbstractReceiver$4 -> com.perm.DoomPlay.AbstractReceiver$4:
     com.perm.DoomPlay.AbstractReceiver this$0 -> this$0
     void onReceive(android.content.Context,android.content.Intent) -> onReceive
-com.perm.DoomPlay.AbstractReceiver$RunnabeParam -> com.perm.DoomPlay.AbstractReceiver$RunnabeParam:
+com.perm.DoomPlay.AbstractReceiver$RunnableParam -> com.perm.DoomPlay.AbstractReceiver$RunnableParam:
     java.lang.Object param -> param
     com.perm.DoomPlay.AbstractReceiver this$0 -> this$0
     void run() -> run
@@ -5532,12 +5539,15 @@ com.perm.DoomPlay.AbstractVkItems -> com.perm.DoomPlay.AbstractVkItems:
     boolean isLoading -> isLoading
     android.widget.LinearLayout linearLoading -> linearLoading
     android.widget.ListView listView -> listView
+    java.lang.String keyLinerLoadingRestore -> keyLinerLoadingRestore
     com.perm.DoomPlay.AbstractVkItems$TaskLoader taskLoader -> taskLoader
     android.widget.AdapterView$OnItemClickListener onClickListener -> onClickListener
     void onClickRefresh() -> onClickRefresh
     java.util.ArrayList getAudios(int) -> getAudios
+    void onCreate(android.os.Bundle) -> onCreate
     boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
     void onBackPressed() -> onBackPressed
+    void onDestroy() -> onDestroy
     void cancelLoading() -> cancelLoading
     void startListVkActivity(java.util.ArrayList) -> startListVkActivity
     void setLoading() -> setLoading
@@ -5921,6 +5931,12 @@ com.perm.DoomPlay.EqualizerActivity -> com.perm.DoomPlay.EqualizerActivity:
     boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
     void showException(java.lang.Exception) -> showException
     void handleKException(com.api.KException) -> handleKException
+com.perm.DoomPlay.ExceptionLog -> com.perm.DoomPlay.ExceptionLog:
+    java.lang.Thread$UncaughtExceptionHandler defaultHandler -> defaultHandler
+    android.content.Context context -> context
+    com.perm.DoomPlay.ExceptionLog exceptionLog -> exceptionLog
+    void init(android.content.Context) -> init
+    void uncaughtException(java.lang.Thread,java.lang.Throwable) -> uncaughtException
 com.perm.DoomPlay.FileSystemActivity -> com.perm.DoomPlay.FileSystemActivity:
     com.perm.DoomPlay.FileSystemActivity$FileSystemAdapter adapter -> adapter
     android.widget.ListView listView -> listView
@@ -5959,7 +5975,6 @@ com.perm.DoomPlay.FileSystemActivity -> com.perm.DoomPlay.FileSystemActivity:
 com.perm.DoomPlay.FileSystemActivity$1 -> com.perm.DoomPlay.FileSystemActivity$1:
     boolean accept(java.io.File) -> accept
 com.perm.DoomPlay.FileSystemActivity$2 -> com.perm.DoomPlay.FileSystemActivity$2:
-    com.perm.DoomPlay.FileSystemActivity this$0 -> this$0
     boolean accept(java.io.File,java.lang.String) -> accept
 com.perm.DoomPlay.FileSystemActivity$3 -> com.perm.DoomPlay.FileSystemActivity$3:
     com.perm.DoomPlay.FileSystemActivity this$0 -> this$0
@@ -6009,7 +6024,7 @@ com.perm.DoomPlay.FullPlaybackActivity -> com.perm.DoomPlay.FullPlaybackActivity
     void onBackPressed() -> onBackPressed
     boolean onKeyDown(int,android.view.KeyEvent) -> onKeyDown
     void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
-    com.perm.DoomPlay.Audio getRealPathFromIntent(android.content.Intent) -> getRealPathFromIntent
+    com.perm.DoomPlay.Audio getAudioFromPath(java.io.File) -> getAudioFromPath
     boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
     android.content.Intent getReturnSmallIntent(android.content.Context,java.util.ArrayList) -> getReturnSmallIntent
     boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
@@ -6144,16 +6159,19 @@ com.perm.DoomPlay.LyricsDialog -> com.perm.DoomPlay.LyricsDialog:
     java.lang.String title -> title
     boolean isLoading -> isLoading
     boolean isFirstResume -> isFirstResume
+    java.lang.String lyrics -> lyrics
     android.os.AsyncTask task -> task
     void onCreate(android.os.Bundle) -> onCreate
     android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> onCreateView
+    void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
     void getLyrics() -> getLyrics
     void onDestroyView() -> onDestroyView
     void onResume() -> onResume
     boolean access$002(com.perm.DoomPlay.LyricsDialog,boolean) -> access$002
     android.widget.LinearLayout access$100(com.perm.DoomPlay.LyricsDialog) -> access$100
     java.lang.String access$200(com.perm.DoomPlay.LyricsDialog) -> access$200
-    android.widget.TextView access$300(com.perm.DoomPlay.LyricsDialog) -> access$300
+    java.lang.String access$302(com.perm.DoomPlay.LyricsDialog,java.lang.String) -> access$302
+    android.widget.TextView access$400(com.perm.DoomPlay.LyricsDialog) -> access$400
 com.perm.DoomPlay.LyricsDialog$1 -> com.perm.DoomPlay.LyricsDialog$1:
     com.perm.DoomPlay.LyricsDialog this$0 -> this$0
     void onPreExecute() -> onPreExecute
@@ -6219,6 +6237,8 @@ com.perm.DoomPlay.MainVkFragment -> com.perm.DoomPlay.MainVkFragment:
 com.perm.DoomPlay.MainVkFragment$1 -> com.perm.DoomPlay.MainVkFragment$1:
     com.perm.DoomPlay.MainVkFragment this$0 -> this$0
     void onClick(android.view.View) -> onClick
+com.perm.DoomPlay.MediaButtonReceiver -> com.perm.DoomPlay.MediaButtonReceiver:
+    void onReceive(android.content.Context,android.content.Intent) -> onReceive
 com.perm.DoomPlay.MyApplication -> com.perm.DoomPlay.MyApplication:
     android.content.Context instance -> instance
     java.lang.String BUGSENCE_API_KEY -> BUGSENCE_API_KEY
@@ -6397,6 +6417,24 @@ com.perm.DoomPlay.PlaylistDB -> com.perm.DoomPlay.PlaylistDB:
     void deletePlaylist(java.lang.String) -> deletePlaylist
     void changeColumns(java.lang.String,java.lang.String,java.lang.String) -> changeColumns
     void addPlaylist(java.lang.String) -> addPlaylist
+com.perm.DoomPlay.PlaylistParser -> com.perm.DoomPlay.PlaylistParser:
+    java.lang.String[] audioExts -> audioExts
+    java.lang.String[] plistExts -> plistExts
+    boolean isFileCue(java.lang.String) -> isFileCue
+    boolean isFilePlaylist(java.lang.String) -> isFilePlaylist
+    boolean hasAudioExt(java.lang.String) -> hasAudioExt
+    java.util.ArrayList displayCue(java.io.File,android.content.Context) -> displayCue
+    java.util.ArrayList displayPlaylist(java.io.File,android.content.Context) -> displayPlaylist
+    java.util.ArrayList parsePlaylist(java.io.File) -> parsePlaylist
+    java.util.ArrayList parseCue(java.io.File) -> parseCue
+    boolean checkUTF16(java.io.File) -> checkUTF16
+com.perm.DoomPlay.PlaylistParser$ParseException -> com.perm.DoomPlay.PlaylistParser$ParseException:
+    int errorCode -> errorCode
+    int ERROR_CUE_NO_SRC -> ERROR_CUE_NO_SRC
+    int ERROR_CUE_BAD -> ERROR_CUE_BAD
+    int ERROR_CUE_SRC_EXT -> ERROR_CUE_SRC_EXT
+    int ERROR_PLAYLIST_BAD -> ERROR_PLAYLIST_BAD
+    int getErrorCode() -> getErrorCode
 com.perm.DoomPlay.R -> com.perm.DoomPlay.R:
 com.perm.DoomPlay.R$anim -> com.perm.DoomPlay.R$anim:
     int abc_fade_in -> abc_fade_in
@@ -6924,7 +6962,6 @@ com.perm.DoomPlay.R$id -> com.perm.DoomPlay.R$id:
     int textGenre -> textGenre
     int textGroup -> textGroup
     int textItem -> textItem
-    int textItemPlaylist -> textItemPlaylist
     int textLyrics -> textLyrics
     int textNoResult -> textNoResult
     int textNotifCount -> textNotifCount
@@ -6997,6 +7034,7 @@ com.perm.DoomPlay.R$layout -> com.perm.DoomPlay.R$layout:
     int item_album -> item_album
     int item_artist -> item_artist
     int item_file -> item_file
+    int item_file_playlist -> item_file_playlist
     int item_file_system -> item_file_system
     int item_friend -> item_friend
     int item_genre -> item_genre
@@ -7110,6 +7148,8 @@ com.perm.DoomPlay.R$string -> com.perm.DoomPlay.R$string:
     int artist -> artist
     int artists -> artists
     int audio_settings -> audio_settings
+    int bad_cue -> bad_cue
+    int bad_playlist -> bad_playlist
     int cancel -> cancel
     int canceled -> canceled
     int cant_delete_file -> cant_delete_file
@@ -7124,8 +7164,10 @@ com.perm.DoomPlay.R$string -> com.perm.DoomPlay.R$string:
     int create_folder_label -> create_folder_label
     int create_folder_msg -> create_folder_msg
     int create_folder_success -> create_folder_success
+    int cue_src_ext -> cue_src_ext
     int delete -> delete
     int delete_playlist -> delete_playlist
+    int delete_special_symbols -> delete_special_symbols
     int delete_track -> delete_track
     int didnt_match -> didnt_match
     int disable -> disable
@@ -7135,6 +7177,7 @@ com.perm.DoomPlay.R$string -> com.perm.DoomPlay.R$string:
     int download_album_art -> download_album_art
     int edit -> edit
     int enable -> enable
+    int enter_more_symbols -> enter_more_symbols
     int enter_playlist_name -> enter_playlist_name
     int enter_search_query -> enter_search_query
     int equalizer -> equalizer
@@ -7157,11 +7200,13 @@ com.perm.DoomPlay.R$string -> com.perm.DoomPlay.R$string:
     int max_popular -> max_popular
     int max_search -> max_search
     int new_playlist -> new_playlist
+    int no_cue_src -> no_cue_src
     int no_valid_files -> no_valid_files
     int onclick_notif -> onclick_notif
     int paused -> paused
     int play_after_call -> play_after_call
     int play_all -> play_all
+    int playlist_already_exist -> playlist_already_exist
     int please_sign_in -> please_sign_in
     int please_wait -> please_wait
     int quality -> quality
@@ -7501,6 +7546,7 @@ com.perm.DoomPlay.SearchVkActivity -> com.perm.DoomPlay.SearchVkActivity:
     void onCreate(android.os.Bundle) -> onCreate
     boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
     void hideKeyboard() -> hideKeyboard
+    void onSaveInstanceState(android.os.Bundle) -> onSaveInstanceState
     void onClickTrack(int) -> onClickTrack
     boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
     android.content.Intent getVoiceIntent() -> getVoiceIntent
@@ -7648,7 +7694,9 @@ com.perm.DoomPlay.TracksHolder -> com.perm.DoomPlay.TracksHolder:
     boolean isScanned() -> isScanned
 com.perm.DoomPlay.Utils -> com.perm.DoomPlay.Utils:
     java.lang.String[] EXTENSIONS -> EXTENSIONS
+    java.lang.String[] ALL_EXTENSIONS -> ALL_EXTENSIONS
     boolean trackChecker(java.lang.String) -> trackChecker
+    boolean trackAndPlaylistChecker(java.lang.String) -> trackAndPlaylistChecker
     java.lang.String milliSecondsToTimer(long) -> milliSecondsToTimer
     boolean checkSpecialCharacters(java.lang.String) -> checkSpecialCharacters
     void setRingtone(android.content.Context,com.perm.DoomPlay.Audio) -> setRingtone

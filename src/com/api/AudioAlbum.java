@@ -17,8 +17,6 @@ public class AudioAlbum implements Serializable
     {
         return new AudioAlbum(o.getLong("album_id"),Api.unescape(o.optString("title")));
     }
-
-
     public AudioAlbum(long album_id,String title)
     {
         this.title = title;

@@ -196,7 +196,12 @@ public class ListTracksActivity extends AbstractList
             playlistDB.deleteTrack(audios.get(position).getUrl(), PlaylistActivity.selectedPlaylist);
 
              if(AbstractList.equalsCollections(audios, PlayingService.audios))
+             {
                  PlayingService.audios.remove(position);
+                 if(PlayingService.audios.size() != 0)
+                     PlayingService.indexCurrentTrack--;
+             }
+
 
             audios.remove(position);
             adapter.changeData(audios);

@@ -34,8 +34,6 @@ import android.widget.TextView;
 
 public abstract class AddListDialog extends DialogFragment
 {
-
-
     private EditText editNewDialog;
     private TextView textInvalid;
 
@@ -58,8 +56,6 @@ public abstract class AddListDialog extends DialogFragment
     }
 
 
-
-
     private final View.OnClickListener onClickNewDialogHandler = new View.OnClickListener()
     {
         @Override
@@ -78,7 +74,7 @@ public abstract class AddListDialog extends DialogFragment
                     textInvalid.setVisibility(View.VISIBLE);
                     textInvalid.setText(getResources().getString(R.string.enter_more_symbols));
                 }
-                else if(!Utils.checkSpecialCharacters(query))
+                else if(!Utils.isOnlyLetters(query))
                 {
                     textInvalid.setVisibility(View.VISIBLE);
                     textInvalid.setText(getResources().getString(R.string.delete_special_symbols));

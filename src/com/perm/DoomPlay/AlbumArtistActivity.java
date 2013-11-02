@@ -100,7 +100,7 @@ public class AlbumArtistActivity extends AbstractReceiver
     }
     ArrayList<Audio> getTracksFromAlbumArtist(int position ,boolean fromAlbum)
     {
-
+        //TODO:java.lang.IllegalArgumentException: the bind value at index 1 is null
         Cursor cursor;
 
         if(fromAlbum)

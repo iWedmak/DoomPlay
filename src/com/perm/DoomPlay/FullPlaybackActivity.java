@@ -68,6 +68,9 @@ public class FullPlaybackActivity  extends AbstractControls
         super.onResume();
         isShown = true;
         isPaused = false;
+
+        //TODO: without that throws  java.lang.IllegalStateException: The application's PagerAdapter changed the adapter's contents without calling PagerAdapter#notifyDataSetChanged! Expected adapter item count: 1, found: 384
+        adapterPager.notifyDataSetChanged();
         viewPager.setCurrentItem(PlayingService.indexCurrentTrack, false);
 
     }

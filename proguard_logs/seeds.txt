@@ -1109,7 +1109,6 @@ android.support.v7.appcompat.R$id: int textFirstName
 android.support.v7.appcompat.R$id: int textGenre
 android.support.v7.appcompat.R$id: int textGroup
 android.support.v7.appcompat.R$id: int textItem
-android.support.v7.appcompat.R$id: int textItemPlaylist
 android.support.v7.appcompat.R$id: int textLyrics
 android.support.v7.appcompat.R$id: int textNoResult
 android.support.v7.appcompat.R$id: int textNotifCount
@@ -1180,6 +1179,7 @@ android.support.v7.appcompat.R$layout: int file_system
 android.support.v7.appcompat.R$layout: int item_album
 android.support.v7.appcompat.R$layout: int item_artist
 android.support.v7.appcompat.R$layout: int item_file
+android.support.v7.appcompat.R$layout: int item_file_playlist
 android.support.v7.appcompat.R$layout: int item_file_system
 android.support.v7.appcompat.R$layout: int item_friend
 android.support.v7.appcompat.R$layout: int item_genre
@@ -1291,6 +1291,8 @@ android.support.v7.appcompat.R$string: int app_name
 android.support.v7.appcompat.R$string: int artist
 android.support.v7.appcompat.R$string: int artists
 android.support.v7.appcompat.R$string: int audio_settings
+android.support.v7.appcompat.R$string: int bad_cue
+android.support.v7.appcompat.R$string: int bad_playlist
 android.support.v7.appcompat.R$string: int cancel
 android.support.v7.appcompat.R$string: int canceled
 android.support.v7.appcompat.R$string: int cant_delete_file
@@ -1305,8 +1307,10 @@ android.support.v7.appcompat.R$string: int create_folder_error_no_write_access
 android.support.v7.appcompat.R$string: int create_folder_label
 android.support.v7.appcompat.R$string: int create_folder_msg
 android.support.v7.appcompat.R$string: int create_folder_success
+android.support.v7.appcompat.R$string: int cue_src_ext
 android.support.v7.appcompat.R$string: int delete
 android.support.v7.appcompat.R$string: int delete_playlist
+android.support.v7.appcompat.R$string: int delete_special_symbols
 android.support.v7.appcompat.R$string: int delete_track
 android.support.v7.appcompat.R$string: int didnt_match
 android.support.v7.appcompat.R$string: int disable
@@ -1316,6 +1320,7 @@ android.support.v7.appcompat.R$string: int download
 android.support.v7.appcompat.R$string: int download_album_art
 android.support.v7.appcompat.R$string: int edit
 android.support.v7.appcompat.R$string: int enable
+android.support.v7.appcompat.R$string: int enter_more_symbols
 android.support.v7.appcompat.R$string: int enter_playlist_name
 android.support.v7.appcompat.R$string: int enter_search_query
 android.support.v7.appcompat.R$string: int equalizer
@@ -1338,11 +1343,13 @@ android.support.v7.appcompat.R$string: int max_my_music
 android.support.v7.appcompat.R$string: int max_popular
 android.support.v7.appcompat.R$string: int max_search
 android.support.v7.appcompat.R$string: int new_playlist
+android.support.v7.appcompat.R$string: int no_cue_src
 android.support.v7.appcompat.R$string: int no_valid_files
 android.support.v7.appcompat.R$string: int onclick_notif
 android.support.v7.appcompat.R$string: int paused
 android.support.v7.appcompat.R$string: int play_after_call
 android.support.v7.appcompat.R$string: int play_all
+android.support.v7.appcompat.R$string: int playlist_already_exist
 android.support.v7.appcompat.R$string: int please_sign_in
 android.support.v7.appcompat.R$string: int please_wait
 android.support.v7.appcompat.R$string: int quality
@@ -2271,22 +2278,25 @@ com.perm.DoomPlay.AbstractReceiver$4
 com.perm.DoomPlay.AbstractReceiver$4: com.perm.DoomPlay.AbstractReceiver this$0
 com.perm.DoomPlay.AbstractReceiver$4: AbstractReceiver$4(com.perm.DoomPlay.AbstractReceiver)
 com.perm.DoomPlay.AbstractReceiver$4: void onReceive(android.content.Context,android.content.Intent)
-com.perm.DoomPlay.AbstractReceiver$RunnabeParam
-com.perm.DoomPlay.AbstractReceiver$RunnabeParam: java.lang.Object param
-com.perm.DoomPlay.AbstractReceiver$RunnabeParam: com.perm.DoomPlay.AbstractReceiver this$0
-com.perm.DoomPlay.AbstractReceiver$RunnabeParam: AbstractReceiver$RunnabeParam(com.perm.DoomPlay.AbstractReceiver,java.lang.Object)
-com.perm.DoomPlay.AbstractReceiver$RunnabeParam: void run()
+com.perm.DoomPlay.AbstractReceiver$RunnableParam
+com.perm.DoomPlay.AbstractReceiver$RunnableParam: java.lang.Object param
+com.perm.DoomPlay.AbstractReceiver$RunnableParam: com.perm.DoomPlay.AbstractReceiver this$0
+com.perm.DoomPlay.AbstractReceiver$RunnableParam: AbstractReceiver$RunnabeParam(com.perm.DoomPlay.AbstractReceiver,java.lang.Object)
+com.perm.DoomPlay.AbstractReceiver$RunnableParam: void run()
 com.perm.DoomPlay.AbstractVkItems
 com.perm.DoomPlay.AbstractVkItems: boolean isLoading
 com.perm.DoomPlay.AbstractVkItems: android.widget.LinearLayout linearLoading
 com.perm.DoomPlay.AbstractVkItems: android.widget.ListView listView
+com.perm.DoomPlay.AbstractVkItems: java.lang.String keyLinerLoadingRestore
 com.perm.DoomPlay.AbstractVkItems: com.perm.DoomPlay.AbstractVkItems$TaskLoader taskLoader
 com.perm.DoomPlay.AbstractVkItems: android.widget.AdapterView$OnItemClickListener onClickListener
 com.perm.DoomPlay.AbstractVkItems: AbstractVkItems()
 com.perm.DoomPlay.AbstractVkItems: void onClickRefresh()
 com.perm.DoomPlay.AbstractVkItems: java.util.ArrayList getAudios(int)
+com.perm.DoomPlay.AbstractVkItems: void onCreate(android.os.Bundle)
 com.perm.DoomPlay.AbstractVkItems: boolean onOptionsItemSelected(android.view.MenuItem)
 com.perm.DoomPlay.AbstractVkItems: void onBackPressed()
+com.perm.DoomPlay.AbstractVkItems: void onDestroy()
 com.perm.DoomPlay.AbstractVkItems: void cancelLoading()
 com.perm.DoomPlay.AbstractVkItems: void startListVkActivity(java.util.ArrayList)
 com.perm.DoomPlay.AbstractVkItems: void setLoading()
@@ -2727,6 +2737,13 @@ com.perm.DoomPlay.EqualizerActivity: void onStopTrackingTouch(android.widget.See
 com.perm.DoomPlay.EqualizerActivity: boolean onOptionsItemSelected(android.view.MenuItem)
 com.perm.DoomPlay.EqualizerActivity: void showException(java.lang.Exception)
 com.perm.DoomPlay.EqualizerActivity: void handleKException(com.api.KException)
+com.perm.DoomPlay.ExceptionLog
+com.perm.DoomPlay.ExceptionLog: java.lang.Thread$UncaughtExceptionHandler defaultHandler
+com.perm.DoomPlay.ExceptionLog: android.content.Context context
+com.perm.DoomPlay.ExceptionLog: com.perm.DoomPlay.ExceptionLog exceptionLog
+com.perm.DoomPlay.ExceptionLog: ExceptionLog(android.content.Context)
+com.perm.DoomPlay.ExceptionLog: void init(android.content.Context)
+com.perm.DoomPlay.ExceptionLog: void uncaughtException(java.lang.Thread,java.lang.Throwable)
 com.perm.DoomPlay.FileSystemActivity
 com.perm.DoomPlay.FileSystemActivity: com.perm.DoomPlay.FileSystemActivity$FileSystemAdapter adapter
 com.perm.DoomPlay.FileSystemActivity: android.widget.ListView listView
@@ -2768,8 +2785,7 @@ com.perm.DoomPlay.FileSystemActivity$1
 com.perm.DoomPlay.FileSystemActivity$1: FileSystemActivity$1()
 com.perm.DoomPlay.FileSystemActivity$1: boolean accept(java.io.File)
 com.perm.DoomPlay.FileSystemActivity$2
-com.perm.DoomPlay.FileSystemActivity$2: com.perm.DoomPlay.FileSystemActivity this$0
-com.perm.DoomPlay.FileSystemActivity$2: FileSystemActivity$2(com.perm.DoomPlay.FileSystemActivity)
+com.perm.DoomPlay.FileSystemActivity$2: FileSystemActivity$2()
 com.perm.DoomPlay.FileSystemActivity$2: boolean accept(java.io.File,java.lang.String)
 com.perm.DoomPlay.FileSystemActivity$3
 com.perm.DoomPlay.FileSystemActivity$3: com.perm.DoomPlay.FileSystemActivity this$0
@@ -2825,7 +2841,7 @@ com.perm.DoomPlay.FullPlaybackActivity: void getTracks(android.content.Intent)
 com.perm.DoomPlay.FullPlaybackActivity: void onBackPressed()
 com.perm.DoomPlay.FullPlaybackActivity: boolean onKeyDown(int,android.view.KeyEvent)
 com.perm.DoomPlay.FullPlaybackActivity: void onSaveInstanceState(android.os.Bundle)
-com.perm.DoomPlay.FullPlaybackActivity: com.perm.DoomPlay.Audio getRealPathFromIntent(android.content.Intent)
+com.perm.DoomPlay.FullPlaybackActivity: com.perm.DoomPlay.Audio getAudioFromPath(java.io.File)
 com.perm.DoomPlay.FullPlaybackActivity: boolean onCreateOptionsMenu(android.view.Menu)
 com.perm.DoomPlay.FullPlaybackActivity: android.content.Intent getReturnSmallIntent(android.content.Context,java.util.ArrayList)
 com.perm.DoomPlay.FullPlaybackActivity: boolean onOptionsItemSelected(android.view.MenuItem)
@@ -2979,17 +2995,20 @@ com.perm.DoomPlay.LyricsDialog: java.lang.String keyLyricsTitle
 com.perm.DoomPlay.LyricsDialog: java.lang.String title
 com.perm.DoomPlay.LyricsDialog: boolean isLoading
 com.perm.DoomPlay.LyricsDialog: boolean isFirstResume
+com.perm.DoomPlay.LyricsDialog: java.lang.String lyrics
 com.perm.DoomPlay.LyricsDialog: android.os.AsyncTask task
 com.perm.DoomPlay.LyricsDialog: LyricsDialog()
 com.perm.DoomPlay.LyricsDialog: void onCreate(android.os.Bundle)
 com.perm.DoomPlay.LyricsDialog: android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle)
+com.perm.DoomPlay.LyricsDialog: void onSaveInstanceState(android.os.Bundle)
 com.perm.DoomPlay.LyricsDialog: void getLyrics()
 com.perm.DoomPlay.LyricsDialog: void onDestroyView()
 com.perm.DoomPlay.LyricsDialog: void onResume()
 com.perm.DoomPlay.LyricsDialog: boolean access$002(com.perm.DoomPlay.LyricsDialog,boolean)
 com.perm.DoomPlay.LyricsDialog: android.widget.LinearLayout access$100(com.perm.DoomPlay.LyricsDialog)
 com.perm.DoomPlay.LyricsDialog: java.lang.String access$200(com.perm.DoomPlay.LyricsDialog)
-com.perm.DoomPlay.LyricsDialog: android.widget.TextView access$300(com.perm.DoomPlay.LyricsDialog)
+com.perm.DoomPlay.LyricsDialog: java.lang.String access$302(com.perm.DoomPlay.LyricsDialog,java.lang.String)
+com.perm.DoomPlay.LyricsDialog: android.widget.TextView access$400(com.perm.DoomPlay.LyricsDialog)
 com.perm.DoomPlay.LyricsDialog$1
 com.perm.DoomPlay.LyricsDialog$1: com.perm.DoomPlay.LyricsDialog this$0
 com.perm.DoomPlay.LyricsDialog$1: LyricsDialog$1(com.perm.DoomPlay.LyricsDialog)
@@ -3064,6 +3083,9 @@ com.perm.DoomPlay.MainVkFragment$1
 com.perm.DoomPlay.MainVkFragment$1: com.perm.DoomPlay.MainVkFragment this$0
 com.perm.DoomPlay.MainVkFragment$1: MainVkFragment$1(com.perm.DoomPlay.MainVkFragment)
 com.perm.DoomPlay.MainVkFragment$1: void onClick(android.view.View)
+com.perm.DoomPlay.MediaButtonReceiver
+com.perm.DoomPlay.MediaButtonReceiver: MediaButtonReceiver()
+com.perm.DoomPlay.MediaButtonReceiver: void onReceive(android.content.Context,android.content.Intent)
 com.perm.DoomPlay.MyApplication
 com.perm.DoomPlay.MyApplication: android.content.Context instance
 com.perm.DoomPlay.MyApplication: java.lang.String BUGSENCE_API_KEY
@@ -3262,6 +3284,27 @@ com.perm.DoomPlay.PlaylistDB: java.lang.String[] getListPlaylist()
 com.perm.DoomPlay.PlaylistDB: void deletePlaylist(java.lang.String)
 com.perm.DoomPlay.PlaylistDB: void changeColumns(java.lang.String,java.lang.String,java.lang.String)
 com.perm.DoomPlay.PlaylistDB: void addPlaylist(java.lang.String)
+com.perm.DoomPlay.PlaylistParser
+com.perm.DoomPlay.PlaylistParser: java.lang.String[] audioExts
+com.perm.DoomPlay.PlaylistParser: java.lang.String[] plistExts
+com.perm.DoomPlay.PlaylistParser: PlaylistParser()
+com.perm.DoomPlay.PlaylistParser: boolean isFileCue(java.lang.String)
+com.perm.DoomPlay.PlaylistParser: boolean isFilePlaylist(java.lang.String)
+com.perm.DoomPlay.PlaylistParser: boolean hasAudioExt(java.lang.String)
+com.perm.DoomPlay.PlaylistParser: java.util.ArrayList displayCue(java.io.File,android.content.Context)
+com.perm.DoomPlay.PlaylistParser: java.util.ArrayList displayPlaylist(java.io.File,android.content.Context)
+com.perm.DoomPlay.PlaylistParser: java.util.ArrayList parsePlaylist(java.io.File)
+com.perm.DoomPlay.PlaylistParser: java.util.ArrayList parseCue(java.io.File)
+com.perm.DoomPlay.PlaylistParser: boolean checkUTF16(java.io.File)
+com.perm.DoomPlay.PlaylistParser: void <clinit>()
+com.perm.DoomPlay.PlaylistParser$ParseException
+com.perm.DoomPlay.PlaylistParser$ParseException: int errorCode
+com.perm.DoomPlay.PlaylistParser$ParseException: int ERROR_CUE_NO_SRC
+com.perm.DoomPlay.PlaylistParser$ParseException: int ERROR_CUE_BAD
+com.perm.DoomPlay.PlaylistParser$ParseException: int ERROR_CUE_SRC_EXT
+com.perm.DoomPlay.PlaylistParser$ParseException: int ERROR_PLAYLIST_BAD
+com.perm.DoomPlay.PlaylistParser$ParseException: int getErrorCode()
+com.perm.DoomPlay.PlaylistParser$ParseException: PlaylistParser$ParseException(int)
 com.perm.DoomPlay.R
 com.perm.DoomPlay.R: R()
 com.perm.DoomPlay.R$anim
@@ -3797,7 +3840,6 @@ com.perm.DoomPlay.R$id: int textFirstName
 com.perm.DoomPlay.R$id: int textGenre
 com.perm.DoomPlay.R$id: int textGroup
 com.perm.DoomPlay.R$id: int textItem
-com.perm.DoomPlay.R$id: int textItemPlaylist
 com.perm.DoomPlay.R$id: int textLyrics
 com.perm.DoomPlay.R$id: int textNoResult
 com.perm.DoomPlay.R$id: int textNotifCount
@@ -3872,6 +3914,7 @@ com.perm.DoomPlay.R$layout: int file_system
 com.perm.DoomPlay.R$layout: int item_album
 com.perm.DoomPlay.R$layout: int item_artist
 com.perm.DoomPlay.R$layout: int item_file
+com.perm.DoomPlay.R$layout: int item_file_playlist
 com.perm.DoomPlay.R$layout: int item_file_system
 com.perm.DoomPlay.R$layout: int item_friend
 com.perm.DoomPlay.R$layout: int item_genre
@@ -3987,6 +4030,8 @@ com.perm.DoomPlay.R$string: int app_name
 com.perm.DoomPlay.R$string: int artist
 com.perm.DoomPlay.R$string: int artists
 com.perm.DoomPlay.R$string: int audio_settings
+com.perm.DoomPlay.R$string: int bad_cue
+com.perm.DoomPlay.R$string: int bad_playlist
 com.perm.DoomPlay.R$string: int cancel
 com.perm.DoomPlay.R$string: int canceled
 com.perm.DoomPlay.R$string: int cant_delete_file
@@ -4001,8 +4046,10 @@ com.perm.DoomPlay.R$string: int create_folder_error_no_write_access
 com.perm.DoomPlay.R$string: int create_folder_label
 com.perm.DoomPlay.R$string: int create_folder_msg
 com.perm.DoomPlay.R$string: int create_folder_success
+com.perm.DoomPlay.R$string: int cue_src_ext
 com.perm.DoomPlay.R$string: int delete
 com.perm.DoomPlay.R$string: int delete_playlist
+com.perm.DoomPlay.R$string: int delete_special_symbols
 com.perm.DoomPlay.R$string: int delete_track
 com.perm.DoomPlay.R$string: int didnt_match
 com.perm.DoomPlay.R$string: int disable
@@ -4012,6 +4059,7 @@ com.perm.DoomPlay.R$string: int download
 com.perm.DoomPlay.R$string: int download_album_art
 com.perm.DoomPlay.R$string: int edit
 com.perm.DoomPlay.R$string: int enable
+com.perm.DoomPlay.R$string: int enter_more_symbols
 com.perm.DoomPlay.R$string: int enter_playlist_name
 com.perm.DoomPlay.R$string: int enter_search_query
 com.perm.DoomPlay.R$string: int equalizer
@@ -4034,11 +4082,13 @@ com.perm.DoomPlay.R$string: int max_my_music
 com.perm.DoomPlay.R$string: int max_popular
 com.perm.DoomPlay.R$string: int max_search
 com.perm.DoomPlay.R$string: int new_playlist
+com.perm.DoomPlay.R$string: int no_cue_src
 com.perm.DoomPlay.R$string: int no_valid_files
 com.perm.DoomPlay.R$string: int onclick_notif
 com.perm.DoomPlay.R$string: int paused
 com.perm.DoomPlay.R$string: int play_after_call
 com.perm.DoomPlay.R$string: int play_all
+com.perm.DoomPlay.R$string: int playlist_already_exist
 com.perm.DoomPlay.R$string: int please_sign_in
 com.perm.DoomPlay.R$string: int please_wait
 com.perm.DoomPlay.R$string: int quality
@@ -4391,6 +4441,7 @@ com.perm.DoomPlay.SearchVkActivity: SearchVkActivity()
 com.perm.DoomPlay.SearchVkActivity: void onCreate(android.os.Bundle)
 com.perm.DoomPlay.SearchVkActivity: boolean onCreateOptionsMenu(android.view.Menu)
 com.perm.DoomPlay.SearchVkActivity: void hideKeyboard()
+com.perm.DoomPlay.SearchVkActivity: void onSaveInstanceState(android.os.Bundle)
 com.perm.DoomPlay.SearchVkActivity: void onClickTrack(int)
 com.perm.DoomPlay.SearchVkActivity: boolean onOptionsItemSelected(android.view.MenuItem)
 com.perm.DoomPlay.SearchVkActivity: android.content.Intent getVoiceIntent()
@@ -4565,8 +4616,10 @@ com.perm.DoomPlay.TracksHolder: boolean isScanned()
 com.perm.DoomPlay.TracksHolder: void <clinit>()
 com.perm.DoomPlay.Utils
 com.perm.DoomPlay.Utils: java.lang.String[] EXTENSIONS
+com.perm.DoomPlay.Utils: java.lang.String[] ALL_EXTENSIONS
 com.perm.DoomPlay.Utils: Utils()
 com.perm.DoomPlay.Utils: boolean trackChecker(java.lang.String)
+com.perm.DoomPlay.Utils: boolean trackAndPlaylistChecker(java.lang.String)
 com.perm.DoomPlay.Utils: java.lang.String milliSecondsToTimer(long)
 com.perm.DoomPlay.Utils: boolean checkSpecialCharacters(java.lang.String)
 com.perm.DoomPlay.Utils: void setRingtone(android.content.Context,com.perm.DoomPlay.Audio)

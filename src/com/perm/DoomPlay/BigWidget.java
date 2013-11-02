@@ -34,7 +34,7 @@ public class BigWidget extends AppWidgetProvider
     {
         super.onReceive(context,intent);
 
-        if(intent.getAction().equals(SmallWidget.actionUpdateWidget) && PlayingService.audios != null)
+        if(intent.getAction().equals(SmallWidget.actionUpdateWidget) && PlayingService.audios != null && PlayingService.audios.size() > 0)
             updateWidget(context);
 
     }
@@ -51,7 +51,18 @@ public class BigWidget extends AppWidgetProvider
         Bitmap cover = AlbumArtGetter.getCoverArt(audio.getAid());
         if (cover != null)
         {
-            views.setImageViewBitmap(R.id.widgetAlbum, cover);
+            //TODO: java.lang.IllegalArgumentException: RemoteViews for widget update exceeds
+            // maximum bitmap memory usage (used: 3240000, max: 2304000)
+            // The total memory cannot exceed that required to fill the device's screen once
+            try
+            {
+                views.setImageViewBitmap(R.id.widgetAlbum, cover);
+            }
+            catch(IllegalArgumentException e)
+            {
+                views.setImageViewBitmap(R.id.widgetAlbum,BitmapFactory.decodeResource(context.getResources(), R.drawable.fallback_cover));
+            }
+
         }
         else
             views.setImageViewBitmap(R.id.widgetAlbum,BitmapFactory.decodeResource(context.getResources(), R.drawable.fallback_cover));

@@ -57,6 +57,16 @@ class Utils
         }
         return false;
     }
+    public static boolean isOnlyLetters(String name) {
+        char[] chars = name.toCharArray();
+
+        for (char c : chars) {
+            if(!Character.isLetter(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
     public static boolean trackAndPlaylistChecker(String trackToTest)
     {
         String trackExt = (trackToTest.substring(trackToTest.lastIndexOf(".")+1)).toLowerCase();

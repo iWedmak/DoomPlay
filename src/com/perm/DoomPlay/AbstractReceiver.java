@@ -66,7 +66,7 @@ abstract class AbstractReceiver extends ActionBarActivity
     {
         e.printStackTrace();
         e.getMessage();
-        runOnUiThread(new  RunnabeParam<String>(e.getMessage())
+        runOnUiThread(new  RunnableParam<String>(e.getMessage())
         {
             @Override
             public void run()
@@ -76,10 +76,10 @@ abstract class AbstractReceiver extends ActionBarActivity
         });
     }
 
-    class RunnabeParam<T> implements Runnable
+    class RunnableParam<T> implements Runnable
     {
         T param;
-        public RunnabeParam(T param)
+        public RunnableParam(T param)
         {
             this.param = param;
         }

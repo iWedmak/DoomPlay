@@ -134,6 +134,10 @@ public class FileSystemActivity extends AbstractReceiver
     {
         File[] filesToPlay = file.listFiles(filenameFilter);
         ArrayList<Audio> audios = new ArrayList<Audio>();
+        //TODO: throws nullPointerException , don't know why.
+        if(filesToPlay == null)
+            return audios;
+
 
         for(File mFile : filesToPlay)
             audios.add(getAudioFromFile(mFile));

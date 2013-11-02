@@ -135,17 +135,17 @@ public class AddTrackToAlbumDialog extends DialogFragment
                     } catch (IOException e) {
                         isLoading = false;
                         ((AbstractReceiver)getActivity()).showException(e);
-                        cancel(true);
+                        cancel(false);
                     }
                     catch (JSONException e) {
                         isLoading = false;
                         ((AbstractReceiver)getActivity()).showException(e);
-                        cancel(true);
+                        cancel(false);
                     }
                     catch (KException e) {
                         isLoading = false;
                         ((AbstractReceiver)getActivity()).handleKException(e);
-                        cancel(true);
+                        cancel(false);
                     }
                     return null;
                 }

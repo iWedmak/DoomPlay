@@ -194,6 +194,17 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
         }
         else
         {
+            //TODO: java.lang.IllegalArgumentException: RemoteViews for widget update exceeds
+            // maximum bitmap memory usage (used: 3240000, max: 2304000)
+            // The total memory cannot exceed that required to fill the device's screen once
+            try
+            {
+                views.setImageViewBitmap(R.id.notifAlbum, cover);
+            }
+            catch(IllegalArgumentException e)
+            {
+                views.setImageViewBitmap(R.id.notifAlbum, BitmapFactory.decodeResource(getResources(), R.drawable.fallback_cover));
+            }
             views.setImageViewBitmap(R.id.notifAlbum, cover);
         }
 

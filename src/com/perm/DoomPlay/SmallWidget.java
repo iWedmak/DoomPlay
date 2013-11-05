@@ -33,26 +33,28 @@ import android.widget.RemoteViews;
 public class SmallWidget extends AppWidgetProvider
 {
     public final static String actionUpdateWidget ="doom.update.widget";
+    public final static String EXTRA_AUDIO = "audio";
+    public final static String EXTRA_SIZE = "size";
+
 
     @Override
     public void onReceive(Context context, Intent intent)
     {
         super.onReceive(context,intent);
 
-        if(intent.getAction().equals(actionUpdateWidget) && PlayingService.audios != null && PlayingService.audios.size() > 0)
-            updateWidget(context);
+        if(intent.getAction().equals(actionUpdateWidget))
+            updateWidget(context,(Audio)intent.getParcelableExtra(EXTRA_AUDIO),intent.getIntExtra(EXTRA_SIZE,0));
 
     }
-    private static void updateWidget(Context context)
+    private static void updateWidget(Context context,Audio audio,int size)
     {
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_small);
 
-        Audio audio = PlayingService.audios.get(PlayingService.indexCurrentTrack);
         views.setTextViewText(R.id.widgetTitle, audio.getTitle());
         views.setTextViewText(R.id.widgetArtist, audio.getArtist());
 
-        Bitmap cover = AlbumArtGetter.getCoverArt(audio.getAid());
+        Bitmap cover = AlbumArtGetter.getBitmapFromStore(audio.getAid(),context);
         if (cover != null)
         {
             //TODO: java.lang.IllegalArgumentException: RemoteViews for widget update
@@ -66,9 +68,16 @@ public class SmallWidget extends AppWidgetProvider
             {
                 views.setImageViewBitmap(R.id.widgetAlbum,BitmapFactory.decodeResource(context.getResources(), R.drawable.fallback_cover));
             }
+            finally {
+                cover.recycle();
+            }
         }
         else
-            views.setImageViewBitmap(R.id.widgetAlbum,BitmapFactory.decodeResource(context.getResources(), R.drawable.fallback_cover));
+        {
+            Bitmap tempBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.fallback_cover);
+            views.setImageViewBitmap(R.id.widgetAlbum,tempBitmap);
+        }
+
 
 
         int playButton = PlayingService.isPlaying ? R.drawable.widget_pause : R.drawable.widget_play;

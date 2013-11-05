@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" android:paddingTop="10dp" android:paddingBottom="5dp">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginLeft="7dp">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/low_freq"
+                android:id="@+id/textView" android:paddingBottom="5dp" android:layout_marginLeft="10dp"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:layout_weight="1" android:paddingTop="3dp"
+                android:gravity="center_vertical">
+            <SeekBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/seekEqual10"
+                    android:tag="10" android:layout_weight="1">
+
+            </SeekBar>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 db"
+                    android:id="@+id/textDb10" android:textSize="14sp" android:paddingRight="5dp" android:paddingLeft="2dp"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginLeft="7dp">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hight_freq"
+                android:id="@+id/textView" android:paddingBottom="5dp" android:layout_marginLeft="10dp"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:layout_weight="1" android:paddingTop="3dp"
+                android:gravity="center_vertical">
+            <SeekBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/seekEqual11"
+                    android:tag="11" android:layout_weight="1">
+
+            </SeekBar>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 db"
+                    android:id="@+id/textDb11" android:textSize="14sp" android:paddingRight="5dp" android:paddingLeft="2dp"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginLeft="7dp">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reverb"
+                android:id="@+id/textView" android:paddingBottom="5dp" android:layout_marginLeft="10dp"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:layout_weight="1" android:paddingTop="3dp"
+                android:gravity="center_vertical">
+            <SeekBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/seekEqual12"
+                    android:tag="12" android:layout_weight="1">
+
+            </SeekBar>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 db"
+                    android:id="@+id/textDb12" android:textSize="14sp" android:paddingRight="5dp" android:paddingLeft="2dp"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginLeft="7dp">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sounds_power"
+                android:id="@+id/textView" android:paddingBottom="5dp" android:layout_marginLeft="10dp"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:layout_weight="1" android:paddingTop="3dp"
+                android:gravity="center_vertical">
+            <SeekBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/seekEqual13"
+                    android:tag="13" android:layout_weight="1">
+
+            </SeekBar>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 db"
+                    android:id="@+id/textDb13" android:textSize="14sp" android:paddingRight="5dp" android:paddingLeft="2dp"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -40,9 +40,9 @@ import java.io.File;
 import java.util.ArrayList;
 
 
-public class FullPlaybackActivity  extends AbstractControls
+public class FullPlaybackActivity  extends AbstractControls implements PlayingService.OnLoadingTrackListener
 {
-    static ArrayList<Audio> audios;
+    ArrayList<Audio> audios;
     private CustomViewPager viewPager;
     public final static String keyService = "zajiy";
     public final static String keyIndex = "indKey";
@@ -52,14 +52,14 @@ public class FullPlaybackActivity  extends AbstractControls
     private final static String keyReturn = "keyForsaveService";
     public final static String actionDataChanged = "notifyDataChanged";
     private PagePlaybackAdapter adapterPager;
-    private Intent intentWas;
 
     private static boolean isPaused  = false;
 
     @Override
     protected void trackChanged()
     {
-        viewPager.setCurrentItem(PlayingService.indexCurrentTrack, false);
+        if(playingService != null)
+            viewPager.setCurrentItem(playingService.indexCurrentTrack, false);
     }
 
     @Override
@@ -68,11 +68,20 @@ public class FullPlaybackActivity  extends AbstractControls
         super.onResume();
         isShown = true;
         isPaused = false;
+    }
 
-        //TODO: without that throws  java.lang.IllegalStateException: The application's PagerAdapter changed the adapter's contents without calling PagerAdapter#notifyDataSetChanged! Expected adapter item count: 1, found: 384
+    @Override
+    protected void onServiceBound() {
+        super.onServiceBound();
+
+        //TODO: without that throws  java.lang.IllegalStateException: The application's
+        // PagerAdapter changed the adapter's contents without calling PagerAdapter#notifyDataSetChanged!
+        // Expected adapter item count: 1, found: 384
+
         adapterPager.notifyDataSetChanged();
         viewPager.setCurrentItem(PlayingService.indexCurrentTrack, false);
-
+        playingService.setOnAlbumArtSaveListener(onAlbumArtSave);
+        playingService.setOnLoadingTrackListener(this);
     }
 
     @Override
@@ -95,11 +104,6 @@ public class FullPlaybackActivity  extends AbstractControls
 
         }
     };
-    @Override
-    protected void onServiceAbstractConnected()
-    {
-        playingService.setOnAlbumArtSaveListener(onAlbumArtSave);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -108,14 +112,13 @@ public class FullPlaybackActivity  extends AbstractControls
         setContentView(R.layout.playing);
 
 
-        intentWas = getIntent();
         intentService = new Intent(this,PlayingService.class);
 
-        getTracks(intentWas);
+        getTracks(getIntent());
         initialize();
         initializeAbstract();
 
-        if(intentWas.getAction().equals(actionReturnFull) || savedInstanceState != null)
+        if(getIntent().getAction().equals(actionReturnFull) || savedInstanceState != null)
         {
             intentService.putExtra(keyIndex, PlayingService.valueIncredible);
         }
@@ -130,7 +133,6 @@ public class FullPlaybackActivity  extends AbstractControls
     protected void onNewIntent(Intent intent)
     {
         super.onNewIntent(intent);
-        intentWas = intent;
         setIntent(intent);
         getTracks(intent);
         adapterPager = new PagePlaybackAdapter(getSupportFragmentManager());
@@ -165,7 +167,7 @@ public class FullPlaybackActivity  extends AbstractControls
         }
         else
         {
-            audios = PlayingService.audios;
+            audios = playingService.audios;
         }
 
         if(intent.getIntExtra(keyIndex,11116) != 11116)
@@ -409,17 +411,36 @@ public class FullPlaybackActivity  extends AbstractControls
             else
             {
                 if(position > PlayingService.indexCurrentTrack)
-                    PlayingService.changeTrack(PlayingService.nextTrack);
+                {
+                    PlayingService.indexCurrentTrack++;
+                    if(PlayingService.indexCurrentTrack > audios.size()-1)
+                        PlayingService.indexCurrentTrack = 0;
+                }
                 else if(position < PlayingService.indexCurrentTrack)
-                    PlayingService.changeTrack(PlayingService.previousTrack);
+                {
+                    PlayingService.indexCurrentTrack--;
+                    if(PlayingService.indexCurrentTrack  == -1 )
+                        PlayingService.indexCurrentTrack = audios.size()-1;
+                }
             }
-
         }
         @Override
         public void onPageSelected(int position) {}
         @Override
         public void onPageScrollStateChanged(int state){}
         };
+
+    @Override
+    public void onLoadingTrackStarted() {
+        if(viewPager != null)
+            viewPager.setBlocked(true);
+    }
+
+    @Override
+    public void onLoadingTrackEnded() {
+        if(viewPager != null)
+            viewPager.setBlocked(false);
+    }
 
     class PagePlaybackAdapter extends FragmentStatePagerAdapter
     {

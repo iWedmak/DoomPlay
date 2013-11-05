@@ -21,7 +21,7 @@
     <application android:label="@string/app_name"
                  android:icon="@drawable/ic_launcher"
                  android:name=".MyApplication"
-                 android:theme="@style/MyTheme">
+                 android:theme="@style/Theme.AppCompat">
 
         <activity android:name="com.perm.DoomPlay.MainScreenActivity"
                   android:label="@string/app_name"

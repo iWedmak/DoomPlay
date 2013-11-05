@@ -23,7 +23,6 @@ package com.perm.DoomPlay;
 import android.content.*;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
@@ -48,10 +47,6 @@ abstract class AbstractControls extends AbstractReceiver
     SeekBar seekBar;
     private volatile boolean flagT;
     private final static int messageUpdate = 2957;
-    PlayingService playingService;
-    ServiceConnection serviceConnection;
-    private  boolean isBound;
-    Intent intentService;
     boolean isShown;
     protected abstract void trackChanged();
     private static final String keySaveShown = "keySswn";
@@ -60,22 +55,8 @@ abstract class AbstractControls extends AbstractReceiver
     protected void onPause()
     {
         super.onPause();
-        unConnecServer();
         flagT = false;
     }
-
-
-
-   /* @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if ((keyCode == KeyEvent.KEYCODE_HOME))
-        {
-            finish();
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-       */
     @Override
     protected void onResume()
     {
@@ -87,7 +68,7 @@ abstract class AbstractControls extends AbstractReceiver
 
     }
 
-    void showHide()
+    protected void showHide()
     {
         if(isShown)
         {
@@ -102,7 +83,7 @@ abstract class AbstractControls extends AbstractReceiver
             loadUpdateThread();
         }
     }
-    void checkIsShown(Bundle savedInstanceState)
+    protected void checkIsShown(Bundle savedInstanceState)
     {
         if(savedInstanceState != null)
         {
@@ -136,19 +117,6 @@ abstract class AbstractControls extends AbstractReceiver
             imgShuffle.setImageResource(R.drawable.shuffle_disable);
     }
 
-    void connectService()
-    {
-        bindService(intentService,serviceConnection,0);
-        isBound = true;
-    }
-    void unConnecServer()
-    {
-        if(isBound)
-        {
-            unbindService(serviceConnection);
-            isBound = false;
-        }
-    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState)
@@ -157,9 +125,6 @@ abstract class AbstractControls extends AbstractReceiver
         outState.putBoolean(keySaveShown,isShown);
     }
 
-    //it's for override
-    void onServiceAbstractConnected()
-    {}
 
     void initializeAbstract()
     {
@@ -172,20 +137,6 @@ abstract class AbstractControls extends AbstractReceiver
         imgPrevious.setOnClickListener(onClickControlsListener);
         imgRepeat.setOnClickListener(onClickControlsListener);
         imgShuffle.setOnClickListener(onClickControlsListener);
-
-        serviceConnection = new ServiceConnection()
-        {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder binder)
-            {
-                playingService = ((PlayingService.MyBinder) binder).getService();
-                onServiceAbstractConnected();
-                loadUpdateThread();
-            }
-            @Override
-            public void onServiceDisconnected(ComponentName name)
-            {}
-        };
     }
 
     @Override
@@ -204,9 +155,9 @@ abstract class AbstractControls extends AbstractReceiver
         @Override
         public void onClick(View v)
         {
-            if(playingService == null || !PlayingService.serviceAlive)
+            if(!PlayingService.serviceAlive)
                 clickWithoutAction();
-            else if(!PlayingService.isLoadingTrack())
+            else if(playingService != null && !playingService.isLoadingTrack())
             {
                 onClickControl(v.getId());
             }
@@ -247,7 +198,7 @@ abstract class AbstractControls extends AbstractReceiver
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
         {
-            if(fromUser && playingService != null && !PlayingService.isLoadingTrack())
+            if(fromUser && playingService != null && !playingService.isLoadingTrack())
                 playingService.setCurrentPosition(playingService.getDuration()*progress / 100);
         }
         @Override
@@ -294,6 +245,11 @@ abstract class AbstractControls extends AbstractReceiver
         flagT = true;
         Thread threadUpdate = new Thread(runnable);
         threadUpdate.start();
+    }
+
+    @Override
+    protected void onServiceBound() {
+      loadUpdateThread();
     }
 
     private final Runnable runnable = new Runnable()

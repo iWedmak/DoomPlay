@@ -1,7 +1,7 @@
 package com.perm.DoomPlay;
 
 import android.content.pm.ApplicationInfo;
-import com.un4seen.bass.*;
+import com.un4seen.bass.BASS;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,7 +20,8 @@ public class BassPlayer
     private static int chan;
     private int totalTime;
     private OnCompletionListener completionListener;
-    private static int[] fx = new int[10];
+    private static int[] fxBands = new int[10];
+    private static int fxReverb ;
 
 
    public void setOnCompletetion(OnCompletionListener listener)
@@ -74,49 +75,57 @@ public class BassPlayer
     }
     private void setUpEffects()
     {
-        fx[0] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
-        fx[1] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
-        fx[2] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
-        fx[3] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
-        fx[4] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
-        fx[5] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
-        fx[6] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
-        fx[7] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
-        fx[8] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
-        fx[9] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fxBands[0] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fxBands[1] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fxBands[2] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fxBands[3] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fxBands[4] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fxBands[5] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fxBands[6] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fxBands[7] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fxBands[8] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fxBands[9] = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_PARAMEQ, 0);
+        fxReverb = BASS.BASS_ChannelSetFX(chan, BASS.BASS_FX_DX8_REVERB, 0);
 
         BASS.BASS_DX8_PARAMEQ p = new BASS.BASS_DX8_PARAMEQ();
 
         p.fGain=0;
         p.fBandwidth = 0.5f;
         p.fCenter=32;
-        BASS.BASS_FXSetParameters(fx[0], p);
+        BASS.BASS_FXSetParameters(fxBands[0], p);
         p.fCenter=64;
-        BASS.BASS_FXSetParameters(fx[1], p);
+        BASS.BASS_FXSetParameters(fxBands[1], p);
         p.fCenter=125;
-        BASS.BASS_FXSetParameters(fx[2], p);
+        BASS.BASS_FXSetParameters(fxBands[2], p);
         p.fBandwidth = 2f;
         p.fCenter=250;
-        BASS.BASS_FXSetParameters(fx[3], p);
+        BASS.BASS_FXSetParameters(fxBands[3], p);
         p.fCenter=500;
-        BASS.BASS_FXSetParameters(fx[4], p);
+        BASS.BASS_FXSetParameters(fxBands[4], p);
         p.fBandwidth = 4f;
         p.fCenter=1000;
-        BASS.BASS_FXSetParameters(fx[5], p);
+        BASS.BASS_FXSetParameters(fxBands[5], p);
         p.fCenter=2000;
-        BASS.BASS_FXSetParameters(fx[6], p);
+        BASS.BASS_FXSetParameters(fxBands[6], p);
         p.fCenter=4000;
-        BASS.BASS_FXSetParameters(fx[7], p);
+        BASS.BASS_FXSetParameters(fxBands[7], p);
         p.fCenter=8000;
         p.fBandwidth = 8f;
-        BASS.BASS_FXSetParameters(fx[8], p);
+        BASS.BASS_FXSetParameters(fxBands[8], p);
         p.fCenter=16000;
-        BASS.BASS_FXSetParameters(fx[9], p);
+        BASS.BASS_FXSetParameters(fxBands[9], p);
 
 
-        int[] bounds  = EqualizerActivity.getSavedBounds();
+
+
+        int[] bounds  = EqualizerBandsFragment.getSavedBounds();
         for(int i = 0 ; i < bounds.length ; i++ )
             updateFX(bounds[i], i);
+
+        int[] effecs = EqualizerEffectsFragment.getSavedEffects();
+        setLowFreq(effecs[0]);
+        setHightFreq(effecs[1]);
+        setReverb(effecs[2]);
 
 
 
@@ -124,19 +133,53 @@ public class BassPlayer
     public static void updateFX(int progress, int n)
     {
         BASS.BASS_DX8_PARAMEQ p = new BASS.BASS_DX8_PARAMEQ();
-        BASS.BASS_FXGetParameters(fx[n], p);
-        p.fGain = EqualizerActivity.convertProgressToGain(progress);
-        BASS.BASS_FXSetParameters(fx[n], p);
-
-         /*
-            ***Reverb***
-             BASS.BASS_DX8_REVERB p=new BASS.BASS_DX8_REVERB();
-            BASS.BASS_FXGetParameters(fx[n], p);
-            p.fReverbMix=(float)(progress > 15 ? Math.log(progress/20.0)*20.0:-96.0);
-            BASS.BASS_FXSetParameters(fx[n], p);
-
-         */
+        BASS.BASS_FXGetParameters(fxBands[n], p);
+        p.fGain = EqualizerBandsFragment.convertProgressToGain(progress);
+        BASS.BASS_FXSetParameters(fxBands[n], p);
     }
+    public static void setReverb(int progress)
+    {
+        BASS.BASS_DX8_REVERB p=new BASS.BASS_DX8_REVERB();
+        BASS.BASS_FXGetParameters(fxReverb, p);
+        p.fReverbMix=(float)(progress > 15 ? Math.log((double)progress/20.0)*20.0:-96.0);
+        BASS.BASS_FXSetParameters(fxReverb, p);
+    }
+    public static void setLowFreq(int progress)
+    {
+          for(int i = 0 ; i < 5 ; i++)
+          {
+              BASS.BASS_DX8_PARAMEQ p = new BASS.BASS_DX8_PARAMEQ();
+              BASS.BASS_FXGetParameters(fxBands[i], p);
+
+              if(i < 3)
+                p.fBandwidth = 0.5f * convertProgressToFreq(progress);
+              else
+                p.fBandwidth = 2f * convertProgressToFreq(progress);
+
+              BASS.BASS_FXSetParameters(fxBands[i], p);
+          }
+
+    }
+    public static void setHightFreq(int progress)
+    {
+        for(int i = 6 ; i < 10 ; i++)
+        {
+            BASS.BASS_DX8_PARAMEQ p = new BASS.BASS_DX8_PARAMEQ();
+            BASS.BASS_FXGetParameters(fxBands[i], p);
+            if(i < 8)
+                p.fBandwidth = 4f * convertProgressToFreq(progress);
+            else
+                p.fBandwidth = 8f * convertProgressToFreq(progress);
+            BASS.BASS_FXSetParameters(fxBands[i], p);
+        }
+    }
+
+
+    public static float convertProgressToFreq(int progress)
+    {
+        return ((float)progress*3f/100f) + 1;
+    }
+
 
     private final Object lock = new Object();
     int req;
@@ -189,8 +232,8 @@ public class BassPlayer
         @Override
         public void DOWNLOADPROC(ByteBuffer buffer, int length, Object user)
         {
-
-            if(filePath != null && (Integer)user == req )
+              //&& (Integer)user == req
+            if(filePath != null )
             {
                 try
                 {
@@ -237,7 +280,6 @@ public class BassPlayer
     {
         BASS.BASS_ChannelSetPosition(chan, BASS.BASS_ChannelSeconds2Bytes(chan, to), BASS.BASS_POS_BYTE);
     }
-
     public void releaseTotal()
     {
         BASS.BASS_Free();

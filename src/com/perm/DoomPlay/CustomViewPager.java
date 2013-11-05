@@ -29,10 +29,16 @@ Prevent illegalStateException (doesn't response if track didn't load)
 
 public class CustomViewPager extends ViewPager
 {
+    private boolean isBlocked;
+
+    public void setBlocked(boolean isBlocked) {
+        this.isBlocked = isBlocked;
+    }
 
     public CustomViewPager(Context context)
     {
         super(context);
+        isBlocked = false;
     }
 
     public CustomViewPager(Context context, AttributeSet attrs)
@@ -45,7 +51,7 @@ public class CustomViewPager extends ViewPager
     {
         try
         {
-            return !PlayingService.isLoadingTrack() && super.onTouchEvent(ev);
+            return !isBlocked && super.onTouchEvent(ev);
         }
         catch (IllegalArgumentException e)
         {
@@ -57,6 +63,6 @@ public class CustomViewPager extends ViewPager
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev)
     {
-        return !PlayingService.isLoadingTrack() && super.onInterceptTouchEvent(ev);
+        return !isBlocked && super.onInterceptTouchEvent(ev);
     }
 }

@@ -18,6 +18,7 @@ package com.perm.DoomPlay;
  *
  *    You can contact me <DoomPlaye@gmail.com>
  */
+
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -28,7 +29,6 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.v4.util.LruCache;
 import android.util.Log;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -169,14 +169,12 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
             else
                 return null;
 
-
         }
         finally
         {
             if(connection!=null)
                 connection.disconnect();
         }
-
     }
 
     // return the cover art downloaded from source
@@ -206,9 +204,7 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
             if(in != null)
                 try {
                     in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                } catch (IOException e) {}
         }
     }
 
@@ -224,7 +220,6 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
         }
         catch (FileNotFoundException e)
         {
-            e.printStackTrace();
             return;
         }
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
@@ -234,16 +229,31 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
             stream.close();
         } catch (IOException e) {}
 
-
-
         ContentValues cv = new ContentValues();
         cv.put("album_id", albumId);
         cv.put("_data", path);
         MyApplication.getInstance().getContentResolver().insert(artworkUri, cv);
     }
-
     //return the cover art by id
 
+
+    public static Bitmap getBitmapFromStore(long id, Context context)
+    {
+        //TODO: sometimes it throws NullPointerException
+
+        if(context == null || context.getContentResolver() == null)
+            return null;
+
+        Uri uri = ContentUris.withAppendedId(artworkUri, id);
+
+
+        try {
+            return MediaStore.Images.Media.getBitmap(context.getContentResolver(),uri);
+        } catch (IOException e) {
+            return null;
+        }
+    }
+    /*
     private static LruCache<Long,Bitmap> bitmapCache = new LruCache<Long,Bitmap>(2 * 1024 * 1024)
     {
         @Override
@@ -266,26 +276,30 @@ abstract class AlbumArtGetter extends AsyncTask<Void,Void,Void>
             return bitmap;
         }
     };
-    private static Bitmap getBitmapFromStore(long id, Context context)
-    {
-        //TODO: sometimes it throws NullPointerException
-
-        if(context == null || context.getContentResolver() == null)
-            return null;
-
-
-        Uri uri = ContentUris.withAppendedId(artworkUri, id);
-        try
-        {
-            return MediaStore.Images.Media.getBitmap(context.getContentResolver(),uri);
-        }
-        catch (IOException e)
-        {
-            return null;
-        }
-    }
     public static Bitmap getCoverArt(long id)
     {
         return bitmapCache.get(id);
     }
+    private static Bitmap decodeFile(String f){
+        try {
+            File file = new File(f);
+            double size = file.length();
+            double prop = size / (1024.0 * 1024.0 * 2.0);
+
+
+            if(prop > 1)
+            {
+                BitmapFactory.Options o = new BitmapFactory.Options();
+                o.inSampleSize = (int)Math.ceil(prop);
+                return BitmapFactory.decodeStream(new FileInputStream(file), null,o);
+            }
+            else
+            {
+                return BitmapFactory.decodeStream(new FileInputStream(file), null,null);
+            }
+        } catch (FileNotFoundException e){
+            return null;
+        }
+    }
+    */
 }

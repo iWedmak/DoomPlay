@@ -117,6 +117,7 @@ class Utils
     }
     public static void setRingtone(Context context,Audio audio)
     {
+
         ContentValues values = new ContentValues();
         values.put(MediaStore.MediaColumns.DATA, audio.getUrl());
         values.put(MediaStore.MediaColumns.TITLE, audio.getTitle());
@@ -130,6 +131,13 @@ class Utils
         values.put(MediaStore.Audio.Media.IS_MUSIC, false);
 
         Uri uri = MediaStore.Audio.Media.getContentUriForPath(audio.getUrl());
+
+        if(uri == null || context.getContentResolver()==null)
+        {
+            Toast.makeText(context,context.getString(R.string.error),Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Uri newUri = context.getContentResolver().insert(uri, values);
 
         if(newUri == null)

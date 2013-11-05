@@ -57,15 +57,19 @@ public class PageFragment extends Fragment
         ImageView imgAlbum = (ImageView)page.findViewById(R.id.imageAlbum);
         TextView textNumberSong = (TextView)page.findViewById(R.id.textNumberSong);
 
-        textNumberSong.setText(pageNumber + 1 + "/" + FullPlaybackActivity.audios.size());
+
+        FullPlaybackActivity activity = (FullPlaybackActivity)getActivity();
+
+        textNumberSong.setText(pageNumber + 1 + "/" + activity.audios.size());
 
 
-        Bitmap bitmap = AlbumArtGetter.getCoverArt(FullPlaybackActivity.audios.get(pageNumber).getAid());
+        Bitmap bitmap = AlbumArtGetter.getBitmapFromStore(activity.audios.get(pageNumber).getAid(),activity);
 
         if(bitmap != null)
+        {
             imgAlbum.setImageBitmap(bitmap);
-
-
+            bitmap.recycle();
+        }
         return page;
     }
 }

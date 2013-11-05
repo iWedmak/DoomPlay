@@ -27,6 +27,7 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 import com.bugsense.trace.BugSenseHandler;
 
 import java.io.File;
@@ -46,7 +47,7 @@ public class DownloadingService extends Service implements Download.DoomObserver
     public static final String keyDownload = "downloadTrack";
     private NotificationManager manager;
 
-    private final static Map<Long,DownloadHolder> downloads = new HashMap<Long,DownloadHolder>();
+    private Map<Long,DownloadHolder> downloads ;
 
     //private static boolean isUpdate = false;
 
@@ -105,12 +106,6 @@ public class DownloadingService extends Service implements Download.DoomObserver
         Download download;
         DownloadNotifBuilder downloadBuilder;
     }
-
-
-    public static boolean isDownloading(long aid)
-    {
-        return downloads.containsKey(aid);
-    }
     private void dispose(long aid)
     {
         downloads.remove(aid);
@@ -122,6 +117,15 @@ public class DownloadingService extends Service implements Download.DoomObserver
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        for(DownloadHolder holder : downloads.values())
+        {
+            holder.download.error("Service has been destroyed(OutOfMemory)");
+        }
+    }
 
     private void addDownload(Audio audio,String filePath)
     {
@@ -171,9 +175,7 @@ public class DownloadingService extends Service implements Download.DoomObserver
                         manager.notify(holder.downloadBuilder.notificationId,notification);
                     }
                 }
-
             }
-
         }
     });
     private void startUpdatingThread()
@@ -209,7 +211,7 @@ public class DownloadingService extends Service implements Download.DoomObserver
     {
         String title = track.getTitle() ;
         if(title.length() > 25)
-            title.substring(0,25);
+            title = title.substring(0,25);
 
         String trackName = (track.getArtist() + "-" + title + ".mp3").replaceAll("[%#@^&$]","");
 
@@ -223,6 +225,7 @@ public class DownloadingService extends Service implements Download.DoomObserver
     {
         super.onCreate();
         manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        downloads = new HashMap<Long,DownloadHolder>();
     }
 
     @Override
@@ -234,7 +237,14 @@ public class DownloadingService extends Service implements Download.DoomObserver
         if(action.equals(PlayingService.actionPlay))
         {
             Audio track = intent.getParcelableExtra(keyDownload);
-            addDownload(track, generateFilePath(track));
+            if(!downloads.containsKey(track.getAid()))
+                addDownload(track, generateFilePath(track));
+            else
+            {
+                Toast.makeText(getBaseContext(), getResources().getString(R.string.track_downloading), Toast.LENGTH_SHORT).show();
+                if(downloads.size() < 1)
+                    stopSelf();
+            }
         }
         else
         {

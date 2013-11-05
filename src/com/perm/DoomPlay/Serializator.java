@@ -50,14 +50,14 @@ class Serializator<T extends Serializable>
 
         File sd = Environment.getExternalStorageDirectory();
 
-        File stacktrace = new File(sd.getPath() + dir,
+        File filePath = new File(sd.getPath() + dir,
                 name.toString() +".txt");
 
 
-        File dumpdir = stacktrace.getParentFile();
+        File dumpdir = filePath.getParentFile();
         dumpdir.mkdirs();
 
-        return stacktrace;
+        return filePath;
     }
 
     /*
@@ -72,7 +72,6 @@ class Serializator<T extends Serializable>
 
     public void inSerialize(ArrayList<T> objects)
     {
-
         File file = getPathByType();
 
         OutputStream fileStream = null;

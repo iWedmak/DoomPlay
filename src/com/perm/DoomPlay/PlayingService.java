@@ -50,39 +50,44 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
     public final static String actionTrackChanged = "DoomedTrackChanged";
     public final static String actionIconPlay = "DoomedPlayPlay";
     public final static String actionIconPause = "DoomedPlaPause";
-    private static BassPlayer bassPlayer;
-    private static boolean isPrepared ;
-    static int indexCurrentTrack = 0;
-    public static boolean isShuffle;
-    public static boolean isPlaying;
-    public static boolean isLoop;
-    final static int nextTrack = 1;
-    final static int previousTrack = -1;
-    public final static int valueIncredible = 519815;
-    private final MyBinder binder = new MyBinder();
-    private final static int idForeground = 931;
+
     public final static String actionPlay = "DoomePlay";
     public final static String actionClose = "DoomClose";
     public final static String actionNext = "DoomNext";
     public final static String actionPrevious = "DoomPrevious";
     public final static String actionShuffle = "DoomShuffle";
     public final static String actionLoop = "DoomLooping";
+
+    public final static String actionOffline = "FromlPlayback";
+    public static final String actionOnline = "vkOnline";
+
+    final static int nextTrack = 1;
+    final static int previousTrack = -1;
+    private final static int idForeground = 931;
+    public final static int valueIncredible = 519815;
+
+    private BassPlayer bassPlayer;
+    public ArrayList<Audio> audios ;
+    private boolean isPrepared ;
+    public static int indexCurrentTrack = 0;
+    public static boolean isShuffle;
+    public static boolean isPlaying;
+    public static boolean isLoop;
     public static boolean serviceAlive ;
+    public static boolean isOnline = false ;
+    private boolean isLoadingTrack;
+
+    private final MyBinder binder = new MyBinder();
     private static  int trackCountTotal = valueIncredible;
     private static  int trackCountCurrent = 0;
-    public final static String actionOffline = "FromlPlayback";
-    public static boolean isOnline = false ;
-    public static final String actionOnline = "vkOnline";
     private AudioManager audioManager ;
-    static ArrayList<Audio> audios ;
-    private static boolean isLoadingTrack;
     private AFListener afListener ;
     private final CallListener callListener = new CallListener();
     private OnLoadingTrackListener loadingListener;
     private final static Random random = new Random();
 
 
-    public static boolean isLoadingTrack()
+    public boolean isLoadingTrack()
     {
         return isLoadingTrack;
     }
@@ -186,11 +191,13 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
         views.setTextViewText(R.id.notifTitle, audio.getTitle());
         views.setTextViewText(R.id.notifArtist, audio.getArtist());
 
-        Bitmap cover = AlbumArtGetter.getCoverArt(audio.getAid());
+        Bitmap cover = AlbumArtGetter.getBitmapFromStore(audio.getAid(),this);
 
         if (cover == null)
         {
-            views.setImageViewBitmap(R.id.notifAlbum, BitmapFactory.decodeResource(getResources(), R.drawable.fallback_cover));
+            Bitmap tempBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.fallback_cover);
+            views.setImageViewBitmap(R.id.notifAlbum, tempBitmap);
+            tempBitmap.recycle();
         }
         else
         {
@@ -203,9 +210,13 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
             }
             catch(IllegalArgumentException e)
             {
-                views.setImageViewBitmap(R.id.notifAlbum, BitmapFactory.decodeResource(getResources(), R.drawable.fallback_cover));
+                Bitmap tempBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.fallback_cover);
+                views.setImageViewBitmap(R.id.notifAlbum, tempBitmap);
+                tempBitmap.recycle();
             }
-            views.setImageViewBitmap(R.id.notifAlbum, cover);
+            finally {
+                cover.recycle();
+            }
         }
 
         views.setImageViewResource(R.id.notifPlay, isPlaying ? R.drawable.widget_pause : R.drawable.widget_play);
@@ -267,6 +278,14 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
         return notification;
     }
 
+    private void updateWidgets()
+    {
+        Intent intent = new Intent(SmallWidget.actionUpdateWidget);
+        intent.putExtra(SmallWidget.EXTRA_AUDIO,(Parcelable)audios.get(indexCurrentTrack));
+        intent.putExtra(SmallWidget.EXTRA_SIZE,audios.size());
+        sendBroadcast(intent);
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
@@ -326,14 +345,17 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
         builder.setContentTitle(audio.getTitle());
         builder.setContentText(audio.getArtist());
 
-        Bitmap cover = AlbumArtGetter.getCoverArt(audio.getAid());
+        Bitmap cover = AlbumArtGetter.getBitmapFromStore(audio.getAid(), this);
         if (cover == null)
         {
-            builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.fallback_cover));
+            Bitmap tempBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.fallback_cover);
+            builder.setLargeIcon(tempBitmap);
+            tempBitmap.recycle();
         }
         else
         {
             builder.setLargeIcon(cover);
+            cover.recycle();
         }
 
         return builder.build();
@@ -341,7 +363,7 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
 
     private void handleNotifControll(String action)
     {
-        if(!PlayingService.isLoadingTrack && isPrepared)
+        if(!isLoadingTrack && isPrepared)
         {
             if (action.equals(actionPlay))
             {
@@ -372,7 +394,7 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
 
     private void setBroadcast()
     {
-        if(PlayingService.isOnline && SettingActivity.getPreferences("broadcast") && MainScreenActivity.api != null)
+        if(isOnline && SettingActivity.getPreferences("broadcast") && MainScreenActivity.api != null)
         {
             new Thread(new Runnable()
             {
@@ -398,9 +420,8 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
         //TODO: sometimes it throws  java.lang.IndexOutOfBoundsException: Invalid index 0, size is 0 , it's need to be fixed
         if(audios == null || audios.size() == 0)
             return;
-
+        updateWidgets();
         sendBroadcast(new Intent(actionTrackChanged));
-        sendBroadcast(new Intent(SmallWidget.actionUpdateWidget));
         if(isPlaying)
             sendBroadcast(new Intent(actionIconPause));
         else
@@ -476,8 +497,12 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
                     bassPlayer.start();
                 }
 
-                if(AlbumArtGetter.getCoverArt(audios.get(indexCurrentTrack).getAid()) == null)
+                Bitmap tempBitmap = AlbumArtGetter.getBitmapFromStore(audios.get(indexCurrentTrack).getAid(),getBaseContext());
+
+                if(tempBitmap == null)
                     downloadAlbumArt(audios.get(indexCurrentTrack));
+                else
+                    tempBitmap.recycle();
             }
         }.execute();
 
@@ -507,7 +532,7 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
         loadMusic();
     }
 
-    private static void setTrack(int direction)
+    private void setTrack(int direction)
     {
         //TODO: sometimes it throws  java.lang.IndexOutOfBoundsException: Invalid index 0, size is 0 , it's need to be fixed
         if(audios == null || audios.size() == 0)
@@ -525,7 +550,7 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
             changeTrack(direction);
 
     }
-    public static void changeTrack(int direction)
+    public void changeTrack(int direction)
     {
         switch (direction)
         {
@@ -650,7 +675,7 @@ public class PlayingService extends Service implements BassPlayer.OnCompletionLi
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
     {
-         if(PlayingService.serviceAlive && key.equals(SettingActivity.keyOnClickNotif) && audios != null)
+         if(serviceAlive && key.equals(SettingActivity.keyOnClickNotif) && audios != null)
              startNotif();
     }
 

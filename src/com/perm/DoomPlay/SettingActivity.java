@@ -63,6 +63,19 @@ public class SettingActivity extends PreferenceActivity
     Preference albumartsFolderPref;
     Preference beginningFolderPref;
 
+    private void prepareLang()
+    {
+        String lang = PreferenceManager.getDefaultSharedPreferences(MyApplication.getInstance()).getString("languages",
+                Locale.getDefault().getLanguage());
+
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, null);
+    }
+
+
 
     @SuppressWarnings("deprecation")
     @Override
@@ -70,9 +83,9 @@ public class SettingActivity extends PreferenceActivity
     {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
+        prepareLang();
+
         addPreferencesFromResource(R.xml.pref);
-
-
 
         findPreference("contact").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
         {

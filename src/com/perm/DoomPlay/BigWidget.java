@@ -34,21 +34,21 @@ public class BigWidget extends AppWidgetProvider
     {
         super.onReceive(context,intent);
 
-        if(intent.getAction().equals(SmallWidget.actionUpdateWidget) && PlayingService.audios != null && PlayingService.audios.size() > 0)
-            updateWidget(context);
+        if(intent.getAction().equals(SmallWidget.actionUpdateWidget))
+            updateWidget(context,(Audio)intent.getParcelableExtra(SmallWidget.EXTRA_AUDIO),
+                    intent.getIntExtra(SmallWidget.EXTRA_SIZE,0));
 
     }
-    private static void updateWidget(Context context)
+    private static void updateWidget(Context context,Audio audio,int size)
     {
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_big);
 
-        Audio audio = PlayingService.audios.get(PlayingService.indexCurrentTrack);
         views.setTextViewText(R.id.widgetlTitle, audio.getTitle());
         views.setTextViewText(R.id.widgetArtist, audio.getArtist());
-        views.setTextViewText(R.id.widgetCount,String.valueOf(PlayingService.indexCurrentTrack + 1)+ "/" +String.valueOf(PlayingService.audios.size()));
+        views.setTextViewText(R.id.widgetCount,String.valueOf(PlayingService.indexCurrentTrack + 1)+ "/" +String.valueOf(size));
 
-        Bitmap cover = AlbumArtGetter.getCoverArt(audio.getAid());
+        Bitmap cover = AlbumArtGetter.getBitmapFromStore(audio.getAid(),context);
         if (cover != null)
         {
             //TODO: java.lang.IllegalArgumentException: RemoteViews for widget update exceeds
@@ -60,16 +60,21 @@ public class BigWidget extends AppWidgetProvider
             }
             catch(IllegalArgumentException e)
             {
-                views.setImageViewBitmap(R.id.widgetAlbum,BitmapFactory.decodeResource(context.getResources(), R.drawable.fallback_cover));
+                Bitmap tempBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.fallback_cover);
+                views.setImageViewBitmap(R.id.widgetAlbum,tempBitmap);
+                tempBitmap.recycle();
+            }
+            finally {
+                cover.recycle();
             }
 
         }
         else
-            views.setImageViewBitmap(R.id.widgetAlbum,BitmapFactory.decodeResource(context.getResources(), R.drawable.fallback_cover));
-
-
-
-
+        {
+            Bitmap tempBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.fallback_cover);
+            views.setImageViewBitmap(R.id.widgetAlbum,tempBitmap);
+            tempBitmap.recycle();
+        }
 
         int playButton = PlayingService.isPlaying ? R.drawable.pause : R.drawable.play;
         int shuffleBtn = PlayingService.isShuffle ? R.drawable.shuffle_enable :  R.drawable.shuffle_disable;

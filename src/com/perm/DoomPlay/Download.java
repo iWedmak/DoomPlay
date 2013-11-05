@@ -93,7 +93,7 @@ public class Download implements Runnable
         observer.doomUpdate(aid);
     }
 
-    private void error(String message)
+    public void error(String message)
     {
         status = States.ERROR;
         observer.doomError(aid,message);
@@ -109,7 +109,7 @@ public class Download implements Runnable
 
             connection = (HttpURLConnection)url.openConnection();
 
-            connection.setRequestMethod("GET");
+            connection.setRequestMethod("POST");
             connection.setDoOutput(true);
             if(downloadedS > 0)
                 connection.setRequestProperty("Range", "bytes=" + String.valueOf(downloadedS) + "-");
@@ -120,7 +120,10 @@ public class Download implements Runnable
 
 
             if(connectLength == null || Long.parseLong(connectLength) < 1 || connectLength.equals(""))
+            {
                 error("Can't download file");
+                return;
+            }
 
             size = Long.parseLong(connectLength);
 
@@ -165,8 +168,6 @@ public class Download implements Runnable
             if(connection != null)
                 connection.disconnect();
         }
-
-
     }
 
     public States getStatus()

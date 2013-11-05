@@ -30,7 +30,7 @@ abstract class AbstractList extends AbstractControls
 {
     ListView listView;
     ListsAdapter adapter;
-    static ArrayList<Audio> audios;
+    protected ArrayList<Audio> audios;
     static boolean isLoading = false;
     LinearLayout linearLoading;
     PlaylistDB playlistDB;
@@ -55,7 +55,7 @@ abstract class AbstractList extends AbstractControls
     {
         if(adapter != null)
         {
-            if(PlayingService.serviceAlive && equalsCollections(PlayingService.audios, audios))
+            if(playingService != null && equalsCollections(playingService.audios, audios))
             {
 
                 adapter.setMarkedItem(position);
@@ -82,21 +82,22 @@ abstract class AbstractList extends AbstractControls
     @Override
     protected void trackChanged()
     {
-        markItem(PlayingService.indexCurrentTrack,true);
+        if(playingService != null)
+            markItem(playingService.indexCurrentTrack,true);
     }
+
     @Override
-    protected void onResume()
-    {
-        super.onResume();
-        markItem(PlayingService.indexCurrentTrack,false);
+    protected void onServiceBound() {
+        super.onServiceBound();
+        markItem(playingService.indexCurrentTrack,false);
     }
 
     void goFullScreen()
     {
-        if(PlayingService.audios != null)
+        if(playingService.audios != null)
         {
             Intent intent = new Intent(getBaseContext(),FullPlaybackActivity.class);
-            intent.putExtra(FileSystemActivity.keyMusic,PlayingService.audios);
+            intent.putExtra(FileSystemActivity.keyMusic,playingService.audios);
             intent.setAction(FullPlaybackActivity.actionReturnFull);
             startActivity(intent);
         }
@@ -180,15 +181,10 @@ abstract class AbstractList extends AbstractControls
                         dislikeTrack(position);
                     break;
                 case R.id.itemDownload:
-                    if(DownloadingService.isDownloading(audios.get(position).getAid()))
-                        Toast.makeText(getBaseContext(),getResources().getString(R.string.track_downloading),Toast.LENGTH_SHORT).show();
-                    else
-                    {
-                        Intent downloadIntent = new Intent(this,DownloadingService.class);
-                        downloadIntent.putExtra(DownloadingService.keyDownload,(Parcelable)audios.get(position))
-                                .setAction(PlayingService.actionPlay);
-                        startService(downloadIntent);
-                    }
+                    Intent downloadIntent = new Intent(this,DownloadingService.class);
+                    downloadIntent.putExtra(DownloadingService.keyDownload,(Parcelable)audios.get(position))
+                            .setAction(PlayingService.actionPlay);
+                    startService(downloadIntent);
                     break;
                 case R.id.itemMoveToAlbum:
                     if(!MainScreenActivity.isRegister)
@@ -257,8 +253,8 @@ abstract class AbstractList extends AbstractControls
                 TracksHolder.audiosVk = audios;
                 adapter.changeData(audios);
 
-                if(position == PlayingService.indexCurrentTrack && equalsCollections(PlayingService.audios,audios))
-                    playingService.playTrackFromList(PlayingService.indexCurrentTrack);
+                if(equalsCollections(playingService.audios,audios) && position == playingService.indexCurrentTrack)
+                    playingService.playTrackFromList(playingService.indexCurrentTrack);
             }
         }.execute(position);
 
@@ -319,7 +315,7 @@ abstract class AbstractList extends AbstractControls
     };
     void onClickTrack(int position)
     {
-        if(PlayingService.isLoadingTrack())
+        if(playingService.isLoadingTrack())
         {
             waitMessage(this);
             return;
@@ -336,7 +332,7 @@ abstract class AbstractList extends AbstractControls
     @Override
     protected void onClickActionBar()
     {
-        if(equalsCollections(audios, PlayingService.audios) && Build.VERSION.SDK_INT >= 8)
-            listView.smoothScrollToPosition(PlayingService.indexCurrentTrack);
+        if(equalsCollections(audios, playingService.audios) && Build.VERSION.SDK_INT >= 8)
+            listView.smoothScrollToPosition(playingService.indexCurrentTrack);
     }
 }

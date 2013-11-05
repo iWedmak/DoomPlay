@@ -20,12 +20,10 @@ package com.perm.DoomPlay;
  */
 
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.*;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
@@ -45,13 +43,18 @@ import java.util.Locale;
 
 abstract class AbstractReceiver extends ActionBarActivity
 {
-    BroadcastReceiver broadcastReceiver;
-    IntentFilter intentFilter;
+    protected BroadcastReceiver broadcastReceiver;
+    protected IntentFilter intentFilter;
     private TextView textArtist;
     private TextView textTitle;
-    boolean isRegister;
-    private BroadcastReceiver broadcastReceiverKiller;
+    protected boolean isRegister;
+    BroadcastReceiver broadcastReceiverKiller;
     public static final String actionKill = "killAllActivities";
+    protected PlayingService playingService;
+    protected ServiceConnection serviceConnection;
+    protected Intent intentService;
+    private  boolean isBound;
+
 
     public void handleKException(KException e)
     {
@@ -105,12 +108,13 @@ abstract class AbstractReceiver extends ActionBarActivity
             isRegister = false;
             unregisterReceiver(broadcastReceiver);
         }
+        unConnecServer();
     }
     void onClickActionBar()
     {
-        if(PlayingService.audios != null)
+        if(playingService != null && playingService.audios != null)
         {
-            startActivity(FullPlaybackActivity.getReturnSmallIntent(this,PlayingService.audios));
+            startActivity(FullPlaybackActivity.getReturnSmallIntent(this,playingService.audios));
         }
     }
 
@@ -152,6 +156,10 @@ abstract class AbstractReceiver extends ActionBarActivity
         getBaseContext().getResources().updateConfiguration(config, null);
     }
 
+    protected void onServiceBound()
+    {}
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -161,6 +169,21 @@ abstract class AbstractReceiver extends ActionBarActivity
         prepareActionBar();
         createBroadcastRec();
         initializeKiller();
+
+        intentService = new Intent(this,PlayingService.class);
+
+        serviceConnection = new ServiceConnection()
+        {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder binder)
+            {
+                playingService = ((PlayingService.MyBinder) binder).getService();
+                onServiceBound();
+            }
+            @Override
+            public void onServiceDisconnected(ComponentName name)
+            {}
+        };
     }
     void prepareActionBar()
     {
@@ -185,10 +208,11 @@ abstract class AbstractReceiver extends ActionBarActivity
 
     void updateActionBar()
     {
-        if(PlayingService.serviceAlive && PlayingService.audios != null && PlayingService.audios.size() > 0)
+        if(playingService != null && PlayingService.serviceAlive && playingService.audios != null
+                && playingService.audios.size() > 0)
         {
-            textTitle.setText(PlayingService.audios.get(PlayingService.indexCurrentTrack).getTitle());
-            textArtist.setText(PlayingService.audios.get(PlayingService.indexCurrentTrack).getArtist());
+            textTitle.setText(playingService.audios.get(playingService.indexCurrentTrack).getTitle());
+            textArtist.setText(playingService.audios.get(playingService.indexCurrentTrack).getArtist());
             textArtist.setVisibility(View.VISIBLE);
             textTitle.setTextColor(getResources().getColor(R.color.blue_text));
         }
@@ -201,7 +225,7 @@ abstract class AbstractReceiver extends ActionBarActivity
         ActivityCompat.invalidateOptionsMenu(this);
 
     }
-    void createBroadcastRec()
+    protected void createBroadcastRec()
     {
         broadcastReceiver = new BroadcastReceiver()
         {
@@ -233,6 +257,7 @@ abstract class AbstractReceiver extends ActionBarActivity
             registerReceiver(broadcastReceiver,intentFilter);
         }
         updateActionBar();
+        connectService();
     }
 
     @Override
@@ -252,4 +277,18 @@ abstract class AbstractReceiver extends ActionBarActivity
         }
         return super.onOptionsItemSelected(item);
     }
+    protected void connectService()
+    {
+        bindService(intentService,serviceConnection,0);
+        isBound = true;
+    }
+    protected void unConnecServer()
+    {
+        if(isBound)
+        {
+            unbindService(serviceConnection);
+            isBound = false;
+        }
+    }
+
 }

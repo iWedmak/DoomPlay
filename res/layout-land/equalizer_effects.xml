@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" android:layout_weight="1" android:paddingTop="3dp"
+            android:gravity="center_horizontal">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 db"
+                android:id="@+id/textDb10" android:textSize="14sp"/>
+        <com.perm.DoomPlay.VerticalSeekBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/seekEqual10"
+                android:tag="6" android:layout_weight="1" android:layout_marginBottom="4dp">
+
+        </com.perm.DoomPlay.VerticalSeekBar>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/LF"
+                android:textSize="14sp" android:paddingBottom="3dp"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" android:layout_weight="1" android:paddingTop="3dp"
+            android:gravity="center_horizontal">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 db"
+                android:id="@+id/textDb11" android:textSize="14sp"/>
+        <com.perm.DoomPlay.VerticalSeekBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/seekEqual11"
+                android:tag="7" android:layout_weight="1" android:layout_marginBottom="4dp">
+
+        </com.perm.DoomPlay.VerticalSeekBar>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/HF"
+                android:textSize="14sp" android:paddingBottom="3dp" android:layout_gravity="center"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" android:layout_weight="1" android:paddingTop="3dp"
+            android:gravity="center_horizontal">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 db"
+                android:id="@+id/textDb12" android:textSize="14sp"/>
+        <com.perm.DoomPlay.VerticalSeekBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/seekEqual12"
+                android:tag="8" android:layout_weight="1" android:layout_marginBottom="4dp">
+
+        </com.perm.DoomPlay.VerticalSeekBar>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reverb"
+                android:textSize="14sp" android:paddingBottom="3dp"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" android:layout_weight="1" android:paddingTop="3dp"
+            android:gravity="center_horizontal">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 db"
+                android:id="@+id/textDb13" android:textSize="14sp"/>
+        <com.perm.DoomPlay.VerticalSeekBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/seekEqual13"
+                android:tag="9" android:layout_weight="1" android:layout_marginBottom="4dp">
+
+        </com.perm.DoomPlay.VerticalSeekBar>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/SP"
+                android:textSize="14sp" android:paddingBottom="3dp"/>
+    </LinearLayout>
+</LinearLayout>
